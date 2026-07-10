@@ -113,6 +113,14 @@ async def run_one(
     run_dir = out_root / f"{condition}_t{swap_timestep}_seed{seed}"
     run_dir.mkdir(parents=True, exist_ok=True)
 
+    print("=" * 60)
+    print(f"🧪 M1 DE-RISK RUN | condition={condition} seed={seed}")
+    print(f"   workflow={WORKFLOW_NAME} max_timesteps={max_timesteps} "
+          f"swap_timestep={swap_timestep}"
+          + ("" if condition == "swap" else " (boundary only, no swap)"))
+    print(f"   target={TARGET_AGENT} -> {run_dir}")
+    print("=" * 60)
+
     spec = SCENARIOS[WORKFLOW_NAME]
     workflow = spec.create_workflow()
     preferences = spec.create_preferences()
@@ -130,6 +138,10 @@ async def run_one(
 
     schedule = build_schedule(condition, swap_timestep)
     schedule.register(agent_registry)
+    n_perturbations = len(schedule.perturbations)
+    print(f"   ✅ workflow: {len(workflow.tasks)} tasks | perturbations "
+          f"scheduled: {n_perturbations}")
+    print(f"🚀 starting simulation ({condition})...")
 
     observation_policy = ObservationPolicy()  # redacted baseline contract
     manager = ChainOfThoughtManagerAgent(preferences=preferences)
