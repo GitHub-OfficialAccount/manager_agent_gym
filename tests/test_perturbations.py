@@ -1,0 +1,96 @@
+import pytest
+from agents import function_tool
+
+from manager_agent_gym.core.workflow_agents.registry import AgentRegistry
+from manager_agent_gym.schemas.execution.perturbations import (
+    PerturbationSchedule,
+    PromptSwap,
+)
+from manager_agent_gym.schemas.workflow_agents import AIAgentConfig
+
+
+def _worker_config(agent_id: str = "w1", prompt: str = "original policy") -> AIAgentConfig:
+    return AIAgentConfig(
+        agent_id=agent_id,
+        agent_type="ai",
+        system_prompt=prompt,
+        model_name="gpt-4o",
+        agent_description="a diligent analyst",
+        agent_capabilities=["analysis"],
+    )
+
+
+@function_tool
+def _noop_tool() -> str:
+    """Placeholder tool so tests avoid the default (network-dependent) toolset."""
+    return "ok"
+
+
+@pytest.mark.asyncio
+async def test_prompt_swap_replaces_agent_in_place() -> None:
+    reg = AgentRegistry()
+    reg.register_ai_agent(_worker_config(), additional_tools=[_noop_tool])
+    original_instance = reg.get_agent("w1")
+
+    reg.schedule_prompt_swap(
+        timestep=3, agent_id="w1", new_system_prompt="degraded policy"
+    )
+    # nothing happens before the scheduled timestep
+    changes = await reg.apply_scheduled_changes_for_timestep(2)
+    assert changes == []
+    assert reg.get_agent("w1").config.system_prompt == "original policy"
+
+    changes = await reg.apply_scheduled_changes_for_timestep(3)
+    assert len(changes) == 1
+    assert "Replaced w1" in changes[0]
+    assert "(silent)" in changes[0]
+
+    agent = reg.get_agent("w1")
+    assert agent is not None
+    assert agent.config.system_prompt == "degraded policy"
+    # same id, new instance (the underlying SDK agent caches the prompt)
+    assert agent is not original_instance
+    # visible metadata unchanged — the swap is silent
+    assert agent.config.agent_description == "a diligent analyst"
+    assert agent.config.agent_capabilities == ["analysis"]
+    assert len(reg.list_agents()) == 1
+
+
+@pytest.mark.asyncio
+async def test_prompt_swap_unknown_agent_reports_failure() -> None:
+    reg = AgentRegistry()
+    reg.schedule_prompt_swap(timestep=0, agent_id="ghost", new_system_prompt="x")
+    changes = await reg.apply_scheduled_changes_for_timestep(0)
+    assert len(changes) == 1
+    assert "Could not replace ghost" in changes[0]
+
+
+def test_schedule_registers_and_manifests() -> None:
+    swap = PromptSwap(
+        timestep=8,
+        agent_id="documentation_lead",
+        new_system_prompt="degraded",
+        label="competence_degradation",
+    )
+    schedule = PerturbationSchedule(perturbations=[swap])
+
+    reg = AgentRegistry()
+    schedule.register(reg)
+    assert 8 in reg._scheduled_changes
+    change = reg._scheduled_changes[8][0]
+    assert change.action == "replace"
+    assert change.agent_id == "documentation_lead"
+    assert change.announce is False
+
+    manifest = schedule.manifest()
+    assert manifest["num_perturbations"] == 1
+    entry = manifest["perturbations"][0]
+    assert entry["kind"] == "prompt_swap"
+    assert entry["timestep"] == 8
+    assert entry["new_system_prompt"] == "degraded"
+    assert entry["label"] == "competence_degradation"
+
+
+def test_empty_schedule_manifest() -> None:
+    manifest = PerturbationSchedule().manifest()
+    assert manifest == {"num_perturbations": 0, "perturbations": []}

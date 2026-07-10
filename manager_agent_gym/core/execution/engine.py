@@ -29,6 +29,7 @@ from ...schemas.core.workflow import Workflow
 from ...schemas.execution.state import ExecutionState
 
 from ...schemas.execution.callbacks import TimestepEndContext
+from ...schemas.execution.observation_policy import ObservationPolicy
 from ...schemas.unified_results import ExecutionResult, create_timestep_result
 from ..workflow_agents.registry import AgentRegistry
 from ..manager_agent.interface import ManagerAgent
@@ -116,6 +117,7 @@ class WorkflowExecutionEngine:
             Callable[[TimestepEndContext], Awaitable[None]]
         ]
         | None = None,
+        observation_policy: ObservationPolicy | None = None,
         # Preference evaluation controls
         log_preference_evaluation_progress: bool = True,
         max_concurrent_rubrics: int = 100,
@@ -124,6 +126,9 @@ class WorkflowExecutionEngine:
     ):
         self.workflow = workflow
         self.agent_registry = agent_registry
+        self.observation_policy = observation_policy or ObservationPolicy()
+        if manager_agent is not None:
+            manager_agent.set_observation_policy(self.observation_policy)
         self.evaluations = list(evaluations or [])
         self.manager_agent = manager_agent
         self.stakeholder_agent: StakeholderBase = stakeholder_agent
@@ -405,7 +410,7 @@ class WorkflowExecutionEngine:
         start_time = datetime.now()
         timestep = self.current_timestep
 
-        agent_coordination_changes = self._check_and_apply_agent_changes()
+        agent_coordination_changes = await self._check_and_apply_agent_changes()
 
         manager_action = None
         if self.manager_agent:
@@ -1013,7 +1018,7 @@ class WorkflowExecutionEngine:
             "running_tasks": len(self.running_tasks),
         }
 
-    def _check_and_apply_agent_changes(self) -> list[str]:
+    async def _check_and_apply_agent_changes(self) -> list[str]:
         """
         Check if agents should change and apply changes if needed.
 
@@ -1022,7 +1027,7 @@ class WorkflowExecutionEngine:
         """
         changes: list[str] = []
 
-        changes = self.agent_registry.apply_scheduled_changes_for_timestep(
+        changes = await self.agent_registry.apply_scheduled_changes_for_timestep(
             timestep=self.current_timestep,
             communication_service=self.communication_service,
             tool_factory=ToolFactory(),

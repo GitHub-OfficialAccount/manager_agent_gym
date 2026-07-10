@@ -14,9 +14,24 @@ class ScheduledAgentChange(BaseModel):
     """A scheduled agent change at a specific timestep."""
 
     timestep: int = Field(..., description="Timestep when change should occur")
-    action: Literal["add", "remove"] = Field(..., description="Add or remove agent")
+    action: Literal["add", "remove", "replace"] = Field(
+        ..., description="Add, remove, or replace (in-place mutation) an agent"
+    )
     agent_config: Any = Field(default=None, description="Agent config for addition")
-    agent_id: str | None = Field(default=None, description="Agent ID for removal")
+    agent_id: str | None = Field(
+        default=None, description="Agent ID for removal or replacement"
+    )
+    new_system_prompt: str | None = Field(
+        default=None,
+        description="Replacement system prompt for 'replace' (same id, new policy)",
+    )
+    announce: bool = Field(
+        default=False,
+        description=(
+            "For 'replace': broadcast the change to all agents. False = silent "
+            "swap (behavior changes with no observable announcement)."
+        ),
+    )
     reason: str = Field(..., description="Reason for this agent change")
     # Note: tools will be handled separately, not stored in schema
 
@@ -26,6 +41,10 @@ class ScheduledAgentChange(BaseModel):
             raise ValueError("agent_config is required for 'add' action")
         if self.action == "remove" and not self.agent_id:
             raise ValueError("agent_id is required for 'remove' action")
+        if self.action == "replace" and not (self.agent_id and self.new_system_prompt):
+            raise ValueError(
+                "agent_id and new_system_prompt are required for 'replace' action"
+            )
 
 
 class AgentCoordinationConfig(BaseModel):

@@ -11,6 +11,7 @@ from abc import ABC, abstractmethod
 
 from ...schemas.execution import ManagerObservation
 from ...schemas.execution.manager_actions import BaseManagerAction, ActionResult
+from ...schemas.execution.observation_policy import ObservationPolicy
 from ...schemas.preferences.preference import PreferenceWeights
 from ...schemas.core.base import TaskStatus
 from ...schemas.workflow_agents.stakeholder import StakeholderPublicProfile
@@ -56,6 +57,8 @@ class ManagerAgent(ABC):
         self._max_timesteps: int | None = None
         # Seed configured by engine (if any)
         self._seed: int = 42
+        # Observation contract (set by engine; defaults to redacted baseline)
+        self._observation_policy: ObservationPolicy = ObservationPolicy()
 
     def configure_seed(self, seed: int) -> None:
         """Configure deterministic seed for this manager (overridable)."""
@@ -77,6 +80,10 @@ class ManagerAgent(ABC):
         self._max_timesteps = (
             max_timesteps if (max_timesteps is None or max_timesteps >= 0) else None
         )
+
+    def set_observation_policy(self, policy: ObservationPolicy) -> None:
+        """Set the observation contract for this execution (set by engine)."""
+        self._observation_policy = policy
 
     async def create_observation(
         self,
@@ -120,13 +127,19 @@ class ManagerAgent(ABC):
         available_agents = workflow.get_available_agents()
 
         # Get recent messages from communication service if available
+        policy = self._observation_policy
         recent_messages = []
         if communication_service:
             all_comm_messages = communication_service.get_all_messages()
-            recent_messages = all_comm_messages[:10]  # Last 10 messages
+            recent_messages = all_comm_messages[: policy.message_window]
         else:
             # Fallback to workflow messages for backward compatibility
-            recent_messages = workflow.messages[-5:]  # Last 5 messages
+            # (guard: [-0:] would return the whole list)
+            recent_messages = (
+                workflow.messages[-policy.message_window :]
+                if policy.message_window > 0
+                else []
+            )
 
         # Compute timeline awareness fields if configured
         max_ts = self._max_timesteps
@@ -147,7 +160,9 @@ class ManagerAgent(ABC):
             running_task_ids=list(running_tasks.keys()),
             completed_task_ids=list(completed_task_ids),
             failed_task_ids=list(failed_task_ids),
-            available_agent_metadata=[agent.config for agent in available_agents],
+            available_agent_metadata=[
+                policy.redact_agent_config(agent.config) for agent in available_agents
+            ],
             recent_messages=recent_messages,
             workflow_progress=len(completed_task_ids) / len(workflow.tasks)
             if workflow.tasks
