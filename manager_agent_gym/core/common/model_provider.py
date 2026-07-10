@@ -1,30 +1,38 @@
 """
 Provider routing policy for all LLM calls.
 
-Single home for every decision about which model serves a role and how it is
-reached: per-role default model names from Settings, OpenRouter vs. native
-provider routing for the LiteLLM path (workers, human mocks, stakeholder),
-Instructor mode selection for the native structured-output path (manager, LLM
-judges), and the Agents SDK tracing kill-switch needed when the OpenAI client
-is pointed at a non-OpenAI endpoint.
+Model names are full LiteLLM-style routes; the name alone determines where
+traffic goes — there is no global endpoint state:
 
-OpenRouter is enabled by configuration, not code changes: set OPENROUTER_API_KEY
-(LiteLLM path) and OPENAI_BASE_URL=https://openrouter.ai/api/v1 (native path)
-in .env, and use full OpenRouter slugs (e.g. "openai/gpt-4o-mini",
-"anthropic/claude-3.7-sonnet") as model names. With neither set, routing falls
-back to upstream behavior: bare model names routed to their native providers.
+- ``openrouter/<provider>/<model>`` → via OpenRouter (any role)
+- ``openai/<model>``                → OpenAI native
+- ``anthropic/<model>``, ``google/<model>``, ... → that provider via LiteLLM
+  (workers/human-mocks/stakeholder only; not supported for manager/judge)
+- bare names (``gpt-4o``, ``claude-3-7-sonnet``) → upstream prefix heuristics,
+  kept for backward compatibility
+
+Two call paths consume these routes:
+
+- LiteLLM path (AI workers, human mocks, stakeholder): LiteLLM understands the
+  full route directly; only bare names need a provider prefix added.
+- Native path (manager, LLM judges): an OpenAI-compatible client; the route
+  prefix determines base URL, API key, the model id sent over the wire, and
+  the Instructor mode.
 """
 
 import os
+from dataclasses import dataclass
 from typing import Any, Literal
 
 ModelRole = Literal["manager", "worker", "stakeholder", "judge"]
 
 _OPENROUTER_PREFIX = "openrouter/"
+_OPENAI_PREFIX = "openai/"
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
 def get_model_for_role(role: ModelRole) -> str:
-    """Resolve the default model name for a role from Settings (.env)."""
+    """Resolve the default model route for a role from Settings (.env)."""
     from ...config import settings
 
     return {
@@ -35,67 +43,91 @@ def get_model_for_role(role: ModelRole) -> str:
     }[role]
 
 
-def is_openrouter_configured() -> bool:
-    """True when LLM traffic is routed through OpenRouter.
-
-    Either signal counts: the native OpenAI client's base URL points at
-    OpenRouter, or an OpenRouter key is present for the LiteLLM path.
-    """
-    if "openrouter.ai" in os.getenv("OPENAI_BASE_URL", ""):
-        return True
-    key = os.getenv("OPENROUTER_API_KEY", "")
-    return bool(key) and key != "na"
-
-
 def build_litellm_model_id(model_id: str) -> str:
     """Build the LiteLLM model ID for the worker/human-mock/stakeholder path.
 
-    When OpenRouter is configured, model names are expected to be full
-    OpenRouter slugs and just get the ``openrouter/`` provider prefix.
-    Otherwise, fall back to upstream native routing by model-name prefix.
+    Provider-prefixed names are already full LiteLLM routes and pass through
+    unchanged (``openrouter/deepseek/x``, ``openai/gpt-4o-mini``,
+    ``anthropic/claude-...``, ``bedrock/...``). Bare names fall back to
+    upstream routing heuristics.
     """
-    if model_id.startswith(_OPENROUTER_PREFIX):
+    if "/" in model_id:
         return model_id
-    if is_openrouter_configured():
-        return f"{_OPENROUTER_PREFIX}{model_id}"
 
-    # Native provider routing (upstream behavior).
+    # Native provider routing for bare names (upstream behavior).
     if model_id.startswith(("gpt-", "o")):
         return f"openai/{model_id}"
     elif model_id.startswith("claude-"):
         return f"anthropic/{model_id}"
     elif model_id.startswith("gemini-"):
         return f"google/{model_id}"
-    elif model_id.startswith(("eu.anthropic.", "eu.openai.", "eu.google.", "bedrock/")):
-        return model_id
     else:
         return model_id
 
 
-def instructor_mode_for_model(model: str) -> Any:
-    """Pick the Instructor mode for the native-client structured-output path.
+@dataclass(frozen=True)
+class NativeRoute:
+    """Where and how the native (OpenAI-compatible) client reaches a model."""
+
+    base_url: str | None  # None = OpenAI default endpoint
+    api_key: str | None
+    wire_model: str  # model id sent over the wire
+    mode: Any  # instructor.Mode
+
+
+def resolve_native_route(model: str) -> NativeRoute:
+    """Resolve a model route for the manager/judge structured-output path.
 
     Several non-OpenAI providers behind OpenRouter mis-handle OpenAI tool-call
-    grammars, so those models use JSON-in-markdown extraction instead of tool
-    calling. Returns an ``instructor.Mode`` (typed Any to keep the import lazy).
+    grammars, so those models use JSON-in-markdown extraction (MD_JSON)
+    instead of tool calling.
     """
     import instructor
 
-    is_openrouter = is_openrouter_configured() or model.startswith(_OPENROUTER_PREFIX)
-    is_openai_model = "gpt-" in model or model.startswith("openai/")
-    if is_openrouter and not is_openai_model:
-        return instructor.Mode.MD_JSON
-    return instructor.Mode.TOOLS
+    if model.startswith(_OPENROUTER_PREFIX):
+        wire_model = model[len(_OPENROUTER_PREFIX) :]
+        is_openai_model = "gpt-" in wire_model or wire_model.startswith(_OPENAI_PREFIX)
+        return NativeRoute(
+            base_url=OPENROUTER_BASE_URL,
+            api_key=os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY"),
+            wire_model=wire_model,
+            mode=instructor.Mode.TOOLS if is_openai_model else instructor.Mode.MD_JSON,
+        )
+    if model.startswith(_OPENAI_PREFIX):
+        return NativeRoute(
+            base_url=None,
+            api_key=os.getenv("OPENAI_API_KEY"),
+            wire_model=model[len(_OPENAI_PREFIX) :],
+            mode=instructor.Mode.TOOLS,
+        )
+    if "/" in model:
+        raise ValueError(
+            f"Model '{model}' routes to a non-OpenAI-compatible provider; the "
+            "manager/judge path only supports 'openai/...', 'openrouter/...', "
+            f"or bare OpenAI names. Use 'openrouter/{model}' to reach it via "
+            "OpenRouter."
+        )
+    # Bare name: send as-is to the default OpenAI endpoint (upstream behavior).
+    return NativeRoute(
+        base_url=None,
+        api_key=os.getenv("OPENAI_API_KEY"),
+        wire_model=model,
+        mode=instructor.Mode.TOOLS,
+    )
 
 
 def disable_agents_tracing_if_proxied() -> None:
-    """Disable OpenAI Agents SDK tracing when using a non-OpenAI endpoint.
+    """Disable OpenAI Agents SDK tracing when traffic is routed off OpenAI.
 
-    The Agents SDK uploads traces to platform.openai.com with the configured
-    key; behind OpenRouter that key is not an OpenAI key, causing 401 spam.
+    The Agents SDK uploads traces to platform.openai.com with OPENAI_API_KEY;
+    when that key is an OpenRouter key (or roles route through OpenRouter),
+    the uploads fail with 401 spam.
     """
-    base_url = os.getenv("OPENAI_BASE_URL", "")
-    if base_url in ("", "na") or "openai.com" in base_url:
+    proxied = os.getenv("OPENAI_API_KEY", "").startswith("sk-or-") or any(
+        get_model_for_role(role).startswith(_OPENROUTER_PREFIX)
+        for role in ("manager", "worker", "stakeholder", "judge")
+    )
+    if not proxied:
         return
     os.environ.setdefault("OPENAI_AGENTS_DISABLE_TRACING", "1")
     try:

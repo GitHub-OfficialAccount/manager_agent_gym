@@ -48,6 +48,9 @@ DEFAULT_SCENARIOS: list[str] = [
 
 MANAGER_MODE_CHOICES: list[str] = ["cot", "random", "assign_all"]
 MODEL_NAME_SUGGESTIONS: list[str] = [
+    "openrouter/deepseek/deepseek-v4-flash",
+    "openrouter/openai/gpt-4o-mini",
+    "openai/gpt-4o-mini",
     "gpt-5",
     "gpt-5-mini",
     "o3",

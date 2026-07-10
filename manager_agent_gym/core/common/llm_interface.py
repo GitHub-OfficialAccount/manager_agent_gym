@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from .logging import logger
 from .model_provider import (
     build_litellm_model_id,
-    instructor_mode_for_model,
+    resolve_native_route,
 )
 
 __all__ = [
@@ -68,13 +68,18 @@ class LLMInferenceTruncationError(Exception):
 _client_cache: dict[Any, Any] = {}
 
 
-def _get_openai_client(mode: Any = None):
-    """Get configured OpenAI async client patched by Instructor, cached by mode.
+def _get_openai_client(
+    base_url: str | None = None,
+    api_key: str | None = None,
+    mode: Any = None,
+):
+    """Get an Instructor-patched OpenAI async client, cached by (base_url, mode).
 
     Lazy-imports provider SDKs so they are optional until actually used.
     """
-    if mode in _client_cache:
-        return _client_cache[mode]
+    cache_key = (base_url, mode)
+    if cache_key in _client_cache:
+        return _client_cache[cache_key]
 
     try:
         from openai import AsyncOpenAI  # type: ignore
@@ -84,7 +89,8 @@ def _get_openai_client(mode: Any = None):
         ) from e
 
     client = AsyncOpenAI(
-        api_key=os.getenv("OPENAI_API_KEY"),
+        api_key=api_key or os.getenv("OPENAI_API_KEY"),
+        base_url=base_url,
         timeout=300.0,
     )
 
@@ -97,7 +103,7 @@ def _get_openai_client(mode: Any = None):
     except Exception:
         pass
 
-    _client_cache[mode] = client
+    _client_cache[cache_key] = client
     return client
 
 
@@ -142,11 +148,14 @@ async def generate_structured_response(
     if user_prompt:
         messages.append({"role": "user", "content": user_prompt})
 
-    client = _get_openai_client(mode=instructor_mode_for_model(model))
+    route = resolve_native_route(model)
+    client = _get_openai_client(
+        base_url=route.base_url, api_key=route.api_key, mode=route.mode
+    )
 
     try:
         kwargs: dict[str, Any] = {
-            "model": model,
+            "model": route.wire_model,
             "messages": messages,
             "response_model": response_type,
             "temperature": temperature,
