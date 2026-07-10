@@ -1,0 +1,254 @@
+[
+  {
+    "resource_id": "1a2b3c4d-5e6f-7890-abcd-ef1234567890",
+    "task_name": "Risk Appetite & Limits",
+    "agent_id": "documentation_lead",
+    "timestep": 1,
+    "started_timestep": 0,
+    "score": 8.0,
+    "reasoning": "The script is well-structured, uses realistic distributions, and generates all required fields (PD, LGD, EAD, default/cure flags) with appropriate downturn adjustments. It is specific with concrete parameters and internally consistent. However, it generates only one observation per account rather than a true panel of account-month observations, which slightly limits its completeness for time-series analysis."
+  },
+  {
+    "resource_id": "2b3c4d5e-6f7a-8901-bcde-f12345678901",
+    "task_name": "Risk Appetite & Limits",
+    "agent_id": "documentation_lead",
+    "timestep": 1,
+    "started_timestep": 0,
+    "score": 9.0,
+    "reasoning": "The artifact provides a complete, well-structured hierarchical limit system with three clearly defined tiers, concrete numeric thresholds, monitoring schedules, severity classification, and an adjustment process. It is highly specific with detailed tables and examples, internally consistent, and covers all stated requirements, though it lacks explicit references to external regulatory sources or detailed allocation formulas that would elevate it to a 10."
+  },
+  {
+    "resource_id": "3c4d5e6f-7a8b-9012-cdef-123456789012",
+    "task_name": "Risk Appetite & Limits",
+    "agent_id": "documentation_lead",
+    "timestep": 1,
+    "started_timestep": 0,
+    "score": 9.5,
+    "reasoning": "The artifact is highly complete and specific, providing concrete thresholds (e.g., 5%, 15%), named roles (CRO, CEO, Board Risk Committee), precise timeframes (15 min, 1 hour, etc.), and a structured escalation flow. It includes all required elements: three-tier escalation, communication flow, resolution timelines, documentation requirements, and recurrence enforcement. The only minor gap is that the recurrence table uses '90 days' and '180 days' inconsistently without a clear rationale, but this does not significantly detract from overall quality."
+  },
+  {
+    "resource_id": "4d5e6f7a-8b90-1234-def0-123456789abc",
+    "task_name": "Risk Appetite & Limits",
+    "agent_id": "documentation_lead",
+    "timestep": 1,
+    "started_timestep": 0,
+    "score": 10.0,
+    "reasoning": "The artifact is comprehensive, with concrete figures, clear traceability to ICAAP, management actions, and review cycles. It is internally consistent and directly addresses the task of linking risk appetite, limits, breach escalation, stress testing, and management actions. No gaps or vague filler."
+  },
+  {
+    "resource_id": "1a3b5c7e-9f02-4d68-ac13-57e9f2b4c6d8",
+    "task_name": "ICAAP Architecture Doc",
+    "agent_id": "documentation_lead",
+    "timestep": 4,
+    "started_timestep": 3,
+    "score": 9.0,
+    "reasoning": "The document is highly comprehensive, covering all required layers with detailed components, concrete thresholds, integration timelines, and traceability matrices. It demonstrates strong specificity and internal consistency, and includes evidence of regulatory compliance mapping. Minor deduction for using generic placeholders (e.g., example technologies, author name) rather than institution-specific details, but overall it meets the standard of thorough professional work."
+  },
+  {
+    "resource_id": "1e8b2f4a-7c3d-4a5e-9b1f-6d2e8a3c5b7f",
+    "task_name": "Governance Roles & Approvals",
+    "agent_id": "documentation_lead",
+    "timestep": 6,
+    "started_timestep": 5,
+    "score": 9.0,
+    "reasoning": "The artifact provides a comprehensive and well-structured governance framework with detailed committees, roles, sign-off workflows, escalation procedures, and a RACI matrix. It is specific with concrete figures, named roles, and meeting frequencies, and is internally consistent. Minor lack of reference to specific regulatory standards does not detract from overall quality."
+  },
+  {
+    "resource_id": "2f9c3e5b-8d4a-4b1e-9c2f-7e3d1a4b6c8e",
+    "task_name": "Governance Roles & Approvals",
+    "agent_id": "documentation_lead",
+    "timestep": 6,
+    "started_timestep": 5,
+    "score": 9.0,
+    "reasoning": "The artifact provides a complete and specific three-tier governance model with clear roles, meeting frequencies, and responsibilities. The sign-off flow and escalation structure are well-defined with named owners and concrete timeframes. It references relevant regulatory guidelines and maintains internal consistency across all components."
+  },
+  {
+    "resource_id": "1a2b3c4d-5e6f-7890-abcd-ef1234567890",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 7,
+    "started_timestep": 6,
+    "score": 5.0,
+    "reasoning": "The script generates the requested PD, LGD, EAD, and default/cure flags for 10,000 observations, with specific distributions and parameters. However, it has a critical flaw: the risk_score (and thus PD values) is generated in two blocks (Wholesale then Retail) without aligning the order with the randomly generated portfolio_type, causing inconsistency between PD and portfolio type per row. Additionally, despite claiming monthly observations over 5 years, it only creates one observation per account (random dates), not a proper time series. These gaps make the artifact only partially usable."
+  },
+  {
+    "resource_id": "2b3c4d5e-6f7a-8901-bcde-f2345678901a",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 7,
+    "started_timestep": 6,
+    "score": 6.5,
+    "reasoning": "The artifact provides a functional data reconciliation pipeline with concrete steps (completeness, range checks, cure handling, downturn adjustments) and outputs a reconciled dataset. However, it lacks traceability to specific input data sources or schema definitions, uses hardcoded multipliers without justification or reference to regulatory standards, and the output column renaming introduces potential confusion (e.g., 'default_flag_model' vs 'default_for_modeling'). The code is more of a script than a documented pipeline, missing error handling, logging, or parameterization expected in professional work."
+  },
+  {
+    "resource_id": "3c4d5e6f-7a8b-9012-cdef-3456789012ab",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 7,
+    "started_timestep": 6,
+    "score": 6.5,
+    "reasoning": "The report provides a structured overview with concrete figures (e.g., 10,000 records, 35%/65% mix, specific multipliers) and lists reconciliation checks, cure handling, and downturn adjustments. However, it lacks traceability to actual data sources or validation evidence, uses vague terms like 'typical regulatory stress scenarios' and 'industry averages' without citations, and does not detail the methodology for generating or reconciling the data, leaving significant gaps for a professional work product."
+  },
+  {
+    "resource_id": "4d5e6f7a-8b90-1234-cdef-4567890123ab",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 7,
+    "started_timestep": 6,
+    "score": 4.5,
+    "reasoning": "The artifact provides a structured approach with concrete figures (35%/65% segment split, 50% PD reduction, 60% LGD reduction, seed=42) and covers key risk parameters, but relies entirely on synthetic data with no traceability to real inputs or sources, and the quality self-assessment of 4.5/10 is low, reflecting significant gaps in completeness and evidence."
+  },
+  {
+    "resource_id": "3c4d5e6f-7a8b-9012-cdef-3456789012ab",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 7,
+    "started_timestep": 6,
+    "score": 8.0,
+    "reasoning": "The report provides a comprehensive and specific overview of data preparation steps, including default statistics, reconciliation checks, cure handling with exact adjustments, and downturn multipliers per portfolio type. Internal consistency holds (e.g., weighted default rates align). Minor gaps exist: reconciliation checks are listed but lack actual results or evidence of passing, and traceability to source data is limited. Overall, it is a thorough professional summary."
+  },
+  {
+    "resource_id": "4d5e6f7a-8b90-1234-cdef-4567890123ab",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 7,
+    "started_timestep": 6,
+    "score": 9.0,
+    "reasoning": "The artifact provides a comprehensive and specific summary of the data preparation task, including concrete figures (e.g., 35% wholesale, 50% PD reduction), clear approach steps, and honest limitations. It is internally consistent and meets the stated requirements for a structured JSON output. The only minor issue is the ambiguous scale for quality_self_assessment, but overall it is thorough and professional."
+  },
+  {
+    "resource_id": "3001e77c-db45-4d5f-9cfb-fe52834d16b8",
+    "task_name": "Risk Inventory & Materiality",
+    "agent_id": "documentation_lead",
+    "timestep": 8,
+    "started_timestep": 7,
+    "score": 9.5,
+    "reasoning": "The artifact is exceptionally thorough, covering all six risk categories with detailed sub-risks, qualitative materiality scales, specific methods, and named owners. It includes a heat map, method mapping, and clear documentation with traceability to regulatory sources. The content is internally consistent and avoids vague filler. A minor deduction for not including quantitative materiality thresholds, but the qualitative scale is appropriate for gross assessment and the document is otherwise professionally complete."
+  },
+  {
+    "resource_id": "4c71f30e-f26f-4b91-ac4d-1e4be295b699",
+    "task_name": "Risk Inventory & Materiality",
+    "agent_id": "documentation_lead",
+    "timestep": 8,
+    "started_timestep": 7,
+    "score": 9.0,
+    "reasoning": "This artifact provides a comprehensive and well-structured summary of risk inventory with materiality levels, assessment methods, named owners, and specific sub-risks for each category. It is concrete, traceable, and internally consistent, fulfilling the task effectively. Minor improvements could include additional risk types or more granular methods, but overall quality is high."
+  },
+  {
+    "resource_id": "1e3b4c5d-6a7b-8c9d-0e1f-2a3b4c5d6e7f",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "op_risk_analyst",
+    "timestep": 9,
+    "started_timestep": 8,
+    "score": 9.0,
+    "reasoning": "The artifact is nearly comprehensive, covering all required domains with concrete thresholds, detailed pathways, and structured remediation tables. It demonstrates strong specificity and internal consistency. The only minor weakness is the lack of explicit references to input data or source documents, but the overall quality is thorough professional work."
+  },
+  {
+    "resource_id": "2f4a5b6c-7d8e-9f0a-1b2c-3d4e5f6a7b8c",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "op_risk_analyst",
+    "timestep": 9,
+    "started_timestep": 8,
+    "score": 8.5,
+    "reasoning": "The artifact provides a well-structured summary table with concrete metrics (CET1 ratios, LCR percentages, specific timeframes) for each pathway, directly fulfilling the reverse stress test task. It is internally consistent and specific, though it lacks explicit traceability to source data or assumptions behind the probability and complexity ratings, which prevents a perfect score."
+  },
+  {
+    "resource_id": "3a5b6c7d-8e9f-0a1b-2c3d-4e5f6a7b8c9d",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "op_risk_analyst",
+    "timestep": 9,
+    "started_timestep": 8,
+    "score": 8.0,
+    "reasoning": "The artifact provides a structured, specific description of the reverse stress test methodology, referencing regulatory standards (PRA SS9/18, EBA) and industry practices. It clearly outlines key components (conditions, pathways, remediation, governance) and includes a thoughtful self-assessment. However, it lacks quantitative details or firm-specific calibration, which would be expected in a fully professional work product. The self-assessment of 4/5 aligns with this evaluation."
+  },
+  {
+    "resource_id": "c1b8e3a2-7f4d-4a9c-b6e1-2d3f5a8c7e0b",
+    "task_name": "Model Estimation & Calibration",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 10,
+    "started_timestep": 9,
+    "score": 9.0,
+    "reasoning": "The report comprehensively covers all required components (PD/LGD/EAD segmentation, calibration, concentration risk, downturn, economic capital, sensitivity) with specific numerical tables, formulas, and references to Basel standards. It demonstrates internal consistency and includes validation and limitations, making it thorough professional work."
+  },
+  {
+    "resource_id": "d4f6a1b2-8e3c-4b7a-9d0e-2f5c1a8b6e7d",
+    "task_name": "Model Estimation & Calibration",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 10,
+    "started_timestep": 9,
+    "score": 8.5,
+    "reasoning": "The artifact provides a complete, structured CSV with all required segment-level PD/LGD/EAD parameters, capital calculations, and concentration metrics, directly matching the task description. It includes concrete figures for 20 segments plus summary statistics, with clear traceability to the hypothetical portfolio context, though the derivation of capital formulas is not explicitly documented."
+  },
+  {
+    "resource_id": "a9b8c7d6-5e4f-3a2b-1c0d-9e8f7a6b5c4d",
+    "task_name": "Model Estimation & Calibration",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 10,
+    "started_timestep": 9,
+    "score": 9.0,
+    "reasoning": "The executive summary is comprehensive and specific, providing concrete figures (e.g., PD ranges, AUC=0.78, capital amounts) across all required model components. It is well-structured, internally consistent, and includes actionable recommendations. Minor omission of data period or sample size does not detract significantly from its purpose for senior management."
+  },
+  {
+    "resource_id": "e1c37b8f-9d2a-4b6c-8f3d-7e5a2c1b9f0d",
+    "task_name": "Sensitivity & Consistency Checks",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 12,
+    "started_timestep": 11,
+    "score": 9.5,
+    "reasoning": "The report is comprehensive with detailed parameter sweeps, reconciliation, and overlay analysis. It provides specific numerical results, elasticity estimates, and statistical tests. Findings are clearly linked to evidence. Minor lack of normalization details for heat map, but overall thorough professional work."
+  },
+  {
+    "resource_id": "f2a4c8e0-1b3d-4e7f-9a5c-8d6b2f1e0c3a",
+    "task_name": "Sensitivity & Consistency Checks",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 12,
+    "started_timestep": 11,
+    "score": 5.0,
+    "reasoning": "The artifact provides highly specific and structured sensitivity data, overlay reconciliation, and calibration metrics, covering a wide range of scenarios. However, a critical internal consistency issue exists: the credit spread (CS) shocks show an inverted relationship where decreasing spreads (CS_neg2) increase PD/ECL and increasing spreads decrease them, contradicting typical credit risk behavior. This undermines the reliability of the sensitivity analysis and suggests a possible data or model error, placing the artifact in the 'usable but with real gaps' range."
+  },
+  {
+    "resource_id": "d4b8a2f1-7c3e-4a5d-9b6f-0e1c2d3f4a5b",
+    "task_name": "Sensitivity & Consistency Checks",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 12,
+    "started_timestep": 11,
+    "score": 9.0,
+    "reasoning": "The artifact is highly complete and specific, with concrete figures for portfolio context, sensitivity sweeps, reconciliation, overlays, and recommendations. It provides traceable evidence (e.g., calibration metrics, empirical data for overlays) and maintains internal consistency across all sections. Minor gaps (e.g., missing explicit ECL impact per shock in sweeps) prevent a perfect score, but overall it represents thorough professional work."
+  },
+  {
+    "resource_id": "1b8f3a2c-7d4e-4f12-9a3b-6c5d8e2f1a0b",
+    "task_name": "Loss Data Analysis",
+    "agent_id": "op_risk_analyst",
+    "timestep": 15,
+    "started_timestep": 14,
+    "score": 8.5,
+    "reasoning": "The artifact provides a thorough, well-structured analysis of 48 operational risk loss events with concrete figures, named categories (Basel event types, severity bands), and statistical measures (mean, median, skewness, kurtosis, percentiles). It includes KRI tracking, model risk overlay with scenario parameters, and references to data quality limitations, demonstrating completeness and traceability. Minor deduction for lack of explicit cross-referencing to external sources or validation of the 'model risk overlay' assumptions, but overall it meets professional standards for a loss data analysis report."
+  },
+  {
+    "resource_id": "be2e3d50-1a2b-4c3d-8e5f-6a7b8c9d0e1f",
+    "task_name": "Behavioral Assumptions",
+    "agent_id": "irrbb_analyst",
+    "timestep": 16,
+    "started_timestep": 15,
+    "score": 8.5,
+    "reasoning": "The artifact is highly complete and specific, providing concrete numerical assumptions (e.g., PTRs of 25% for retail sight deposits, core ratios of 70%) with clear justifications and regulatory references (BCBS 368, EBA/GL/2022/14). It demonstrates strong traceability through methodology descriptions (historical regression, minimum balance analysis) and covers all major product types. Minor deduction for the artifact being cut off mid-sentence in section 2.3, which slightly reduces completeness."
+  },
+  {
+    "resource_id": "28a2ea97-0b2f-4c6f-a7c0-2ed10852511b",
+    "task_name": "Scenario Workshop",
+    "agent_id": "op_risk_analyst",
+    "timestep": 17,
+    "started_timestep": 16,
+    "score": 1.0,
+    "reasoning": "The artifact contains only a preliminary reasoning step about checking context, with no actual workshop narratives, parameter rationale, or any substantive output. It fails to fulfill the task description of conducting a scenario workshop and documenting results. The content is extremely superficial and incomplete."
+  },
+  {
+    "resource_id": "c052ed3c-dab9-4157-aa2d-49ce75a3e155",
+    "task_name": "Quantification & Overlay",
+    "agent_id": "op_risk_analyst",
+    "timestep": 19,
+    "started_timestep": 18,
+    "score": 1.0,
+    "reasoning": "The artifact contains no quantification, overlay, or distribution summaries. The agent only noted missing input resources and produced no substantive output. The task is completely unfulfilled, resulting in a very low quality score."
+  }
+]

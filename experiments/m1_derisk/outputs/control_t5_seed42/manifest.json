@@ -1,0 +1,21 @@
+{
+  "workflow": "icaap",
+  "condition": "control",
+  "seed": 42,
+  "max_timesteps": 30,
+  "reference_boundary": 5,
+  "target_agent": "documentation_lead",
+  "started_at": "2026-07-10T18:11:49.716877",
+  "finished_at": "2026-07-10T18:44:14.146653",
+  "observation_policy": {
+    "expose_worker_system_prompts": false,
+    "worker_metadata": "capabilities",
+    "message_window": 10
+  },
+  "perturbation_schedule": {
+    "num_perturbations": 0,
+    "perturbations": []
+  },
+  "manager_model": "openrouter/deepseek/deepseek-v4-flash",
+  "target_agent_final_prompt_prefix": "You assemble ICAAP documentation including CAS, risk coverage, stress results, a"
+}

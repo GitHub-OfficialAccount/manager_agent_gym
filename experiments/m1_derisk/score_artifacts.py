@@ -30,8 +30,6 @@ figures, named items, structure) vs. vague filler, evidence/traceability
 does NOT count as quality. Score 0-10 where 8-10 = thorough professional work,
 4-7 = usable but with real gaps, 0-3 = superficial or unsubstantiated."""
 
-MAX_CONTENT_CHARS = 6000
-
 
 class ArtifactScore(BaseModel):
     score: float = Field(..., ge=0.0, le=10.0)
@@ -39,7 +37,8 @@ class ArtifactScore(BaseModel):
 
 
 async def score_artifact(artifact: dict, model: str, seed: int) -> dict:
-    content = (artifact.get("content") or "")[:MAX_CONTENT_CHARS]
+    # No truncation: the library's own rubric scoring feeds full content.
+    content = artifact.get("content") or ""
     user_prompt = (
         f"TASK: {artifact['task_name']}\n"
         f"ARTIFACT NAME: {artifact.get('name', '')}\n"

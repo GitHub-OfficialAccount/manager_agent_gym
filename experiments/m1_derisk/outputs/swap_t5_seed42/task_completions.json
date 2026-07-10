@@ -1,0 +1,212 @@
+[
+  {
+    "timestep": 1,
+    "started_timestep": 0,
+    "task_id": "00000000-0000-0000-0000-000000000064",
+    "task_name": "Risk Appetite & Limits",
+    "agent_id": "irrbb_analyst",
+    "output_resource_ids": [
+      "1a2b3c4d-0011-5000-8000-000000000001"
+    ]
+  },
+  {
+    "timestep": 2,
+    "started_timestep": 1,
+    "task_id": "00000000-0000-0000-0000-000000000065",
+    "task_name": "ICAAP Architecture Doc",
+    "agent_id": "documentation_lead",
+    "output_resource_ids": [
+      "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    ]
+  },
+  {
+    "timestep": 3,
+    "started_timestep": 2,
+    "task_id": "00000000-0000-0000-0000-000000000066",
+    "task_name": "Governance Roles & Approvals",
+    "agent_id": "op_risk_analyst",
+    "output_resource_ids": [
+      "3b0d1e50-8a32-4b12-9d87-f4c2a1b8e007",
+      "6f4c8a2d-9b1e-4f37-8c6d-3e5a2f1b0c9d",
+      "9a7b3c5d-8e2f-4a1b-9d6c-7f4e2a3b1c8d",
+      "2d8f4a6e-5c3b-4d9f-8a7e-1b6c3d2e9f0a",
+      "5e1a9c7b-4d2f-4b8e-9c3a-6f7d2e1a8b4c"
+    ]
+  },
+  {
+    "timestep": 4,
+    "started_timestep": 3,
+    "task_id": "00000000-0000-0000-0000-00000000006e",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "c3d4e5f6-a7b8-9012-cdef-123456789012",
+      "d4e5f6a7-b8c9-0123-defa-234567890123",
+      "e5f6a7b8-c9d0-1234-efab-345678901234"
+    ]
+  },
+  {
+    "timestep": 5,
+    "started_timestep": 4,
+    "task_id": "00000000-0000-0000-0000-000000000001",
+    "task_name": "Risk Inventory & Materiality",
+    "agent_id": "documentation_lead",
+    "output_resource_ids": [
+      "d8842a5b-1e2c-4e3d-8f7a-9b0c1d2e3f4a"
+    ]
+  },
+  {
+    "timestep": 6,
+    "started_timestep": 5,
+    "task_id": "00000000-0000-0000-0000-00000000006f",
+    "task_name": "Model Estimation & Calibration",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "6a8f9d21-7e3b-4c5a-9d0f-1e2b3c4d5e6f",
+      "b7e1f2a3-8c4d-5e6f-9a0b-1c2d3e4f5a6b"
+    ]
+  },
+  {
+    "timestep": 7,
+    "started_timestep": 6,
+    "task_id": "00000000-0000-0000-0000-000000000006",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "documentation_lead",
+    "output_resource_ids": [
+      "1a2b3c4d-1234-5678-9abc-def012345678"
+    ]
+  },
+  {
+    "timestep": 8,
+    "started_timestep": 7,
+    "task_id": "00000000-0000-0000-0000-000000000070",
+    "task_name": "Sensitivity & Consistency Checks",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "1b5c7a3e-8f2d-4a6b-9c1e-3d4f5a6b7c8d",
+      "2c6d8b4f-9e3a-4b7c-8d1e-5f6a7b8c9d0e",
+      "3d7e9c5a-0f4b-4c8d-9e2f-6a7b8c9d0e1f",
+      "4e8f0d6b-1a5c-4d9e-8f3a-7b8c9d0e1f2a"
+    ]
+  },
+  {
+    "timestep": 9,
+    "started_timestep": 8,
+    "task_id": "00000000-0000-0000-0000-000000000078",
+    "task_name": "Behavioral Assumptions",
+    "agent_id": "irrbb_analyst",
+    "output_resource_ids": [
+      "e83a7f1b-2c4d-4f5e-9a8b-1c2d3e4f5a6b",
+      "f7b8c9d0-1e2f-3a4b-5c6d-7e8f9a0b1c2d"
+    ]
+  },
+  {
+    "timestep": 11,
+    "started_timestep": 10,
+    "task_id": "00000000-0000-0000-0000-000000000079",
+    "task_name": "Shock Application & Limits Check",
+    "agent_id": "irrbb_analyst",
+    "output_resource_ids": [
+      "1cbe5ba3-288a-4f6c-9b5a-6f29cf837804"
+    ]
+  },
+  {
+    "timestep": 13,
+    "started_timestep": 12,
+    "task_id": "00000000-0000-0000-0000-000000000082",
+    "task_name": "Loss Data Analysis",
+    "agent_id": "op_risk_analyst",
+    "output_resource_ids": [
+      "1a2b3c4d-1111-2222-3333-444455556666",
+      "2b3c4d5e-2222-3333-4444-555566667777"
+    ]
+  },
+  {
+    "timestep": 14,
+    "started_timestep": 13,
+    "task_id": "00000000-0000-0000-0000-00000000007a",
+    "task_name": "Reconciliation & Reporting",
+    "agent_id": "irrbb_analyst",
+    "output_resource_ids": [
+      "a4de7704-26eb-4ea6-aa60-8ea6850a80c7"
+    ]
+  },
+  {
+    "timestep": 15,
+    "started_timestep": 14,
+    "task_id": "00000000-0000-0000-0000-000000000083",
+    "task_name": "Scenario Workshop",
+    "agent_id": "op_risk_analyst",
+    "output_resource_ids": [
+      "1e1a8882-f048-4668-9ec0-0b3f05809e0a"
+    ]
+  },
+  {
+    "timestep": 17,
+    "started_timestep": 16,
+    "task_id": "00000000-0000-0000-0000-000000000084",
+    "task_name": "Quantification & Overlay",
+    "agent_id": "op_risk_analyst",
+    "output_resource_ids": [
+      "1ea2518a-0797-4d35-9508-ad296057787a"
+    ]
+  },
+  {
+    "timestep": 19,
+    "started_timestep": 18,
+    "task_id": "00000000-0000-0000-0000-00000000008c",
+    "task_name": "Scenario Definitions",
+    "agent_id": "stress_testing_designer",
+    "output_resource_ids": [
+      "1a2b3c4d-5e6f-7890-abcd-ef1234567890"
+    ]
+  },
+  {
+    "timestep": 21,
+    "started_timestep": 20,
+    "task_id": "00000000-0000-0000-0000-00000000008d",
+    "task_name": "Severity Calibration",
+    "agent_id": "stress_testing_designer",
+    "output_resource_ids": [
+      "22ac533b-b25e-4ae0-afa9-a7d8e88a98d6"
+    ]
+  },
+  {
+    "timestep": 23,
+    "started_timestep": 22,
+    "task_id": "00000000-0000-0000-0000-00000000008e",
+    "task_name": "Attribution & Reporting",
+    "agent_id": "stress_testing_designer",
+    "output_resource_ids": [
+      "1d7e3a9b-4c2f-8e5d-9a1b-6f3c8d2e7a4b",
+      "f8a2b4c6-7d9e-1f3a-5b8c-2e4d6f0a9b3c",
+      "3c5e7f9a-1b2d-4e6f-8a9b-0c1d2e3f4a5b"
+    ]
+  },
+  {
+    "timestep": 25,
+    "started_timestep": 24,
+    "task_id": "00000000-0000-0000-0000-000000000096",
+    "task_name": "Projection Engine Setup",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "01a2b3c4-d5e6-7890-abcd-ef1234567890",
+      "02b3c4d5-e6f7-8901-abcd-ef1234567891",
+      "03c4d5e6-f7a8-9012-bcde-f12345678902",
+      "04d5e6f7-a8b9-0123-cdef-1234567890ab",
+      "05e6f7a8-b9c0-1234-defa-234567890abc"
+    ]
+  },
+  {
+    "timestep": 28,
+    "started_timestep": 27,
+    "task_id": "00000000-0000-0000-0000-000000000097",
+    "task_name": "Buffer & MDA Checks",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "b6f8e3a1-c9d4-4f7b-92e5-1d8a3c6f0b2a"
+    ]
+  }
+]

@@ -1,0 +1,138 @@
+[
+  {
+    "timestep": 1,
+    "started_timestep": 0,
+    "task_id": "00000000-0000-0000-0000-000000000064",
+    "task_name": "Risk Appetite & Limits",
+    "agent_id": "documentation_lead",
+    "output_resource_ids": [
+      "1a2b3c4d-5e6f-7890-abcd-ef1234567890",
+      "2b3c4d5e-6f7a-8901-bcde-f12345678901",
+      "3c4d5e6f-7a8b-9012-cdef-123456789012",
+      "4d5e6f7a-8b90-1234-def0-123456789abc"
+    ]
+  },
+  {
+    "timestep": 4,
+    "started_timestep": 3,
+    "task_id": "00000000-0000-0000-0000-000000000065",
+    "task_name": "ICAAP Architecture Doc",
+    "agent_id": "documentation_lead",
+    "output_resource_ids": [
+      "1a3b5c7e-9f02-4d68-ac13-57e9f2b4c6d8"
+    ]
+  },
+  {
+    "timestep": 6,
+    "started_timestep": 5,
+    "task_id": "00000000-0000-0000-0000-000000000066",
+    "task_name": "Governance Roles & Approvals",
+    "agent_id": "documentation_lead",
+    "output_resource_ids": [
+      "1e8b2f4a-7c3d-4a5e-9b1f-6d2e8a3c5b7f",
+      "2f9c3e5b-8d4a-4b1e-9c2f-7e3d1a4b6c8e"
+    ]
+  },
+  {
+    "timestep": 7,
+    "started_timestep": 6,
+    "task_id": "00000000-0000-0000-0000-00000000006e",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "1a2b3c4d-5e6f-7890-abcd-ef1234567890",
+      "2b3c4d5e-6f7a-8901-bcde-f2345678901a",
+      "3c4d5e6f-7a8b-9012-cdef-3456789012ab",
+      "4d5e6f7a-8b90-1234-cdef-4567890123ab",
+      "3c4d5e6f-7a8b-9012-cdef-3456789012ab",
+      "4d5e6f7a-8b90-1234-cdef-4567890123ab"
+    ]
+  },
+  {
+    "timestep": 8,
+    "started_timestep": 7,
+    "task_id": "00000000-0000-0000-0000-000000000001",
+    "task_name": "Risk Inventory & Materiality",
+    "agent_id": "documentation_lead",
+    "output_resource_ids": [
+      "3001e77c-db45-4d5f-9cfb-fe52834d16b8",
+      "4c71f30e-f26f-4b91-ac4d-1e4be295b699"
+    ]
+  },
+  {
+    "timestep": 9,
+    "started_timestep": 8,
+    "task_id": "00000000-0000-0000-0000-000000000006",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "op_risk_analyst",
+    "output_resource_ids": [
+      "1e3b4c5d-6a7b-8c9d-0e1f-2a3b4c5d6e7f",
+      "2f4a5b6c-7d8e-9f0a-1b2c-3d4e5f6a7b8c",
+      "3a5b6c7d-8e9f-0a1b-2c3d-4e5f6a7b8c9d"
+    ]
+  },
+  {
+    "timestep": 10,
+    "started_timestep": 9,
+    "task_id": "00000000-0000-0000-0000-00000000006f",
+    "task_name": "Model Estimation & Calibration",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "c1b8e3a2-7f4d-4a9c-b6e1-2d3f5a8c7e0b",
+      "d4f6a1b2-8e3c-4b7a-9d0e-2f5c1a8b6e7d",
+      "a9b8c7d6-5e4f-3a2b-1c0d-9e8f7a6b5c4d"
+    ]
+  },
+  {
+    "timestep": 12,
+    "started_timestep": 11,
+    "task_id": "00000000-0000-0000-0000-000000000070",
+    "task_name": "Sensitivity & Consistency Checks",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "e1c37b8f-9d2a-4b6c-8f3d-7e5a2c1b9f0d",
+      "f2a4c8e0-1b3d-4e7f-9a5c-8d6b2f1e0c3a",
+      "d4b8a2f1-7c3e-4a5d-9b6f-0e1c2d3f4a5b"
+    ]
+  },
+  {
+    "timestep": 15,
+    "started_timestep": 14,
+    "task_id": "00000000-0000-0000-0000-000000000082",
+    "task_name": "Loss Data Analysis",
+    "agent_id": "op_risk_analyst",
+    "output_resource_ids": [
+      "1b8f3a2c-7d4e-4f12-9a3b-6c5d8e2f1a0b"
+    ]
+  },
+  {
+    "timestep": 16,
+    "started_timestep": 15,
+    "task_id": "00000000-0000-0000-0000-000000000078",
+    "task_name": "Behavioral Assumptions",
+    "agent_id": "irrbb_analyst",
+    "output_resource_ids": [
+      "be2e3d50-1a2b-4c3d-8e5f-6a7b8c9d0e1f"
+    ]
+  },
+  {
+    "timestep": 17,
+    "started_timestep": 16,
+    "task_id": "00000000-0000-0000-0000-000000000083",
+    "task_name": "Scenario Workshop",
+    "agent_id": "op_risk_analyst",
+    "output_resource_ids": [
+      "28a2ea97-0b2f-4c6f-a7c0-2ed10852511b"
+    ]
+  },
+  {
+    "timestep": 19,
+    "started_timestep": 18,
+    "task_id": "00000000-0000-0000-0000-000000000084",
+    "task_name": "Quantification & Overlay",
+    "agent_id": "op_risk_analyst",
+    "output_resource_ids": [
+      "c052ed3c-dab9-4157-aa2d-49ce75a3e155"
+    ]
+  }
+]
