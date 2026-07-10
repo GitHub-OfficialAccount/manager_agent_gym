@@ -219,6 +219,10 @@ OUTPUT REQUIREMENTS (JSON only, no prose outside JSON):
                 model=self.model,
                 # temperature=0.1,
                 seed=self.seed,
+                # Judge outputs occasionally fail to parse (e.g. malformed JSON from
+                # fast models); Instructor re-prompts with the parse error, and a
+                # failed rubric otherwise records a hard 0.0.
+                max_retries=2,
             )
 
             # Interpret union score (bool | level | numeric)
