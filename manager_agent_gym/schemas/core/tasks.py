@@ -213,6 +213,12 @@ class Task(BaseModel):
             lines.append(f"{prefix}  Estimated cost: ${float(self.estimated_cost):.2f}")
         if self.actual_cost is not None:
             lines.append(f"{prefix}  Actual cost: ${float(self.actual_cost):.2f}")
+        if self.status == TaskStatus.FAILED and self.execution_notes:
+            # Surface why it failed — inspectors can't diagnose from status alone.
+            lines.append(f"{prefix}  Failure notes (most recent first):")
+            for note in self.execution_notes[-2:][::-1]:
+                text = note if len(note) <= 500 else note[:500] + "…"
+                lines.append(f"{prefix}    - {text}")
         if self.dependency_task_ids:
             dep_ids = ", ".join(str(d) for d in self.dependency_task_ids)
             lines.append(f"{prefix}  Depends on: {dep_ids}")

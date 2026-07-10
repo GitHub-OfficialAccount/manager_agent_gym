@@ -35,6 +35,7 @@ from ...schemas.unified_results import ExecutionResult, create_task_result
 from ..workflow_agents.interface import AgentInterface
 
 from ..common.llm_interface import build_litellm_model_id
+from ..common.logging import logger
 
 if TYPE_CHECKING:
     pass
@@ -229,13 +230,22 @@ class AIAgent(AgentInterface[AIAgentConfig]):
             # Handle cases where input_tokens_details or cached_tokens don't exist
             pass
 
-        # Calculate cost using LiteLLM
-        prompt_cost, completion_cost = cost_per_token(
-            model=self.config.model_name,
-            prompt_tokens=usage.input_tokens,
-            completion_tokens=usage.output_tokens,
-            cache_read_input_tokens=cached_tokens,
-            cache_creation_input_tokens=cache_creation_tokens,
-        )
+        # Calculate cost using LiteLLM; models missing from its price map raise,
+        # and cost bookkeeping must never fail the task itself.
+        try:
+            prompt_cost, completion_cost = cost_per_token(
+                model=self.config.model_name,
+                prompt_tokens=usage.input_tokens,
+                completion_tokens=usage.output_tokens,
+                cache_read_input_tokens=cached_tokens,
+                cache_creation_input_tokens=cache_creation_tokens,
+            )
+        except Exception as e:
+            logger.warning(
+                "Cost lookup failed for model %s (%s); recording $0 for this call",
+                self.config.model_name,
+                e.__class__.__name__,
+            )
+            return 0.0
 
         return prompt_cost + completion_cost
