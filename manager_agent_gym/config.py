@@ -15,6 +15,25 @@ class Settings(BaseSettings):
     EXA_API_KEY: str = "na"
     COHERE_API_KEY: str = "na"
 
+    # Optional OpenRouter / provider routing; leave both "na" to use native providers.
+    # Exported to os.environ below so the OpenAI SDK (OPENAI_BASE_URL) and LiteLLM
+    # (OPENROUTER_API_KEY) pick them up. Routing policy lives in
+    # core/common/model_provider.py.
+    OPENROUTER_API_KEY: str = "na"
+    OPENAI_BASE_URL: str = "na"
+
+    # Default model names by role, resolved via model_provider.get_model_for_role().
+    # With OpenRouter configured these must be full slugs (e.g. "openai/gpt-4o-mini",
+    # "anthropic/claude-3.7-sonnet"); with native providers use bare names ("gpt-4o").
+    MANAGER_MODEL_NAME: str = "openai/gpt-4o-mini"
+    WORKER_MODEL_NAME: str = "openai/gpt-4o-mini"
+    STAKEHOLDER_MODEL_NAME: str = "openai/gpt-4o-mini"
+    JUDGE_MODEL_NAME: str = "openai/gpt-4o-mini"
+
+    # Output cap passed on every structured-output call that doesn't set its own;
+    # some OpenRouter providers apply very low default output limits otherwise.
+    LLM_DEFAULT_MAX_COMPLETION_TOKENS: int = 4096
+
     # Default simulation configuration
     default_output_dir: str = "./simulation_outputs"
 
@@ -90,6 +109,13 @@ if settings.EXA_API_KEY != "na":
     os.environ["EXA_API_KEY"] = settings.EXA_API_KEY
 if settings.COHERE_API_KEY != "na":
     os.environ["COHERE_API_KEY"] = settings.COHERE_API_KEY
+if settings.OPENROUTER_API_KEY != "na":
+    os.environ["OPENROUTER_API_KEY"] = settings.OPENROUTER_API_KEY
+if settings.OPENAI_BASE_URL != "na":
+    os.environ["OPENAI_BASE_URL"] = settings.OPENAI_BASE_URL
+    # Using a non-OpenAI endpoint (e.g. OpenRouter): the OpenAI Agents SDK would try to
+    # upload traces to platform.openai.com with the non-OpenAI key, causing 401s.
+    os.environ.setdefault("OPENAI_AGENTS_DISABLE_TRACING", "1")
 
 # Soft validation: warn on missing env vars instead of erroring hard
 if settings.ENV == "local":
