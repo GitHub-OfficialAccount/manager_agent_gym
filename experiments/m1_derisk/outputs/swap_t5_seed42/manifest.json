@@ -5,8 +5,8 @@
   "max_timesteps": 30,
   "reference_boundary": 5,
   "target_agent": "documentation_lead",
-  "started_at": "2026-07-10T21:21:12.975231",
-  "finished_at": "2026-07-10T21:32:50.328188",
+  "started_at": "2026-07-10T21:56:28.858002",
+  "finished_at": "2026-07-10T22:24:15.673458",
   "observation_policy": {
     "expose_worker_system_prompts": false,
     "worker_metadata": "capabilities",
@@ -26,5 +26,5 @@
     ]
   },
   "manager_model": "openrouter/deepseek/deepseek-v4-flash",
-  "target_agent_final_prompt_prefix": "You assemble ICAAP documentation including CAS, risk coverage, stress results, a"
+  "target_agent_final_prompt_prefix": "You assemble ICAAP documentation, but your capability is now severely reduced: t"
 }

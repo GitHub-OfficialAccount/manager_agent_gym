@@ -161,13 +161,11 @@ async def generate_structured_response(
             "temperature": temperature,
             "seed": seed,
         }
-        # Always pass an explicit output cap: some OpenRouter providers apply very
-        # low default output limits, silently truncating structured responses.
-        if not max_completion_tokens or max_completion_tokens <= 0:
-            from ...config import settings
-
-            max_completion_tokens = settings.LLM_DEFAULT_MAX_COMPLETION_TOKENS
-        kwargs["max_tokens"] = max_completion_tokens
+        # Only cap output when a caller explicitly asks (upstream behavior).
+        # Forcing a default cap truncates long structured outputs (manager
+        # actions, task decomposition) mid-JSON, causing parse failures.
+        if max_completion_tokens and max_completion_tokens > 0:
+            kwargs["max_tokens"] = max_completion_tokens
 
         # Delegate validation and retries to Instructor (patched method not typed)
         create_fn: Any = client.chat.completions.create

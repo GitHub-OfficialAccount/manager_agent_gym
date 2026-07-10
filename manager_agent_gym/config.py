@@ -28,10 +28,6 @@ class Settings(BaseSettings):
     STAKEHOLDER_MODEL_NAME: str = "openai/gpt-4o-mini"
     JUDGE_MODEL_NAME: str = "openai/gpt-4o-mini"
 
-    # Output cap passed on every structured-output call that doesn't set its own;
-    # some OpenRouter providers apply very low default output limits otherwise.
-    LLM_DEFAULT_MAX_COMPLETION_TOKENS: int = 4096
-
     # Default simulation configuration
     default_output_dir: str = "./simulation_outputs"
 
