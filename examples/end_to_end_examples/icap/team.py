@@ -206,7 +206,6 @@ def create_team_configs():
         system_prompt=(
             "You are the bank CFO balancing regulatory compliance, delivery speed, and resource cost."
         ),
-        model_name="o3",
         name="Bank CFO",
         role="Executive Stakeholder",
         persona_description="Pragmatic, compliance-focused, values timely delivery with adequate quality.",

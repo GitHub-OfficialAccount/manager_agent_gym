@@ -12,6 +12,13 @@ from ..preferences.preference import PreferenceWeights
 from ..preferences.preference import PreferenceChange
 
 
+def _default_stakeholder_model() -> str:
+    """Default stakeholder model name (see core/common/model_provider.py)."""
+    from ...core.common.model_provider import get_model_for_role
+
+    return get_model_for_role("stakeholder")
+
+
 class StakeholderPublicProfile(BaseModel):
     """Minimal public information about the stakeholder available to the manager."""
 
@@ -40,7 +47,8 @@ class StakeholderConfig(AgentConfig):
         description="Short persona description for messaging style",
     )
     model_name: str = Field(
-        description="Model name to use for stakeholder agent", default="o3"
+        default_factory=_default_stakeholder_model,
+        description="Model name to use for stakeholder agent",
     )
     initial_preferences: PreferenceWeights = Field(
         description="Initial, normalized preference weights owned by the stakeholder"

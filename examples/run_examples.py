@@ -47,7 +47,13 @@ from manager_agent_gym.core.evaluation.common_evaluators import build_default_ev
 from manager_agent_gym.schemas.workflow_agents import AgentConfig
 from manager_agent_gym.schemas.preferences.rubric import RunCondition
 
+from manager_agent_gym.core.common.model_provider import (
+    disable_agents_tracing_if_proxied,
+    get_model_for_role,
+)
 from examples.scenarios import SCENARIOS
+
+disable_agents_tracing_if_proxied()
 
 
 def create_workflow(name: str) -> Workflow:
@@ -319,7 +325,9 @@ if __name__ == "__main__":
     parser.add_argument("--workflow_name", required=True)
     parser.add_argument("--offline-run-dir", dest="offline_run_dir", default=None)
     parser.add_argument("--max-timesteps", dest="max_timesteps", type=int, default=None)
-    parser.add_argument("--model-name", dest="model_name", default="o3")
+    parser.add_argument(
+        "--model-name", dest="model_name", default=get_model_for_role("manager")
+    )
     parser.add_argument("--output-dir", dest="output_dir", default=None)
     parser.add_argument("--manager-agent-mode", dest="manager_agent_mode", default=None)
     parser.add_argument("--seed", dest="seed", type=int, default=42)

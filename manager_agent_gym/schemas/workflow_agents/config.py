@@ -6,6 +6,13 @@ from pydantic import BaseModel, Field, field_validator
 from ...schemas.workflow_agents.prompts.persona_prompts import PERSONA_ROLEPLAY_TEMPLATE
 
 
+def _default_worker_model() -> str:
+    """Default AI-worker / human-mock model name (see core/common/model_provider.py)."""
+    from ...core.common.model_provider import get_model_for_role
+
+    return get_model_for_role("worker")
+
+
 class AgentConfig(BaseModel):
     """Base configuration for an agent instance."""
 
@@ -15,7 +22,9 @@ class AgentConfig(BaseModel):
 
     # Core behavior configuration
     system_prompt: str = Field(..., description="System instructions for the agent")
-    model_name: str = Field(default="gpt-4.1", description="LLM model to use")
+    model_name: str = Field(
+        default_factory=_default_worker_model, description="LLM model to use"
+    )
 
     agent_description: str = Field(..., description="Description of the agent")
     agent_capabilities: list[str] = Field(..., description="Capabilities of the agent")
