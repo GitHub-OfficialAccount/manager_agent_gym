@@ -181,3 +181,13 @@ def get_default_action_classes() -> list[type[BaseManagerAction]]:
         # RequestEndWorkflowAction,
         NoOpAction,
     ]
+def unwrap_constrained_action(parsed: BaseModel) -> BaseManagerAction:
+    """Extract the action from a constrained-schema response wrapper.
+
+    Some models leave the per-action ``reasoning`` field blank and only fill
+    the wrapper-level one; propagate it so logs keep the rationale.
+    """
+    action: BaseManagerAction = parsed.action  # type: ignore[attr-defined]
+    if not action.reasoning:
+        action.reasoning = getattr(parsed, "reasoning", "") or ""
+    return action

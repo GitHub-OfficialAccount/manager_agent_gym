@@ -7,7 +7,7 @@ validation. These are used for structured output generation and validation.
 
 from abc import ABC, abstractmethod
 from uuid import UUID
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Literal, TYPE_CHECKING, Any
 from ...core.decomposition import decompose_task, get_workflow_context_string
 from ...schemas.core.communication import Message, MessageType
@@ -78,15 +78,29 @@ class BaseManagerAction(BaseModel, ABC):
     """
 
     reasoning: str = Field(
+        default="",
         description="Concise 2–3 sentence rationale for the chosen action",
         examples=["Agent idle, task READY, skill match found → assigning ai_writer."],
     )
     success: bool | None = Field(
-        description="Whether the action succeeded (set by execute)"
+        default=None, description="Whether the action succeeded (set by execute)"
     )
     result_summary: str | None = Field(
+        default=None,
         description="Short human-readable summary of the result (set by execute)",
     )
+
+    @field_validator("success", mode="before")
+    @classmethod
+    def _coerce_success(cls, v: Any) -> Any:
+        """Tolerate models that emit boolean-ish strings (e.g. "true") for success."""
+        if isinstance(v, str):
+            s = v.strip().lower()
+            if s in {"true", "1", "yes"}:
+                return True
+            if s in {"false", "0", "no", ""}:
+                return False
+        return v
 
     @abstractmethod
     async def execute(

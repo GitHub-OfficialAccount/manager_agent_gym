@@ -18,6 +18,7 @@ from .action_constraints import build_context_constrained_action_schema
 from .llm_action_utils import (
     get_action_descriptions,
     get_default_action_classes,
+    unwrap_constrained_action,
 )
 from ...schemas.core.workflow import Workflow
 from ...schemas.execution import ManagerObservation, ExecutionState
@@ -87,7 +88,7 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
                 model=self.model_name,
                 seed=self._seed,
             )
-            return parsed_action.action  # type: ignore[attr-defined]
+            return unwrap_constrained_action(parsed_action)
 
         except LLMInferenceTruncationError as e:
             concise_reason = (

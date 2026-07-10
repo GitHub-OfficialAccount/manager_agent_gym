@@ -32,6 +32,7 @@ from ...schemas.preferences.preference import PreferenceWeights
 from .llm_action_utils import (
     get_action_descriptions,
     get_default_action_classes,
+    unwrap_constrained_action,
 )
 from .prompts.structured_manager_prompts import (
     STRUCTURED_MANAGER_SYSTEM_PROMPT_TEMPLATE,
@@ -210,8 +211,7 @@ class RandomManagerAgentV2(ManagerAgent):
                 model=self.model_name,
                 seed=self._seed,
             )
-
-            return parsed_action.action  # type: ignore[attr-defined]
+            return unwrap_constrained_action(parsed_action)
 
         except Exception:
             logger.error(
@@ -396,7 +396,6 @@ class OneShotDelegateManagerAgent(ManagerAgent):
                 model=self.model_name,
                 seed=self._seed,
             )
-
             action: AssignTasksToAgentsAction = parsed.action  # type: ignore[attr-defined]
 
             # Fill gaps with fallback agent
