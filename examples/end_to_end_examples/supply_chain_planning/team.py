@@ -227,7 +227,6 @@ def create_team_configs():
             "You are the COO. Early, you prioritize launch speed and reliable slot bookings. Mid‑campaign, you care most about "
             "network stability and customer commitments. During execution, compliance and OTIF become paramount. Keep updates crisp."
         ),
-        model_name="o3",
         name="COO Stakeholder",
         role="Executive Stakeholder",
         persona_description="Operations‑first, customer‑sensitive, and risk‑aware; favors measurable OTIF and clear SLAs.",

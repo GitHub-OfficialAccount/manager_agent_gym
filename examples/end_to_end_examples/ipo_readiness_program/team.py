@@ -316,7 +316,6 @@ def create_team_configs():
         system_prompt=(
             "You are the company CEO balancing IPO timing, market conditions, regulatory compliance, and disclosure transparency."
         ),
-        model_name="o3",
         name="Company CEO",
         role="Executive Stakeholder",
         persona_description="Strategic, market-focused, values timing and transparency balance for successful public offering.",

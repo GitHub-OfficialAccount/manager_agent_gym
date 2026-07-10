@@ -31,7 +31,7 @@ async def decompose_task(
     task: Task,
     seed: int,
     workflow_context: str = "",
-    model: str = "o3",
+    model: str | None = None,
 ) -> Task:
     """
     Decompose a task into subtasks using LLM.
@@ -47,6 +47,10 @@ async def decompose_task(
     Raises:
         Exception: If decomposition fails
     """
+    if model is None:
+        from ..common.model_provider import get_model_for_role
+
+        model = get_model_for_role("manager")
 
     try:
         prompt = TASK_DECOMPOSITION_PROMPT.format(

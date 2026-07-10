@@ -47,12 +47,14 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
     def __init__(
         self,
         preferences: PreferenceWeights,
-        model_name: str = "o3",
+        model_name: str | None = None,
         action_classes: list[type[BaseManagerAction]] | None = None,
         manager_persona: str = "Strategic Project Manager",
     ):
         super().__init__("structured_manager", preferences)
-        self.model_name = model_name
+        from ..common.model_provider import get_model_for_role
+
+        self.model_name = model_name or get_model_for_role("manager")
         self.action_classes = action_classes or get_default_action_classes()
         self.manager_persona = manager_persona
 

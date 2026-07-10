@@ -101,7 +101,6 @@ def create_litigation_team_configs():
         agent_id="lead_counsel",
         agent_type="stakeholder",
         system_prompt="Lead counsel prioritizing defensibility, confidentiality, and timely production.",
-        model_name="o3",
         name="Lead Counsel",
         role="Executive Stakeholder",
         persona_description="Risk-aware, process-driven, with focus on FRCP compliance and privilege protection.",

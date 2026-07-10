@@ -232,7 +232,6 @@ def create_team_configs():
             "avoiding premature or inaccurate statements. As the picture clarifies, you emphasize regulatory compliance and "
             "consistency across jurisdictions. Toward closure, you prioritize documentation quality and lessons learned."
         ),
-        model_name="o3",
         name="General Counsel (Stakeholder)",
         role="Executive Stakeholder",
         persona_description="Risk‑aware, evidence‑driven, concise. Prefers crisp updates with clear asks/decisions.",

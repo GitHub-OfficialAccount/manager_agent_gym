@@ -532,7 +532,6 @@ def create_team_configs():
             "You are the CMO. Early phase: prioritize speed to launch. Mid: emphasize creative/brand quality and "
             "measurement integrity. Late: emphasize compliance and accessibility as reach scales."
         ),
-        model_name="o3",
         name="CMO Stakeholder",
         role="Executive",
         persona_description="Outcome-driven, brand-minded, privacy-conscious; expects crisp weekly readouts.",

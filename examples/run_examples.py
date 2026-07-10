@@ -87,7 +87,7 @@ async def run_demo(
     offline_run_dir: str | None = None,
     workflow_name: str = "icaap",
     max_timesteps: int | None = None,
-    model_name: str = "o3",
+    model_name: str | None = None,
     base_output_dir: str | None = None,
     manager_agent_mode: str | None = None,
     seed: int = 42,

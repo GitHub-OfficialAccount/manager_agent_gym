@@ -222,7 +222,6 @@ def create_team_configs():
             "Early: align criteria and consultation plan. Mid: ensure adverse-impact remediation and humane comms. "
             "Late: verify documentation, benefits accuracy, and post-action audit readiness."
         ),
-        model_name="o3",
         name="CHRO (Stakeholder)",
         role="Executive Stakeholder",
         persona_description="Empathetic and disciplined; expects defensible decisions and respectful execution.",
