@@ -240,4 +240,12 @@ async def end_workflow(
         return f"Failed to request workflow end: {str(e)}"
 
 
-COMMUNICATION_TOOLS.append(end_workflow)
+# NOTE: end_workflow is intentionally NOT added to COMMUNICATION_TOOLS.
+# Its own docstring states it "should only ever be called by the manager agent",
+# but COMMUNICATION_TOOLS is handed to every worker and the stakeholder — giving
+# them the power to terminate the whole run. In practice a worker occasionally
+# calls it and ends the episode early and nondeterministically (observed killing
+# experiment runs one timestep before a scheduled event). The manager ends work
+# via RequestEndWorkflowAction, not this tool path, so removing it here restores
+# the documented intent. Re-append if worker-initiated termination is ever wanted.
+# COMMUNICATION_TOOLS.append(end_workflow)
