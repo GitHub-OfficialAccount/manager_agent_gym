@@ -33,7 +33,7 @@ async def test_generate_structured_response_happy_path(
     llm_iface = importlib.import_module("manager_agent_gym.core.common.llm_interface")
 
     # Patch the _get_openai_client function to return our mock
-    monkeypatch.setattr(llm_iface, "_get_openai_client", lambda: mock_client)
+    monkeypatch.setattr(llm_iface, "_get_openai_client", lambda mode=None: mock_client)
 
     result = await llm_iface.generate_structured_response(
         system_prompt="sys",
@@ -64,7 +64,7 @@ async def test_generate_structured_response_error_wrapping(
     llm_iface = importlib.import_module("manager_agent_gym.core.common.llm_interface")
 
     # Patch the _get_openai_client function to return our mock
-    monkeypatch.setattr(llm_iface, "_get_openai_client", lambda: mock_client)
+    monkeypatch.setattr(llm_iface, "_get_openai_client", lambda mode=None: mock_client)
 
     with pytest.raises(llm_iface.LLMInferenceTruncationError) as exc_info:
         await llm_iface.generate_structured_response(
@@ -98,7 +98,7 @@ async def test_generate_structured_response_exception_propagates(
     llm_iface = importlib.import_module("manager_agent_gym.core.common.llm_interface")
 
     # Patch the _get_openai_client function to return our mock
-    monkeypatch.setattr(llm_iface, "_get_openai_client", lambda: mock_client)
+    monkeypatch.setattr(llm_iface, "_get_openai_client", lambda mode=None: mock_client)
 
     with pytest.raises(llm_iface.LLMInferenceTruncationError) as exc_info:
         await llm_iface.generate_structured_response(
@@ -151,7 +151,7 @@ async def test_generate_structured_response_across_providers(
     llm_iface = importlib.import_module("manager_agent_gym.core.common.llm_interface")
 
     # Patch the _get_openai_client function to return our mock
-    monkeypatch.setattr(llm_iface, "_get_openai_client", lambda: mock_client)
+    monkeypatch.setattr(llm_iface, "_get_openai_client", lambda mode=None: mock_client)
 
     result = await llm_iface.generate_structured_response(
         system_prompt="sys",

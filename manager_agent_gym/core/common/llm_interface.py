@@ -6,6 +6,16 @@ from typing import TypeVar, Type, Any
 import os
 from pydantic import BaseModel
 from .logging import logger
+from .model_provider import (
+    build_litellm_model_id,
+    instructor_mode_for_model,
+)
+
+__all__ = [
+    "LLMInferenceTruncationError",
+    "build_litellm_model_id",
+    "generate_structured_response",
+]
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -55,11 +65,17 @@ class LLMInferenceTruncationError(Exception):
         return base + (" [" + ", ".join(details) + "]" if details else "")
 
 
-def _get_openai_client():
-    """Get configured OpenAI async client patched by Instructor.
+_client_cache: dict[Any, Any] = {}
+
+
+def _get_openai_client(mode: Any = None):
+    """Get configured OpenAI async client patched by Instructor, cached by mode.
 
     Lazy-imports provider SDKs so they are optional until actually used.
     """
+    if mode in _client_cache:
+        return _client_cache[mode]
+
     try:
         from openai import AsyncOpenAI  # type: ignore
     except Exception as e:  # pragma: no cover - import guard
@@ -74,35 +90,15 @@ def _get_openai_client():
 
     try:
         import instructor  # type: ignore
-        instructor.patch(client)  # type: ignore[attr-defined]
+        if mode is not None:
+            instructor.patch(client, mode=mode)
+        else:
+            instructor.patch(client)  # type: ignore[attr-defined]
     except Exception:
         pass
 
+    _client_cache[mode] = client
     return client
-
-
-def build_litellm_model_id(model_id: str) -> str:
-    """Build the litellm model ID by prepending the appropriate provider prefix.
-
-    NOTE: This function is kept for backward compatibility with other parts of the codebase
-    that still use LiteLLM directly. The structured generation functionality now uses
-    OpenAI's native client.
-    """
-    # OpenAI models
-    if model_id.startswith(("gpt-", "o")):
-        return f"openai/{model_id}"
-    # Anthropic models
-    elif model_id.startswith("claude-"):
-        return f"anthropic/{model_id}"
-    # Google models
-    elif model_id.startswith("gemini-"):
-        return f"google/{model_id}"
-    # Bedrock models (already have provider prefix)
-    elif model_id.startswith(("eu.anthropic.", "eu.openai.", "eu.google.", "bedrock/")):
-        return model_id
-    # Default case - return as is
-    else:
-        return model_id
 
 
 # Note: Manual prompt truncation and custom retry loops have been removed.
@@ -145,8 +141,8 @@ async def generate_structured_response(
     messages = [{"role": "system", "content": system_prompt}]
     if user_prompt:
         messages.append({"role": "user", "content": user_prompt})
-    # Get Instructor-patched OpenAI client
-    client = _get_openai_client()
+
+    client = _get_openai_client(mode=instructor_mode_for_model(model))
 
     try:
         kwargs: dict[str, Any] = {
@@ -156,9 +152,13 @@ async def generate_structured_response(
             "temperature": temperature,
             "seed": seed,
         }
-        # Map "max_completion_tokens" if provided
-        if max_completion_tokens and max_completion_tokens > 0:
-            kwargs["max_tokens"] = max_completion_tokens
+        # Always pass an explicit output cap: some OpenRouter providers apply very
+        # low default output limits, silently truncating structured responses.
+        if not max_completion_tokens or max_completion_tokens <= 0:
+            from ...config import settings
+
+            max_completion_tokens = settings.LLM_DEFAULT_MAX_COMPLETION_TOKENS
+        kwargs["max_tokens"] = max_completion_tokens
 
         # Delegate validation and retries to Instructor (patched method not typed)
         create_fn: Any = client.chat.completions.create
