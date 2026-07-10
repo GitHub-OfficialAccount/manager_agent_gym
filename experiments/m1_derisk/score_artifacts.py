@@ -97,7 +97,11 @@ def summarize(run_dir: Path, scores: list[dict]) -> None:
     valid = [s for s in scores if s.get("score") is not None]
     target_scores = [s for s in valid if s["agent_id"] == target]
     other_scores = [s for s in valid if s["agent_id"] != target]
-    boundary = swap_t if swap_t is not None else manifest["max_timesteps"]
+    boundary = (
+        swap_t
+        if swap_t is not None
+        else manifest.get("reference_boundary", manifest["max_timesteps"])
+    )
 
     def effective_t(s: dict) -> int:
         # attribute by start timestep: the agent instance (pre/post-swap
@@ -108,7 +112,7 @@ def summarize(run_dir: Path, scores: list[dict]) -> None:
     post = [s["score"] for s in target_scores if effective_t(s) >= boundary]
 
     print(f"\n== {run_dir.name} (condition={manifest['condition']}, "
-          f"swap_t={swap_t}) ==")
+          f"boundary={boundary}{'' if swap_t is not None else ' [reference]'}) ==")
     print(f"  {target} pre-boundary : {mean(pre)}")
     print(f"  {target} post-boundary: {mean(post)}")
     print(f"  other workers (all t) : {mean([s['score'] for s in other_scores])}")

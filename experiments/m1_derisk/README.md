@@ -34,6 +34,11 @@ uv run python -m experiments.m1_derisk.score_artifacts
 `manifest.json` (ground truth), `probe_reports.json`, `task_completions.json`,
 `artifacts.json`, and after scoring `artifact_scores.json`.
 
+Run directories are named `{condition}_t{swap_timestep}_seed{seed}`, so
+timestep variants never overwrite each other. Control runs ignore the swap
+timestep during the episode but record it as `reference_boundary`, giving
+control artifacts the same matched pre/post split in the scorer.
+
 **Go signal:** target-worker post-swap scores drop clearly below both its own
 pre-swap scores and the control condition's post-boundary scores, with other
 workers flat. **No-go:** streams overlap → fix the degraded prompt or the judge

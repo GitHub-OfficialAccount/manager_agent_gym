@@ -109,7 +109,7 @@ def build_schedule(condition: str, swap_timestep: int) -> PerturbationSchedule:
 async def run_one(
     condition: str, seed: int, max_timesteps: int, swap_timestep: int, out_root: Path
 ) -> Path:
-    run_dir = out_root / f"{condition}_seed{seed}"
+    run_dir = out_root / f"{condition}_t{swap_timestep}_seed{seed}"
     run_dir.mkdir(parents=True, exist_ok=True)
 
     spec = SCENARIOS[WORKFLOW_NAME]
@@ -162,6 +162,10 @@ async def run_one(
         "condition": condition,
         "seed": seed,
         "max_timesteps": max_timesteps,
+        # For control runs the swap timestep is ignored by the episode but kept
+        # as the analysis boundary, so control artifacts get the same matched
+        # pre/post split as the paired swap run.
+        "reference_boundary": swap_timestep,
         "target_agent": TARGET_AGENT,
         "started_at": started_at,
         "finished_at": datetime.now().isoformat(),
