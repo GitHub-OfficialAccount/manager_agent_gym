@@ -34,6 +34,7 @@ from manager_agent_gym import (
     WorkflowExecutionEngine,
 )
 from manager_agent_gym.core.communication.service import CommunicationService
+from manager_agent_gym.core.common.callbacks import default_timestep_callbacks
 from manager_agent_gym.core.common.model_provider import (
     disable_agents_tracing_if_proxied,
 )
@@ -149,7 +150,11 @@ async def run_one(
         max_timesteps=max_timesteps,
         enable_timestep_logging=True,
         enable_final_metrics_logging=False,
-        timestep_end_callbacks=[probe.callback, recorder.callback],
+        timestep_end_callbacks=[
+            *default_timestep_callbacks(),  # the standard TS-summary logging
+            probe.callback,
+            recorder.callback,
+        ],
         observation_policy=observation_policy,
         seed=seed,
     )
