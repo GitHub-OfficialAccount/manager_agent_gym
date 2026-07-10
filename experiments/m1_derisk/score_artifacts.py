@@ -127,6 +127,9 @@ async def main() -> None:
                         default=Path("experiments/m1_derisk/outputs"))
     parser.add_argument("--model", type=str, default=None,
                         help="Judge model route; defaults to JUDGE_MODEL_NAME")
+    parser.add_argument("--summarize-only", action="store_true",
+                        help="Reprint summaries from saved artifact_scores.json "
+                             "without making any judge calls")
     args = parser.parse_args()
 
     model = args.model or get_model_for_role("judge")
@@ -138,7 +141,15 @@ async def main() -> None:
         print(f"No run directories with artifacts.json under {args.runs}")
         return
     for run_dir in run_dirs:
-        scores = await score_run(run_dir, model=model)
+        scores_file = run_dir / "artifact_scores.json"
+        if args.summarize_only:
+            if not scores_file.exists():
+                print(f"\n== {run_dir.name} == (no artifact_scores.json; "
+                      "run without --summarize-only first)")
+                continue
+            scores = json.loads(scores_file.read_text())
+        else:
+            scores = await score_run(run_dir, model=model)
         summarize(run_dir, scores)
 
 
