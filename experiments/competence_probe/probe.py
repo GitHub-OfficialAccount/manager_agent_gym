@@ -145,8 +145,9 @@ async def score_groundedness(content: str, seed: int) -> GroundednessScore | Non
         return None
 
 
-async def run_condition(info_rich: bool, n: int) -> list[dict]:
-    agent = AIAgent(config=WORKER_CONFIG, tools=[])
+async def run_condition(info_rich: bool, n: int, worker_model: str) -> list[dict]:
+    config = WORKER_CONFIG.model_copy(update={"model_name": worker_model})
+    agent = AIAgent(config=config, tools=[])
     resources = [SOURCE] if info_rich else []
     rows: list[dict] = []
     label = "info_rich" if info_rich else "info_poor"
@@ -191,17 +192,18 @@ def summarize(name: str, rows: list[dict]) -> None:
 async def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--n", type=int, default=3, help="attempts per condition")
+    parser.add_argument("--worker-model", type=str, default=WORKER_MODEL)
     parser.add_argument(
         "--out", type=Path, default=Path("experiments/competence_probe/outputs")
     )
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
 
-    print(f"worker={WORKER_MODEL}  judge={JUDGE_MODEL}\n")
+    print(f"worker={args.worker_model}  judge={JUDGE_MODEL}\n")
     print("=== info_rich (given the data pack) ===")
-    rich = await run_condition(info_rich=True, n=args.n)
+    rich = await run_condition(info_rich=True, n=args.n, worker_model=args.worker_model)
     print("=== info_poor (no data pack) ===")
-    poor = await run_condition(info_rich=False, n=args.n)
+    poor = await run_condition(info_rich=False, n=args.n, worker_model=args.worker_model)
 
     (args.out / "results.json").write_text(
         json.dumps({"info_rich": rich, "info_poor": poor}, indent=2)
