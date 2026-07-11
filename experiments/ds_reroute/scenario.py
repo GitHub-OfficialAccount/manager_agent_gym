@@ -32,32 +32,54 @@ _DATA = {"amount": _amount, "income": _income, "dti": _dti,
 COLUMNS = list(_DATA)
 
 
+# Basic ops (available to everyone) vs advanced ops (the competence).
+BASIC_OPS = {"mean", "count", "sum", "min", "max"}
+ADVANCED_OPS = {"std", "median", "q90", "corr"}
+
+
 def compute(operation: str, column: str, column2: str = "") -> float:
     x = _DATA[column]
-    if operation == "mean":
-        return float(x.mean())
-    if operation == "std":
-        return float(x.std())
-    if operation == "median":
-        return float(np.median(x))
-    if operation == "q90":
-        return float(np.percentile(x, 90))
-    if operation == "corr":
-        return float(np.corrcoef(x, _DATA[column2])[0, 1])
-    raise ValueError(f"unknown operation: {operation}")
+    fns = {
+        "mean": lambda: float(x.mean()), "count": lambda: float(x.size),
+        "sum": lambda: float(x.sum()), "min": lambda: float(x.min()),
+        "max": lambda: float(x.max()), "std": lambda: float(x.std()),
+        "median": lambda: float(np.median(x)),
+        "q90": lambda: float(np.percentile(x, 90)),
+        "corr": lambda: float(np.corrcoef(x, _DATA[column2])[0, 1]),
+    }
+    if operation not in fns:
+        raise ValueError(f"unknown operation: {operation}")
+    return fns[operation]()
 
 
 @function_tool
-def query_data(operation: str, column: str, column2: str = "") -> str:
-    """Compute a statistic over the loan-portfolio dataset.
+def basic_stats(operation: str, column: str) -> str:
+    """Basic data access: simple aggregates over the portfolio dataset.
 
-    operation: one of mean, std, median, q90, corr.
+    operation: one of mean, count, sum, min, max.
+    column: one of amount, income, dti, rate, default.
+    """
+    if operation not in BASIC_OPS:
+        return (f"basic_stats does not support '{operation}'. It only does "
+                f"{sorted(BASIC_OPS)}; correlations/percentiles/std need "
+                "advanced analytics.")
+    try:
+        return str(compute(operation, column))
+    except Exception as e:  # noqa: BLE001
+        return f"basic_stats error: {e}"
+
+
+@function_tool
+def advanced_stats(operation: str, column: str, column2: str = "") -> str:
+    """Advanced analytics over the portfolio dataset (a superset of basic).
+
+    operation: mean, count, sum, min, max, std, median, q90, corr.
     column/column2: one of amount, income, dti, rate, default (column2 for corr).
     """
     try:
         return str(compute(operation, column, column2))
     except Exception as e:  # noqa: BLE001
-        return f"query_data error: {e}"
+        return f"advanced_stats error: {e}"
 
 
 # tasks: (name, question, operation, column, column2, answer)
@@ -78,9 +100,10 @@ TASKS = [
 TASK_ANSWERS = {name: ans for name, _q, _o, _c, _c2, ans in TASKS}
 
 WORKER_PROMPT = (
-    "You are a portfolio data analyst. Answer the question using data available "
-    "to you via any tools you have; do not guess figures from memory. Show brief "
-    "reasoning, then end with a single final line exactly 'ANSWER: <number>'."
+    "You are a portfolio data analyst. Answer the question using the data tools "
+    "available to you; do not guess figures from memory, and if your tools "
+    "cannot produce the required statistic, say so rather than estimating. Show "
+    "brief reasoning, then end with a single final line 'ANSWER: <number>'."
 )
 
 WORKER_SPECS = {
@@ -89,17 +112,21 @@ WORKER_SPECS = {
     "junior_analyst": "Junior analyst.",
 }
 
-
-def build_worker(agent_id: str, has_tool: bool) -> tuple[AIAgentConfig, list]:
+# tier: "advanced" (full analytics — the competence) or "basic" (data access only).
+def build_worker(agent_id: str, tier: str) -> tuple[AIAgentConfig, list]:
     desc = WORKER_SPECS[agent_id]
-    if has_tool:
-        desc += " Has a data-query tool with access to the portfolio dataset."
+    if tier == "advanced":
+        desc += " Has an advanced analytics tool (correlations, percentiles, etc.)."
+        tools = [advanced_stats]
+    else:
+        desc += " Has basic data access (simple aggregates only)."
+        tools = [basic_stats]
     cfg = AIAgentConfig(
         agent_id=agent_id, agent_type="ai", system_prompt=WORKER_PROMPT,
         model_name=WORKER_MODEL, agent_description=desc,
         agent_capabilities=["data analysis"],
     )
-    return cfg, ([query_data] if has_tool else [])
+    return cfg, tools
 
 
 def build_workflow() -> Workflow:

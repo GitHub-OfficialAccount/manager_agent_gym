@@ -19,10 +19,10 @@ from .scenario import TASKS, build_worker, extract_answer, is_correct
 os.environ.setdefault("OPENAI_AGENTS_DISABLE_TRACING", "1")
 
 
-async def run_condition(has_tool: bool, n: int) -> None:
-    cfg, tools = build_worker("senior_analyst", has_tool=has_tool)
+async def run_condition(tier: str, n: int) -> None:
+    cfg, tools = build_worker("senior_analyst", tier=tier)
     agent = AIAgent(config=cfg, tools=tools)
-    label = "WITH-tool" if has_tool else "NO-tool  "
+    label = f"{tier:<8}"
     results = []
     for name, q, _op, _c, _c2, truth in TASKS:
         task = Task(name=name, description=q)
@@ -45,11 +45,11 @@ async def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--n", type=int, default=2)
     args = p.parse_args()
-    print("=== WITH data-query tool ===")
-    await run_condition(True, args.n)
-    print("=== WITHOUT data-query tool ===")
-    await run_condition(False, args.n)
-    print("\nGO if WITH >> WITHOUT.")
+    print("=== ADVANCED tier (full analytics) ===")
+    await run_condition("advanced", args.n)
+    print("=== BASIC tier (data access only) ===")
+    await run_condition("basic", args.n)
+    print("\nGO if advanced ~full and basic ~partial (graded, not 0).")
 
 
 if __name__ == "__main__":
