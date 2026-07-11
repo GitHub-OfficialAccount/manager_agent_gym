@@ -68,11 +68,27 @@ class CompletionRecorder:
 
     def __init__(self) -> None:
         self.completions: list[dict] = []
+        self.failures: list[dict] = []
         self._start_timesteps: dict[str, int] = {}
 
     async def callback(self, ctx: TimestepEndContext) -> None:
         for task_id in ctx.tasks_started:
             self._start_timesteps.setdefault(str(task_id), ctx.timestep)
+        for task_id in ctx.tasks_failed:
+            task = ctx.workflow.tasks.get(task_id)
+            if task is None:
+                continue
+            self.failures.append(
+                {
+                    "timestep": ctx.timestep,
+                    "started_timestep": self._start_timesteps.get(str(task_id)),
+                    "task_id": str(task_id),
+                    "task_name": task.name,
+                    "agent_id": task.assigned_agent_id,
+                    # execution_notes carry "Failed: <raw error message>"
+                    "execution_notes": list(task.execution_notes),
+                }
+            )
         for task_id in ctx.tasks_completed:
             task = ctx.workflow.tasks.get(task_id)
             if task is None:
@@ -200,6 +216,13 @@ async def run_one(
     (run_dir / "probe_reports.json").write_text(json.dumps(probe.reports, indent=2))
     (run_dir / "task_completions.json").write_text(
         json.dumps(recorder.completions, indent=2)
+    )
+    (run_dir / "task_failures.json").write_text(
+        json.dumps(recorder.failures, indent=2)
+    )
+    print(
+        f"   completions={len(recorder.completions)} "
+        f"failures={len(recorder.failures)}"
     )
 
     resource_index = {str(r_id): res for r_id, res in workflow.resources.items()}

@@ -1,35 +1,12 @@
 [
   {
-    "timestep": 11,
-    "started_timestep": 10,
-    "task_id": "00000000-0000-0000-0000-000000000065",
-    "task_name": "ICAAP Architecture Doc",
-    "agent_id": "documentation_lead",
+    "timestep": 1,
+    "started_timestep": 0,
+    "task_id": "00000000-0000-0000-0000-00000000006e",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
     "output_resource_ids": [
-      "01ca6cd1-9d7b-4b4f-a008-cca3e5d38ae5"
-    ]
-  },
-  {
-    "timestep": 24,
-    "started_timestep": 23,
-    "task_id": "cbeede2d-8ea3-488c-b045-2f991a8f2950",
-    "task_name": "Define Non-Viability Conditions and Thresholds",
-    "agent_id": "stress_testing_designer",
-    "output_resource_ids": [
-      "2ad2e612-52c2-4712-a572-df821dbab423"
-    ]
-  },
-  {
-    "timestep": 25,
-    "started_timestep": 24,
-    "task_id": "00000000-0000-0000-0000-000000000066",
-    "task_name": "Governance Roles & Approvals",
-    "agent_id": "documentation_lead",
-    "output_resource_ids": [
-      "001a78e1-4c23-40c8-80b4-2ce8e3e4d7e4",
-      "e7b3a2d1-5f6c-4a8e-9b0d-3c1f2e4a7b8c",
-      "f8c9d4e2-6a7b-4c1d-9e3f-5b2a8c0d1e4f",
-      "a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d"
+      "b5a1d17c-14f0-451a-93cb-420df5dea591"
     ]
   }
 ]
