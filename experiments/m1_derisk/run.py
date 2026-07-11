@@ -287,10 +287,11 @@ async def main() -> None:
     disable_agents_tracing_if_proxied()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--conditions", nargs="+", default=["control", "swap"],
+        "--conditions", nargs="+", default=["control", "model_swap"],
         choices=["control", "swap", "model_swap"],
-        help="control (no perturbation), swap (prompt degradation), "
-             "model_swap (weaker-model degradation; needs --weak-model)",
+        help="control (no perturbation), model_swap (weaker-model degradation; "
+             "needs --weak-model; default), swap (prompt degradation, kept "
+             "available but not default)",
     )
     parser.add_argument("--seeds", nargs="+", type=int, default=[42])
     parser.add_argument("--max-timesteps", type=int, default=20)
