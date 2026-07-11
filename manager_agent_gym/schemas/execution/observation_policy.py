@@ -49,6 +49,14 @@ class ObservationPolicy(BaseModel):
         ge=0,
         description="How many recent messages the manager sees each timestep",
     )
+    quality_digest: str = Field(
+        default="none",
+        description=(
+            "Per-worker quality signal in the observation: 'none' (blind) or "
+            "'per_worker' (a recent-correctness summary per worker). The detection "
+            "channel for teammate-change experiments; populated by the engine."
+        ),
+    )
 
     def redact_agent_config(self, config):
         """Return a copy of an agent config filtered to this policy."""

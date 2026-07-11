@@ -141,12 +141,15 @@ _ANSWER_RE = re.compile(r"ANSWER:\s*\$?([-+]?[\d,]*\.?\d+(?:[eE][-+]?\d+)?)")
 
 
 def extract_answer(text: str) -> float | None:
+    """Strict: only an explicit 'ANSWER: <number>' counts. A declined/absent
+    answer returns None (no spurious number-grabbing)."""
     if not text:
         return None
     m = _ANSWER_RE.findall(text)
-    raw = m[-1] if m else (re.findall(r"[-+]?[\d,]*\.?\d+", text) or [None])[-1]
+    if not m:
+        return None
     try:
-        return float(raw.replace(",", "")) if raw is not None else None
+        return float(m[-1].replace(",", ""))
     except ValueError:
         return None
 

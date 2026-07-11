@@ -44,6 +44,13 @@ class AgentRegistry:
         # Optional: simple built-in scheduler for adding/removing agents at timesteps
         self._scheduled_changes: dict[int, list[ScheduledAgentChange]] = {}
         self._executed_change_timesteps: set[int] = set()
+        # Named tools, so serializable schedules can reference tool objects by id
+        # (used by tool-swap perturbations).
+        self._tool_registry: dict[str, object] = {}
+
+    def register_tool(self, tool_id: str, tool: object) -> None:
+        """Register a task-tool object under an id for tool-swap resolution."""
+        self._tool_registry[tool_id] = tool
 
     def register_agent_class(
         self, agent_type: str, agent_class: Type[AgentInterface]
@@ -260,6 +267,28 @@ class AgentRegistry:
         )
         self._scheduled_changes.setdefault(timestep, []).append(change)
 
+    def schedule_tool_swap(
+        self,
+        timestep: int,
+        agent_id: str,
+        new_tool_ids: list[str],
+        announce: bool = False,
+        reason: str = "",
+    ) -> None:
+        """Schedule an in-place toolset change (e.g. downgrade advanced->basic).
+
+        Tool ids are resolved against the registry's tool registry at apply time.
+        """
+        change = ScheduledAgentChange(
+            timestep=timestep,
+            action="replace",
+            agent_id=agent_id,
+            new_tool_ids=new_tool_ids,
+            announce=announce,
+            reason=reason,
+        )
+        self._scheduled_changes.setdefault(timestep, []).append(change)
+
     async def apply_scheduled_changes_for_timestep(
         self,
         timestep: int,
@@ -319,6 +348,7 @@ class AgentRegistry:
                 and (
                     change.new_system_prompt is not None
                     or change.new_model_name is not None
+                    or change.new_tool_ids is not None
                 )
             ):
                 existing = self.get_agent(change.agent_id)
@@ -335,13 +365,21 @@ class AgentRegistry:
                 if change.new_model_name is not None:
                     config_updates["model_name"] = change.new_model_name
                 new_config = existing.config.model_copy(update=config_updates)
-                # Keep the worker's existing toolset: a prompt/model swap changes
-                # policy or capability, not the available tools.
-                tools = list(getattr(existing, "tools", []) or [])
-                if not tools and tool_factory is not None and communication_service is not None:
-                    tools = tool_factory.add_communication_tools(
-                        tools, communication_service, change.agent_id
-                    )
+                # Tool swap: resolve new task-tools by id (communication tools are
+                # re-added by the agent). Otherwise keep the existing toolset (a
+                # prompt/model swap changes policy/capability, not tools).
+                if change.new_tool_ids is not None:
+                    tools = [
+                        self._tool_registry[tid]
+                        for tid in change.new_tool_ids
+                        if tid in self._tool_registry
+                    ]
+                else:
+                    tools = list(getattr(existing, "tools", []) or [])
+                    if not tools and tool_factory is not None and communication_service is not None:
+                        tools = tool_factory.add_communication_tools(
+                            tools, communication_service, change.agent_id
+                        )
                 if isinstance(new_config, AIAgentConfig):
                     self.register_ai_agent(new_config, tools)
                 elif isinstance(new_config, HumanAgentConfig):
@@ -363,9 +401,12 @@ class AgentRegistry:
                             + (f" — {change.reason}" if change.reason else "")
                         ),
                     )
-                swapped = "+".join(
+                swapped_fields = [
                     k for k in ("system_prompt", "model_name") if k in config_updates
-                )
+                ]
+                if change.new_tool_ids is not None:
+                    swapped_fields.append("tools")
+                swapped = "+".join(swapped_fields)
                 changes.append(
                     f"Replaced {change.agent_id} [{swapped}]"
                     + (" (announced)" if change.announce else " (silent)")

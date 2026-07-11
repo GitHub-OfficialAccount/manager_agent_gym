@@ -1,0 +1,100 @@
+{
+  "info_rich": [
+    {
+      "attempt": 0,
+      "ok": true,
+      "len": 1860,
+      "quality": 7.0,
+      "groundedness": 10.0,
+      "unsupported": [],
+      "content": "### Meridian Bank plc \u2013 ICAAP Capital Adequacy Summary (Q4\u202f2025)\n\n**Common Equity Tier\u202f1 (CET1) Ratio**\n- Reported CET1 ratio: **13.7\u202f%**\n- Regulatory minimum (including buffers): **10.4\u202f%**\n- *Interpretation*: The bank exceeds the regulatory CET1 requirement by **3.3\u202fpercentage points**, indicating a comfortable capital buffer.\n\n**Tier\u202f1 Capital Ratio**\n- Reported Tier\u202f1 capital ratio: **15.1\u202f%**\n- *Interpretation*: This ratio comfortably exceeds the Basel\u202fIII minimum (usually 6\u202f% plus applicable buffers).\n\n**Total Capital Ratio**\n- Reported total capital ratio: **18.6\u202f%**\n- *Interpretation*: The bank holds a strong total capital cushion relative to risk\u2011weighted assets.\n\n**Tier\u202f1 Leverage Ratio**\n- Reported Tier\u202f1 leverage ratio: **[not available]**\n- *Interpretation*: Data not provided in the source material; cannot assess leverage compliance.\n\n**Risk\u2011Weighted Assets (RWA)**\n- RWA figure: **[not available]**\n- *Interpretation*: Without the underlying RWA total, precise capital\u2011to\u2011RWA calculations beyond the reported ratios cannot be verified.\n\n**Liquidity Coverage Ratio (LCR) & Net Stable Funding Ratio (NSFR)**\n- LCR: **[not available]**\n- NSFR: **[not available]**\n- *Interpretation*: Liquidity metrics are not supplied in the provided data pack; therefore, liquidity adequacy cannot be quantified.\n\n**Overall Assessment**\n- The bank\u2019s CET1, Tier\u202f1, and total capital ratios all sit well above the regulatory minima, indicating solid capital adequacy.\n- Missing leverage, RWA, LCR, and NSFR figures prevent a full ICAAP evaluation; the bank should ensure these metrics are documented and monitored in future reporting.\n\n*All figures are taken directly from the \"CAPITAL & LIQUIDITY DATA PACK \u2014 Meridian Bank plc \u2014 Q4\u202f2025\". Where data were not supplied, the placeholder '[not available]' is used in compliance with the task instructions.*"
+    },
+    {
+      "attempt": 1,
+      "ok": true,
+      "len": 855,
+      "quality": 6.0,
+      "groundedness": 5.0,
+      "unsupported": [
+        "Tier 1 leverage ratio: [not available]",
+        "Liquidity Coverage Ratio (LCR): [not available]",
+        "Net Stable Funding Ratio (NSFR): [not available]",
+        "Risk\u2011Weighted Assets (RWA): [not available]"
+      ],
+      "content": "**Capital Adequacy Summary \u2013 ICAAP (Q4\u202f2025)**\n\n- **Common Equity Tier\u202f1 (CET1)**: 13.7\u202f% (regulatory minimum including buffers: 10.4\u202f%).\n- **Tier\u202f1 Capital Ratio**: 15.1\u202f% (total capital ratio: 18.6\u202f%).\n- **Tier\u202f1 Leverage Ratio**: [not available].\n- **Liquidity Coverage Ratio (LCR)**: [not available].\n- **Net Stable Funding Ratio (NSFR)**: [not available].\n- **Risk\u2011Weighted Assets (RWA)**: [not available].\n\n*Interpretation*: The bank comfortably exceeds the CET1 regulatory floor by 3.3\u202fpercentage points and maintains a solid Tier\u202f1 capital buffer at 15.1\u202f% against the minimum requirement (typically 6\u202f%). Total capital stands at 18.6\u202f%, indicating ample capacity to absorb shocks. Because the Tier\u202f1 leverage ratio, RWA totals, and the LCR/NSFR figures are not provided in the available data pack, those metrics cannot be quantified at this time."
+    },
+    {
+      "attempt": 2,
+      "ok": true,
+      "len": 1492,
+      "quality": 7.0,
+      "groundedness": 5.0,
+      "unsupported": [
+        "Tier 1 Leverage Ratio: [not available]",
+        "Liquidity Coverage Ratio (LCR): [not available]",
+        "Net Stable Funding Ratio (NSFR): [not available]",
+        "Risk\u2011Weighted Assets (RWA): [not available]"
+      ],
+      "content": "## Capital Adequacy Summary (ICAAP \u2013 Q4\u202f2025)\n\n- **Common Equity Tier\u202f1 (CET1) Ratio**: **13.7\u202f%**\n  - Regulatory minimum (including buffers): **10.4\u202f%**\n  - *Interpretation*: The bank\u2019s CET1 buffer stands at 3.3 percentage points above the required minimum, indicating a comfortable buffer against credit and market stress.\n\n- **Tier\u202f1 Capital Ratio**: **15.1\u202f%**\n  - *Interpretation*: Well above the regulatory floor, supporting the bank\u2019s ability to absorb losses.\n\n- **Total Capital Ratio**: **18.6\u202f%**\n  - *Interpretation*: Demonstrates strong overall capitalisation.\n\n- **Tier\u202f1 Leverage Ratio**: **[not available]**\n  - *Interpretation*: Data not provided in the source pack; unable to comment.\n\n- **Liquidity Coverage Ratio (LCR)**: **[not available]**\n- **Net Stable Funding Ratio (NSFR)**: **[not available]**\n  - *Interpretation*: Liquidity metrics are missing from the supplied data; they should be obtained for a complete ICAAP assessment.\n\n- **Risk\u2011Weighted Assets (RWA)**: **[not available]**\n  - *Interpretation*: Without RWA figures, the absolute capital volumes cannot be disclosed.\n\n**Overall Assessment**: Based on the available regulatory ratios, Meridian Bank plc exceeds all minimum capital requirements by a comfortable margin. However, a full ICAAP appraisal requires the missing Tier\u202f1 leverage ratio, RWA totals, and liquidity ratios (LCR/NSFR). These should be sourced from the complete Q4\u202f2025 Capital & Liquidity Data Pack before finalising the ICAAP submission."
+    }
+  ],
+  "info_poor": [
+    {
+      "attempt": 0,
+      "ok": true,
+      "len": 1065,
+      "quality": 2.0,
+      "groundedness": 0.0,
+      "unsupported": [
+        "CET1 Ratio: [not available]",
+        "CET1 Capital: [not available]",
+        "Risk\u2011Weighted Assets (RWA): [not available]",
+        "Leverage Ratio: [not available]",
+        "Tier\u202f1 Capital (as defined for leverage): [not available]",
+        "Total Exposure Measure: [not available]",
+        "LCR: [not available]",
+        "High\u2011Quality Liquid Assets (HQLA): [not available]",
+        "Total Net Cash Outflows (30\u2011day horizon): [not available]",
+        "NSFR: [not available]",
+        "Available Stable Funding (ASF): [not available]",
+        "Required Stable Funding (RSF): [not available]"
+      ],
+      "content": "## ICAAP Capital Adequacy Summary\n\n**1. Common Equity Tier\u202f1 (CET1)**\n- **CET1 Ratio:** [not available]\n- **CET1 Capital:** [not available]\n- **Risk\u2011Weighted Assets (RWA):** [not available]\n\n**2. Tier\u202f1 Leverage Ratio**\n- **Leverage Ratio:** [not available]\n- **Tier\u202f1 Capital (as defined for leverage):** [not available]\n- **Total Exposure Measure:** [not available]\n\n**3. Liquidity Coverage Ratio (LCR)**\n- **LCR:** [not available]\n- **High\u2011Quality Liquid Assets (HQLA):** [not available]\n- **Total Net Cash Outflows (30\u2011day horizon):** [not available]\n\n**4. Net Stable Funding Ratio (NSFR)**\n- **NSFR:** [not available]\n- **Available Stable Funding (ASF):** [not available]\n- **Required Stable Funding (RSF):** [not available]\n\n**Overall Assessment**\nGiven the lack of quantitative data in the source material, a full assessment of the bank\u2019s capital adequacy and liquidity position cannot be provided at this time. The placeholders above should be replaced with the actual figures once the relevant ICAAP data become available.\n\n*Prepared for the ICAAP review.*"
+    },
+    {
+      "attempt": 1,
+      "ok": true,
+      "len": 1266,
+      "quality": 3.0,
+      "groundedness": 0.0,
+      "unsupported": [
+        "CET1 Ratio: [not available] %",
+        "Tier 1 Leverage Ratio: [not available] %",
+        "LCR: [not available] %",
+        "NSFR: [not available] %"
+      ],
+      "content": "## ICAAP Capital Adequacy Summary\n\n**Common Equity Tier 1 (CET1) Ratio**\n- CET1 Capital: [not available]\n- Risk\u2011Weighted Assets (RWA): [not available]\n- CET1 Ratio: [not available] %\n\n**Tier\u202f1 Leverage Ratio**\n- Tier\u202f1 Capital: [not available]\n- Total Exposure Measure: [not available]\n- Leverage Ratio: [not available] %\n\n**Liquidity Coverage Ratio (LCR)**\n- High\u2011Quality Liquid Assets (HQLA): [not available]\n- Net Cash Outflows over 30\u2011day horizon: [not available]\n- LCR: [not available] %\n\n**Net Stable Funding Ratio (NSFR)**\n- Available Stable Funding (ASF): [not available]\n- Required Stable Funding (RSF): [not available]\n- NSFR: [not available] %\n\n**Key Observations**\n- All core regulatory ratios are currently **[not available]**, preventing a definitive assessment of the bank\u2019s capital and liquidity posture.\n- The absence of RWA figures precludes calculation of the CET1 and leverage ratios.\n- Without HQLA and cash\u2011outflow data, the LCR cannot be validated.\n- NSFR assessment likewise lacks the necessary funding and asset data.\n\n**Conclusion**\nGiven the lack of available quantitative inputs, the ICAAP capital adequacy analysis remains incomplete. Provision of the missing CET1, Tier\u202f1, RWA, LCR, and NSFR data is required to finalize the assessment."
+    },
+    {
+      "attempt": 2,
+      "ok": true,
+      "len": 468,
+      "quality": 2.0,
+      "groundedness": 0.0,
+      "unsupported": [
+        "CET1 ratio: [not available]",
+        "Tier 1 capital ratio: [not available]",
+        "Total capital ratio: [not available]",
+        "Tier 1 leverage ratio: [not available]",
+        "Total risk-weighted assets (RWA): [not available]",
+        "Liquidity Coverage Ratio (LCR): [not available]",
+        "Net Stable Funding Ratio (NSFR): [not available]",
+        "CET1 capital: [not available]",
+        "Total capital: [not available]",
+        "Largest single-name concentration: [not available]",
+        "Management buffer above CET1 minimum: [not available]"
+      ],
+      "content": "## ICAAP Capital Adequacy Summary\n\n**Common Equity Tier\u202f1 (CET1) Ratio**: [not available]\n\n**Tier\u202f1 Leverage Ratio**: [not available]\n\n**Liquidity Coverage Ratio (LCR)**: [not available]\n\n**Net Stable Funding Ratio (NSFR)**: [not available]\n\n**Risk\u2011Weighted Assets (RWA)**: [not available]\n\n*Notes*: All quantitative figures are marked as '[not available]' because the requisite data was not supplied in the task input. No assumptions or external data have been used.\n"
+    }
+  ]
+}

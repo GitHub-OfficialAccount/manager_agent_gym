@@ -64,7 +64,29 @@ class ModelSwap(BaseModel):
     )
 
 
-Perturbation = Annotated[Union[PromptSwap, ModelSwap], Field(discriminator="kind")]
+class ToolSwap(BaseModel):
+    """Replace a worker's task-toolset in place (e.g. downgrade advanced->basic).
+
+    Tool ids are resolved against the AgentRegistry's tool registry, so the
+    tools must be registered there before the run.
+    """
+
+    kind: Literal["tool_swap"] = "tool_swap"
+    timestep: int = Field(..., ge=0, description="Timestep at which the swap applies")
+    agent_id: str = Field(..., description="Worker whose toolset changes")
+    new_tool_ids: list[str] = Field(
+        ..., description="Replacement task-tool ids (registered in the registry)"
+    )
+    announce: bool = Field(
+        default=False,
+        description="Broadcast the change (announced condition); False = silent",
+    )
+    label: str = Field(default="", description="Short experimenter label")
+
+
+Perturbation = Annotated[
+    Union[PromptSwap, ModelSwap, ToolSwap], Field(discriminator="kind")
+]
 
 
 class PerturbationSchedule(BaseModel):
@@ -88,6 +110,14 @@ class PerturbationSchedule(BaseModel):
                     timestep=p.timestep,
                     agent_id=p.agent_id,
                     new_model_name=p.new_model_name,
+                    announce=p.announce,
+                    reason=p.label,
+                )
+            elif isinstance(p, ToolSwap):
+                agent_registry.schedule_tool_swap(
+                    timestep=p.timestep,
+                    agent_id=p.agent_id,
+                    new_tool_ids=p.new_tool_ids,
                     announce=p.announce,
                     reason=p.label,
                 )

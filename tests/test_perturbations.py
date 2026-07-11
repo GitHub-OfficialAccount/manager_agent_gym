@@ -78,6 +78,26 @@ async def test_model_swap_replaces_model_in_place() -> None:
 
 
 @pytest.mark.asyncio
+async def test_tool_swap_replaces_toolset() -> None:
+    from agents import function_tool
+
+    @function_tool
+    def basic() -> str:
+        return "b"
+
+    reg = AgentRegistry()
+    reg.register_tool("basic", basic)
+    reg.register_ai_agent(_worker_config(), additional_tools=[_noop_tool])
+    assert any(t.name == "_noop_tool" for t in reg.get_agent("w1").tools)
+
+    reg.schedule_tool_swap(timestep=1, agent_id="w1", new_tool_ids=["basic"])
+    changes = await reg.apply_scheduled_changes_for_timestep(1)
+    assert "Replaced w1 [tools]" in changes[0]
+    names = [t.name for t in reg.get_agent("w1").tools]
+    assert "basic" in names and "_noop_tool" not in names  # swapped, not kept
+
+
+@pytest.mark.asyncio
 async def test_prompt_swap_unknown_agent_reports_failure() -> None:
     reg = AgentRegistry()
     reg.schedule_prompt_swap(timestep=0, agent_id="ghost", new_system_prompt="x")
