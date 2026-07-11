@@ -98,6 +98,7 @@ TASKS = [
     _t("Income–Default Corr", "What is the correlation between income and default?", "corr", "income", "default"),
 ]
 TASK_ANSWERS = {name: ans for name, _q, _o, _c, _c2, ans in TASKS}
+TASK_META = {name: {"op": op} for name, _q, op, _c, _c2, _a in TASKS}
 
 WORKER_PROMPT = (
     "You are a portfolio data analyst. Answer the question using the data tools "
@@ -141,15 +142,23 @@ _ANSWER_RE = re.compile(r"ANSWER:\s*\$?([-+]?[\d,]*\.?\d+(?:[eE][-+]?\d+)?)")
 
 
 def extract_answer(text: str) -> float | None:
-    """Strict: only an explicit 'ANSWER: <number>' counts. A declined/absent
-    answer returns None (no spurious number-grabbing)."""
+    """Extract a numeric answer robustly without grabbing spurious numbers.
+
+    Accepts (1) an explicit 'ANSWER: <number>' line, or (2) a resource whose
+    entire content is a bare number (the worker's usual output). Declined /
+    prose outputs (no clean number) return None.
+    """
     if not text:
         return None
     m = _ANSWER_RE.findall(text)
-    if not m:
-        return None
+    if m:
+        try:
+            return float(m[-1].replace(",", ""))
+        except ValueError:
+            pass
+    s = text.strip().replace(",", "").replace("$", "").rstrip("%")
     try:
-        return float(m[-1].replace(",", ""))
+        return float(s)
     except ValueError:
         return None
 
