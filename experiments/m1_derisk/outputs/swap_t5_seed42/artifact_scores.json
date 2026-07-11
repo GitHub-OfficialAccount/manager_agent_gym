@@ -1,38 +1,137 @@
 [
   {
-    "resource_id": "1a2b3c4d-0001-4000-8000-000000000001",
-    "task_name": "ICAAP Architecture Doc",
-    "agent_id": "documentation_lead",
-    "timestep": 16,
-    "started_timestep": 15,
-    "score": 5.0,
-    "reasoning": "The document provides a high-level outline of ICAAP architecture but lacks concrete details, specific figures, named components, or references to inputs. While it covers key areas, it is too vague for a thorough professional work product."
+    "resource_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 2,
+    "started_timestep": 1,
+    "score": 7.5,
+    "reasoning": "The artifact provides concrete specifics (85,432 records, 29 quarters, exact treatment percentages) and a clear reconciliation log with traceable steps back to the named data sources. However, it lacks any reference to the broader task context (no mention of a 'genius expert' directive or the purposes of credit risk modeling), contains no explicit linking to the task's required output format, and the summary statistics are sparse with no distribution details or validation metrics for the imputed values."
   },
   {
-    "resource_id": "1b3e5a7c-9d8f-4e2b-b6c1-3f7a0d9e5c2b",
+    "resource_id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 2,
+    "started_timestep": 1,
+    "score": 10.0,
+    "reasoning": "The artifact provides a comprehensive and specific framework for default, cure, and downturn adjustments, with concrete figures (e.g., GDP growth, LGD percentages, multipliers) and clear variable definitions. It aligns with regulatory standards (Basel II/IFRS 9) and includes detailed segment-level breakdowns for wholesale and retail. The structure is logical and internally consistent, making it suitable for data preparation in wholesale/retail contexts."
+  },
+  {
+    "resource_id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 2,
+    "started_timestep": 1,
+    "score": 8.5,
+    "reasoning": "The artifact is a well-structured CSV dataset with 20 representative records covering wholesale and retail loan segments, including all required fields (PD, LGD, EAD, downturn adjustments, cure flags) and consistent data types. It demonstrates thorough preparation with realistic values and proper field relationships, though it lacks explicit documentation of cleaning steps or reconciliation methodology that would elevate it to a 10."
+  },
+  {
+    "resource_id": "1a2b3c4d-5e6f-7890-abcd-ef1234567890",
+    "task_name": "ICAAP Architecture Doc",
+    "agent_id": "documentation_lead",
+    "timestep": 3,
+    "started_timestep": 2,
+    "score": 10.0,
+    "reasoning": "The document is exceptionally thorough, covering all required aspects (architecture, integration with planning and governance, data architecture, systems, implementation roadmap, RACI, committee structure, three lines of defense, capital planning cycle) with concrete details, named systems, regulatory references, and clear tables. It is internally consistent, specific, and traceable to inputs, meeting the highest professional standards."
+  },
+  {
+    "resource_id": "dc894f24-75f8-408c-a998-22419e5461ae",
+    "task_name": "Data Lineage Registry & Controls",
+    "agent_id": "documentation_lead",
+    "timestep": 5,
+    "started_timestep": 4,
+    "score": 0.0,
+    "reasoning": "The artifact contains no actual data lineage registry, control checks, or owners\u2014it is merely an initial placeholder message with zero substantive content. It fails completely on completeness, specificity, and traceability relative to the stated task."
+  },
+  {
+    "resource_id": "1a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d",
     "task_name": "Governance Roles & Approvals",
+    "agent_id": "op_risk_analyst",
+    "timestep": 6,
+    "started_timestep": 5,
+    "score": 9.0,
+    "reasoning": "The document comprehensively covers all required governance elements including committees, roles, sign-off workflows, escalation procedures, model risk overlay, and delegation of authority with specific thresholds and timelines. It demonstrates high internal consistency and concrete figures, though it lacks external references beyond broad standards alignment."
+  },
+  {
+    "resource_id": "1e6f3a8b-2c4d-5e7f-9a0b-1c2d3e4f5a6b",
+    "task_name": "Risk Appetite & Limits",
     "agent_id": "documentation_lead",
     "timestep": 20,
     "started_timestep": 19,
     "score": 9.0,
-    "reasoning": "The artifact provides a comprehensive, well-structured definition of ICAAP governance, including specific committees, roles, a six-step sign-off workflow, and escalation procedures with concrete timelines. It is complete, internally consistent, and uses specific details rather than vague filler, meeting the standards of a thorough professional work product."
+    "reasoning": "The artifact is highly specific with concrete numerical thresholds across three limit levels and a tiered breach escalation process with clear timelines. It is complete and internally consistent, covering all required components of a risk appetite and limits framework. A minor deduction applies because the document does not explicitly reference how limits are derived from risk assessments or regulatory minima, reducing traceability slightly."
   },
   {
-    "resource_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "resource_id": "43356514-41be-48a0-a06b-f486a3f82bad",
+    "task_name": "Segment PD Estimation and Validation",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 24,
+    "started_timestep": 23,
+    "score": 1.0,
+    "reasoning": "The artifact contains no actual PD estimates, validation results, or model specifications. It only states an intention to generate synthetic data, with no concrete output or evidence of completing the stated task. Therefore, it is nearly non-existent in terms of quality and completeness."
+  },
+  {
+    "resource_id": "2a90b156-8b99-4f43-80c5-fc8ee691cc75",
     "task_name": "Risk Inventory & Materiality",
     "agent_id": "documentation_lead",
     "timestep": 25,
     "started_timestep": 24,
-    "score": 6.5,
-    "reasoning": "The artifact provides a detailed inventory of data sources, transformations, reconciliation points, and controls, which aligns well with the risk inventory aspect of the task. However, it lacks any explicit materiality assessment or prioritization of risks, which is a significant gap for a 'Risk Inventory & Materiality' deliverable. The content is specific and consistent, but the omission of materiality reduces its overall completeness for the stated task."
+    "score": 7.5,
+    "reasoning": "The artifact provides a structured risk inventory with seven risk types, gross materiality ratings, methods, and owners, which directly fulfills the task. However, it lacks concrete figures (e.g., specific thresholds for materiality levels, quantitative loss estimates) and references to external sources or data, making it somewhat generic. The content is internally consistent and well-organized, but the absence of traceable evidence or detailed justification for materiality ratings limits its depth for a professional work product."
   },
   {
-    "resource_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "task_name": "Data Lineage Registry & Controls",
+    "resource_id": "f8ff5cf0-3308-42d0-8e1f-5b63a58a732b",
+    "task_name": "Risk Inventory & Materiality",
     "agent_id": "documentation_lead",
-    "timestep": 29,
-    "started_timestep": 28,
+    "timestep": 25,
+    "started_timestep": 24,
+    "score": 3.5,
+    "reasoning": "The artifact states that the task is completed and lists risk types covered, but provides no concrete figures, specific risks, owners, or materiality results. It lacks evidence of actual deliverables and relies on vague filler like 'generically' and 'High, Medium, or Low' without any populated data."
+  },
+  {
+    "resource_id": "2bae52c1-426f-431d-aa21-066eed5e5976",
+    "task_name": "Segment LGD Estimation and Validation",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 26,
+    "started_timestep": 25,
+    "score": 1.0,
+    "reasoning": "The artifact contains no actual LGD estimation, segmentation, modeling, or validation results. It only shows a run result with a brief reasoning note about needing to generate synthetic data, and no output metrics or models. This fails all acceptance criteria and is superficial, as it does not advance beyond planning."
+  },
+  {
+    "resource_id": "ead1a022-a637-4c41-ba83-119f4a53dd5d",
+    "task_name": "Segment EAD Estimation and Validation",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 27,
+    "started_timestep": 26,
+    "score": 7.0,
+    "reasoning": "The artifact is highly detailed and specific, covering all required aspects of EAD estimation including CCF distributions, validation, and segment mapping. However, there is a significant internal inconsistency: the global summary totals (estimated 268,055,000 and actual 255,850,000) do not match the sum of individual segment figures (268,205,000 and 258,100,000 respectively), indicating a data integrity error. This flaw prevents a higher score, even though overall structure and methodology notes are strong."
+  },
+  {
+    "resource_id": "ead2b033-b748-4d52-ba94-220f5b64ee6e",
+    "task_name": "Segment EAD Estimation and Validation",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 27,
+    "started_timestep": 26,
+    "score": 9.5,
+    "reasoning": "The report is thorough and professional, detailing CCF estimation methods, concrete numerical results for each segment, regulatory floor analysis, and validation against actual EAD with clear pass/fail criteria. It is internally consistent, references specific sample sizes and distributions, and fully documents segment mapping, leaving no major gaps in coverage."
+  },
+  {
+    "resource_id": "e239b04b-81ac-446a-a11b-18f31733f16c",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "stress_testing_designer",
+    "timestep": 28,
+    "started_timestep": 27,
     "score": 9.0,
-    "reasoning": "The artifact provides a comprehensive and structured registry covering all required aspects: data sources, transformations, reconciliation points, control checks, and ownership. It includes specific named systems, frequencies, and assigned owners, demonstrating thoroughness and traceability. No vague filler or inconsistencies."
+    "reasoning": "The artifact is highly comprehensive, providing detailed quantitative non-viability thresholds, five distinct pathways with transmission chains, parameterization tables with specific values, and a four-level remediation escalation ladder with clear triggers and actions. It demonstrates strong internal consistency and specificity. The only minor gap is the absence of explicit references to external regulatory sources or historical data inputs, but the framework is otherwise thorough and professional."
+  },
+  {
+    "resource_id": "691d6e48-8a56-4185-b4a4-221620730780",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "stress_testing_designer",
+    "timestep": 28,
+    "started_timestep": 27,
+    "score": 9.5,
+    "reasoning": "The artifact provides comprehensive, specific quantitative parameters for all five stress-test pathways across three severity levels, including non-viability thresholds with cited data sources and remediation actions with timing and dependencies. It is internally consistent, avoids vague filler, and fully satisfies the stated task of a quantitative parameter workbook."
   }
 ]

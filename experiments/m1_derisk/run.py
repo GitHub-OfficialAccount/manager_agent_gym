@@ -42,6 +42,7 @@ from manager_agent_gym.core.evaluation.detection_probe import DetectionProbe
 from manager_agent_gym.schemas.execution.callbacks import TimestepEndContext
 from manager_agent_gym.schemas.execution.observation_policy import ObservationPolicy
 from manager_agent_gym.schemas.execution.perturbations import (
+    ModelSwap,
     PerturbationSchedule,
     PromptSwap,
 )
@@ -107,24 +108,49 @@ class CompletionRecorder:
             )
 
 
-def build_schedule(condition: str, swap_timestep: int) -> PerturbationSchedule:
+def build_schedule(
+    condition: str, swap_timestep: int, weak_model: str | None
+) -> PerturbationSchedule:
     if condition == "control":
         return PerturbationSchedule()
-    return PerturbationSchedule(
-        perturbations=[
-            PromptSwap(
-                timestep=swap_timestep,
-                agent_id=TARGET_AGENT,
-                new_system_prompt=DEGRADED_DOCUMENTATION_LEAD_PROMPT,
-                announce=False,
-                label="competence_degradation",
-            )
-        ]
-    )
+    if condition == "swap":
+        # Prompt-based degradation (unchanged original behavior).
+        return PerturbationSchedule(
+            perturbations=[
+                PromptSwap(
+                    timestep=swap_timestep,
+                    agent_id=TARGET_AGENT,
+                    new_system_prompt=DEGRADED_DOCUMENTATION_LEAD_PROMPT,
+                    announce=False,
+                    label="competence_degradation",
+                )
+            ]
+        )
+    if condition == "model_swap":
+        # Genuine capability degradation: swap to a weaker model.
+        if not weak_model:
+            raise ValueError("--weak-model is required for the model_swap condition")
+        return PerturbationSchedule(
+            perturbations=[
+                ModelSwap(
+                    timestep=swap_timestep,
+                    agent_id=TARGET_AGENT,
+                    new_model_name=weak_model,
+                    announce=False,
+                    label="capability_degradation",
+                )
+            ]
+        )
+    raise ValueError(f"unknown condition: {condition}")
 
 
 async def run_one(
-    condition: str, seed: int, max_timesteps: int, swap_timestep: int, out_root: Path
+    condition: str,
+    seed: int,
+    max_timesteps: int,
+    swap_timestep: int,
+    out_root: Path,
+    weak_model: str | None = None,
 ) -> Path:
     run_dir = out_root / f"{condition}_t{swap_timestep}_seed{seed}"
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -133,7 +159,8 @@ async def run_one(
     print(f"🧪 M1 DE-RISK RUN | condition={condition} seed={seed}")
     print(f"   workflow={WORKFLOW_NAME} max_timesteps={max_timesteps} "
           f"swap_timestep={swap_timestep}"
-          + ("" if condition == "swap" else " (boundary only, no swap)"))
+          + ("" if condition != "control" else " (boundary only, no swap)")
+          + (f" weak_model={weak_model}" if condition == "model_swap" else ""))
     print(f"   target={TARGET_AGENT} -> {run_dir}")
     print("=" * 60)
 
@@ -152,7 +179,7 @@ async def run_one(
                 )
                 agent_registry.schedule_agent_remove(t, agent_id, reason)
 
-    schedule = build_schedule(condition, swap_timestep)
+    schedule = build_schedule(condition, swap_timestep, weak_model)
     schedule.register(agent_registry)
     n_perturbations = len(schedule.perturbations)
     print(f"   ✅ workflow: {len(workflow.tasks)} tasks | perturbations "
@@ -211,6 +238,11 @@ async def run_one(
             if TARGET_AGENT in workflow.agents
             else None
         ),
+        "target_agent_final_model": (
+            workflow.agents[TARGET_AGENT].config.model_name
+            if TARGET_AGENT in workflow.agents
+            else None
+        ),
     }
     (run_dir / "manifest.json").write_text(json.dumps(manifest, indent=2))
     (run_dir / "probe_reports.json").write_text(json.dumps(probe.reports, indent=2))
@@ -256,11 +288,18 @@ async def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--conditions", nargs="+", default=["control", "swap"],
-        choices=["control", "swap"],
+        choices=["control", "swap", "model_swap"],
+        help="control (no perturbation), swap (prompt degradation), "
+             "model_swap (weaker-model degradation; needs --weak-model)",
     )
     parser.add_argument("--seeds", nargs="+", type=int, default=[42])
     parser.add_argument("--max-timesteps", type=int, default=20)
     parser.add_argument("--swap-timestep", type=int, default=8)
+    parser.add_argument(
+        "--weak-model", type=str, default=None,
+        help="Model route to swap in for the model_swap condition, "
+             "e.g. openrouter/<provider>/<weak-model>",
+    )
     parser.add_argument(
         "--out", type=Path, default=Path("experiments/m1_derisk/outputs")
     )
@@ -274,6 +313,7 @@ async def main() -> None:
                 max_timesteps=args.max_timesteps,
                 swap_timestep=args.swap_timestep,
                 out_root=args.out,
+                weak_model=args.weak_model,
             )
 
 

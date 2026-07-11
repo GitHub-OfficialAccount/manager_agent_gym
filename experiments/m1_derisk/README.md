@@ -13,7 +13,13 @@ result is interpretable.
 - Perturbation: silent `PromptSwap` at `--swap-timestep` (default 8) replacing
   the documentation lead's prompt with a degraded-but-superficially-normal one
   (`prompts.py`).
-- Conditions: `control` vs `swap`, same seeds.
+- Conditions (same seeds):
+  - `control` — no perturbation.
+  - `swap` — silent `PromptSwap`: degraded system prompt (prompt-based
+    degradation; unreliable — a capable model often ignores it).
+  - `model_swap` — silent `ModelSwap`: swap the target to a genuinely weaker
+    model via `--weak-model` (capability degradation that isn't a roleplay the
+    model can opt out of).
 - Preference weight-update dynamics are deliberately disabled (single
   non-stationarity; confounds return in the M3 attribution study).
 - Observation contract: default `ObservationPolicy` (worker system prompts
@@ -24,8 +30,14 @@ result is interpretable.
 ## Run
 
 ```bash
+# prompt-based degradation
 uv run python -m experiments.m1_derisk.run --conditions control swap --seeds 42 \
     --max-timesteps 20 --swap-timestep 8
+
+# model-based (capability) degradation — pick a weaker model route
+uv run python -m experiments.m1_derisk.run --conditions control model_swap --seeds 42 \
+    --max-timesteps 20 --swap-timestep 8 --weak-model openrouter/<provider>/<weak-model>
+
 uv run python -m experiments.m1_derisk.score_artifacts
 ```
 

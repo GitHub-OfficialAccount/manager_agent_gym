@@ -5,8 +5,8 @@
   "max_timesteps": 30,
   "reference_boundary": 5,
   "target_agent": "documentation_lead",
-  "started_at": "2026-07-10T23:01:24.537045",
-  "finished_at": "2026-07-10T23:26:54.874586",
+  "started_at": "2026-07-11T10:53:54.034611",
+  "finished_at": "2026-07-11T11:32:44.706637",
   "observation_policy": {
     "expose_worker_system_prompts": false,
     "worker_metadata": "capabilities",

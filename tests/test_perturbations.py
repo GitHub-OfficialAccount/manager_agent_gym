@@ -3,6 +3,7 @@ from agents import function_tool
 
 from manager_agent_gym.core.workflow_agents.registry import AgentRegistry
 from manager_agent_gym.schemas.execution.perturbations import (
+    ModelSwap,
     PerturbationSchedule,
     PromptSwap,
 )
@@ -57,6 +58,26 @@ async def test_prompt_swap_replaces_agent_in_place() -> None:
 
 
 @pytest.mark.asyncio
+async def test_model_swap_replaces_model_in_place() -> None:
+    reg = AgentRegistry()
+    reg.register_ai_agent(_worker_config(), additional_tools=[_noop_tool])
+
+    reg.schedule_model_swap(
+        timestep=2, agent_id="w1", new_model_name="openrouter/weak/model"
+    )
+    changes = await reg.apply_scheduled_changes_for_timestep(2)
+    assert len(changes) == 1
+    assert "Replaced w1 [model_name]" in changes[0]
+
+    agent = reg.get_agent("w1")
+    assert agent is not None
+    # model changed, but policy and visible metadata untouched
+    assert agent.config.model_name == "openrouter/weak/model"
+    assert agent.config.system_prompt == "original policy"
+    assert agent.config.agent_description == "a diligent analyst"
+
+
+@pytest.mark.asyncio
 async def test_prompt_swap_unknown_agent_reports_failure() -> None:
     reg = AgentRegistry()
     reg.schedule_prompt_swap(timestep=0, agent_id="ghost", new_system_prompt="x")
@@ -89,6 +110,27 @@ def test_schedule_registers_and_manifests() -> None:
     assert entry["timestep"] == 8
     assert entry["new_system_prompt"] == "degraded"
     assert entry["label"] == "competence_degradation"
+
+
+def test_schedule_accepts_mixed_perturbations_and_dispatches() -> None:
+    schedule = PerturbationSchedule(
+        perturbations=[
+            PromptSwap(timestep=5, agent_id="a", new_system_prompt="p"),
+            ModelSwap(timestep=8, agent_id="b", new_model_name="openrouter/weak/model",
+                      label="capability_degradation"),
+        ]
+    )
+    reg = AgentRegistry()
+    schedule.register(reg)
+    assert reg._scheduled_changes[5][0].new_system_prompt == "p"
+    assert reg._scheduled_changes[5][0].new_model_name is None
+    assert reg._scheduled_changes[8][0].new_model_name == "openrouter/weak/model"
+    assert reg._scheduled_changes[8][0].new_system_prompt is None
+
+    manifest = schedule.manifest()
+    assert manifest["num_perturbations"] == 2
+    kinds = {p["kind"] for p in manifest["perturbations"]}
+    assert kinds == {"prompt_swap", "model_swap"}
 
 
 def test_empty_schedule_manifest() -> None:

@@ -1,56 +1,200 @@
 [
   {
-    "resource_id": "01ca6cd1-9d7b-4b4f-a008-cca3e5d38ae5",
+    "resource_id": "1d0e5b3d-7a2e-4c8f-b9c6-1f3e2a4d5b7c",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "op_risk_analyst",
+    "timestep": 1,
+    "started_timestep": 0,
+    "score": 9.0,
+    "reasoning": "The artifact comprehensively defines non-viability conditions with specific quantitative triggers for capital, liquidity, solvency, funding, and operational failures. It includes a clear summary table and assumptions, making it thorough and internally consistent. Minor improvement would be explicit regulatory references, but overall it meets the task with high specificity and completeness."
+  },
+  {
+    "resource_id": "2a1c6e4f-8b3d-4f0a-9e7c-5d2b1a3c8f6e",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "op_risk_analyst",
+    "timestep": 1,
+    "started_timestep": 0,
+    "score": 9.0,
+    "reasoning": "The artifact provides five highly detailed, specific, and internally consistent narrative pathways covering distinct risk categories (credit, market, operational, sovereign, conduct) with concrete figures (e.g., GDP -5%, fines $500M+, CET1 below 4.5%) and clear causal flows from trigger to non-viability. Minor deduct for not explicitly linking each pathway back to a specific regulatory framework or defined non-viability threshold beyond capital ratios."
+  },
+  {
+    "resource_id": "3b2d7f5a-9c4e-4b1a-8f0d-6e3c2a4d9e7b",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "op_risk_analyst",
+    "timestep": 1,
+    "started_timestep": 0,
+    "score": 9.0,
+    "reasoning": "The artifact delivers a thorough, highly specific parameterization for five reverse stress test pathways, with quantitative tables for base, stress, and extreme scenarios, plus probabilistic weighting and assumptions. All figures are concrete, internally consistent, and the structure is complete. The only minor limitation is the lack of explicit external data citations, which is acceptable for a hypothetical exercise."
+  },
+  {
+    "resource_id": "4c3e8f6b-0a5d-4b2c-9e8f-7d4a1b2c5d8e",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "op_risk_analyst",
+    "timestep": 1,
+    "started_timestep": 0,
+    "score": 8.5,
+    "reasoning": "The artifact provides a comprehensive, structured set of remediation actions mapped to five distinct pathways, with specific timelines, costs, and expected impacts for each action. It includes a prioritization matrix and monitoring metrics, demonstrating strong completeness and specificity. However, it lacks explicit traceability to the original reverse stress test inputs (e.g., specific non-viability thresholds or scenario assumptions), and some cost estimates are vague (e.g., 'capital cost' for R5.4), which slightly reduces the score from a perfect 10."
+  },
+  {
+    "resource_id": "5d4f0a7c-1b6e-4c3d-9f0a-8e5b2c3d6f0a",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "op_risk_analyst",
+    "timestep": 1,
+    "started_timestep": 0,
+    "score": 8.5,
+    "reasoning": "The artifact is well-structured and specific, providing concrete figures (e.g., CET1 < 4.5%, 50 bps CET1 reduction), named pathways, and clear timelines. It covers key findings, triggers, actions, and sensitivity analysis with traceability to the task. Minor deduction for lacking explicit references to input data sources or assumptions behind probability estimates, and the limitations section is brief but acknowledged."
+  },
+  {
+    "resource_id": "6e5f1b8d-2c7f-4d5e-0a1b-9f6c3d4e0a1b",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "op_risk_analyst",
+    "timestep": 1,
+    "started_timestep": 0,
+    "score": 7.0,
+    "reasoning": "The artifact is well-structured with concrete loss figures and clear identification of model risks, demonstrating internal consistency. However, it lacks traceability to specific data sources or model documentation, and the flat 20% adjustment is not empirically justified, limiting its depth for a professional work product."
+  },
+  {
+    "resource_id": "bb90d833-4685-4130-8835-7068af53eca1",
+    "task_name": "Risk Appetite & Limits",
+    "agent_id": "documentation_lead",
+    "timestep": 2,
+    "started_timestep": 1,
+    "score": 1.0,
+    "reasoning": "The artifact contains only a reasoning note that the agent will construct documentation from scratch, but no actual risk appetite statement, hierarchical limit system, or breach escalation procedures are provided. It is essentially a placeholder with zero substantive content, making it superficial and incomplete for the stated task."
+  },
+  {
+    "resource_id": "e7955a28-b1fd-4e68-a77a-7c73df987f9e",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 3,
+    "started_timestep": 2,
+    "score": 2.0,
+    "reasoning": "The artifact contains no actual data preparation work\u2014no PD/LGD/EAD inputs, no reconciliation, no handling of defaults, cures, or downturn adjustments. It is merely an initialization message with zero confidence and no resources or execution notes, making it superficial and incomplete relative to the stated task."
+  },
+  {
+    "resource_id": "0001a9b0-5fc2-4360-b55a-df29f1e0372e",
     "task_name": "ICAAP Architecture Doc",
     "agent_id": "documentation_lead",
-    "timestep": 11,
-    "started_timestep": 10,
+    "timestep": 4,
+    "started_timestep": 3,
+    "score": 0.0,
+    "reasoning": "The artifact does not provide the parsed objects in JSON that match the specified schema. Instead, it is a comprehensive ICAAP Architecture and Integration document with narrative text, tables, and diagrams. It does not contain any JSON output or structured data conforming to the required ArtifactScore schema."
+  },
+  {
+    "resource_id": "1a2b3c4d-5e6f-7890-abcd-ef1234567890",
+    "task_name": "Governance Roles & Approvals",
+    "agent_id": "documentation_lead",
+    "timestep": 6,
+    "started_timestep": 5,
     "score": 9.0,
-    "reasoning": "The artifact is a thorough and well-structured ICAAP architecture document, covering all required components, integration points, governance, data architecture, and control framework with concrete references to methodologies, committees, and regulatory standards. Minor placeholders (e.g., system names, effective date) prevent a perfect score, but the document is complete, specific, internally consistent, and includes a traceability matrix, meeting the highest quality tier."
+    "reasoning": "The artifact is highly comprehensive, with detailed committee descriptions, sign-off workflows, escalation procedures, and delegation matrices. It uses concrete figures (e.g., response times in hours/days, capital allocation limits) and maintains strong internal consistency across the Three Lines of Defense. Minor deduction for not explicitly citing external regulatory standards, but this does not detract from the thoroughness of the governance framework itself."
   },
   {
-    "resource_id": "2ad2e612-52c2-4712-a572-df821dbab423",
-    "task_name": "Define Non-Viability Conditions and Thresholds",
-    "agent_id": "stress_testing_designer",
-    "timestep": 24,
-    "started_timestep": 23,
-    "score": 1.0,
-    "reasoning": "The artifact contains only the agent's internal reasoning and execution notes, with no actual definitions, thresholds, or framework content. It fails to deliver any of the required outputs such as quantitative thresholds, qualitative conditions, or PONV boundary, thus completely missing the task objective."
-  },
-  {
-    "resource_id": "001a78e1-4c23-40c8-80b4-2ce8e3e4d7e4",
+    "resource_id": "2b3c4d5e-6f7a-8901-bcde-f12345678901",
     "task_name": "Governance Roles & Approvals",
     "agent_id": "documentation_lead",
-    "timestep": 25,
-    "started_timestep": 24,
-    "score": 6.0,
-    "reasoning": "The RACI matrix covers all stated ICAAP activities and roles with specific assignments, meeting the core task requirement. However, row 10 (ICAAP Challenge / Independent Review) contains an extra column entry (an additional 'I') and an accountability assignment that conflicts with the principle of independent review, indicating internal consistency issues. The artifact is usable but has notable errors that reduce reliability."
-  },
-  {
-    "resource_id": "e7b3a2d1-5f6c-4a8e-9b0d-3c1f2e4a7b8c",
-    "task_name": "Governance Roles & Approvals",
-    "agent_id": "documentation_lead",
-    "timestep": 25,
-    "started_timestep": 24,
-    "score": 9.0,
-    "reasoning": "The artifact provides a comprehensive and well-structured definition of all key ICAAP committees, including specific responsibilities, meeting frequencies, and an authority matrix. It avoids vague filler, maintains internal consistency (e.g., the matrix aligns with described duties), and directly fulfills the stated task of detailing governance roles. A minor improvement could be adding explicit regulatory references, but the work is already professional and thorough."
-  },
-  {
-    "resource_id": "f8c9d4e2-6a7b-4c1d-9e3f-5b2a8c0d1e4f",
-    "task_name": "Governance Roles & Approvals",
-    "agent_id": "documentation_lead",
-    "timestep": 25,
-    "started_timestep": 24,
+    "timestep": 6,
+    "started_timestep": 5,
     "score": 5.0,
-    "reasoning": "The artifact provides a detailed, role-specific workflow with concrete deliverables and checklists, but it suffers from a significant internal inconsistency: the overview diagram shows only five gates (Gate 1\u20135), while the detailed definitions include six gates (Gate 0\u20135), and the diagram omits the Gate 1 'Risk Identification & Scope' step. This mismatch between the claimed five-stage workflow and the actual structure undermines traceability and completeness, making it usable but not thoroughly professional."
+    "reasoning": "The summary provides a structured table and bullet points with specific counts (6 committees, 30+ sign-off points) but lacks detailed descriptions of roles, processes, or evidence traceability. It is usable as a high-level overview but has significant gaps in completeness and specificity for a professional governance framework summary."
   },
   {
-    "resource_id": "a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+    "resource_id": "3c4d5e6f-7a8b-9012-cdef-123456789012",
     "task_name": "Governance Roles & Approvals",
     "agent_id": "documentation_lead",
+    "timestep": 6,
+    "started_timestep": 5,
+    "score": 3.0,
+    "reasoning": "The artifact presents only a high-level outline of governance components (e.g., 'Six committees', '15+ roles', 'Six-phase annual cycle') without any concrete details, named items, or procedural specifics. It reads as a table of contents or placeholder, lacking the substantive content needed for a professional governance framework document. No evidence of traceable inputs or references is provided."
+  },
+  {
+    "resource_id": "e8b3f7a2-9c1d-4e5f-b6a0-3d2c1e8f7a6b",
+    "task_name": "Model Estimation & Calibration",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 7,
+    "started_timestep": 6,
+    "score": 9.2,
+    "reasoning": "The report is comprehensive, covering all required components (PD/LGD/EAD estimation, concentration risk, downturn calibration) with detailed quantitative results, clear tables, and validation metrics. It demonstrates strong internal consistency across segments and scenarios, includes specific statistical values (AUC=0.782, HHI=0.207, stress multipliers), and provides actionable recommendations. Minor deduction for lacking explicit traceability to specific input datasets (synthetic data noted but no source citation) and for the concentration add-on calculation lacking full derivation detail."
+  },
+  {
+    "resource_id": "f9c4b8a3-0d2e-4f5b-9c7a-4e3d2f1a8b6c",
+    "task_name": "Model Estimation & Calibration",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 7,
+    "started_timestep": 6,
+    "score": 8.5,
+    "reasoning": "The artifact provides a comprehensive and well-structured JSON representation of model estimation and calibration results, including specific model types, methods, performance metrics (AUC-ROC, R\u00b2), variable lists, and downturn calibration ranges. It is internally consistent and contains concrete figures for all key parameters, though it lacks explicit traceability to source data or validation references that would make it a 10/10."
+  },
+  {
+    "resource_id": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6",
+    "task_name": "Model Estimation & Calibration",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 7,
+    "started_timestep": 6,
+    "score": 9.0,
+    "reasoning": "The artifact provides a comprehensive and well-structured summary of segment-level and portfolio-level PD/LGD/EAD estimates for both TTC and downturn scenarios. It includes specific, concrete figures for 11 segments, portfolio weighted averages, expected loss, and economic capital with concentration adjustments. The data is internally consistent and clearly presented. A minor deduction is given for the absence of calibration methodology or validation metrics, but as a summary table it is thorough and professional."
+  },
+  {
+    "resource_id": "6e8f2a1b-9c3d-4e7f-8b2a-1d5c9f3e7a0b",
+    "task_name": "Risk Inventory & Materiality",
+    "agent_id": "op_risk_analyst",
+    "timestep": 8,
+    "started_timestep": 7,
+    "score": 10.0,
+    "reasoning": "The artifact is a thorough, professional risk inventory and materiality assessment. It covers all six required risk categories, providing detailed sub-risks, gross materiality ratings, quantification methods, and named owners for each. The document is internally consistent, uses concrete references (e.g., >40% of RWA, Basel standards), and includes a cross-reference table, meeting all task requirements without gaps or filler."
+  },
+  {
+    "resource_id": "e1c2a3b4-0001-4000-8000-000000000001",
+    "task_name": "Sensitivity & Consistency Checks",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 9,
+    "started_timestep": 8,
+    "score": 6.0,
+    "reasoning": "The artifact provides a detailed baseline inventory with specific numerical values and sector breakdown, which is largely complete. However, internal inconsistencies exist: the reported weighted-average PD (2.15%) does not match the weighted average of sector PDs (2.59%), and the weighted-average LGD for senior unsecured (45%) differs from the sector-weighted LGD (37.5%). These gaps reduce reliability for reconciliation and sensitivity sweeps, making it usable but with real gaps."
+  },
+  {
+    "resource_id": "e1c2a3b4-0002-4000-8000-000000000002",
+    "task_name": "Sensitivity & Consistency Checks",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 9,
+    "started_timestep": 8,
+    "score": 8.0,
+    "reasoning": "The artifact covers a wide range of sensitivity and consistency checks with specific, concrete numerical values across multiple parameters and scenarios. Tables are well-structured and most values are internally consistent (e.g., two-way sweep matches one-way extremes). However, the sensitivity ranking uses EC bounds not directly shown in other tables (e.g., EAD growth ranking refers to EC, but the EAD sensitivity table only reports 'Capital Charge' which differs from base EC), and the management overlay combined percentage (28.6%) does not exactly match additive (28%) or multiplicative (30.3%) combination of the stated individual overlays. These traceability and consistency gaps prevent the score from reaching the 9-10 range for thorough professional work."
+  },
+  {
+    "resource_id": "e1c2a3b4-0003-4000-8000-000000000003",
+    "task_name": "Sensitivity & Consistency Checks",
+    "agent_id": "credit_risk_modeler",
+    "timestep": 9,
+    "started_timestep": 8,
+    "score": 8.5,
+    "reasoning": "The report is thorough and well-structured, with concrete figures (e.g., \u20ac254.8M spread, \u20ac71.6M change, 28.6% overlay) and specific methodology references (ASRF model, Vasicek distribution, regulatory correlation formula). It covers all required aspects: sensitivity findings, inventory reconciliation, management overlay reconciliation, and recommendations. Minor gaps include lack of explicit tolerance band values for inventory reconciliation and no detailed breakdown of the management overlay components, but overall it meets professional standards."
+  },
+  {
+    "resource_id": "d1c1f3b2-4a5e-6d78-9c01-b2e3f4a5c6d7",
+    "task_name": "Data Lineage Registry & Controls",
+    "agent_id": "documentation_lead",
+    "timestep": 17,
+    "started_timestep": 16,
+    "score": 8.5,
+    "reasoning": "The artifact provides a comprehensive, well-structured registry with specific data sources, transformation mappings, reconciliation rules, and control checks, all with named owners and concrete tolerances. It is internally consistent and directly addresses the task of documenting ICAAP data lineage, though it lacks explicit version history or a formal sign-off section, and some external sources could be more specific."
+  },
+  {
+    "resource_id": "53663358-aac2-4c41-9bd7-1e899d0fd721",
+    "task_name": "Scenario Workshop",
+    "agent_id": "op_risk_analyst",
     "timestep": 25,
     "started_timestep": 24,
-    "score": 9.0,
-    "reasoning": "The artifact is comprehensive and specific, with clear escalation levels, triggers, paths, response times, and logging requirements. It is internally consistent and covers all stated aspects of the escalation framework. Minor omission: does not separately list all governance roles, but they are embedded in the paths."
+    "score": 1.0,
+    "reasoning": "The artifact contains only a preliminary check message with no actual scenario workshop narratives or parameter rationale. It fails to deliver the required documentation, resulting in a lack of completeness, specificity, and evidence. The content is essentially a placeholder rather than a completed work product."
+  },
+  {
+    "resource_id": "b2b63765-1635-4619-9d58-f8fc28b9c3a6",
+    "task_name": "Shock Application & Limits Check",
+    "agent_id": "irrbb_analyst",
+    "timestep": 29,
+    "started_timestep": 28,
+    "score": 1.0,
+    "reasoning": "The artifact reports completion but contains no actual results: no computed shocks, EVE/NII values, or breach flags. The final output is empty, indicating the task was not substantively performed. This is superficial and unsubstantiated."
   }
 ]

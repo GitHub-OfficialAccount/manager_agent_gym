@@ -25,6 +25,10 @@ class ScheduledAgentChange(BaseModel):
         default=None,
         description="Replacement system prompt for 'replace' (same id, new policy)",
     )
+    new_model_name: str | None = Field(
+        default=None,
+        description="Replacement model name for 'replace' (same id, new capability)",
+    )
     announce: bool = Field(
         default=False,
         description=(
@@ -41,9 +45,12 @@ class ScheduledAgentChange(BaseModel):
             raise ValueError("agent_config is required for 'add' action")
         if self.action == "remove" and not self.agent_id:
             raise ValueError("agent_id is required for 'remove' action")
-        if self.action == "replace" and not (self.agent_id and self.new_system_prompt):
+        if self.action == "replace" and not (
+            self.agent_id and (self.new_system_prompt or self.new_model_name)
+        ):
             raise ValueError(
-                "agent_id and new_system_prompt are required for 'replace' action"
+                "agent_id and at least one of new_system_prompt / new_model_name "
+                "are required for 'replace' action"
             )
 
 

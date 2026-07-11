@@ -1,1 +1,107 @@
-[]
+[
+  {
+    "timestep": 2,
+    "started_timestep": 1,
+    "task_id": "00000000-0000-0000-0000-00000000006e",
+    "task_name": "Data Preparation (Wholesale/Retail)",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "c3d4e5f6-a7b8-9012-cdef-123456789012"
+    ]
+  },
+  {
+    "timestep": 3,
+    "started_timestep": 2,
+    "task_id": "00000000-0000-0000-0000-000000000065",
+    "task_name": "ICAAP Architecture Doc",
+    "agent_id": "documentation_lead",
+    "output_resource_ids": [
+      "1a2b3c4d-5e6f-7890-abcd-ef1234567890"
+    ]
+  },
+  {
+    "timestep": 5,
+    "started_timestep": 4,
+    "task_id": "00000000-0000-0000-0000-00000000000b",
+    "task_name": "Data Lineage Registry & Controls",
+    "agent_id": "documentation_lead",
+    "output_resource_ids": [
+      "dc894f24-75f8-408c-a998-22419e5461ae"
+    ]
+  },
+  {
+    "timestep": 6,
+    "started_timestep": 5,
+    "task_id": "00000000-0000-0000-0000-000000000066",
+    "task_name": "Governance Roles & Approvals",
+    "agent_id": "op_risk_analyst",
+    "output_resource_ids": [
+      "1a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d"
+    ]
+  },
+  {
+    "timestep": 20,
+    "started_timestep": 19,
+    "task_id": "00000000-0000-0000-0000-000000000064",
+    "task_name": "Risk Appetite & Limits",
+    "agent_id": "documentation_lead",
+    "output_resource_ids": [
+      "1e6f3a8b-2c4d-5e7f-9a0b-1c2d3e4f5a6b"
+    ]
+  },
+  {
+    "timestep": 24,
+    "started_timestep": 23,
+    "task_id": "dd3c6da6-f63f-4a98-9460-8ace3948b003",
+    "task_name": "Segment PD Estimation and Validation",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "43356514-41be-48a0-a06b-f486a3f82bad"
+    ]
+  },
+  {
+    "timestep": 25,
+    "started_timestep": 24,
+    "task_id": "00000000-0000-0000-0000-000000000001",
+    "task_name": "Risk Inventory & Materiality",
+    "agent_id": "documentation_lead",
+    "output_resource_ids": [
+      "2a90b156-8b99-4f43-80c5-fc8ee691cc75",
+      "f8ff5cf0-3308-42d0-8e1f-5b63a58a732b"
+    ]
+  },
+  {
+    "timestep": 26,
+    "started_timestep": 25,
+    "task_id": "302b44c0-3f88-4507-9ca1-d4cf59dbff89",
+    "task_name": "Segment LGD Estimation and Validation",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "2bae52c1-426f-431d-aa21-066eed5e5976"
+    ]
+  },
+  {
+    "timestep": 27,
+    "started_timestep": 26,
+    "task_id": "a7b68494-3f32-4f0c-9fda-a69885337d8a",
+    "task_name": "Segment EAD Estimation and Validation",
+    "agent_id": "credit_risk_modeler",
+    "output_resource_ids": [
+      "ead1a022-a637-4c41-ba83-119f4a53dd5d",
+      "ead2b033-b748-4d52-ba94-220f5b64ee6e"
+    ]
+  },
+  {
+    "timestep": 28,
+    "started_timestep": 27,
+    "task_id": "00000000-0000-0000-0000-000000000006",
+    "task_name": "Reverse Stress Test",
+    "agent_id": "stress_testing_designer",
+    "output_resource_ids": [
+      "e239b04b-81ac-446a-a11b-18f31733f16c",
+      "691d6e48-8a56-4185-b4a4-221620730780"
+    ]
+  }
+]
