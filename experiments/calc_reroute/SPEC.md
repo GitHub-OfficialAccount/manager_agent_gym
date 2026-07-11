@@ -95,6 +95,35 @@ of calc-first is that correctness is unambiguous.
 Expected shape (hypothesis): control high, silent low (manager keeps routing to
 now-calc-less quant_analyst → wrong numbers), oracle recovers.
 
+## Detection channel (quality digest)
+
+The manager can only adapt if it can *know* a worker degraded — but a wrong
+number still *completes* the task and looks plausible, so the manager can't
+judge correctness by inspection. The engine already passes a scalar
+`previous_reward` to the manager, but (a) the CoT manager ignores it and (b)
+it's workflow-level (can't localize a worker). So we add a **per-worker quality
+digest** as an `ObservationPolicy` knob (the policy was designed with a
+"quality digest" placeholder for exactly this):
+
+- `quality_digest: "none" | "per_worker"` (default `none`).
+- When `per_worker`, `create_observation` includes a recent-correctness summary
+  per worker, e.g. *"quant_analyst: last 3 quant tasks 1/3 correct"*. Correctness
+  is the deterministic exact-match check (optionally via a `ValidationEngine`
+  non-LLM `evaluator_function`). It enters the observation, which the manager
+  actually reads (unlike `previous_reward`).
+
+Manager conditions form a ladder from clean-signal to no-signal:
+- **digest-augmented** (`quality_digest=per_worker`): manager is handed per-worker
+  correctness → can localize and reroute. Tests whether it *uses* a clean signal.
+- **baseline-blind** (`quality_digest=none`): no quality signal → expected to fail
+  the silent condition (structural blindness).
+- (later) coarse-signal / profile-memory / changepoint managers = the harder,
+  novel rungs where the manager must localize from weaker evidence.
+
+**Condition grid:** {baseline-blind, digest-augmented} × {control, silent,
+oracle}. Regret and recovery are read per manager type; the interesting quantity
+is how much the digest closes the silent→oracle gap.
+
 ## Reuse vs new
 
 **Reuse:** engine, `AIAgent` (native tool-calling), `ChainOfThoughtManagerAgent`,
