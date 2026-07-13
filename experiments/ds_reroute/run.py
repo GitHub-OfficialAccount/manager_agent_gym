@@ -1,21 +1,20 @@
-"""ds_reroute experiment runner.
+"""Run the loan-audit teammate-change experiment.
 
-3 workers: senior_analyst starts with the ADVANCED analytics tool; credit_analyst
-and junior_analyst have only BASIC. The perturbation moves the advanced tool
-senior->junior (a downgrade of senior + upgrade of junior). Advanced-tasks
-should then re-route to junior. Conditions: control / silent / oracle.
-
-  uv run python -m experiments.ds_reroute.run \
-      --conditions control silent oracle --seeds 42 --max-timesteps 16 --swap-timestep 3
-  uv run python -m experiments.ds_reroute.score
+Example:
+    uv run python -m experiments.ds_reroute.run \
+        --conditions control silent partial full --seeds 42 --swap-timestep 3
 """
+
+from __future__ import annotations
 
 import argparse
 import asyncio
 import json
 import logging
+import re
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 from examples.common_stakeholders import create_stakeholder_agent
 from manager_agent_gym import (
@@ -28,166 +27,253 @@ from manager_agent_gym.core.common.model_provider import disable_agents_tracing_
 from manager_agent_gym.core.communication.service import CommunicationService
 from manager_agent_gym.schemas.execution.callbacks import TimestepEndContext
 from manager_agent_gym.schemas.execution.observation_policy import ObservationPolicy
-from manager_agent_gym.schemas.execution.perturbations import (
-    PerturbationSchedule,
-    ToolSwap,
-)
-from manager_agent_gym.schemas.preferences.evaluator import (
-    AggregationStrategy,
-    Evaluator,
-)
-from manager_agent_gym.schemas.preferences.preference import (
-    Preference,
-    PreferenceWeights,
-)
+from manager_agent_gym.schemas.execution.perturbations import PerturbationSchedule, ToolSwap
+from manager_agent_gym.schemas.preferences.evaluator import AggregationStrategy, Evaluator
+from manager_agent_gym.schemas.preferences.preference import Preference, PreferenceWeights
+from manager_agent_gym.schemas.preferences.rubric import RunCondition, WorkflowRubric
 
 from .scenario import (
-    TASK_ANSWERS,
-    TASK_META,
-    advanced_stats,
-    basic_stats,
+    SCREENING_TOOL_IDS,
+    build_scenario,
     build_worker,
-    build_workflow,
-    extract_answer,
+    extract_metric,
     is_correct,
+    score,
 )
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
 )
 
-ADVANCED_HOLDER = "senior_analyst"
-NEW_HOLDER = "junior_analyst"
+TARGET_WORKER = "portfolio_analyst"
+WORKER_TIERS = {
+    TARGET_WORKER: "robust",
+    "risk_analyst": "robust",
+    "screening_analyst": "screening",
+}
+_METHOD_RE = re.compile(r"method\s*[:=]\s*([a-zA-Z0-9_+\- ]+)", re.IGNORECASE)
 
 
-def _prefs() -> PreferenceWeights:
+def _preferences() -> PreferenceWeights:
+    rubric = WorkflowRubric(
+        name="loan_audit_pack_quality",
+        llm_prompt=(
+            "Assess the completed loan-audit pack for analytical completeness, "
+            "method transparency, reconciliation of robust and rapid screens, "
+            "and an actionable capacity estimate. Use only evidence in workflow "
+            "artifacts. Return a score from 0 to 10."
+        ),
+        max_score=10.0,
+        run_condition=RunCondition.ON_COMPLETION,
+    )
     return PreferenceWeights(preferences=[Preference(
-        name="quality", weight=1.0, description="Correct analysis",
-        evaluator=Evaluator(name="q", description="p",
-                            aggregation=AggregationStrategy.WEIGHTED_AVERAGE, rubrics=[]))])
+        name="quality",
+        weight=1.0,
+        description="Complete and defensible portfolio audit",
+        evaluator=Evaluator(
+            name="loan_audit_quality",
+            description="Native LLM evaluation of the audit pack",
+            aggregation=AggregationStrategy.WEIGHTED_AVERAGE,
+            rubrics=[rubric],
+        ),
+    )])
 
 
-def build_schedule(condition: str, swap_t: int) -> PerturbationSchedule:
+def build_schedule(condition: str, swap_timestep: int) -> PerturbationSchedule:
     if condition == "control":
         return PerturbationSchedule()
-    announce = condition == "oracle"
-    return PerturbationSchedule(perturbations=[
-        ToolSwap(timestep=swap_t, agent_id=ADVANCED_HOLDER, new_tool_ids=["basic"],
-                 announce=announce,
-                 label=(f"{ADVANCED_HOLDER} lost advanced analytics" if announce
-                        else "internal update")),
-        ToolSwap(timestep=swap_t, agent_id=NEW_HOLDER, new_tool_ids=["advanced"],
-                 announce=announce,
-                 label=(f"{NEW_HOLDER} now holds advanced analytics" if announce
-                        else "internal update")),
-    ])
+    if condition not in {"silent", "partial", "full"}:
+        raise ValueError(f"Unknown condition: {condition}")
+    labels = {
+        "silent": "internal capability update",
+        "partial": "the analyst's capability profile changed",
+        "full": "robust percentile analysis changed to mean-plus-two-SD screening",
+    }
+    return PerturbationSchedule(perturbations=[ToolSwap(
+        timestep=swap_timestep,
+        agent_id=TARGET_WORKER,
+        new_tool_ids=list(SCREENING_TOOL_IDS),
+        announce=condition in {"partial", "full"},
+        label=labels[condition],
+    )])
 
 
 class Recorder:
-    def __init__(self) -> None:
-        self.completions: list[dict] = []
-        self.actions: list[dict] = []
+    def __init__(self, task_answers: dict[str, float], task_meta: dict[str, dict[str, Any]]) -> None:
+        self.task_answers = task_answers
+        self.task_meta = task_meta
+        self.completions: list[dict[str, Any]] = []
+        self.actions: list[dict[str, Any]] = []
         self._start: dict[str, int] = {}
 
     async def callback(self, ctx: TimestepEndContext) -> None:
-        a = ctx.manager_action
+        action = ctx.manager_action
         self.actions.append({
             "timestep": ctx.timestep,
-            "action_type": getattr(a, "action_type", None) if a else None,
-            "task_id": str(getattr(a, "task_id", "")) or None,
-            "agent_id": getattr(a, "agent_id", None),
+            "action": action.model_dump(mode="json") if action is not None else None,
         })
-        for tid in ctx.tasks_started:
-            self._start.setdefault(str(tid), ctx.timestep)
-        for tid in ctx.tasks_completed:
-            task = ctx.workflow.tasks.get(tid)
-            if task is None:
+        for task_id in ctx.tasks_started:
+            self._start.setdefault(str(task_id), ctx.timestep)
+        for task_id in ctx.tasks_completed:
+            task = ctx.workflow.tasks.get(task_id)
+            if task is None or task.name not in self.task_answers:
                 continue
             content = ""
-            for rid in task.output_resource_ids:
-                res = ctx.workflow.resources.get(rid)
-                if res is not None:
-                    content = res.content or ""
+            for resource_id in task.output_resource_ids:
+                resource = ctx.workflow.resources.get(resource_id)
+                if resource is not None and resource.content:
+                    content = resource.content
                     break
-            meta = TASK_META.get(task.name, {})
-            truth = TASK_ANSWERS.get(task.name)
-            ans = extract_answer(content)
+            truth = self.task_answers[task.name]
+            answer = extract_metric(content)
+            method_match = _METHOD_RE.search(content)
             self.completions.append({
                 "timestep": ctx.timestep,
-                "started_timestep": self._start.get(str(tid)),
+                "started_timestep": self._start.get(str(task_id)),
                 "task_name": task.name,
-                "task_op": meta.get("op"),
-                "needs_advanced": meta.get("op") in {"std", "median", "q90", "corr"},
+                **self.task_meta[task.name],
                 "agent_id": task.assigned_agent_id,
-                "answer": ans,
-                "correct": bool(truth is not None and is_correct(ans, truth)),
+                "content": content,
+                "answer": answer,
+                "truth": truth,
+                "method_reported": method_match.group(1).strip() if method_match else None,
+                "correct": is_correct(answer, truth),
+                "r_check": score(answer, truth),
             })
 
+    def score_summary(self) -> dict[str, Any]:
+        by_name = {row["task_name"]: row for row in self.completions}
+        task_scores = {
+            name: by_name[name]["r_check"] if name in by_name else 0.0
+            for name in self.task_answers
+        }
+        return {
+            "r_check": sum(task_scores.values()) / len(task_scores),
+            "completed_predefined": len(by_name),
+            "total_predefined": len(self.task_answers),
+            "task_scores": task_scores,
+        }
 
-async def run_one(condition, seed, max_timesteps, swap_timestep, out_root) -> Path:
+
+async def run_one(
+    condition: str,
+    seed: int,
+    max_timesteps: int,
+    swap_timestep: int,
+    out_root: Path,
+) -> Path:
     run_dir = out_root / f"{condition}_t{swap_timestep}_seed{seed}"
     run_dir.mkdir(parents=True, exist_ok=True)
-    print("=" * 60)
-    print(f"🧪 DS-REROUTE | condition={condition} seed={seed} swap_t={swap_timestep} "
-          f"| advanced moves {ADVANCED_HOLDER}->{NEW_HOLDER}")
-    print("=" * 60)
+    print(
+        f"DS-REROUTE condition={condition} seed={seed} "
+        f"swap_t={swap_timestep} target={TARGET_WORKER}",
+        flush=True,
+    )
 
-    workflow = build_workflow()
-    prefs = _prefs()
+    scenario = build_scenario(seed)
+    preferences = _preferences()
     registry = AgentRegistry()
-    registry.register_tool("advanced", advanced_stats)
-    registry.register_tool("basic", basic_stats)
-    for aid, tier in [(ADVANCED_HOLDER, "advanced"), ("credit_analyst", "basic"),
-                      (NEW_HOLDER, "basic")]:
-        cfg, tools = build_worker(aid, tier)
-        registry.register_ai_agent(cfg, tools)
+    for tool_id, tool in scenario.tools.items():
+        registry.register_tool(tool_id, tool)
+    for agent_id, tier in WORKER_TIERS.items():
+        config, tools = build_worker(scenario, agent_id, tier)
+        registry.register_ai_agent(config, tools)
 
     schedule = build_schedule(condition, swap_timestep)
     schedule.register(registry)
-
-    manager = ChainOfThoughtManagerAgent(preferences=prefs)
-    stakeholder = create_stakeholder_agent(persona="balanced", preferences=prefs)
-    recorder = Recorder()
+    observation_policy = ObservationPolicy(
+        expose_worker_system_prompts=False,
+        worker_metadata="capabilities",
+        quality_digest="none",
+    )
+    manager = ChainOfThoughtManagerAgent(preferences=preferences)
+    stakeholder = create_stakeholder_agent(persona="balanced", preferences=preferences)
+    recorder = Recorder(scenario.task_answers, scenario.task_meta)
     engine = WorkflowExecutionEngine(
-        workflow=workflow, agent_registry=registry, stakeholder_agent=stakeholder,
-        manager_agent=manager, communication_service=CommunicationService(),
-        max_timesteps=max_timesteps, enable_timestep_logging=True,
+        workflow=scenario.workflow,
+        agent_registry=registry,
+        stakeholder_agent=stakeholder,
+        manager_agent=manager,
+        communication_service=CommunicationService(),
+        max_timesteps=max_timesteps,
+        enable_timestep_logging=True,
         enable_final_metrics_logging=False,
         timestep_end_callbacks=[*default_timestep_callbacks(), recorder.callback],
-        observation_policy=ObservationPolicy(), seed=seed,
+        observation_policy=observation_policy,
+        seed=seed,
     )
-    started = datetime.now().isoformat()
+    started_at = datetime.now().isoformat()
     await engine.run_full_execution(save_outputs=False)
 
+    score_summary = recorder.score_summary()
     manifest = {
-        "condition": condition, "seed": seed, "swap_timestep": swap_timestep,
-        "advanced_holder_initial": ADVANCED_HOLDER, "new_holder": NEW_HOLDER,
-        "started_at": started, "finished_at": datetime.now().isoformat(),
+        "condition": condition,
+        "seed": seed,
+        "swap_timestep": swap_timestep,
+        "target_worker": TARGET_WORKER,
+        "started_at": started_at,
+        "finished_at": datetime.now().isoformat(),
+        "observation_policy": observation_policy.model_dump(mode="json"),
         "perturbation": schedule.manifest(),
-        "final_tools": {aid: [t.name for t in registry.get_agent(aid).tools]
-                        for aid in [ADVANCED_HOLDER, "credit_analyst", NEW_HOLDER]
-                        if registry.get_agent(aid)},
+        "final_tools": {
+            agent_id: [tool.name for tool in registry.get_agent(agent_id).tools]
+            for agent_id in WORKER_TIERS
+            if registry.get_agent(agent_id) is not None
+        },
+        "native_reward_vector": engine.validation_engine.reward_vector,
+        "native_reward_final": engine.validation_engine.most_recent_reward,
+        **score_summary,
     }
-    (run_dir / "manifest.json").write_text(json.dumps(manifest, indent=2))
-    (run_dir / "completions.json").write_text(json.dumps(recorder.completions, indent=2))
-    (run_dir / "manager_actions.json").write_text(json.dumps(recorder.actions, indent=2))
-    print(f"✅ {condition}: {len(recorder.completions)} completions -> {run_dir}")
+    artifacts = {
+        "manifest.json": manifest,
+        "completions.json": recorder.completions,
+        "manager_actions.json": recorder.actions,
+        "tool_calls.json": scenario.tool_calls,
+        "task_ground_truth.json": {
+            key: {
+                "name": spec.name,
+                "stage": spec.stage,
+                "truth": spec.truth,
+                "method": spec.method,
+                "dependencies": list(spec.dependencies),
+            }
+            for key, spec in scenario.task_specs.items()
+        },
+    }
+    for filename, payload in artifacts.items():
+        (run_dir / filename).write_text(json.dumps(payload, indent=2))
+    print(
+        f"{condition}: R_check={score_summary['r_check']:.3f} "
+        f"completed={score_summary['completed_predefined']}/"
+        f"{score_summary['total_predefined']} -> {run_dir}",
+        flush=True,
+    )
     return run_dir
 
 
 async def main() -> None:
     disable_agents_tracing_if_proxied()
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--conditions", nargs="+", default=["control", "silent", "oracle"],
-                   choices=["control", "silent", "oracle"])
-    p.add_argument("--seeds", nargs="+", type=int, default=[42])
-    p.add_argument("--max-timesteps", type=int, default=16)
-    p.add_argument("--swap-timestep", type=int, default=3)
-    p.add_argument("--out", type=Path, default=Path("experiments/ds_reroute/outputs"))
-    args = p.parse_args()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--conditions",
+        nargs="+",
+        default=["control", "silent", "partial", "full"],
+        choices=["control", "silent", "partial", "full"],
+    )
+    parser.add_argument("--seeds", nargs="+", type=int, default=[42])
+    parser.add_argument("--max-timesteps", type=int, default=16)
+    parser.add_argument("--swap-timestep", type=int, default=3)
+    parser.add_argument("--out", type=Path, default=Path("experiments/ds_reroute/outputs"))
+    args = parser.parse_args()
     for seed in args.seeds:
-        for c in args.conditions:
-            await run_one(c, seed, args.max_timesteps, args.swap_timestep, args.out)
+        for condition in args.conditions:
+            await run_one(
+                condition,
+                seed,
+                args.max_timesteps,
+                args.swap_timestep,
+                args.out,
+            )
 
 
 if __name__ == "__main__":

@@ -1,49 +1,91 @@
-"""Analyze ds_reroute runs — pure aggregation (correctness is exact-match, no LLM).
+"""Aggregate deterministic and native metrics from ds_reroute runs."""
 
-For post-swap ADVANCED tasks: correctness and routing per condition, plus the
-manager's action mix (task-graph edits). Regret = oracle - silent.
-
-  uv run python -m experiments.ds_reroute.analyze
-"""
+from __future__ import annotations
 
 import argparse
 import json
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
+from statistics import mean
+from typing import Any
 
 
-def analyze_run(run_dir: Path) -> dict:
-    m = json.loads((run_dir / "manifest.json").read_text())
-    comps = json.loads((run_dir / "completions.json").read_text())
+def analyze_run(run_dir: Path) -> dict[str, Any]:
+    manifest = json.loads((run_dir / "manifest.json").read_text())
+    completions = json.loads((run_dir / "completions.json").read_text())
     actions = json.loads((run_dir / "manager_actions.json").read_text())
-    swap_t = m["swap_timestep"]
-    new_holder = m["new_holder"]
+    tool_calls = json.loads((run_dir / "tool_calls.json").read_text())
+    swap_timestep = manifest["swap_timestep"]
 
-    post_adv = [c for c in comps if c["needs_advanced"]
-                and (c["started_timestep"] or 0) >= swap_t]
-    n = len(post_adv)
-    correct = sum(c["correct"] for c in post_adv)
-    routed = Counter(c["agent_id"] for c in post_adv)
-    to_new = routed.get(new_holder, 0)
-    print(f"\n== {run_dir.name} (condition={m['condition']}) ==")
-    print(f"  post-swap ADVANCED tasks: {correct}/{n} correct")
-    print(f"  routed to: {dict(routed)}  (correct holder after swap: {new_holder})")
-    print(f"  manager action mix: {dict(Counter(a['action_type'] for a in actions))}")
-    return {"condition": m["condition"], "n": n, "correct": correct,
-            "acc": correct / n if n else None, "to_new_holder": to_new}
+    post_change = [
+        row for row in completions
+        if (row.get("started_timestep") or 0) >= swap_timestep
+    ]
+    post_robust = [
+        row for row in post_change
+        if row.get("stage") == "audit" and row.get("method") == "percentile"
+    ]
+    routes = Counter(row.get("agent_id") for row in post_robust)
+    action_mix = Counter(
+        row["action"].get("action_type")
+        for row in actions
+        if row.get("action")
+    )
+    result = {
+        "condition": manifest["condition"],
+        "seed": manifest["seed"],
+        "r_check": manifest["r_check"],
+        "native_reward": manifest["native_reward_final"],
+        "completed": manifest["completed_predefined"],
+        "post_change_r_check": (
+            mean(row["r_check"] for row in post_change) if post_change else None
+        ),
+        "post_robust_routes": dict(routes),
+        "tool_calls": dict(Counter(row["tool"] for row in tool_calls)),
+        "action_mix": dict(action_mix),
+    }
+    print(f"\n== {run_dir.name} ==")
+    print(
+        f"  R_check={result['r_check']:.3f} native={result['native_reward']:.3f} "
+        f"completed={result['completed']}/{manifest['total_predefined']}"
+    )
+    print(
+        f"  post-change R_check={result['post_change_r_check']} "
+        f"robust audit routes={result['post_robust_routes']}"
+    )
+    print(f"  action mix={result['action_mix']}")
+    return result
 
 
 def main() -> None:
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--runs", type=Path, default=Path("experiments/ds_reroute/outputs"))
-    args = p.parse_args()
-    dirs = sorted(d for d in args.runs.iterdir()
-                  if d.is_dir() and (d / "completions.json").exists())
-    summ = {r["condition"]: r for r in (analyze_run(d) for d in dirs)}
-    if "oracle" in summ and "silent" in summ:
-        o, s = summ["oracle"]["acc"], summ["silent"]["acc"]
-        if o is not None and s is not None:
-            print(f"\nregret (advanced-task accuracy) = oracle - silent = {o - s:.2f}")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--runs", type=Path, default=Path("experiments/ds_reroute/outputs")
+    )
+    args = parser.parse_args()
+    run_dirs = sorted(
+        path for path in args.runs.iterdir()
+        if path.is_dir() and (path / "manifest.json").exists()
+    )
+    by_condition: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for run_dir in run_dirs:
+        row = analyze_run(run_dir)
+        by_condition[row["condition"]].append(row)
+
+    if by_condition:
+        print("\n== condition means ==")
+    condition_means: dict[str, float] = {}
+    for condition, rows in sorted(by_condition.items()):
+        condition_means[condition] = mean(row["r_check"] for row in rows)
+        print(
+            f"  {condition:<8} R_check={condition_means[condition]:.3f} "
+            f"native={mean(row['native_reward'] for row in rows):.3f} n={len(rows)}"
+        )
+    if "full" in condition_means and "silent" in condition_means:
+        print(
+            "\n  adaptation gap (full - silent) = "
+            f"{condition_means['full'] - condition_means['silent']:.3f}"
+        )
 
 
 if __name__ == "__main__":
