@@ -5,7 +5,10 @@ Provides real LLM-powered agents that can execute tasks using
 system prompts and tools via the OpenAI Agents framework.
 """
 
+import json
+import math
 import os
+import re
 import time
 import traceback
 from typing import TYPE_CHECKING
@@ -47,6 +50,98 @@ from ..workflow_agents.prompts.ai_agent_prompts import (
 )
 
 
+# Appended to the system prompt for models where we cannot use the SDK's
+# structured-output mechanism (see comment in AIAgent.__init__). Mirrors the
+# AITaskOutput schema so the final text answer can be parsed back into it.
+PLAIN_TEXT_OUTPUT_CONTRACT = (
+    "\n\nFINAL OUTPUT FORMAT: after any tool use, reply with a single JSON "
+    'object (no markdown fences, no text before or after it) with exactly '
+    'these keys: "reasoning" (string), "resources" (array of objects, each '
+    'with "name", "description", "content", "content_type"; at least one), '
+    '"confidence" (number between 0 and 1), "execution_notes" (array of '
+    "strings). Put your actual final answer in the resources' content fields."
+)
+
+# Key aliases models drift to when the schema is only prompt-specified.
+_RESOURCE_LIST_KEYS = ("resources", "generated_resources", "output_resources")
+
+
+def _parse_plain_text_output(text: str, task: Task) -> AITaskOutput:
+    """Best-effort parse of a plain-text final answer into AITaskOutput.
+
+    Tolerates markdown fences, surrounding prose, drifted key names, and
+    scalar-vs-list mismatches. Never raises: an unparseable reply is wrapped
+    verbatim in a single resource so the worker always produces output.
+    """
+    fallback = AITaskOutput(
+        reasoning="Unstructured model output; raw reply preserved as resource content.",
+        resources=[
+            Resource(
+                name=f"Output: {task.name}",
+                description=f"Raw model reply for task: {task.name}",
+                content=text,
+                content_type="text/plain",
+            )
+        ],
+        confidence=0.5,
+        execution_notes=["Final reply did not parse as structured JSON."],
+    )
+    stripped = re.sub(r"```[a-zA-Z]*", "", text).strip()
+    start, end = stripped.find("{"), stripped.rfind("}")
+    if start == -1 or end <= start:
+        return fallback
+    try:
+        obj = json.loads(stripped[start : end + 1])
+    except Exception:
+        return fallback
+    if not isinstance(obj, dict):
+        return fallback
+
+    raw_resources = None
+    for key in _RESOURCE_LIST_KEYS:
+        candidate = obj.get(key)
+        if isinstance(candidate, list) and candidate:
+            raw_resources = candidate
+            break
+        if isinstance(candidate, dict):
+            raw_resources = [candidate]
+            break
+    resources: list[Resource] = []
+    for item in raw_resources or []:
+        if not isinstance(item, dict):
+            continue
+        content = item.get("content")
+        resources.append(
+            Resource(
+                name=str(item.get("name") or f"Output: {task.name}"),
+                description=str(item.get("description") or "Model-generated output."),
+                content=None if content is None else str(content),
+                content_type=str(item.get("content_type") or "text/plain"),
+            )
+        )
+    if not resources:
+        return fallback
+
+    notes = obj.get("execution_notes") or obj.get("notes") or []
+    if isinstance(notes, str):
+        notes = [notes]
+    elif not isinstance(notes, list):
+        notes = [notes]
+    try:
+        confidence = float(obj.get("confidence", obj.get("confidence_level", 0.5)))
+    except (TypeError, ValueError):
+        confidence = 0.5
+    if not math.isfinite(confidence):
+        confidence = 0.5
+    confidence = min(1.0, max(0.0, confidence))
+    return AITaskOutput(
+        reasoning=str(obj.get("reasoning") or ""),
+        resources=resources,
+        confidence=confidence,
+        execution_notes=[str(n) for n in notes if n is not None],
+    )
+
+
 class AIAgent(AgentInterface[AIAgentConfig]):
     """
     AI agent implementation using OpenAI Agents SDK.
@@ -75,12 +170,24 @@ class AIAgent(AgentInterface[AIAgentConfig]):
         from ..execution.context import AgentExecutionContext
 
         self.tools = tools + COMMUNICATION_TOOLS
+        # The SDK's output_type sends a strict json_schema response_format on
+        # EVERY request, including turns where a tool call is expected. Most
+        # OpenRouter backends grammar-enforce that schema, which makes emitting
+        # a tool call literally impossible — the model is forced to fabricate a
+        # final answer on turn 1 (see CHANGED.md: with response_format 0/9 tool
+        # calls across 10 providers; without it 12/12, byte-identical bodies).
+        # So for OpenRouter models we skip output_type, specify the schema in
+        # the prompt instead, and parse the plain-text reply leniently.
+        self._plain_text_output = config.model_name.startswith("openrouter/")
+        instructions = config.system_prompt
+        if self._plain_text_output:
+            instructions = config.system_prompt + PLAIN_TEXT_OUTPUT_CONTRACT
         self.openai_agent: Agent[AgentExecutionContext] = Agent(
             model=LitellmModel(model=build_litellm_model_id(config.model_name)),
             name=config.agent_id,
-            instructions=config.system_prompt,
+            instructions=instructions,
             tools=self.tools,
-            output_type=AITaskOutput,
+            **({} if self._plain_text_output else {"output_type": AITaskOutput}),
         )
 
     async def execute_task(
@@ -134,6 +241,8 @@ class AIAgent(AgentInterface[AIAgentConfig]):
 
             # Extract structured output
             output = result.final_output
+            if self._plain_text_output and isinstance(output, str):
+                output = _parse_plain_text_output(output, task)
             if not isinstance(output, AITaskOutput):
                 raise ValueError("Output is not an AITaskOutput")
 
