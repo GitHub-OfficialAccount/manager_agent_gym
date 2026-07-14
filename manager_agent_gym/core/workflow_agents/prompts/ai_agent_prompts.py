@@ -16,11 +16,11 @@ INPUT RESOURCES:
 
 INSTRUCTIONS:
 1. Understand the task requirements
-2. Use available tools when useful, including reasonable verification
+2. Use available tools when useful
 3. Return the requested deliverable as appropriate output resources
 4. Include a brief rationale, confidence level, and any relevant execution notes
 
-Complete the task and return the result once you are satisfied with the evidence.
+Complete the task and return the result.
 """
 
 # Specialized task template with additional context

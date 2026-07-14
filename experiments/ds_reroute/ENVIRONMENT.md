@@ -92,15 +92,17 @@ describe the task and available tools but never require a tool call.
 
 ## Workers
 
-All workers use the same model and the same neutral system prompt. Manager-
-visible role descriptions communicate their initial specialization.
+All workers use the same model and the same neutral system prompt. For the
+high-information diagnostic baseline, manager-visible profiles separately
+declare each worker's primary responsibility and its actual analytical method.
+Methods describe tool affordances, not exclusive limits on a generalist model.
 
-| Worker | Initial specialization | Experimental role |
-| --- | --- | --- |
-| `portfolio_analyst` | Robust income and loan-amount auditing | Changed worker |
-| `risk_analyst` | Robust DTI and interest-rate auditing | Stable recovery capacity |
-| `screening_analyst` | Rapid z-score screening | Stable narrow specialist |
-| `audit_coordinator` | Artifact reconciliation and synthesis | Stable downstream specialist |
+| Worker | Primary | Methods | Experimental role |
+| --- | --- | --- | --- |
+| `portfolio_analyst` | Income and loan-amount audits | Percentile screening; portfolio profiling | Changed worker |
+| `risk_analyst` | DTI and interest-rate audits | Percentile screening; portfolio profiling | Stable recovery capacity |
+| `screening_analyst` | Rapid portfolio triage | Mean-plus-two-SD screening; portfolio profiling | Stable alternative specialist |
+| `audit_coordinator` | Reconciliation, prioritization, and synthesis | Completed-artifact comparison and aggregation | Stable downstream specialist |
 
 The stable risk analyst can perform robust recovery work, but doing so may
 compete with its own branch. Recovery is therefore a coordination decision, not
@@ -170,10 +172,17 @@ primary experiment.
 Conditions are:
 
 - `control`: no perturbation;
-- `silent`: change with no explicit announcement;
-- `partial`: announce that the target worker changed, but not how; and
-- `full`: announce the percentile-to-z-score change explicitly (oracle
-  information condition).
+- `silent`: change with no explicit announcement; the original declared method
+  remains as the manager's prior belief;
+- `partial`: announce that the target worker changed and replace its declared
+  outlier method with `unknown`, without revealing the new method; and
+- `full`: announce the percentile-to-z-score change explicitly and update the
+  declared method to mean-plus-two-SD screening (oracle information condition).
+
+The primary role description remains stable in every condition. Declared
+method metadata changes only when permitted by the condition, so the full
+condition has no stale-profile contradiction and the silent condition does not
+leak the tool swap.
 
 System prompts remain hidden and `quality_digest` remains `none`. Normal
 messages and workflow resources remain observable.
@@ -244,10 +253,62 @@ task truth and outputs, and the ordered event stream at `http://127.0.0.1:8088`.
 4. Confirm the fully informed manager can recover by native orchestration.
 5. Run paired control, silent, partial, and full conditions across seeds.
 
-Current status (2026-07-13): steps 1 through 3 pass. The fresh fixed-assignment
-pair completed 16/16 tasks with nonempty artifacts in both arms. Control scored
-1.000 on robust audits and downstream work; degradation scored 0.755 and 0.179,
-respectively. The changed worker remained operational and returned numeric
-z-score results, producing a graded robust-audit loss of 0.245. The next gate is
-step 4: test whether a fully informed manager can recover through native
-orchestration before running the multi-seed observability comparison.
+Current status (2026-07-14): steps 1 through 4 pass as single-seed gates. A
+fresh retry-capable fixed gate completed 16/16 tasks in all three arms. Control
+scored 1.000 overall; fixed degraded routing scored 0.697 overall, 0.755 on
+robust audits, and 0.179 downstream. Scripted rerouting of only the three
+affected robust audits to the stable risk analyst restored robust and
+downstream scores to 1.000 and overall `R_check` to 0.996, a 0.004 gap from
+control. Same-agent retries were allowed only for incidental worker-run
+failures and never changed the assignment policy.
+
+The fully signaled native-manager gate then passed on seed 43 with the
+high-information Primary + Methods profiles: 16/16 tasks, `R_check=1.000`, and
+native reward 0.800. The manager explicitly connected the announced method
+change to its first recovery action and assigned all three post-change robust
+audits to `risk_analyst` at timesteps 8, 10, and 15. All three answers exactly
+matched ground truth, and the manager used no retries. This establishes that
+the native action and observation path supports recovery; it is not yet a
+multi-seed reliability claim. Step 5 is next.
+
+Two replication runs show that this baseline is not yet reliable enough to
+increase environment complexity. Seed 44 completed 16/16 predefined tasks but
+sent all three robust audits to the changed `portfolio_analyst`, scoring
+`R_check=0.725`. Seed 45 correctly sent all three robust audits to
+`risk_analyst` with exact answers, but completed only 14/16 predefined tasks by
+the 32-timestep horizon (`R_check=0.875`). It repeatedly queried already-visible
+agent availability and created an unwired stakeholder-approval task that
+competed with the predefined critical path. Neither run used retries. The next
+gate should therefore isolate belief persistence and action efficiency before
+adding task or observability complexity.
+
+A follow-up gate reran the fully signaled condition on seeds 43 through 45 after
+making declared capabilities perturbation-aware, removing verification-biased
+generic task wording, clarifying deterministic tool semantics, and raising the
+experiment workers' turn ceiling to 30. All three runs completed 16/16
+predefined tasks with no AI-worker execution failure. Seeds 43 and 44 routed all
+three robust audits to `risk_analyst` and scored `R_check=1.000`. Seed 45 routed
+batches A and C correctly but assigned batch B to the changed
+`portfolio_analyst`, producing 59 flags against a truth of 78 and an overall
+`R_check=0.869`. The exact manager prompt at that decision correctly declared
+the portfolio analyst's mean-plus-two-SD method and the risk analyst's
+percentile method, so the remaining miss is model inconsistency rather than
+stale capability wiring. Exact deterministic tool-call repetition also remains
+present despite the prompt and tool-description guidance: the worst run was
+seed 45's rapid-screening calibration with five redundant calls across 14
+turns. The larger ceiling prevents those exploratory loops from becoming
+incidental task failures, but it does not eliminate them.
+
+The first Lever A (model + prompt judgment change) manipulation probe is a
+no-go on the existing robust-audit task. The experiment-local schedule now
+supports a bundled model and prompt change while preserving the target's full
+percentile and CORE tool access. However, both Qwen2.5 7B Instruct and GPT-4o
+mini ignored a limited-integration policy and used the percentile tool's
+`column="all"` operation to return the exact four-column answer. This is a task
+sensitivity problem, not a failed worker: both candidates remained operational,
+used tools, and produced valid numeric resources. Because the current tool
+directly returns the scored answer, forcing a wrong answer through a stronger
+prompt would manufacture misalignment rather than measure degraded judgment.
+Do not run the full Lever A manager gate until a small numeric task branch
+requires genuine integration of multiple valid pieces of evidence under an
+identical pre/post toolset.

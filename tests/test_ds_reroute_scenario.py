@@ -2,11 +2,19 @@ import math
 
 import pytest
 
+from manager_agent_gym import AgentRegistry
+from manager_agent_gym.core.workflow_agents.prompts.ai_agent_prompts import (
+    AI_AGENT_TASK_TEMPLATE,
+)
+
 from experiments.ds_reroute.fixed_gate import (
     FIXED_ASSIGNMENTS,
+    RECOVERY_ASSIGNMENTS,
     FixedNoOpManager,
+    FixedRetryManager,
     apply_fixed_assignments,
     evaluate_gate,
+    evaluate_recovery_gate,
 )
 from experiments.ds_reroute.run import (
     Recorder,
@@ -17,8 +25,11 @@ from experiments.ds_reroute.run import (
 from experiments.ds_reroute.scenario import (
     COORDINATOR_TOOL_IDS,
     CORE_TOOL_IDS,
+    DEGRADED_JUDGMENT_PROMPT,
+    JUDGMENT_WORKER_MODEL,
     ROBUST_TOOL_IDS,
     SCREENING_TOOL_IDS,
+    WORKER_PROMPT,
     build_scenario,
     build_worker,
     extract_metric,
@@ -36,8 +47,7 @@ def test_scenario_is_deterministic_and_uses_held_out_batches():
     assert len(first.reference["income"]) == 2000
     assert all(len(batch["income"]) == 400 for batch in first.batches.values())
     assert not any(
-        first.reference["income"] is batch["income"]
-        for batch in first.batches.values()
+        first.reference["income"] is batch["income"] for batch in first.batches.values()
     )
 
 
@@ -59,7 +69,9 @@ def test_task_dag_has_parallel_forks_and_downstream_joins():
     assert len(reconciliations) == 3
     assert all(len(spec.dependencies) == 2 for spec in reconciliations)
     assert len(specs["prioritize"].dependencies) == 3
-    assert all(task.assigned_agent_id is None for task in scenario.workflow.tasks.values())
+    assert all(
+        task.assigned_agent_id is None for task in scenario.workflow.tasks.values()
+    )
 
 
 def test_tool_tiers_share_core_access_but_are_not_supersets():
@@ -77,9 +89,7 @@ def test_tool_tiers_share_core_access_but_are_not_supersets():
 
 def test_workers_use_same_model_and_prompt_with_alternative_tools():
     scenario = build_scenario(42)
-    robust_config, robust_tools = build_worker(
-        scenario, "portfolio_analyst", "robust"
-    )
+    robust_config, robust_tools = build_worker(scenario, "portfolio_analyst", "robust")
     screening_config, screening_tools = build_worker(
         scenario, "screening_analyst", "screening"
     )
@@ -91,17 +101,79 @@ def test_workers_use_same_model_and_prompt_with_alternative_tools():
     assert robust_config.model_name == coordinator_config.model_name
     assert robust_config.system_prompt == screening_config.system_prompt
     assert robust_config.system_prompt == coordinator_config.system_prompt
-    assert robust_config.max_turns == screening_config.max_turns == 15
-    assert coordinator_config.max_turns == 15
+    assert robust_config.max_turns == screening_config.max_turns == 30
+    assert coordinator_config.max_turns == 30
     assert {tool.name for tool in robust_tools} == set(ROBUST_TOOL_IDS)
     assert {tool.name for tool in screening_tools} == set(SCREENING_TOOL_IDS)
     assert {tool.name for tool in coordinator_tools} == set(COORDINATOR_TOOL_IDS)
     assert "portfolio_profile" not in {tool.name for tool in coordinator_tools}
     assert "analyze_audit_artifacts" in {tool.name for tool in coordinator_tools}
 
+    robust_by_name = {tool.name: tool for tool in robust_tools}
+    screening_by_name = {tool.name: tool for tool in screening_tools}
+    coordinator_by_name = {tool.name: tool for tool in coordinator_tools}
+    robust_description = " ".join(
+        robust_by_name["flag_outliers_percentile"].description.lower().split()
+    )
+    screening_description = " ".join(
+        screening_by_name["flag_outliers_zscore"].description.lower().split()
+    )
+    coordinator_description = " ".join(
+        coordinator_by_name["analyze_audit_artifacts"].description.lower().split()
+    )
+    assert "identical for batch a, b, or c" in robust_description
+    assert "complete four-column result" in screening_description
+    assert "repeating the same operation" in coordinator_description
 
-@pytest.mark.parametrize("condition", ["silent", "partial", "full"])
-def test_primary_perturbation_changes_one_worker_and_preserves_core_tools(condition):
+
+def test_worker_prompt_preserves_tool_choice_and_defines_a_stopping_policy():
+    prompt = WORKER_PROMPT.lower()
+
+    assert "may decide not to use them" in prompt
+    assert "do not change over time" in prompt
+    assert "completed workflow artifacts are immutable" in prompt
+    assert "at most one additional verification" in prompt
+    assert "default action" in prompt and "finalize immediately" in prompt
+    assert "identical deterministic tool call is not verification" in prompt
+    assert "must never be repeated" in prompt
+    assert "do not use tools merely to increase confidence" in prompt
+    assert "final resource is the completion signal" in prompt
+    assert "return it immediately" in prompt
+
+
+def test_shared_task_prompt_does_not_invite_open_ended_verification():
+    prompt = AI_AGENT_TASK_TEMPLATE.lower()
+
+    assert "use available tools when useful" in prompt
+    assert "reasonable verification" not in prompt
+    assert "once you are satisfied" not in prompt
+
+
+def test_worker_profiles_expose_faithful_primary_and_method_baseline():
+    scenario = build_scenario(42)
+    portfolio, _ = build_worker(scenario, "portfolio_analyst", "robust")
+    risk, _ = build_worker(scenario, "risk_analyst", "robust")
+    screening, _ = build_worker(scenario, "screening_analyst", "screening")
+
+    assert portfolio.agent_description.startswith("Primary:")
+    assert risk.agent_description.startswith("Primary:")
+    assert screening.agent_description.startswith("Primary:")
+    assert "Methods: percentile outlier screening" in portfolio.agent_capabilities
+    assert "Methods: percentile outlier screening" in risk.agent_capabilities
+    assert "Methods: mean-plus-two-SD screening" in screening.agent_capabilities
+
+
+@pytest.mark.parametrize(
+    ("condition", "visible_method"),
+    [
+        ("silent", None),
+        ("partial", "Methods: changed; current outlier-screening method unknown"),
+        ("full", "Methods: mean-plus-two-SD screening"),
+    ],
+)
+def test_primary_perturbation_changes_one_worker_and_preserves_core_tools(
+    condition, visible_method
+):
     schedule = build_schedule(condition, swap_timestep=3)
     manifest = schedule.manifest()
 
@@ -111,10 +183,83 @@ def test_primary_perturbation_changes_one_worker_and_preserves_core_tools(condit
     assert change["new_tool_ids"] == list(SCREENING_TOOL_IDS)
     assert set(CORE_TOOL_IDS) <= set(change["new_tool_ids"])
     assert change["announce"] is (condition != "silent")
+    capabilities = change["new_agent_capabilities"]
+    if visible_method is None:
+        assert capabilities is None
+    else:
+        assert visible_method in capabilities
+        assert "Methods: portfolio profiling" in capabilities
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("condition", "expected_method"),
+    [
+        ("silent", "Methods: percentile outlier screening"),
+        ("partial", "Methods: changed; current outlier-screening method unknown"),
+        ("full", "Methods: mean-plus-two-SD screening"),
+    ],
+)
+async def test_primary_perturbation_applies_condition_visible_capabilities(
+    condition, expected_method
+):
+    scenario = build_scenario(42)
+    config, tools = build_worker(scenario, TARGET_WORKER, "robust")
+    registry = AgentRegistry()
+    for tool_id, tool in scenario.tools.items():
+        registry.register_tool(tool_id, tool)
+    registry.register_ai_agent(config, tools)
+    schedule = build_schedule(condition, swap_timestep=3)
+    schedule.register(registry)
+
+    await registry.apply_scheduled_changes_for_timestep(3)
+
+    changed = registry.get_agent(TARGET_WORKER)
+    assert changed is not None
+    assert expected_method in changed.config.agent_capabilities
+    assert changed.config.agent_description == config.agent_description
 
 
 def test_control_has_no_perturbation():
     assert build_schedule("control", 3).manifest()["num_perturbations"] == 0
+
+
+@pytest.mark.parametrize("condition", ["silent", "partial", "full"])
+def test_judgment_perturbation_bundles_model_and_prompt_without_tool_swap(condition):
+    manifest = build_schedule(condition, swap_timestep=3, lever="judgment").manifest()
+
+    assert manifest["num_perturbations"] == 2
+    model_change, prompt_change = manifest["perturbations"]
+    assert model_change["kind"] == "model_swap"
+    assert model_change["agent_id"] == TARGET_WORKER
+    assert model_change["new_model_name"] == JUDGMENT_WORKER_MODEL
+    assert model_change["announce"] is False
+    assert prompt_change["kind"] == "prompt_swap"
+    assert prompt_change["agent_id"] == TARGET_WORKER
+    assert prompt_change["new_system_prompt"] == DEGRADED_JUDGMENT_PROMPT
+    assert prompt_change["announce"] is (condition != "silent")
+
+
+@pytest.mark.asyncio
+async def test_judgment_perturbation_preserves_full_robust_tool_access():
+    scenario = build_scenario(42)
+    config, tools = build_worker(scenario, TARGET_WORKER, "robust")
+    registry = AgentRegistry()
+    for tool_id, tool in scenario.tools.items():
+        registry.register_tool(tool_id, tool)
+    registry.register_ai_agent(config, tools)
+    build_schedule("silent", 3, lever="judgment").register(registry)
+
+    await registry.apply_scheduled_changes_for_timestep(3)
+
+    changed = registry.get_agent(TARGET_WORKER)
+    assert changed is not None
+    assert changed.config.model_name == JUDGMENT_WORKER_MODEL
+    assert changed.config.system_prompt == DEGRADED_JUDGMENT_PROMPT
+    assert changed.config.agent_capabilities == config.agent_capabilities
+    changed_tool_names = {tool.name for tool in changed.tools}
+    assert set(ROBUST_TOOL_IDS) <= changed_tool_names
+    assert set(CORE_TOOL_IDS) <= changed_tool_names
 
 
 def test_held_out_methods_produce_a_graded_gap():
@@ -171,10 +316,31 @@ def test_fixed_gate_assigns_every_task_without_prescribing_a_runtime_recovery():
     )
 
 
+def test_scripted_recovery_routes_only_affected_audits_to_stable_worker():
+    changed_keys = {
+        key
+        for key in FIXED_ASSIGNMENTS
+        if FIXED_ASSIGNMENTS[key] != RECOVERY_ASSIGNMENTS[key]
+    }
+    assert changed_keys == {"audit_a_robust", "audit_b_robust", "audit_c_robust"}
+    assert all(RECOVERY_ASSIGNMENTS[key] == "risk_analyst" for key in changed_keys)
+
+
 def test_fixed_manager_is_constructible_and_has_no_adaptive_state():
     manager = FixedNoOpManager(_preferences())
     manager.reset()
     assert manager.get_action_buffer() == []
+
+
+@pytest.mark.asyncio
+async def test_fixed_retry_manager_retries_without_reassignment():
+    scenario = build_scenario(42)
+    task_id = next(iter(scenario.workflow.tasks))
+    action = await FixedRetryManager(_preferences()).step(failed_task_ids={task_id})
+
+    assert action.action_type == "retry_task"
+    assert action.task_id == task_id
+    assert action.agent_id is None
 
 
 def test_gate_evaluation_requires_immediate_and_downstream_loss():
@@ -210,3 +376,49 @@ def test_gate_evaluation_requires_immediate_and_downstream_loss():
     assert result["robust_audit_loss"] == pytest.approx(0.25)
     assert result["downstream_loss"] == pytest.approx(0.6)
     assert result["checks"]["completed_outputs_are_nonempty"] is True
+
+
+def test_recovery_gate_requires_near_control_quality_and_risk_routing():
+    assignments = {"task": "worker"}
+    control = {
+        "assignments": assignments,
+        "completed_predefined": 16,
+        "total_predefined": 16,
+        "robust_audit_only_r_check": 1.0,
+        "downstream_r_check": 1.0,
+        "r_check": 1.0,
+        "completions": [{"content": "metric: 1"}] * 16,
+    }
+    degradation = {
+        "assignments": assignments,
+        "completed_predefined": 16,
+        "total_predefined": 16,
+        "robust_audit_only_r_check": 0.75,
+        "downstream_r_check": 0.4,
+        "r_check": 0.7,
+        "swap_timestep": 3,
+        "completions": [{"content": "metric: 1"}] * 16,
+        "robust_audits": [
+            {"answer": 74.0, "started_timestep": 3},
+            {"answer": 113.0, "started_timestep": 3},
+            {"answer": 99.0, "started_timestep": 3},
+        ],
+    }
+    recovery = {
+        "completed_predefined": 16,
+        "total_predefined": 16,
+        "robust_audit_only_r_check": 1.0,
+        "downstream_r_check": 1.0,
+        "r_check": 1.0,
+        "swap_timestep": 3,
+        "robust_audits": [
+            {"agent_id": "risk_analyst", "started_timestep": 5},
+            {"agent_id": "risk_analyst", "started_timestep": 5},
+            {"agent_id": "risk_analyst", "started_timestep": 5},
+        ],
+    }
+
+    result = evaluate_recovery_gate(control, degradation, recovery)
+
+    assert result["passed"] is True
+    assert all(result["checks"].values())

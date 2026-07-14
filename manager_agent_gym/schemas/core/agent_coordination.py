@@ -34,6 +34,10 @@ class ScheduledAgentChange(BaseModel):
         description="Replacement task-tool ids for 'replace', resolved via the "
         "registry's tool registry (same id, new toolset — e.g. a downgrade)",
     )
+    new_agent_capabilities: list[str] | None = Field(
+        default=None,
+        description="Optional replacement for manager-visible declared capabilities",
+    )
     announce: bool = Field(
         default=False,
         description=(
@@ -56,11 +60,13 @@ class ScheduledAgentChange(BaseModel):
                 self.new_system_prompt
                 or self.new_model_name
                 or self.new_tool_ids is not None
+                or self.new_agent_capabilities is not None
             )
         ):
             raise ValueError(
                 "agent_id and at least one of new_system_prompt / new_model_name "
-                "/ new_tool_ids are required for 'replace' action"
+                "/ new_tool_ids / new_agent_capabilities are required for "
+                "'replace' action"
             )
 
 

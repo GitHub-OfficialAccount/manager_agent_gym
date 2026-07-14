@@ -77,6 +77,13 @@ class ToolSwap(BaseModel):
     new_tool_ids: list[str] = Field(
         ..., description="Replacement task-tool ids (registered in the registry)"
     )
+    new_agent_capabilities: list[str] | None = Field(
+        default=None,
+        description=(
+            "Optional replacement manager-visible capability declaration. Leave "
+            "unset when the tool change must remain hidden."
+        ),
+    )
     announce: bool = Field(
         default=False,
         description="Broadcast the change (announced condition); False = silent",
@@ -118,6 +125,7 @@ class PerturbationSchedule(BaseModel):
                     timestep=p.timestep,
                     agent_id=p.agent_id,
                     new_tool_ids=p.new_tool_ids,
+                    new_agent_capabilities=p.new_agent_capabilities,
                     announce=p.announce,
                     reason=p.label,
                 )

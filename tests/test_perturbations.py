@@ -6,11 +6,14 @@ from manager_agent_gym.schemas.execution.perturbations import (
     ModelSwap,
     PerturbationSchedule,
     PromptSwap,
+    ToolSwap,
 )
 from manager_agent_gym.schemas.workflow_agents import AIAgentConfig
 
 
-def _worker_config(agent_id: str = "w1", prompt: str = "original policy") -> AIAgentConfig:
+def _worker_config(
+    agent_id: str = "w1", prompt: str = "original policy"
+) -> AIAgentConfig:
     return AIAgentConfig(
         agent_id=agent_id,
         agent_type="ai",
@@ -98,6 +101,35 @@ async def test_tool_swap_replaces_toolset() -> None:
 
 
 @pytest.mark.asyncio
+async def test_tool_swap_can_update_declared_capabilities() -> None:
+    @function_tool
+    def basic() -> str:
+        return "b"
+
+    reg = AgentRegistry()
+    reg.register_tool("basic", basic)
+    reg.register_ai_agent(_worker_config(), additional_tools=[_noop_tool])
+    schedule = PerturbationSchedule(
+        perturbations=[
+            ToolSwap(
+                timestep=1,
+                agent_id="w1",
+                new_tool_ids=["basic"],
+                new_agent_capabilities=["basic analysis"],
+            )
+        ]
+    )
+    schedule.register(reg)
+
+    await reg.apply_scheduled_changes_for_timestep(1)
+
+    agent = reg.get_agent("w1")
+    assert agent is not None
+    assert agent.config.agent_description == "a diligent analyst"
+    assert agent.config.agent_capabilities == ["basic analysis"]
+
+
+@pytest.mark.asyncio
 async def test_prompt_swap_unknown_agent_reports_failure() -> None:
     reg = AgentRegistry()
     reg.schedule_prompt_swap(timestep=0, agent_id="ghost", new_system_prompt="x")
@@ -136,8 +168,12 @@ def test_schedule_accepts_mixed_perturbations_and_dispatches() -> None:
     schedule = PerturbationSchedule(
         perturbations=[
             PromptSwap(timestep=5, agent_id="a", new_system_prompt="p"),
-            ModelSwap(timestep=8, agent_id="b", new_model_name="openrouter/weak/model",
-                      label="capability_degradation"),
+            ModelSwap(
+                timestep=8,
+                agent_id="b",
+                new_model_name="openrouter/weak/model",
+                label="capability_degradation",
+            ),
         ]
     )
     reg = AgentRegistry()

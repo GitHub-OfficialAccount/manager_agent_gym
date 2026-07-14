@@ -1,8 +1,11 @@
-"""Paired fixed-assignment manipulation gate for the ds_reroute environment.
+"""Fixed-assignment manipulation and scripted-recovery gate for ds_reroute.
 
 The reference manager cannot adapt: all predefined tasks are assigned before
-execution and it emits only the native NoOpAction. This isolates whether the
-scheduled worker change causes a graded immediate and downstream loss.
+execution and it only observes or retries incidental failures under the same
+assignment. This isolates whether the scheduled worker change causes a graded
+immediate and downstream loss. A third arm routes the affected robust audits to
+the stable percentile-capable worker, proving that recovery is feasible without
+changing the environment or workers.
 
 Run:
     uv run python -m experiments.ds_reroute.fixed_gate --seed 42
@@ -19,14 +22,20 @@ from typing import Any
 
 from examples.common_stakeholders import create_stakeholder_agent
 from manager_agent_gym import AgentRegistry, WorkflowExecutionEngine
-from manager_agent_gym.core.common.model_provider import disable_agents_tracing_if_proxied
+from manager_agent_gym.core.common.model_provider import (
+    disable_agents_tracing_if_proxied,
+)
 from manager_agent_gym.core.communication.service import CommunicationService
 from manager_agent_gym.core.manager_agent.interface import ManagerAgent
-from manager_agent_gym.schemas.execution.manager_actions import BaseManagerAction, NoOpAction
+from manager_agent_gym.schemas.execution.manager_actions import (
+    BaseManagerAction,
+    NoOpAction,
+    RetryTaskAction,
+)
 from manager_agent_gym.schemas.execution.observation_policy import ObservationPolicy
 
 from .run import Recorder, TARGET_WORKER, WORKER_TIERS, _preferences, build_schedule
-from .scenario import Scenario, build_scenario, build_worker
+from .scenario import JUDGMENT_WORKER_MODEL, Scenario, build_scenario, build_worker
 
 FIXED_ASSIGNMENTS = {
     "profile": TARGET_WORKER,
@@ -47,6 +56,13 @@ FIXED_ASSIGNMENTS = {
     "capacity": "audit_coordinator",
 }
 
+RECOVERY_ASSIGNMENTS = {
+    **FIXED_ASSIGNMENTS,
+    "audit_a_robust": "risk_analyst",
+    "audit_b_robust": "risk_analyst",
+    "audit_c_robust": "risk_analyst",
+}
+
 
 class FixedNoOpManager(ManagerAgent):
     """Native manager reference policy with no adaptive actions."""
@@ -61,10 +77,31 @@ class FixedNoOpManager(ManagerAgent):
         return NoOpAction(reasoning="Fixed-assignment manipulation check.")
 
 
-def apply_fixed_assignments(scenario: Scenario) -> dict[str, str]:
+class FixedRetryManager(FixedNoOpManager):
+    """Fixed routing with native same-agent retries for incidental run failures."""
+
+    async def step(self, **kwargs) -> BaseManagerAction:
+        failed_task_ids = kwargs.get("failed_task_ids") or set()
+        if failed_task_ids:
+            task_id = sorted(failed_task_ids, key=str)[0]
+            return RetryTaskAction(
+                reasoning=(
+                    "Retrying an incidental worker-run failure without changing "
+                    "the fixed assignment policy."
+                ),
+                task_id=task_id,
+            )
+        return await super().step(**kwargs)
+
+
+def apply_fixed_assignments(
+    scenario: Scenario,
+    assignments: dict[str, str] | None = None,
+) -> dict[str, str]:
+    assignments = assignments or FIXED_ASSIGNMENTS
     by_name = {task.name: task for task in scenario.workflow.tasks.values()}
     applied = {}
-    for key, agent_id in FIXED_ASSIGNMENTS.items():
+    for key, agent_id in assignments.items():
         task_name = scenario.task_specs[key].name
         by_name[task_name].assigned_agent_id = agent_id
         applied[task_name] = agent_id
@@ -82,9 +119,14 @@ async def run_fixed(
     swap_timestep: int,
     max_timesteps: int,
     out_root: Path,
+    lever: str = "toolset",
+    weak_model: str = JUDGMENT_WORKER_MODEL,
 ) -> dict[str, Any]:
     scenario = build_scenario(seed)
-    assignments = apply_fixed_assignments(scenario)
+    assignment_policy = (
+        RECOVERY_ASSIGNMENTS if condition == "recovery" else FIXED_ASSIGNMENTS
+    )
+    assignments = apply_fixed_assignments(scenario, assignment_policy)
     preferences = _preferences()
     registry = AgentRegistry()
     for tool_id, tool in scenario.tools.items():
@@ -94,7 +136,10 @@ async def run_fixed(
         registry.register_ai_agent(config, tools)
 
     schedule = build_schedule(
-        "control" if condition == "control" else "silent", swap_timestep
+        "control" if condition == "control" else "silent",
+        swap_timestep,
+        lever=lever,
+        weak_model=weak_model,
     )
     schedule.register(registry)
     recorder = Recorder(scenario.task_answers, scenario.task_meta)
@@ -109,7 +154,7 @@ async def run_fixed(
         stakeholder_agent=create_stakeholder_agent(
             persona="balanced", preferences=preferences
         ),
-        manager_agent=FixedNoOpManager(preferences),
+        manager_agent=FixedRetryManager(preferences),
         communication_service=CommunicationService(),
         max_timesteps=max_timesteps,
         enable_timestep_logging=False,
@@ -122,12 +167,14 @@ async def run_fixed(
 
     score_summary = recorder.score_summary()
     robust_audits = [
-        row for row in recorder.completions
+        row
+        for row in recorder.completions
         if row["stage"] == "audit" and row["method"] == "percentile"
     ]
     downstream_stages = {"reconciliation", "prioritization", "capacity"}
     result = {
         "condition": condition,
+        "lever": lever,
         "seed": seed,
         "swap_timestep": swap_timestep,
         "assignments": assignments,
@@ -157,8 +204,9 @@ async def run_fixed(
         "final_target_tools": [
             tool.name for tool in registry.get_agent(TARGET_WORKER).tools
         ],
+        "final_target_model": registry.get_agent(TARGET_WORKER).config.model_name,
     }
-    run_dir = out_root / f"fixed_{condition}_t{swap_timestep}_seed{seed}"
+    run_dir = out_root / f"fixed_{lever}_{condition}_t{swap_timestep}_seed{seed}"
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "result.json").write_text(json.dumps(result, indent=2))
     print(
@@ -171,7 +219,9 @@ async def run_fixed(
     return result
 
 
-def evaluate_gate(control: dict[str, Any], degradation: dict[str, Any]) -> dict[str, Any]:
+def evaluate_gate(
+    control: dict[str, Any], degradation: dict[str, Any]
+) -> dict[str, Any]:
     degraded_audits = degradation["robust_audits"]
     downstream_loss = control["downstream_r_check"] - degradation["downstream_r_check"]
     all_completions = control["completions"] + degradation["completions"]
@@ -185,14 +235,18 @@ def evaluate_gate(control: dict[str, Any], degradation: dict[str, Any]) -> dict[
         "robust_loss_at_least_0_15": (
             control["robust_audit_only_r_check"]
             - degradation["robust_audit_only_r_check"]
-        ) >= 0.15,
+        )
+        >= 0.15,
         "degraded_outputs_remain_numeric": (
             len(degraded_audits) == 3
             and all(row["answer"] is not None for row in degraded_audits)
         ),
         "audits_start_after_change": (
             len(degraded_audits) == 3
-            and all(row["started_timestep"] >= degradation["swap_timestep"] for row in degraded_audits)
+            and all(
+                row["started_timestep"] >= degradation["swap_timestep"]
+                for row in degraded_audits
+            )
         ),
         "completed_outputs_are_nonempty": (
             len(all_completions)
@@ -213,26 +267,104 @@ def evaluate_gate(control: dict[str, Any], degradation: dict[str, Any]) -> dict[
     }
 
 
+def evaluate_recovery_gate(
+    control: dict[str, Any],
+    degradation: dict[str, Any],
+    recovery: dict[str, Any],
+) -> dict[str, Any]:
+    manipulation = evaluate_gate(control, degradation)
+    recovered_audits = recovery["robust_audits"]
+    checks = {
+        "manipulation_gate_passed": manipulation["passed"],
+        "recovery_complete": (
+            recovery["completed_predefined"] == recovery["total_predefined"]
+        ),
+        "affected_audits_rerouted_to_risk": (
+            len(recovered_audits) == 3
+            and all(row["agent_id"] == "risk_analyst" for row in recovered_audits)
+        ),
+        "recovered_audits_start_after_change": (
+            len(recovered_audits) == 3
+            and all(
+                row["started_timestep"] >= recovery["swap_timestep"]
+                for row in recovered_audits
+            )
+        ),
+        "robust_quality_near_control": (
+            recovery["robust_audit_only_r_check"]
+            >= control["robust_audit_only_r_check"] - 0.05
+        ),
+        "downstream_quality_near_control": (
+            recovery["downstream_r_check"] >= control["downstream_r_check"] - 0.05
+        ),
+        "episode_quality_near_control": (
+            recovery["r_check"] >= control["r_check"] - 0.05
+        ),
+    }
+    return {
+        "passed": all(checks.values()),
+        "checks": checks,
+        "manipulation": manipulation,
+        "recovery_vs_control": {
+            "episode_gap": control["r_check"] - recovery["r_check"],
+            "robust_audit_gap": (
+                control["robust_audit_only_r_check"]
+                - recovery["robust_audit_only_r_check"]
+            ),
+            "downstream_gap": (
+                control["downstream_r_check"] - recovery["downstream_r_check"]
+            ),
+        },
+    }
+
+
 async def main() -> None:
     disable_agents_tracing_if_proxied()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--swap-timestep", type=int, default=3)
-    parser.add_argument("--max-timesteps", type=int, default=12)
+    parser.add_argument("--max-timesteps", type=int, default=32)
+    parser.add_argument("--lever", choices=["toolset", "judgment"], default="toolset")
+    parser.add_argument(
+        "--weak-model",
+        default=JUDGMENT_WORKER_MODEL,
+        help="Replacement model used by the judgment lever.",
+    )
     parser.add_argument(
         "--out", type=Path, default=Path("experiments/ds_reroute/outputs/fixed_gate")
     )
     args = parser.parse_args()
     control = await run_fixed(
-        "control", args.seed, args.swap_timestep, args.max_timesteps, args.out
+        "control",
+        args.seed,
+        args.swap_timestep,
+        args.max_timesteps,
+        args.out,
+        args.lever,
+        args.weak_model,
     )
     degradation = await run_fixed(
-        "degradation", args.seed, args.swap_timestep, args.max_timesteps, args.out
+        "degradation",
+        args.seed,
+        args.swap_timestep,
+        args.max_timesteps,
+        args.out,
+        args.lever,
+        args.weak_model,
     )
-    gate = evaluate_gate(control, degradation)
-    (args.out / f"gate_t{args.swap_timestep}_seed{args.seed}.json").write_text(
-        json.dumps(gate, indent=2)
+    recovery = await run_fixed(
+        "recovery",
+        args.seed,
+        args.swap_timestep,
+        args.max_timesteps,
+        args.out,
+        args.lever,
+        args.weak_model,
     )
+    gate = evaluate_recovery_gate(control, degradation, recovery)
+    (
+        args.out / f"gate_{args.lever}_t{args.swap_timestep}_seed{args.seed}.json"
+    ).write_text(json.dumps(gate, indent=2))
     print(json.dumps(gate, indent=2), flush=True)
     if not gate["passed"]:
         raise SystemExit(1)

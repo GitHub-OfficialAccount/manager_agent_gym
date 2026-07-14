@@ -23,17 +23,32 @@ from manager_agent_gym import (
     WorkflowExecutionEngine,
 )
 from manager_agent_gym.core.common.callbacks import default_timestep_callbacks
-from manager_agent_gym.core.common.model_provider import disable_agents_tracing_if_proxied
+from manager_agent_gym.core.common.model_provider import (
+    disable_agents_tracing_if_proxied,
+)
 from manager_agent_gym.core.common.run_trace import RunTraceRecorder
 from manager_agent_gym.core.communication.service import CommunicationService
 from manager_agent_gym.schemas.execution.callbacks import TimestepEndContext
 from manager_agent_gym.schemas.execution.observation_policy import ObservationPolicy
-from manager_agent_gym.schemas.execution.perturbations import PerturbationSchedule, ToolSwap
-from manager_agent_gym.schemas.preferences.evaluator import AggregationStrategy, Evaluator
-from manager_agent_gym.schemas.preferences.preference import Preference, PreferenceWeights
+from manager_agent_gym.schemas.execution.perturbations import (
+    ModelSwap,
+    PerturbationSchedule,
+    PromptSwap,
+    ToolSwap,
+)
+from manager_agent_gym.schemas.preferences.evaluator import (
+    AggregationStrategy,
+    Evaluator,
+)
+from manager_agent_gym.schemas.preferences.preference import (
+    Preference,
+    PreferenceWeights,
+)
 from manager_agent_gym.schemas.preferences.rubric import RunCondition, WorkflowRubric
 
 from .scenario import (
+    DEGRADED_JUDGMENT_PROMPT,
+    JUDGMENT_WORKER_MODEL,
     SCREENING_TOOL_IDS,
     build_scenario,
     build_worker,
@@ -47,6 +62,14 @@ logging.basicConfig(
 )
 
 TARGET_WORKER = "portfolio_analyst"
+PARTIAL_TARGET_CAPABILITIES = [
+    "Methods: changed; current outlier-screening method unknown",
+    "Methods: portfolio profiling",
+]
+FULL_TARGET_CAPABILITIES = [
+    "Methods: mean-plus-two-SD screening",
+    "Methods: portfolio profiling",
+]
 WORKER_TIERS = {
     TARGET_WORKER: "robust",
     "risk_analyst": "robust",
@@ -68,40 +91,91 @@ def _preferences() -> PreferenceWeights:
         max_score=10.0,
         run_condition=RunCondition.ON_COMPLETION,
     )
-    return PreferenceWeights(preferences=[Preference(
-        name="quality",
-        weight=1.0,
-        description="Complete and defensible portfolio audit",
-        evaluator=Evaluator(
-            name="loan_audit_quality",
-            description="Native LLM evaluation of the audit pack",
-            aggregation=AggregationStrategy.WEIGHTED_AVERAGE,
-            rubrics=[rubric],
-        ),
-    )])
+    return PreferenceWeights(
+        preferences=[
+            Preference(
+                name="quality",
+                weight=1.0,
+                description="Complete and defensible portfolio audit",
+                evaluator=Evaluator(
+                    name="loan_audit_quality",
+                    description="Native LLM evaluation of the audit pack",
+                    aggregation=AggregationStrategy.WEIGHTED_AVERAGE,
+                    rubrics=[rubric],
+                ),
+            )
+        ]
+    )
 
 
-def build_schedule(condition: str, swap_timestep: int) -> PerturbationSchedule:
+def build_schedule(
+    condition: str,
+    swap_timestep: int,
+    *,
+    lever: str = "toolset",
+    weak_model: str = JUDGMENT_WORKER_MODEL,
+) -> PerturbationSchedule:
     if condition == "control":
         return PerturbationSchedule()
     if condition not in {"silent", "partial", "full"}:
         raise ValueError(f"Unknown condition: {condition}")
+    if lever == "judgment":
+        labels = {
+            "silent": "internal judgment update",
+            "partial": "the analyst's behavior changed",
+            "full": (
+                "the analyst's model and analytical judgment changed; it now "
+                "has limited multi-part integration ability"
+            ),
+        }
+        return PerturbationSchedule(
+            perturbations=[
+                ModelSwap(
+                    timestep=swap_timestep,
+                    agent_id=TARGET_WORKER,
+                    new_model_name=weak_model,
+                    announce=False,
+                    label="judgment_change_model",
+                ),
+                PromptSwap(
+                    timestep=swap_timestep,
+                    agent_id=TARGET_WORKER,
+                    new_system_prompt=DEGRADED_JUDGMENT_PROMPT,
+                    announce=condition in {"partial", "full"},
+                    label=labels[condition],
+                ),
+            ]
+        )
+    if lever != "toolset":
+        raise ValueError(f"Unknown lever: {lever}")
     labels = {
         "silent": "internal capability update",
         "partial": "the analyst's capability profile changed",
         "full": "robust percentile analysis changed to mean-plus-two-SD screening",
     }
-    return PerturbationSchedule(perturbations=[ToolSwap(
-        timestep=swap_timestep,
-        agent_id=TARGET_WORKER,
-        new_tool_ids=list(SCREENING_TOOL_IDS),
-        announce=condition in {"partial", "full"},
-        label=labels[condition],
-    )])
+    visible_capabilities = {
+        "silent": None,
+        "partial": PARTIAL_TARGET_CAPABILITIES,
+        "full": FULL_TARGET_CAPABILITIES,
+    }
+    return PerturbationSchedule(
+        perturbations=[
+            ToolSwap(
+                timestep=swap_timestep,
+                agent_id=TARGET_WORKER,
+                new_tool_ids=list(SCREENING_TOOL_IDS),
+                new_agent_capabilities=visible_capabilities[condition],
+                announce=condition in {"partial", "full"},
+                label=labels[condition],
+            )
+        ]
+    )
 
 
 class Recorder:
-    def __init__(self, task_answers: dict[str, float], task_meta: dict[str, dict[str, Any]]) -> None:
+    def __init__(
+        self, task_answers: dict[str, float], task_meta: dict[str, dict[str, Any]]
+    ) -> None:
         self.task_answers = task_answers
         self.task_meta = task_meta
         self.completions: list[dict[str, Any]] = []
@@ -110,10 +184,14 @@ class Recorder:
 
     async def callback(self, ctx: TimestepEndContext) -> None:
         action = ctx.manager_action
-        self.actions.append({
-            "timestep": ctx.timestep,
-            "action": action.model_dump(mode="json") if action is not None else None,
-        })
+        self.actions.append(
+            {
+                "timestep": ctx.timestep,
+                "action": action.model_dump(mode="json")
+                if action is not None
+                else None,
+            }
+        )
         for task_id in ctx.tasks_started:
             self._start.setdefault(str(task_id), ctx.timestep)
         for task_id in ctx.tasks_completed:
@@ -129,19 +207,23 @@ class Recorder:
             truth = self.task_answers[task.name]
             answer = extract_metric(content)
             method_match = _METHOD_RE.search(content)
-            self.completions.append({
-                "timestep": ctx.timestep,
-                "started_timestep": self._start.get(str(task_id)),
-                "task_name": task.name,
-                **self.task_meta[task.name],
-                "agent_id": task.assigned_agent_id,
-                "content": content,
-                "answer": answer,
-                "truth": truth,
-                "method_reported": method_match.group(1).strip() if method_match else None,
-                "correct": is_correct(answer, truth),
-                "r_check": score(answer, truth),
-            })
+            self.completions.append(
+                {
+                    "timestep": ctx.timestep,
+                    "started_timestep": self._start.get(str(task_id)),
+                    "task_name": task.name,
+                    **self.task_meta[task.name],
+                    "agent_id": task.assigned_agent_id,
+                    "content": content,
+                    "answer": answer,
+                    "truth": truth,
+                    "method_reported": method_match.group(1).strip()
+                    if method_match
+                    else None,
+                    "correct": is_correct(answer, truth),
+                    "r_check": score(answer, truth),
+                }
+            )
 
     def score_summary(self) -> dict[str, Any]:
         by_name = {row["task_name"]: row for row in self.completions}
@@ -163,11 +245,14 @@ async def run_one(
     max_timesteps: int,
     swap_timestep: int,
     out_root: Path,
+    lever: str = "toolset",
+    weak_model: str = JUDGMENT_WORKER_MODEL,
 ) -> Path:
-    run_dir = out_root / f"{condition}_t{swap_timestep}_seed{seed}"
+    prefix = "" if lever == "toolset" else f"{lever}_"
+    run_dir = out_root / f"{prefix}{condition}_t{swap_timestep}_seed{seed}"
     run_dir.mkdir(parents=True, exist_ok=True)
     print(
-        f"DS-REROUTE condition={condition} seed={seed} "
+        f"DS-REROUTE lever={lever} condition={condition} seed={seed} "
         f"swap_t={swap_timestep} target={TARGET_WORKER}",
         flush=True,
     )
@@ -181,7 +266,9 @@ async def run_one(
         config, tools = build_worker(scenario, agent_id, tier)
         registry.register_ai_agent(config, tools)
 
-    schedule = build_schedule(condition, swap_timestep)
+    schedule = build_schedule(
+        condition, swap_timestep, lever=lever, weak_model=weak_model
+    )
     schedule.register(registry)
     observation_policy = ObservationPolicy(
         expose_worker_system_prompts=False,
@@ -191,13 +278,16 @@ async def run_one(
     manager = ChainOfThoughtManagerAgent(preferences=preferences)
     stakeholder = create_stakeholder_agent(persona="balanced", preferences=preferences)
     recorder = Recorder(scenario.task_answers, scenario.task_meta)
-    trace_recorder = RunTraceRecorder(metadata={
-        "experiment": "ds_reroute",
-        "condition": condition,
-        "seed": seed,
-        "swap_timestep": swap_timestep,
-        "target_worker": TARGET_WORKER,
-    })
+    trace_recorder = RunTraceRecorder(
+        metadata={
+            "experiment": "ds_reroute",
+            "lever": lever,
+            "condition": condition,
+            "seed": seed,
+            "swap_timestep": swap_timestep,
+            "target_worker": TARGET_WORKER,
+        }
+    )
     engine = WorkflowExecutionEngine(
         workflow=scenario.workflow,
         agent_registry=registry,
@@ -241,6 +331,7 @@ async def run_one(
     score_summary = recorder.score_summary()
     manifest = {
         "condition": condition,
+        "lever": lever,
         "seed": seed,
         "swap_timestep": swap_timestep,
         "target_worker": TARGET_WORKER,
@@ -253,6 +344,7 @@ async def run_one(
             for agent_id in WORKER_TIERS
             if registry.get_agent(agent_id) is not None
         },
+        "final_target_model": registry.get_agent(TARGET_WORKER).config.model_name,
         "native_reward_vector": engine.validation_engine.reward_vector,
         "native_reward_final": engine.validation_engine.most_recent_reward,
         **score_summary,
@@ -304,7 +396,15 @@ async def main() -> None:
     parser.add_argument("--seeds", nargs="+", type=int, default=[42])
     parser.add_argument("--max-timesteps", type=int, default=16)
     parser.add_argument("--swap-timestep", type=int, default=3)
-    parser.add_argument("--out", type=Path, default=Path("experiments/ds_reroute/outputs"))
+    parser.add_argument("--lever", choices=["toolset", "judgment"], default="toolset")
+    parser.add_argument(
+        "--weak-model",
+        default=JUDGMENT_WORKER_MODEL,
+        help="Replacement model used by the judgment lever.",
+    )
+    parser.add_argument(
+        "--out", type=Path, default=Path("experiments/ds_reroute/outputs")
+    )
     args = parser.parse_args()
     for seed in args.seeds:
         for condition in args.conditions:
@@ -314,6 +414,8 @@ async def main() -> None:
                 args.max_timesteps,
                 args.swap_timestep,
                 args.out,
+                args.lever,
+                args.weak_model,
             )
 
 

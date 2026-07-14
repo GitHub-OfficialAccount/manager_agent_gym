@@ -203,7 +203,9 @@ def test_task_prompt_requests_brief_output_without_unused_quality_score() -> Non
         Task(name="Report metric", description="Report the requested metric."), []
     )
 
-    assert "reasonable verification" in prompt
+    assert "Use available tools when useful" in prompt
+    assert "reasonable verification" not in prompt
+    assert "once you are satisfied" not in prompt
     assert "brief rationale" in prompt
     assert "quality" not in prompt.lower()
 

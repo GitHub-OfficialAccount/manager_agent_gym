@@ -272,6 +272,7 @@ class AgentRegistry:
         timestep: int,
         agent_id: str,
         new_tool_ids: list[str],
+        new_agent_capabilities: list[str] | None = None,
         announce: bool = False,
         reason: str = "",
     ) -> None:
@@ -284,6 +285,7 @@ class AgentRegistry:
             action="replace",
             agent_id=agent_id,
             new_tool_ids=new_tool_ids,
+            new_agent_capabilities=new_agent_capabilities,
             announce=announce,
             reason=reason,
         )
@@ -349,6 +351,7 @@ class AgentRegistry:
                     change.new_system_prompt is not None
                     or change.new_model_name is not None
                     or change.new_tool_ids is not None
+                    or change.new_agent_capabilities is not None
                 )
             ):
                 existing = self.get_agent(change.agent_id)
@@ -364,6 +367,8 @@ class AgentRegistry:
                     config_updates["system_prompt"] = change.new_system_prompt
                 if change.new_model_name is not None:
                     config_updates["model_name"] = change.new_model_name
+                if change.new_agent_capabilities is not None:
+                    config_updates["agent_capabilities"] = change.new_agent_capabilities
                 new_config = existing.config.model_copy(update=config_updates)
                 # Tool swap: resolve new task-tools by id (communication tools are
                 # re-added by the agent). Otherwise keep the existing toolset (a
@@ -376,7 +381,11 @@ class AgentRegistry:
                     ]
                 else:
                     tools = list(getattr(existing, "tools", []) or [])
-                    if not tools and tool_factory is not None and communication_service is not None:
+                    if (
+                        not tools
+                        and tool_factory is not None
+                        and communication_service is not None
+                    ):
                         tools = tool_factory.add_communication_tools(
                             tools, communication_service, change.agent_id
                         )
@@ -406,6 +415,8 @@ class AgentRegistry:
                 ]
                 if change.new_tool_ids is not None:
                     swapped_fields.append("tools")
+                if change.new_agent_capabilities is not None:
+                    swapped_fields.append("agent_capabilities")
                 swapped = "+".join(swapped_fields)
                 changes.append(
                     f"Replaced {change.agent_id} [{swapped}]"
