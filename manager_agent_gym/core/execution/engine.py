@@ -437,6 +437,15 @@ class WorkflowExecutionEngine:
                 logger.error("failed to execute manager action", exc_info=True)
                 action_result = None
 
+            if (
+                action_result is not None
+                and action_result.success
+                and action_result.action_type == "retry_task"
+            ):
+                retried_task_id = action_result.data.get("task_id")
+                if retried_task_id is not None:
+                    self.failed_task_ids.discard(UUID(str(retried_task_id)))
+
             # Delegate action logging to the manager agent hook
             self.manager_agent.on_action_executed(
                 timestep=timestep,

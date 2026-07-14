@@ -24,6 +24,7 @@ from manager_agent_gym import (
 )
 from manager_agent_gym.core.common.callbacks import default_timestep_callbacks
 from manager_agent_gym.core.common.model_provider import disable_agents_tracing_if_proxied
+from manager_agent_gym.core.common.run_trace import RunTraceRecorder
 from manager_agent_gym.core.communication.service import CommunicationService
 from manager_agent_gym.schemas.execution.callbacks import TimestepEndContext
 from manager_agent_gym.schemas.execution.observation_policy import ObservationPolicy
@@ -50,6 +51,7 @@ WORKER_TIERS = {
     TARGET_WORKER: "robust",
     "risk_analyst": "robust",
     "screening_analyst": "screening",
+    "audit_coordinator": "coordination",
 }
 _METHOD_RE = re.compile(r"method\s*[:=]\s*([a-zA-Z0-9_+\- ]+)", re.IGNORECASE)
 
@@ -189,6 +191,13 @@ async def run_one(
     manager = ChainOfThoughtManagerAgent(preferences=preferences)
     stakeholder = create_stakeholder_agent(persona="balanced", preferences=preferences)
     recorder = Recorder(scenario.task_answers, scenario.task_meta)
+    trace_recorder = RunTraceRecorder(metadata={
+        "experiment": "ds_reroute",
+        "condition": condition,
+        "seed": seed,
+        "swap_timestep": swap_timestep,
+        "target_worker": TARGET_WORKER,
+    })
     engine = WorkflowExecutionEngine(
         workflow=scenario.workflow,
         agent_registry=registry,
@@ -198,12 +207,36 @@ async def run_one(
         max_timesteps=max_timesteps,
         enable_timestep_logging=True,
         enable_final_metrics_logging=False,
-        timestep_end_callbacks=[*default_timestep_callbacks(), recorder.callback],
+        timestep_end_callbacks=[
+            *default_timestep_callbacks(),
+            recorder.callback,
+            trace_recorder.timestep_callback,
+        ],
         observation_policy=observation_policy,
         seed=seed,
     )
     started_at = datetime.now().isoformat()
-    await engine.run_full_execution(save_outputs=False)
+    try:
+        with trace_recorder.activate():
+            await engine.run_full_execution(save_outputs=False)
+    except Exception as error:
+        trace_recorder.record(
+            "episode_failed",
+            {
+                "error_type": type(error).__name__,
+                "error": str(error),
+            },
+            actor_type="environment",
+            actor_id="workflow_engine",
+        )
+        trace_recorder.write_json(
+            run_dir / "run.json",
+            failure={
+                "error_type": type(error).__name__,
+                "error": str(error),
+            },
+        )
+        raise
 
     score_summary = recorder.score_summary()
     manifest = {
@@ -242,6 +275,14 @@ async def run_one(
     }
     for filename, payload in artifacts.items():
         (run_dir / filename).write_text(json.dumps(payload, indent=2))
+    trace_recorder.write_json(
+        run_dir / "run.json",
+        manifest=manifest,
+        completions=recorder.completions,
+        manager_actions=recorder.actions,
+        tool_calls=scenario.tool_calls,
+        task_ground_truth=artifacts["task_ground_truth.json"],
+    )
     print(
         f"{condition}: R_check={score_summary['r_check']:.3f} "
         f"completed={score_summary['completed_predefined']}/"

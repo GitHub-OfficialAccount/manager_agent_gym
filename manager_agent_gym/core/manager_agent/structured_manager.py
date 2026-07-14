@@ -30,6 +30,7 @@ from ..common.llm_interface import (
     generate_structured_response,
     LLMInferenceTruncationError,
 )
+from ..common.run_trace import trace_scope
 from ...schemas.workflow_agents.config import AgentConfig
 
 
@@ -83,13 +84,19 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
             user_prompt = self._prepare_context(observation)
 
             # Direct LLM call with structured output (validated by Pydantic)
-            parsed_action = await generate_structured_response(
-                system_prompt=system_prompt,
-                user_prompt=user_prompt,
-                response_type=constrained_schema,
-                model=self.model_name,
-                seed=self._seed,
-            )
+            with trace_scope(
+                timestep=observation.timestep,
+                actor_type="manager",
+                actor_id=self.agent_id,
+                operation="choose_action",
+            ):
+                parsed_action = await generate_structured_response(
+                    system_prompt=system_prompt,
+                    user_prompt=user_prompt,
+                    response_type=constrained_schema,
+                    model=self.model_name,
+                    seed=self._seed,
+                )
             return unwrap_constrained_action(parsed_action)
 
         except LLMInferenceTruncationError as e:

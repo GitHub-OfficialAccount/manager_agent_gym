@@ -56,6 +56,11 @@ class AIAgentConfig(AgentConfig):
     """Configuration specific to AI agents."""
 
     agent_type: str = Field(default="ai", description="Type of agent")
+    max_turns: int | None = Field(
+        default=None,
+        ge=1,
+        description="Optional per-task Agents SDK turn limit; uses the SDK default when unset",
+    )
 
 
 class HumanAgentConfig(AgentConfig):

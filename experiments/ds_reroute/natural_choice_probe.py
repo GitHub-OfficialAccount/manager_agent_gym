@@ -46,6 +46,7 @@ async def run_tier(tier: str, batches: list[str], repetitions: int) -> list[dict
                 "repetition": repetition,
                 "success": result.success,
                 "tool_calls": [call["tool"] for call in calls],
+                "content": content,
                 "answer": answer,
                 "truth": spec.truth,
                 "score": score(answer, spec.truth),

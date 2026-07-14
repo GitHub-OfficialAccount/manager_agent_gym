@@ -39,6 +39,7 @@ from ..workflow_agents.interface import AgentInterface
 
 from ..common.llm_interface import build_litellm_model_id
 from ..common.logging import logger
+from ..common.run_trace import record_run_event
 
 if TYPE_CHECKING:
     pass
@@ -61,9 +62,26 @@ PLAIN_TEXT_OUTPUT_CONTRACT = (
     '"confidence" (number between 0 and 1), "execution_notes" (array of '
     "strings). Put your actual final answer in the resources' content fields."
 )
+EMPTY_OUTPUT_RECOVERY_PROMPT = (
+    "Your previous response was empty. Using the evidence already gathered, "
+    "return the final task result now in the required final output format."
+)
 
 # Key aliases models drift to when the schema is only prompt-specified.
 _RESOURCE_LIST_KEYS = ("resources", "generated_resources", "output_resources")
+
+
+def _run_trace_payload(result: RunResult) -> dict[str, object]:
+    """Retain the SDK-visible model/tool exchange before RunResult is discarded."""
+    to_input_list = getattr(result, "to_input_list", None)
+    last_agent = getattr(result, "last_agent", None)
+    return {
+        "history": to_input_list() if callable(to_input_list) else [],
+        "raw_responses": getattr(result, "raw_responses", []),
+        "final_output": result.final_output,
+        "last_response_id": getattr(result, "last_response_id", None),
+        "last_agent": getattr(last_agent, "name", None),
+    }
 
 
 def _parse_plain_text_output(text: str, task: Task) -> AITaskOutput:
@@ -111,11 +129,13 @@ def _parse_plain_text_output(text: str, task: Task) -> AITaskOutput:
         if not isinstance(item, dict):
             continue
         content = item.get("content")
+        if content is None or not str(content).strip():
+            continue
         resources.append(
             Resource(
                 name=str(item.get("name") or f"Output: {task.name}"),
                 description=str(item.get("description") or "Model-generated output."),
-                content=None if content is None else str(content),
+                content=str(content),
                 content_type=str(item.get("content_type") or "text/plain"),
             )
         )
@@ -182,6 +202,7 @@ class AIAgent(AgentInterface[AIAgentConfig]):
         instructions = config.system_prompt
         if self._plain_text_output:
             instructions = config.system_prompt + PLAIN_TEXT_OUTPUT_CONTRACT
+        self._effective_instructions = instructions
         self.openai_agent: Agent[AgentExecutionContext] = Agent(
             model=LitellmModel(model=build_litellm_model_id(config.model_name)),
             name=config.agent_id,
@@ -232,12 +253,84 @@ class AIAgent(AgentInterface[AIAgentConfig]):
             # Prepare the task prompt
             task_prompt = self._create_task_prompt(task, resources or [])
 
+            trace_fields = {
+                "actor_type": "worker",
+                "actor_id": self.config.agent_id,
+                "task_id": str(task.id),
+                "task_name": task.name,
+            }
+            record_run_event(
+                "worker_execution_started",
+                {
+                    "model": self.config.model_name,
+                    "system_prompt": self._effective_instructions,
+                    "task_prompt": task_prompt,
+                    "input_resources": resources or [],
+                    "tools": [tool.name for tool in self.tools],
+                    "max_turns": self.config.max_turns,
+                },
+                **trace_fields,
+            )
+
             # Execute using OpenAI Agent with DI context
+            run_options = (
+                {"max_turns": self.config.max_turns}
+                if self.config.max_turns is not None
+                else {}
+            )
             result: RunResult = await Runner.run(
                 self.openai_agent,
                 task_prompt,
                 context=context,  # 🎯 DI magic happens here!
+                **run_options,
             )
+            run_results = [result]
+            record_run_event(
+                "worker_run_completed",
+                _run_trace_payload(result),
+                run_index=0,
+                **trace_fields,
+            )
+
+            if (
+                self._plain_text_output
+                and isinstance(result.final_output, str)
+                and not result.final_output.strip()
+            ):
+                logger.warning(
+                    "Worker %s returned empty final output; requesting finalization once",
+                    self.config.agent_id,
+                )
+                record_run_event(
+                    "worker_empty_output_recovery_started",
+                    {"prompt": EMPTY_OUTPUT_RECOVERY_PROMPT},
+                    **trace_fields,
+                )
+                recovery_input = result.to_input_list()
+                recovery_input.append({
+                    "role": "user",
+                    "content": EMPTY_OUTPUT_RECOVERY_PROMPT,
+                })
+                # The original run has already finished. Recovery exists only
+                # to serialize its gathered evidence, so exposing tools here
+                # can restart the task and create another tool loop.
+                recovery_agent = self.openai_agent.clone(tools=[])
+                result = await Runner.run(
+                    recovery_agent,
+                    recovery_input,
+                    context=context,
+                    **run_options,
+                )
+                run_results.append(result)
+                record_run_event(
+                    "worker_run_completed",
+                    _run_trace_payload(result),
+                    run_index=1,
+                    recovery=True,
+                    **trace_fields,
+                )
+                if isinstance(result.final_output, str) and not result.final_output.strip():
+                    raise ValueError("Model returned empty final output after recovery")
 
             # Extract structured output
             output = result.final_output
@@ -261,6 +354,17 @@ class AIAgent(AgentInterface[AIAgentConfig]):
                     )
                 )
 
+            record_run_event(
+                "worker_execution_completed",
+                {
+                    "reasoning": output.reasoning,
+                    "confidence": output.confidence,
+                    "execution_notes": output.execution_notes,
+                    "output_resources": output_resources,
+                },
+                **trace_fields,
+            )
+
             return create_task_result(
                 task_id=task.id,
                 agent_id=self.config.agent_id,
@@ -268,13 +372,26 @@ class AIAgent(AgentInterface[AIAgentConfig]):
                 execution_time=execution_time,
                 resources=output_resources,
                 simulated_duration_hours=(execution_time / 3600.0),
-                cost=self._calculate_accurate_cost(result),
+                cost=sum(self._calculate_accurate_cost(item) for item in run_results),
                 execution_notes=output.execution_notes,
                 reasoning=output.reasoning,
             )
 
         except Exception as e:
             execution_time = time.time() - start_time
+
+            record_run_event(
+                "worker_execution_failed",
+                {
+                    "error_type": type(e).__name__,
+                    "error": str(e),
+                    "traceback": traceback.format_exc(),
+                },
+                actor_type="worker",
+                actor_id=self.config.agent_id,
+                task_id=str(task.id),
+                task_name=task.name,
+            )
 
             return create_task_result(
                 task_id=task.id,

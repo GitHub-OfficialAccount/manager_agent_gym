@@ -100,6 +100,7 @@ visible role descriptions communicate their initial specialization.
 | `portfolio_analyst` | Robust income and loan-amount auditing | Changed worker |
 | `risk_analyst` | Robust DTI and interest-rate auditing | Stable recovery capacity |
 | `screening_analyst` | Rapid z-score screening | Stable narrow specialist |
+| `audit_coordinator` | Artifact reconciliation and synthesis | Stable downstream specialist |
 
 The stable risk analyst can perform robust recovery work, but doing so may
 compete with its own branch. Recovery is therefore a coordination decision, not
@@ -200,6 +201,38 @@ evaluator remain active and are logged alongside `R_check`. `R_check` does not
 replace or feed the native reward path. The manager receives no hidden truth or
 engineered correctness digest.
 
+## Offline Run Trace
+
+Each adaptive episode bulk-writes a self-contained `run.json` after execution.
+Tracing is opt-in and in-memory; it performs no per-event disk writes and does
+not alter prompts, model routing, tools, or manager observations. Ordered events
+retain:
+
+- exact structured-LLM messages, response schema, parsed response, and errors;
+- each worker's effective system prompt, generated task prompt, input resources,
+  available tools, SDK model/tool history, raw responses, final output, and any
+  blank-output recovery;
+- the native end-of-timestep result, including the workflow snapshot, task
+  transitions, messages, resources, manager action, perturbation effects, and
+  the observation snapshot generated at the end of the step.
+
+The bundle also embeds the manifest, deterministic ground truth, completions,
+manager actions, experiment tool-call telemetry, and final scores. Sequence
+numbers are assigned when events are captured so parallel executions have a
+stable observed order. The exact manager prompt event is authoritative for what
+the manager saw when choosing its action; the timestep snapshot is the native
+post-action inspection state.
+
+Inspect saved bundles locally with the read-only NiceGUI viewer:
+
+```bash
+uv run --group viewer python -m experiments.ds_reroute.viewer
+```
+
+It discovers `run.json` files below `experiments/ds_reroute/outputs` and exposes
+the task DAG at each timestep, manager prompts, correlated worker histories,
+task truth and outputs, and the ordered event stream at `http://127.0.0.1:8088`.
+
 ## Validation Sequence
 
 1. Unit-test deterministic data, ground truth, DAG dependencies, non-superset
@@ -210,3 +243,11 @@ engineered correctness digest.
    perturbation severity without adaptation.
 4. Confirm the fully informed manager can recover by native orchestration.
 5. Run paired control, silent, partial, and full conditions across seeds.
+
+Current status (2026-07-13): steps 1 through 3 pass. The fresh fixed-assignment
+pair completed 16/16 tasks with nonempty artifacts in both arms. Control scored
+1.000 on robust audits and downstream work; degradation scored 0.755 and 0.179,
+respectively. The changed worker remained operational and returned numeric
+z-score results, producing a graded robust-audit loss of 0.245. The next gate is
+step 4: test whether a fully informed manager can recover through native
+orchestration before running the multi-seed observability comparison.

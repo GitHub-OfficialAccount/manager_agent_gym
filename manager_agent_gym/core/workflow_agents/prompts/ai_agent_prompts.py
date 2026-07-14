@@ -15,19 +15,12 @@ INPUT RESOURCES:
 {input_resources}
 
 INSTRUCTIONS:
-1. Analyze the task requirements carefully
-2. Use available tools as needed to complete the work
-3. Generate appropriate output resources
-4. Provide your reasoning for the approach taken
-5. Assess the quality of your work on a scale of 0-5
-6. Note your confidence level in the result (0-1)
+1. Understand the task requirements
+2. Use available tools when useful, including reasonable verification
+3. Return the requested deliverable as appropriate output resources
+4. Include a brief rationale, confidence level, and any relevant execution notes
 
-Please complete this task and provide structured output with:
-- Generated resources (with names, descriptions, and content)
-- Your reasoning process
-- Quality self-assessment
-- Confidence level
-- Any execution notes
+Complete the task and return the result once you are satisfied with the evidence.
 """
 
 # Specialized task template with additional context

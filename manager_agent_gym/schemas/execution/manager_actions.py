@@ -37,6 +37,7 @@ class ActionResult(BaseModel):
 
     action_type: Literal[
         "assign_task",
+        "retry_task",
         "assign_all_pending_tasks",
         "create_task",
         "remove_task",
@@ -182,6 +183,98 @@ class AssignTaskAction(BaseManagerAction):
             data=data,
             action_type=self.action_type,
             success=self.success,
+        )
+
+
+class RetryTaskAction(BaseManagerAction):
+    """Retry a failed atomic task under the same task ID, optionally with a new agent.
+
+    Use when a task failed but its role in the dependency graph is still valid.
+    The retry preserves the task's identity, dependencies, instructions, and failure
+    notes while resetting attempt-specific execution state. Downstream dependencies
+    remain attached to the same node and unlock normally if the retry succeeds.
+    """
+
+    action_type: Literal["retry_task"] = "retry_task"
+    task_id: UUID = Field(description="ID of the failed atomic task to retry")
+    agent_id: str | None = Field(
+        default=None,
+        description="Optional replacement agent ID; omit to keep the current assignment",
+    )
+
+    async def execute(
+        self,
+        workflow: "Workflow",
+        communication_service: "CommunicationService | None" = None,
+    ) -> ActionResult:
+        task = workflow.tasks.get(self.task_id)
+        if task is None:
+            return ActionResult(
+                summary=f"Failed: Task {self.task_id} not found in workflow",
+                kind="failed_action",
+                data={},
+                action_type=self.action_type,
+                success=False,
+            )
+        if not task.is_atomic_task():
+            return ActionResult(
+                summary=f"Failed: Composite task {self.task_id} cannot be retried directly",
+                kind="failed_action",
+                data={"task_id": str(self.task_id)},
+                action_type=self.action_type,
+                success=False,
+            )
+        if task.status != TaskStatus.FAILED:
+            return ActionResult(
+                summary=(
+                    f"Failed: Task {self.task_id} has status {task.status.value}; "
+                    "only failed tasks can be retried"
+                ),
+                kind="failed_action",
+                data={"task_id": str(self.task_id)},
+                action_type=self.action_type,
+                success=False,
+            )
+        if self.agent_id is not None and self.agent_id not in workflow.agents:
+            return ActionResult(
+                summary=f"Failed: Agent {self.agent_id} not found in workflow",
+                kind="failed_action",
+                data={"task_id": str(self.task_id)},
+                action_type=self.action_type,
+                success=False,
+            )
+
+        previous_agent_id = task.assigned_agent_id
+        if self.agent_id is not None:
+            task.assigned_agent_id = self.agent_id
+        task.status = TaskStatus.PENDING
+        task.effective_status = TaskStatus.PENDING.value
+        task.started_at = None
+        task.completed_at = None
+        task.deps_ready_at = None
+        task.actual_duration_hours = None
+        task.actual_cost = None
+        task.quality_score = None
+        task.output_resource_ids = []
+        task.execution_notes.append("Retry requested by manager")
+
+        assigned_agent_id = task.assigned_agent_id
+        summary = f"Retrying task {self.task_id}"
+        if assigned_agent_id:
+            summary += f" with {assigned_agent_id}"
+        data = {
+            "task_id": str(self.task_id),
+            "previous_agent_id": previous_agent_id,
+            "agent_id": assigned_agent_id,
+        }
+        self.success = True
+        self.result_summary = summary
+        return ActionResult(
+            summary=summary,
+            kind="mutation",
+            data=data,
+            action_type=self.action_type,
+            success=True,
         )
 
 

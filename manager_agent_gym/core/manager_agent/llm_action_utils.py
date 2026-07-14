@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 from ...schemas.execution.manager_actions import BaseManagerAction
 from ...schemas.execution.manager_actions import (
     AssignTaskAction,
+    RetryTaskAction,
     CreateTaskAction,
     RemoveTaskAction,
     RefineTaskAction,
@@ -164,6 +165,7 @@ def get_default_action_classes() -> list[type[BaseManagerAction]]:
     return [
         # Task assignment and basic workflow actions
         AssignTaskAction,
+        RetryTaskAction,
         CreateTaskAction,
         RemoveTaskAction,
         # Hierarchical task decomposition and editing

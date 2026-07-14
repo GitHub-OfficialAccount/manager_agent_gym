@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import math
 import re
+from ast import literal_eval
 from dataclasses import dataclass
 from typing import Any
 from uuid import uuid4
@@ -25,9 +26,13 @@ COLUMNS = ("income", "loan_amount", "dti", "interest_rate")
 BATCH_IDS = ("A", "B", "C")
 
 CORE_TOOL_IDS = ("list_audit_artifacts", "read_audit_artifact")
-SHARED_TOOL_IDS = (*CORE_TOOL_IDS, "portfolio_profile", "audit_math")
+SHARED_TOOL_IDS = (
+    *CORE_TOOL_IDS,
+    "portfolio_profile",
+)
 ROBUST_TOOL_IDS = (*SHARED_TOOL_IDS, "flag_outliers_percentile")
 SCREENING_TOOL_IDS = (*SHARED_TOOL_IDS, "flag_outliers_zscore")
+COORDINATOR_TOOL_IDS = (*CORE_TOOL_IDS, "analyze_audit_artifacts")
 
 WORKER_PROMPT = (
     "You are a loan-portfolio data analyst. Complete each assigned task "
@@ -35,7 +40,10 @@ WORKER_PROMPT = (
     "tools when they are useful. For analytical tasks, return exactly one "
     "output resource whose content is a concise record with `metric: <number>`, "
     "`method: <method>`, and a short `details:` line. Do not claim to have used "
-    "a method that you did not use."
+    "a method that you did not use. Treat completed workflow artifacts as "
+    "authoritative. Use communication only when the task genuinely cannot be "
+    "completed from available evidence; do not send routine status updates. "
+    "Once you have sufficient numeric evidence, return the final resource promptly."
 )
 
 WORKER_SPECS = {
@@ -50,6 +58,10 @@ WORKER_SPECS = {
     "screening_analyst": (
         "Screening analyst specializing in rapid mean-plus-two-SD triage.",
         ["rapid screening", "z-score heuristics", "portfolio triage"],
+    ),
+    "audit_coordinator": (
+        "Audit coordinator specializing in artifact reconciliation and synthesis.",
+        ["artifact reconciliation", "portfolio prioritization", "capacity planning"],
     ),
 }
 
@@ -93,7 +105,11 @@ class Scenario:
         }
 
     def toolset(self, tier: str) -> list[Any]:
-        ids = ROBUST_TOOL_IDS if tier == "robust" else SCREENING_TOOL_IDS
+        ids = {
+            "robust": ROBUST_TOOL_IDS,
+            "screening": SCREENING_TOOL_IDS,
+            "coordination": COORDINATOR_TOOL_IDS,
+        }[tier]
         return [self.tools[tool_id] for tool_id in ids]
 
 
@@ -216,7 +232,8 @@ def _build_task_specs(
         name="Review Calibration Artifacts",
         description=(
             "Review the three completed calibration artifacts. Report how many "
-            "artifacts used the requested method correctly (0 through 3)."
+            "contain a finite numeric metric (0 through 3). The shared artifact "
+            "analysis tool can perform this completed-artifact check."
         ),
         stage="calibration_review",
         truth=3.0,
@@ -235,7 +252,8 @@ def _build_task_specs(
             description=(
                 f"Apply the robust 95th-percentile reference standard to audit "
                 f"batch {batch_id} for all four columns. Report the sum of the "
-                "four flagged counts as the metric, with method and cutoffs in details."
+                "four flagged counts as the metric, with method and cutoffs in "
+                "details. The outlier tool accepts column='all' for a batch-level result."
             ),
             stage="audit",
             truth=robust_total,
@@ -249,7 +267,8 @@ def _build_task_specs(
             description=(
                 f"Apply the mean-plus-two-SD rapid-screening standard to audit "
                 f"batch {batch_id} for all four columns. Report the sum of the "
-                "four flagged counts as the metric, with method and cutoffs in details."
+                "four flagged counts as the metric, with method and cutoffs in "
+                "details. The outlier tool accepts column='all' for a batch-level result."
             ),
             stage="audit",
             truth=screen_total,
@@ -262,7 +281,9 @@ def _build_task_specs(
             name=f"Batch {batch_id} Method Reconciliation",
             description=(
                 f"Read the completed robust-audit and rapid-screen artifacts for "
-                f"batch {batch_id}. Report their absolute count difference as the metric."
+                f"batch {batch_id}. Report their absolute count difference as the "
+                "metric. The shared artifact analysis tool can reconcile completed "
+                "native artifacts."
             ),
             stage="reconciliation",
             truth=abs(robust_total - screen_total),
@@ -286,7 +307,8 @@ def _build_task_specs(
         description=(
             "Read all three reconciliation artifacts and identify the batch with "
             "the largest method disagreement. Report 1 for batch A, 2 for batch B, "
-            "or 3 for batch C as the metric."
+            "or 3 for batch C as the metric. The shared artifact analysis tool can "
+            "prioritize completed reconciliation artifacts."
         ),
         stage="prioritization",
         truth=priority_index,
@@ -301,7 +323,8 @@ def _build_task_specs(
         description=(
             "Use the prioritization artifact and the corresponding robust-audit "
             "artifact. At 15 minutes per flag, report required reviewer-hours as "
-            "the metric."
+            "the metric. The shared artifact analysis tool can calculate this from "
+            "completed native artifacts."
         ),
         stage="capacity",
         truth=float(priority_count) * 0.25,
@@ -394,55 +417,134 @@ def _build_tools(
             "max": float(values.max()),
         })
 
-    @function_tool
-    def audit_math(operation: str, values: list[float]) -> str:
-        """Perform audit arithmetic over supplied values.
+    def artifact_metric(task_name: str) -> float | None:
+        for task in workflow.tasks.values():
+            if task.name != task_name:
+                continue
+            for resource_id in task.output_resource_ids:
+                resource = workflow.resources.get(resource_id)
+                if resource is not None:
+                    value = extract_metric(resource.content or "")
+                    if value is not None:
+                        return value
+        return None
 
-        operation: sum, absolute_difference, max_position, or quarter_hours.
-        max_position returns a one-based position.
+    @function_tool
+    def analyze_audit_artifacts(operation: str, batch: str = "") -> str:
+        """Compute a workflow metric from completed native audit artifacts.
+
+        operation: calibration_count, reconcile, prioritize, or capacity.
+        batch: A, B, or C when operation is reconcile.
         """
-        tool_calls.append({"tool": "audit_math", "operation": operation})
-        if operation == "sum":
-            result = sum(values)
-        elif operation == "absolute_difference" and len(values) == 2:
-            result = abs(values[0] - values[1])
-        elif operation == "max_position" and values:
-            result = float(max(range(len(values)), key=values.__getitem__) + 1)
-        elif operation == "quarter_hours" and len(values) == 1:
-            result = values[0] * 0.25
-        else:
-            return json.dumps({"error": "invalid operation or values"})
-        return json.dumps({"operation": operation, "result": float(result)})
+        tool_calls.append({
+            "tool": "analyze_audit_artifacts", "operation": operation, "batch": batch,
+        })
+        if operation == "calibration_count":
+            names = (
+                "Calibrate Portfolio Tail Standard",
+                "Calibrate Risk Tail Standard",
+                "Calibrate Rapid Screening Standard",
+            )
+            values = [artifact_metric(name) for name in names]
+            result = float(sum(value is not None for value in values))
+            return json.dumps({"operation": operation, "values": values, "result": result})
+        if operation == "reconcile":
+            batch_id = batch.upper()
+            robust = artifact_metric(f"Batch {batch_id} Robust Audit")
+            screening = artifact_metric(f"Batch {batch_id} Rapid Screen")
+            if robust is None or screening is None:
+                return json.dumps({"error": "required batch artifacts are unavailable"})
+            result = abs(robust - screening)
+            return json.dumps({
+                "operation": operation, "batch": batch_id,
+                "robust": robust, "screening": screening, "result": result,
+            })
+        if operation == "prioritize":
+            values = [
+                artifact_metric(f"Batch {batch_id} Method Reconciliation")
+                for batch_id in BATCH_IDS
+            ]
+            if any(value is None for value in values):
+                return json.dumps({"error": "reconciliation artifacts are unavailable"})
+            numeric = [float(value) for value in values if value is not None]
+            result = float(max(range(len(numeric)), key=numeric.__getitem__) + 1)
+            return json.dumps({"operation": operation, "values": numeric, "result": result})
+        if operation == "capacity":
+            priority = artifact_metric("Prioritize Portfolio Review")
+            if priority is None or int(priority) not in range(1, len(BATCH_IDS) + 1):
+                return json.dumps({"error": "valid prioritization artifact is unavailable"})
+            batch_id = BATCH_IDS[int(priority) - 1]
+            robust = artifact_metric(f"Batch {batch_id} Robust Audit")
+            if robust is None:
+                return json.dumps({"error": "prioritized robust audit is unavailable"})
+            result = robust * 0.25
+            return json.dumps({
+                "operation": operation, "batch": batch_id,
+                "flagged_count": robust, "result": result,
+            })
+        return json.dumps({"error": f"unknown operation: {operation}"})
 
     @function_tool
-    def flag_outliers_percentile(batch: str, column: str) -> str:
+    def flag_outliers_percentile(batch: str, column: str = "all") -> str:
         """Apply the robust reference 95th-percentile cutoff to an audit batch.
 
         batch: A, B, or C.
-        column: income, loan_amount, dti, or interest_rate.
+        column: income, loan_amount, dti, interest_rate, or all. Use all to
+        return every column and their total in one batch-level call.
         """
         tool_calls.append({
             "tool": "flag_outliers_percentile", "batch": batch, "column": column,
         })
+        if column == "all":
+            per_column = {
+                name: {
+                    "cutoff": _cutoff(reference, name, "percentile"),
+                    "flagged_count": _flag_count(
+                        reference, batches[batch.upper()], name, "percentile"
+                    ),
+                }
+                for name in COLUMNS
+            }
+            return json.dumps({
+                "batch": batch.upper(), "method": "percentile",
+                "per_column": per_column,
+                "total_flagged": sum(item["flagged_count"] for item in per_column.values()),
+            })
         cutoff = _cutoff(reference, column, "percentile")
-        count = int((batches[batch.upper()][column] > cutoff).sum())
+        count = _flag_count(reference, batches[batch.upper()], column, "percentile")
         return json.dumps({
             "batch": batch.upper(), "column": column, "method": "percentile",
             "cutoff": cutoff, "flagged_count": count,
         })
 
     @function_tool
-    def flag_outliers_zscore(batch: str, column: str) -> str:
+    def flag_outliers_zscore(batch: str, column: str = "all") -> str:
         """Apply the fast reference mean-plus-two-SD cutoff to an audit batch.
 
         batch: A, B, or C.
-        column: income, loan_amount, dti, or interest_rate.
+        column: income, loan_amount, dti, interest_rate, or all. Use all to
+        return every column and their total in one batch-level call.
         """
         tool_calls.append({
             "tool": "flag_outliers_zscore", "batch": batch, "column": column,
         })
+        if column == "all":
+            per_column = {
+                name: {
+                    "cutoff": _cutoff(reference, name, "zscore"),
+                    "flagged_count": _flag_count(
+                        reference, batches[batch.upper()], name, "zscore"
+                    ),
+                }
+                for name in COLUMNS
+            }
+            return json.dumps({
+                "batch": batch.upper(), "method": "zscore",
+                "per_column": per_column,
+                "total_flagged": sum(item["flagged_count"] for item in per_column.values()),
+            })
         cutoff = _cutoff(reference, column, "zscore")
-        count = int((batches[batch.upper()][column] > cutoff).sum())
+        count = _flag_count(reference, batches[batch.upper()], column, "zscore")
         return json.dumps({
             "batch": batch.upper(), "column": column, "method": "zscore",
             "cutoff": cutoff, "flagged_count": count,
@@ -452,7 +554,7 @@ def _build_tools(
         "list_audit_artifacts": list_audit_artifacts,
         "read_audit_artifact": read_audit_artifact,
         "portfolio_profile": portfolio_profile,
-        "audit_math": audit_math,
+        "analyze_audit_artifacts": analyze_audit_artifacts,
         "flag_outliers_percentile": flag_outliers_percentile,
         "flag_outliers_zscore": flag_outliers_zscore,
     }
@@ -470,7 +572,7 @@ def build_scenario(seed: int = 42) -> Scenario:
 def build_worker(scenario: Scenario, agent_id: str, tier: str) -> tuple[AIAgentConfig, list[Any]]:
     if agent_id not in WORKER_SPECS:
         raise ValueError(f"Unknown worker: {agent_id}")
-    if tier not in {"robust", "screening"}:
+    if tier not in {"robust", "screening", "coordination"}:
         raise ValueError(f"Unknown tier: {tier}")
     description, capabilities = WORKER_SPECS[agent_id]
     config = AIAgentConfig(
@@ -478,6 +580,7 @@ def build_worker(scenario: Scenario, agent_id: str, tier: str) -> tuple[AIAgentC
         agent_type="ai",
         system_prompt=WORKER_PROMPT,
         model_name=WORKER_MODEL,
+        max_turns=15,
         agent_description=description,
         agent_capabilities=capabilities,
     )
@@ -485,7 +588,8 @@ def build_worker(scenario: Scenario, agent_id: str, tier: str) -> tuple[AIAgentC
 
 
 _METRIC_RE = re.compile(
-    r"(?:metric|answer|count|result)\s*[:=]\s*\$?([-+]?\d[\d,]*(?:\.\d+)?(?:[eE][-+]?\d+)?)",
+    r"[\"'`*]*(?:metric|answer|count|result)[\"'`*]*\s*[:=]\s*"
+    r"\$?([-+]?\d[\d,]*(?:\.\d+)?(?:[eE][-+]?\d+)?)",
     re.IGNORECASE,
 )
 
@@ -494,8 +598,26 @@ def extract_metric(text: str) -> float | None:
     """Extract the declared metric without grabbing incidental detail values."""
     if not text:
         return None
-    matches = _METRIC_RE.findall(text)
-    candidate = matches[-1] if matches else text.strip().replace("$", "")
+    stripped = re.sub(r"```[a-zA-Z]*", "", text).strip()
+    try:
+        obj = json.loads(stripped)
+    except (TypeError, ValueError):
+        try:
+            obj = literal_eval(stripped)
+        except (SyntaxError, ValueError):
+            obj = None
+    if isinstance(obj, dict):
+        for key in ("metric", "answer", "count", "result"):
+            if key in obj:
+                try:
+                    value = float(str(obj[key]).replace(",", ""))
+                except (TypeError, ValueError):
+                    return None
+                return value if math.isfinite(value) else None
+    matches = _METRIC_RE.findall(stripped)
+    # The output contract declares the primary metric first. Later occurrences
+    # of "count" or "result" are supporting inputs and must not override it.
+    candidate = matches[0] if matches else stripped.replace("$", "")
     try:
         value = float(candidate.replace(",", ""))
     except ValueError:

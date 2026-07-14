@@ -10,6 +10,7 @@ from .model_provider import (
     build_litellm_model_id,
     resolve_native_route,
 )
+from .run_trace import record_run_event
 
 __all__ = [
     "LLMInferenceTruncationError",
@@ -153,6 +154,19 @@ async def generate_structured_response(
         base_url=route.base_url, api_key=route.api_key, mode=route.mode
     )
 
+    request_trace = {
+        "model": model,
+        "wire_model": route.wire_model,
+        "messages": messages,
+        "response_type": response_type.__name__,
+        "response_schema": response_type.model_json_schema(),
+        "temperature": temperature,
+        "seed": seed,
+        "max_completion_tokens": max_completion_tokens or None,
+        "max_retries": max_retries,
+    }
+    record_run_event("structured_llm_request", request_trace)
+
     try:
         kwargs: dict[str, Any] = {
             "model": route.wire_model,
@@ -173,9 +187,25 @@ async def generate_structured_response(
             max_retries=max_retries,
             **kwargs,
         )
+        record_run_event(
+            "structured_llm_response",
+            {
+                "model": model,
+                "response_type": response_type.__name__,
+                "parsed_response": result,
+            },
+        )
         return result
 
     except Exception as e:
+        record_run_event(
+            "structured_llm_error",
+            {
+                **request_trace,
+                "error_type": type(e).__name__,
+                "error": str(e),
+            },
+        )
         error = LLMInferenceTruncationError(
             f"LLM request failed for {response_type.__name__}: {str(e)}",
             model=model,
