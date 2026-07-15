@@ -2,7 +2,8 @@
 
 Example:
     uv run python -m experiments.ds_reroute.run \
-        --conditions control silent partial full --seeds 42 --swap-timestep 3
+        --perturbation toolset_to_screening \
+        --conditions control silent partial full --seeds 42
 """
 
 from __future__ import annotations
@@ -30,12 +31,6 @@ from manager_agent_gym.core.common.run_trace import RunTraceRecorder
 from manager_agent_gym.core.communication.service import CommunicationService
 from manager_agent_gym.schemas.execution.callbacks import TimestepEndContext
 from manager_agent_gym.schemas.execution.observation_policy import ObservationPolicy
-from manager_agent_gym.schemas.execution.perturbations import (
-    ModelSwap,
-    PerturbationSchedule,
-    PromptSwap,
-    ToolSwap,
-)
 from manager_agent_gym.schemas.preferences.evaluator import (
     AggregationStrategy,
     Evaluator,
@@ -46,32 +41,20 @@ from manager_agent_gym.schemas.preferences.preference import (
 )
 from manager_agent_gym.schemas.preferences.rubric import RunCondition, WorkflowRubric
 
-from .scenario import (
-    DEGRADED_JUDGMENT_PROMPT,
-    JUDGMENT_WORKER_MODEL,
-    SCREENING_TOOL_IDS,
-    build_scenario,
-    build_worker,
-    extract_metric,
-    is_correct,
-    score,
+from .perturbations import (
+    DEFAULT_PERTURBATION,
+    PERTURBATIONS,
+    build_schedule,
+    get_perturbation,
 )
+from .scenario import build_scenario, build_worker, extract_metric, is_correct, score
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
 )
 
-TARGET_WORKER = "portfolio_analyst"
-PARTIAL_TARGET_CAPABILITIES = [
-    "Methods: changed; current outlier-screening method unknown",
-    "Methods: portfolio profiling",
-]
-FULL_TARGET_CAPABILITIES = [
-    "Methods: mean-plus-two-SD screening",
-    "Methods: portfolio profiling",
-]
 WORKER_TIERS = {
-    TARGET_WORKER: "robust",
+    "portfolio_analyst": "robust",
     "risk_analyst": "robust",
     "screening_analyst": "screening",
     "audit_coordinator": "coordination",
@@ -103,70 +86,6 @@ def _preferences() -> PreferenceWeights:
                     aggregation=AggregationStrategy.WEIGHTED_AVERAGE,
                     rubrics=[rubric],
                 ),
-            )
-        ]
-    )
-
-
-def build_schedule(
-    condition: str,
-    swap_timestep: int,
-    *,
-    lever: str = "toolset",
-    weak_model: str = JUDGMENT_WORKER_MODEL,
-) -> PerturbationSchedule:
-    if condition == "control":
-        return PerturbationSchedule()
-    if condition not in {"silent", "partial", "full"}:
-        raise ValueError(f"Unknown condition: {condition}")
-    if lever == "judgment":
-        labels = {
-            "silent": "internal judgment update",
-            "partial": "the analyst's behavior changed",
-            "full": (
-                "the analyst's model and analytical judgment changed; it now "
-                "has limited multi-part integration ability"
-            ),
-        }
-        return PerturbationSchedule(
-            perturbations=[
-                ModelSwap(
-                    timestep=swap_timestep,
-                    agent_id=TARGET_WORKER,
-                    new_model_name=weak_model,
-                    announce=False,
-                    label="judgment_change_model",
-                ),
-                PromptSwap(
-                    timestep=swap_timestep,
-                    agent_id=TARGET_WORKER,
-                    new_system_prompt=DEGRADED_JUDGMENT_PROMPT,
-                    announce=condition in {"partial", "full"},
-                    label=labels[condition],
-                ),
-            ]
-        )
-    if lever != "toolset":
-        raise ValueError(f"Unknown lever: {lever}")
-    labels = {
-        "silent": "internal capability update",
-        "partial": "the analyst's capability profile changed",
-        "full": "robust percentile analysis changed to mean-plus-two-SD screening",
-    }
-    visible_capabilities = {
-        "silent": None,
-        "partial": PARTIAL_TARGET_CAPABILITIES,
-        "full": FULL_TARGET_CAPABILITIES,
-    }
-    return PerturbationSchedule(
-        perturbations=[
-            ToolSwap(
-                timestep=swap_timestep,
-                agent_id=TARGET_WORKER,
-                new_tool_ids=list(SCREENING_TOOL_IDS),
-                new_agent_capabilities=visible_capabilities[condition],
-                announce=condition in {"partial", "full"},
-                label=labels[condition],
             )
         ]
     )
@@ -242,18 +161,21 @@ class Recorder:
 async def run_one(
     condition: str,
     seed: int,
-    max_timesteps: int,
-    swap_timestep: int,
+    max_timesteps: int | None,
+    swap_timestep: int | None,
     out_root: Path,
-    lever: str = "toolset",
-    weak_model: str = JUDGMENT_WORKER_MODEL,
+    perturbation: str = DEFAULT_PERTURBATION,
 ) -> Path:
-    prefix = "" if lever == "toolset" else f"{lever}_"
-    run_dir = out_root / f"{prefix}{condition}_t{swap_timestep}_seed{seed}"
+    definition = get_perturbation(perturbation)
+    max_timesteps = definition.max_timesteps if max_timesteps is None else max_timesteps
+    swap_timestep = (
+        definition.swap_timestep if swap_timestep is None else swap_timestep
+    )
+    run_dir = out_root / f"{perturbation}_{condition}_t{swap_timestep}_seed{seed}"
     run_dir.mkdir(parents=True, exist_ok=True)
     print(
-        f"DS-REROUTE lever={lever} condition={condition} seed={seed} "
-        f"swap_t={swap_timestep} target={TARGET_WORKER}",
+        f"DS-REROUTE perturbation={perturbation} condition={condition} seed={seed} "
+        f"swap_t={swap_timestep} target={definition.target_worker}",
         flush=True,
     )
 
@@ -267,7 +189,9 @@ async def run_one(
         registry.register_ai_agent(config, tools)
 
     schedule = build_schedule(
-        condition, swap_timestep, lever=lever, weak_model=weak_model
+        condition,
+        swap_timestep,
+        perturbation=perturbation,
     )
     schedule.register(registry)
     observation_policy = ObservationPolicy(
@@ -281,11 +205,13 @@ async def run_one(
     trace_recorder = RunTraceRecorder(
         metadata={
             "experiment": "ds_reroute",
-            "lever": lever,
+            "perturbation_name": perturbation,
+            "lever": definition.lever,
             "condition": condition,
             "seed": seed,
             "swap_timestep": swap_timestep,
-            "target_worker": TARGET_WORKER,
+            "max_timesteps": max_timesteps,
+            "target_worker": definition.target_worker,
         }
     )
     engine = WorkflowExecutionEngine(
@@ -331,10 +257,12 @@ async def run_one(
     score_summary = recorder.score_summary()
     manifest = {
         "condition": condition,
-        "lever": lever,
+        "perturbation_name": perturbation,
+        "lever": definition.lever,
         "seed": seed,
         "swap_timestep": swap_timestep,
-        "target_worker": TARGET_WORKER,
+        "max_timesteps": max_timesteps,
+        "target_worker": definition.target_worker,
         "started_at": started_at,
         "finished_at": datetime.now().isoformat(),
         "observation_policy": observation_policy.model_dump(mode="json"),
@@ -344,7 +272,9 @@ async def run_one(
             for agent_id in WORKER_TIERS
             if registry.get_agent(agent_id) is not None
         },
-        "final_target_model": registry.get_agent(TARGET_WORKER).config.model_name,
+        "final_target_model": registry.get_agent(
+            definition.target_worker
+        ).config.model_name,
         "native_reward_vector": engine.validation_engine.reward_vector,
         "native_reward_final": engine.validation_engine.most_recent_reward,
         **score_summary,
@@ -394,13 +324,22 @@ async def main() -> None:
         choices=["control", "silent", "partial", "full"],
     )
     parser.add_argument("--seeds", nargs="+", type=int, default=[42])
-    parser.add_argument("--max-timesteps", type=int, default=16)
-    parser.add_argument("--swap-timestep", type=int, default=3)
-    parser.add_argument("--lever", choices=["toolset", "judgment"], default="toolset")
     parser.add_argument(
-        "--weak-model",
-        default=JUDGMENT_WORKER_MODEL,
-        help="Replacement model used by the judgment lever.",
+        "--max-timesteps",
+        type=int,
+        default=None,
+        help="Override the selected perturbation's manager-run horizon.",
+    )
+    parser.add_argument(
+        "--swap-timestep",
+        type=int,
+        default=None,
+        help="Override the selected perturbation's default change timestep.",
+    )
+    parser.add_argument(
+        "--perturbation",
+        choices=sorted(PERTURBATIONS),
+        default=DEFAULT_PERTURBATION,
     )
     parser.add_argument(
         "--out", type=Path, default=Path("experiments/ds_reroute/outputs")
@@ -414,8 +353,7 @@ async def main() -> None:
                 args.max_timesteps,
                 args.swap_timestep,
                 args.out,
-                args.lever,
-                args.weak_model,
+                args.perturbation,
             )
 
 

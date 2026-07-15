@@ -1,4 +1,5 @@
 import math
+from dataclasses import replace
 
 import pytest
 
@@ -16,17 +17,18 @@ from experiments.ds_reroute.fixed_gate import (
     evaluate_gate,
     evaluate_recovery_gate,
 )
-from experiments.ds_reroute.run import (
-    Recorder,
-    TARGET_WORKER,
-    _preferences,
+from experiments.ds_reroute.perturbations import (
+    DEGRADED_JUDGMENT_PROMPT,
+    MODEL_PROMPT_JUDGMENT,
+    PRIMARY_TARGET_WORKER,
+    TOOLSET_TO_SCREENING,
     build_schedule,
+    get_perturbation,
 )
+from experiments.ds_reroute.run import Recorder, _preferences
 from experiments.ds_reroute.scenario import (
     COORDINATOR_TOOL_IDS,
     CORE_TOOL_IDS,
-    DEGRADED_JUDGMENT_PROMPT,
-    JUDGMENT_WORKER_MODEL,
     ROBUST_TOOL_IDS,
     SCREENING_TOOL_IDS,
     WORKER_PROMPT,
@@ -179,7 +181,7 @@ def test_primary_perturbation_changes_one_worker_and_preserves_core_tools(
 
     assert manifest["num_perturbations"] == 1
     change = manifest["perturbations"][0]
-    assert change["agent_id"] == TARGET_WORKER
+    assert change["agent_id"] == PRIMARY_TARGET_WORKER
     assert change["new_tool_ids"] == list(SCREENING_TOOL_IDS)
     assert set(CORE_TOOL_IDS) <= set(change["new_tool_ids"])
     assert change["announce"] is (condition != "silent")
@@ -204,7 +206,7 @@ async def test_primary_perturbation_applies_condition_visible_capabilities(
     condition, expected_method
 ):
     scenario = build_scenario(42)
-    config, tools = build_worker(scenario, TARGET_WORKER, "robust")
+    config, tools = build_worker(scenario, PRIMARY_TARGET_WORKER, "robust")
     registry = AgentRegistry()
     for tool_id, tool in scenario.tools.items():
         registry.register_tool(tool_id, tool)
@@ -214,7 +216,7 @@ async def test_primary_perturbation_applies_condition_visible_capabilities(
 
     await registry.apply_scheduled_changes_for_timestep(3)
 
-    changed = registry.get_agent(TARGET_WORKER)
+    changed = registry.get_agent(PRIMARY_TARGET_WORKER)
     assert changed is not None
     assert expected_method in changed.config.agent_capabilities
     assert changed.config.agent_description == config.agent_description
@@ -226,40 +228,74 @@ def test_control_has_no_perturbation():
 
 @pytest.mark.parametrize("condition", ["silent", "partial", "full"])
 def test_judgment_perturbation_bundles_model_and_prompt_without_tool_swap(condition):
-    manifest = build_schedule(condition, swap_timestep=3, lever="judgment").manifest()
+    approved_model = "openrouter/explicitly-approved/test-model"
+    definition = replace(
+        get_perturbation(MODEL_PROMPT_JUDGMENT),
+        replacement_model=approved_model,
+    )
+    manifest = definition.build_schedule(condition, 3).manifest()
 
     assert manifest["num_perturbations"] == 2
     model_change, prompt_change = manifest["perturbations"]
     assert model_change["kind"] == "model_swap"
-    assert model_change["agent_id"] == TARGET_WORKER
-    assert model_change["new_model_name"] == JUDGMENT_WORKER_MODEL
+    assert model_change["agent_id"] == PRIMARY_TARGET_WORKER
+    assert model_change["new_model_name"] == approved_model
     assert model_change["announce"] is False
     assert prompt_change["kind"] == "prompt_swap"
-    assert prompt_change["agent_id"] == TARGET_WORKER
+    assert prompt_change["agent_id"] == PRIMARY_TARGET_WORKER
     assert prompt_change["new_system_prompt"] == DEGRADED_JUDGMENT_PROMPT
     assert prompt_change["announce"] is (condition != "silent")
 
 
 @pytest.mark.asyncio
 async def test_judgment_perturbation_preserves_full_robust_tool_access():
+    approved_model = "openrouter/explicitly-approved/test-model"
     scenario = build_scenario(42)
-    config, tools = build_worker(scenario, TARGET_WORKER, "robust")
+    config, tools = build_worker(scenario, PRIMARY_TARGET_WORKER, "robust")
     registry = AgentRegistry()
     for tool_id, tool in scenario.tools.items():
         registry.register_tool(tool_id, tool)
     registry.register_ai_agent(config, tools)
-    build_schedule("silent", 3, lever="judgment").register(registry)
+    definition = replace(
+        get_perturbation(MODEL_PROMPT_JUDGMENT),
+        replacement_model=approved_model,
+    )
+    definition.build_schedule("silent", 3).register(registry)
 
     await registry.apply_scheduled_changes_for_timestep(3)
 
-    changed = registry.get_agent(TARGET_WORKER)
+    changed = registry.get_agent(PRIMARY_TARGET_WORKER)
     assert changed is not None
-    assert changed.config.model_name == JUDGMENT_WORKER_MODEL
+    assert changed.config.model_name == approved_model
     assert changed.config.system_prompt == DEGRADED_JUDGMENT_PROMPT
     assert changed.config.agent_capabilities == config.agent_capabilities
     changed_tool_names = {tool.name for tool in changed.tools}
     assert set(ROBUST_TOOL_IDS) <= changed_tool_names
     assert set(CORE_TOOL_IDS) <= changed_tool_names
+
+
+def test_judgment_perturbation_requires_an_explicitly_approved_model():
+    with pytest.raises(ValueError, match="explicitly approved"):
+        build_schedule("silent", 3, perturbation=MODEL_PROMPT_JUDGMENT)
+
+
+def test_named_perturbation_centralizes_target_and_lever_metadata():
+    toolset = get_perturbation(TOOLSET_TO_SCREENING)
+    judgment = get_perturbation(MODEL_PROMPT_JUDGMENT)
+
+    assert toolset.target_worker == judgment.target_worker == PRIMARY_TARGET_WORKER
+    assert toolset.lever == "toolset"
+    assert judgment.lever == "judgment"
+    assert toolset.swap_timestep == 3
+    assert toolset.max_timesteps == 32
+    assert toolset.fixed_gate_max_timesteps == 32
+    assert judgment.replacement_model is None
+
+
+def test_schedule_uses_definition_swap_timestep_by_default():
+    manifest = build_schedule("silent").manifest()
+
+    assert manifest["perturbations"][0]["timestep"] == 3
 
 
 def test_held_out_methods_produce_a_graded_gap():
@@ -311,7 +347,7 @@ def test_fixed_gate_assigns_every_task_without_prescribing_a_runtime_recovery():
     assert len(applied) == len(scenario.task_specs) == len(FIXED_ASSIGNMENTS)
     assert all(task.assigned_agent_id for task in scenario.workflow.tasks.values())
     assert all(
-        applied[scenario.task_specs[key].name] == TARGET_WORKER
+        applied[scenario.task_specs[key].name] == PRIMARY_TARGET_WORKER
         for key in ("audit_a_robust", "audit_b_robust", "audit_c_robust")
     )
 

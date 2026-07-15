@@ -8,7 +8,8 @@ the stable percentile-capable worker, proving that recovery is feasible without
 changing the environment or workers.
 
 Run:
-    uv run python -m experiments.ds_reroute.fixed_gate --seed 42
+    uv run python -m experiments.ds_reroute.fixed_gate \
+        --perturbation toolset_to_screening --seed 42
 """
 
 from __future__ import annotations
@@ -34,18 +35,25 @@ from manager_agent_gym.schemas.execution.manager_actions import (
 )
 from manager_agent_gym.schemas.execution.observation_policy import ObservationPolicy
 
-from .run import Recorder, TARGET_WORKER, WORKER_TIERS, _preferences, build_schedule
-from .scenario import JUDGMENT_WORKER_MODEL, Scenario, build_scenario, build_worker
+from .perturbations import (
+    DEFAULT_PERTURBATION,
+    PERTURBATIONS,
+    PRIMARY_TARGET_WORKER,
+    build_schedule,
+    get_perturbation,
+)
+from .run import Recorder, WORKER_TIERS, _preferences
+from .scenario import Scenario, build_scenario, build_worker
 
 FIXED_ASSIGNMENTS = {
-    "profile": TARGET_WORKER,
-    "calibrate_portfolio": TARGET_WORKER,
+    "profile": PRIMARY_TARGET_WORKER,
+    "calibrate_portfolio": PRIMARY_TARGET_WORKER,
     "calibrate_risk": "risk_analyst",
     "calibrate_screen": "screening_analyst",
     "calibration_review": "audit_coordinator",
-    "audit_a_robust": TARGET_WORKER,
-    "audit_b_robust": TARGET_WORKER,
-    "audit_c_robust": TARGET_WORKER,
+    "audit_a_robust": PRIMARY_TARGET_WORKER,
+    "audit_b_robust": PRIMARY_TARGET_WORKER,
+    "audit_c_robust": PRIMARY_TARGET_WORKER,
     "audit_a_screen": "screening_analyst",
     "audit_b_screen": "screening_analyst",
     "audit_c_screen": "screening_analyst",
@@ -58,9 +66,7 @@ FIXED_ASSIGNMENTS = {
 
 RECOVERY_ASSIGNMENTS = {
     **FIXED_ASSIGNMENTS,
-    "audit_a_robust": "risk_analyst",
-    "audit_b_robust": "risk_analyst",
-    "audit_c_robust": "risk_analyst",
+    **(get_perturbation(DEFAULT_PERTURBATION).recovery_assignment_overrides or {}),
 }
 
 
@@ -116,15 +122,31 @@ def _stage_mean(completions: list[dict[str, Any]], stages: set[str]) -> float:
 async def run_fixed(
     condition: str,
     seed: int,
-    swap_timestep: int,
-    max_timesteps: int,
+    swap_timestep: int | None,
+    max_timesteps: int | None,
     out_root: Path,
-    lever: str = "toolset",
-    weak_model: str = JUDGMENT_WORKER_MODEL,
+    perturbation: str = DEFAULT_PERTURBATION,
 ) -> dict[str, Any]:
+    definition = get_perturbation(perturbation)
+    swap_timestep = (
+        definition.swap_timestep if swap_timestep is None else swap_timestep
+    )
+    max_timesteps = (
+        definition.fixed_gate_max_timesteps
+        if max_timesteps is None
+        else max_timesteps
+    )
+    fixed_assignments = {
+        **FIXED_ASSIGNMENTS,
+        **(definition.fixed_assignment_overrides or {}),
+    }
+    recovery_assignments = {
+        **fixed_assignments,
+        **(definition.recovery_assignment_overrides or {}),
+    }
     scenario = build_scenario(seed)
     assignment_policy = (
-        RECOVERY_ASSIGNMENTS if condition == "recovery" else FIXED_ASSIGNMENTS
+        recovery_assignments if condition == "recovery" else fixed_assignments
     )
     assignments = apply_fixed_assignments(scenario, assignment_policy)
     preferences = _preferences()
@@ -138,8 +160,7 @@ async def run_fixed(
     schedule = build_schedule(
         "control" if condition == "control" else "silent",
         swap_timestep,
-        lever=lever,
-        weak_model=weak_model,
+        perturbation=perturbation,
     )
     schedule.register(registry)
     recorder = Recorder(scenario.task_answers, scenario.task_meta)
@@ -174,9 +195,11 @@ async def run_fixed(
     downstream_stages = {"reconciliation", "prioritization", "capacity"}
     result = {
         "condition": condition,
-        "lever": lever,
+        "perturbation_name": perturbation,
+        "lever": definition.lever,
         "seed": seed,
         "swap_timestep": swap_timestep,
+        "max_timesteps": max_timesteps,
         "assignments": assignments,
         "perturbation": schedule.manifest(),
         "r_check": score_summary["r_check"],
@@ -202,11 +225,13 @@ async def run_fixed(
             for task in scenario.workflow.tasks.values()
         },
         "final_target_tools": [
-            tool.name for tool in registry.get_agent(TARGET_WORKER).tools
+            tool.name for tool in registry.get_agent(definition.target_worker).tools
         ],
-        "final_target_model": registry.get_agent(TARGET_WORKER).config.model_name,
+        "final_target_model": registry.get_agent(
+            definition.target_worker
+        ).config.model_name,
     }
-    run_dir = out_root / f"fixed_{lever}_{condition}_t{swap_timestep}_seed{seed}"
+    run_dir = out_root / f"fixed_{perturbation}_{condition}_t{swap_timestep}_seed{seed}"
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "result.json").write_text(json.dumps(result, indent=2))
     print(
@@ -322,13 +347,22 @@ async def main() -> None:
     disable_agents_tracing_if_proxied()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--swap-timestep", type=int, default=3)
-    parser.add_argument("--max-timesteps", type=int, default=32)
-    parser.add_argument("--lever", choices=["toolset", "judgment"], default="toolset")
     parser.add_argument(
-        "--weak-model",
-        default=JUDGMENT_WORKER_MODEL,
-        help="Replacement model used by the judgment lever.",
+        "--swap-timestep",
+        type=int,
+        default=None,
+        help="Override the selected perturbation's default change timestep.",
+    )
+    parser.add_argument(
+        "--max-timesteps",
+        type=int,
+        default=None,
+        help="Override the selected perturbation's fixed-gate horizon.",
+    )
+    parser.add_argument(
+        "--perturbation",
+        choices=sorted(PERTURBATIONS),
+        default=DEFAULT_PERTURBATION,
     )
     parser.add_argument(
         "--out", type=Path, default=Path("experiments/ds_reroute/outputs/fixed_gate")
@@ -340,8 +374,7 @@ async def main() -> None:
         args.swap_timestep,
         args.max_timesteps,
         args.out,
-        args.lever,
-        args.weak_model,
+        args.perturbation,
     )
     degradation = await run_fixed(
         "degradation",
@@ -349,8 +382,7 @@ async def main() -> None:
         args.swap_timestep,
         args.max_timesteps,
         args.out,
-        args.lever,
-        args.weak_model,
+        args.perturbation,
     )
     recovery = await run_fixed(
         "recovery",
@@ -358,12 +390,12 @@ async def main() -> None:
         args.swap_timestep,
         args.max_timesteps,
         args.out,
-        args.lever,
-        args.weak_model,
+        args.perturbation,
     )
     gate = evaluate_recovery_gate(control, degradation, recovery)
     (
-        args.out / f"gate_{args.lever}_t{args.swap_timestep}_seed{args.seed}.json"
+        args.out
+        / f"gate_{args.perturbation}_t{control['swap_timestep']}_seed{args.seed}.json"
     ).write_text(json.dumps(gate, indent=2))
     print(json.dumps(gate, indent=2), flush=True)
     if not gate["passed"]:

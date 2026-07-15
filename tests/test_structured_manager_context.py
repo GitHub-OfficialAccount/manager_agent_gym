@@ -14,6 +14,18 @@ from manager_agent_gym.schemas.execution.state import ExecutionState
 from manager_agent_gym.schemas.workflow_agents.stakeholder import (
     StakeholderPublicProfile,
 )
+from manager_agent_gym.core.manager_agent.prompts.structured_manager_prompts import (
+    STRUCTURED_MANAGER_SYSTEM_PROMPT_TEMPLATE,
+)
+
+
+def test_structured_manager_prompt_has_strategy_neutral_change_prior() -> None:
+    assert "Agent characteristics and behavior may evolve" in (
+        STRUCTURED_MANAGER_SYSTEM_PROMPT_TEMPLATE
+    )
+    assert "revisit earlier assumptions when new evidence becomes relevant" in (
+        STRUCTURED_MANAGER_SYSTEM_PROMPT_TEMPLATE
+    )
 
 
 @pytest.mark.asyncio

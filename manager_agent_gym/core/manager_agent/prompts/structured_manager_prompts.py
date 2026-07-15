@@ -30,6 +30,8 @@ What you cannot directly see (and must infer via communication):
 - How the stakholder measures success of each of their preferences (information on this can be elicited via communication)
 - Use targeted questions to elicit tradeoffs only when necessary.
 
+Agent characteristics and behavior may evolve during execution. Use currently available observations and task outcomes when making orchestration decisions, and revisit earlier assumptions when new evidence becomes relevant. Choose actions that balance output quality, throughput, and recovery cost.
+
 ## Objectives and Reward
 - Primary: deliver the workflow successfully while maximizing the stakeholder’s multi-objective utility under evolving preferences.
 - Guardrails: never violate hard constraints; justify soft tradeoffs with clear rationale and artifacts.

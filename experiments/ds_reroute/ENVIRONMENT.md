@@ -187,6 +187,45 @@ leak the tool swap.
 System prompts remain hidden and `quality_digest` remains `none`. Normal
 messages and workflow resources remain observable.
 
+### Named perturbation definitions
+
+Experiment-local perturbations are defined once in `perturbations.py`. Each
+named definition owns its target worker, change lever, concrete mutations,
+condition-specific announcement text, manager-visible capability metadata,
+default swap timestep, manager/fixed-gate horizons, and replacement model.
+The normal runner and fixed-assignment gate both consume this same registry.
+Timing flags remain available only as explicit overrides for timing studies.
+The default horizon is 32 timesteps because the native manager assigns one
+task per action; a 16-timestep horizon cannot complete this 16-node DAG once
+normal observation and dependency-join steps are included.
+
+Fresh preset-resolution run (full observation, seed 47, 2026-07-15): the
+change fired at timestep 3 and the episode completed 16/16 tasks at timestep
+27 with `R_check=0.917`. The first post-change robust audit remained on the
+changed portfolio analyst (46 vs. ground truth 68); the manager then routed
+the other two robust audits to the risk analyst, both exactly correct. This is
+partial adaptation evidence and confirms that the 32-timestep horizon is
+necessary rather than merely defensive.
+
+The validated primary definition is `toolset_to_screening`. The
+`model_prompt_judgment` scaffold is disabled unless an explicitly approved
+replacement model is configured in its definition; project policy currently
+permits live calls only to DeepSeek V4 Flash, so that field remains `None`.
+
+Select a perturbation without editing runner code:
+
+```bash
+uv run python -m experiments.ds_reroute.run \
+    --perturbation toolset_to_screening \
+    --conditions control silent partial full \
+    --seeds 42
+```
+
+Adding another experiment-level perturbation now requires one new definition
+in `perturbations.py` plus its contract test and documentation. MA-Gym schemas
+or registry code change only when the intervention needs a genuinely new core
+mutation mechanism beyond the existing prompt, model, and tool swaps.
+
 ## Ground Truth And Reward
 
 The scenario stores deterministic expected values for every predefined scored
