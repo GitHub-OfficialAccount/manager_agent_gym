@@ -1041,6 +1041,12 @@ class WorkflowExecutionEngine:
             communication_service=self.communication_service,
             tool_factory=ToolFactory(),
         )
+        changes.extend(
+            await self.observation_policy.apply_scheduled_disclosures_for_timestep(
+                timestep=self.current_timestep,
+                communication_service=self.communication_service,
+            )
+        )
 
         # Mirror registry agents into workflow so observations/assignments can see them
         try:

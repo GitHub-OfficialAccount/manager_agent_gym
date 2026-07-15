@@ -12,7 +12,7 @@ from manager_agent_gym.schemas.execution.perturbations import (
     ToolSwap,
 )
 
-from .scenario import SCREENING_TOOL_IDS
+from .scenario import SCREENING_TOOL_IDS, WORKER_SPECS
 
 Condition = Literal["control", "silent", "partial", "full"]
 
@@ -40,18 +40,18 @@ DEGRADED_JUDGMENT_PROMPT = (
 
 @dataclass(frozen=True)
 class PerturbationDefinition:
-    """All experiment-local choices needed to construct one intervention."""
+    """The objective worker mutation, independent of manager observability."""
 
     name: str
     lever: Literal["toolset", "judgment"]
     target_worker: str
-    labels: dict[Condition, str]
+    label: str
     swap_timestep: int
     max_timesteps: int
     fixed_gate_max_timesteps: int
     replacement_model: str | None = None
     replacement_tool_ids: tuple[str, ...] | None = None
-    visible_capabilities: dict[Condition, tuple[str, ...] | None] | None = None
+    replacement_capabilities: tuple[str, ...] | None = None
     replacement_prompt: str | None = None
     requires_replacement_model: bool = False
     fixed_assignment_overrides: dict[str, str] | None = None
@@ -65,13 +65,7 @@ class PerturbationDefinition:
         if condition == "control":
             return PerturbationSchedule()
 
-        announce = condition in {"partial", "full"}
         if self.replacement_tool_ids is not None:
-            capabilities = (
-                self.visible_capabilities.get(condition)
-                if self.visible_capabilities is not None
-                else None
-            )
             return PerturbationSchedule(
                 perturbations=[
                     ToolSwap(
@@ -79,10 +73,12 @@ class PerturbationDefinition:
                         agent_id=self.target_worker,
                         new_tool_ids=list(self.replacement_tool_ids),
                         new_agent_capabilities=(
-                            list(capabilities) if capabilities is not None else None
+                            list(self.replacement_capabilities)
+                            if self.replacement_capabilities is not None
+                            else None
                         ),
-                        announce=announce,
-                        label=self.labels[condition],
+                        announce=False,
+                        label=self.label,
                     )
                 ]
             )
@@ -109,8 +105,8 @@ class PerturbationDefinition:
                     timestep=swap_timestep,
                     agent_id=self.target_worker,
                     new_system_prompt=self.replacement_prompt,
-                    announce=announce,
-                    label=self.labels[condition],
+                    announce=False,
+                    label=self.label,
                 )
             )
         if not mutations:
@@ -123,28 +119,12 @@ PERTURBATIONS: dict[str, PerturbationDefinition] = {
         name=TOOLSET_TO_SCREENING,
         lever="toolset",
         target_worker=PRIMARY_TARGET_WORKER,
-        labels={
-            "control": "no change",
-            "silent": "internal capability update",
-            "partial": "the analyst's capability profile changed",
-            "full": "robust percentile analysis changed to mean-plus-two-SD screening",
-        },
+        label="replace robust toolset with screening toolset",
         swap_timestep=3,
         max_timesteps=32,
         fixed_gate_max_timesteps=32,
         replacement_tool_ids=tuple(SCREENING_TOOL_IDS),
-        visible_capabilities={
-            "control": None,
-            "silent": None,
-            "partial": (
-                "Methods: changed; current outlier-screening method unknown",
-                "Methods: portfolio profiling",
-            ),
-            "full": (
-                "Methods: mean-plus-two-SD screening",
-                "Methods: portfolio profiling",
-            ),
-        },
+        replacement_capabilities=tuple(WORKER_SPECS["screening_analyst"][1]),
         recovery_assignment_overrides={
             "audit_a_robust": "risk_analyst",
             "audit_b_robust": "risk_analyst",
@@ -155,15 +135,7 @@ PERTURBATIONS: dict[str, PerturbationDefinition] = {
         name=MODEL_PROMPT_JUDGMENT,
         lever="judgment",
         target_worker=PRIMARY_TARGET_WORKER,
-        labels={
-            "control": "no change",
-            "silent": "internal judgment update",
-            "partial": "the analyst's behavior changed",
-            "full": (
-                "the analyst's model and analytical judgment changed; it now "
-                "has limited multi-part integration ability"
-            ),
-        },
+        label="replace model and analytical judgment prompt",
         swap_timestep=3,
         max_timesteps=32,
         fixed_gate_max_timesteps=32,

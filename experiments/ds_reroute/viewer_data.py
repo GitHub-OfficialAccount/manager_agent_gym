@@ -331,6 +331,10 @@ class RunBundle:
     def perturbations(self) -> list[dict[str, Any]]:
         """Return manifest perturbations enriched with observed before/after tools."""
         raw = self.manifest.get("perturbation", {}).get("perturbations", [])
+        disclosures = self.manifest.get("observation_policy", {}).get(
+            "scheduled_worker_disclosures", []
+        )
+        observability = self.manifest.get("observability", {})
         starts = [
             event
             for event in self.events
@@ -341,6 +345,21 @@ class RunBundle:
             item = dict(perturbation)
             timestep = int(item.get("timestep", 0))
             agent_id = item.get("agent_id")
+            disclosure = next(
+                (
+                    candidate
+                    for candidate in disclosures
+                    if candidate.get("agent_id") == agent_id
+                    and int(candidate.get("timestep", -1)) == timestep
+                ),
+                {},
+            )
+            if disclosure:
+                item["announce"] = bool(disclosure.get("announce", False))
+                item["announcement"] = disclosure.get("announcement")
+            item["capability_projection"] = observability.get(
+                "capability_projection"
+            )
             prior = [
                 event
                 for event in starts

@@ -13,11 +13,30 @@ trivially "detect" behavior changes by reading the policy instead of observing
 behavior.
 """
 
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, PrivateAttr
+
+if TYPE_CHECKING:
+    from ...core.communication.service import CommunicationService
 
 WorkerMetadataLevel = Literal["id_only", "capabilities", "full"]
+
+
+class WorkerObservationDisclosure(BaseModel):
+    """A scheduled change to one worker's manager-visible projection."""
+
+    timestep: int = Field(ge=0)
+    agent_id: str
+    capability_override: list[str] | None = Field(
+        default=None,
+        description=(
+            "Capabilities shown after this disclosure. None removes any prior "
+            "override and exposes the worker's current canonical capabilities."
+        ),
+    )
+    announce: bool = False
+    announcement: str | None = None
 
 
 class ObservationPolicy(BaseModel):
@@ -57,10 +76,66 @@ class ObservationPolicy(BaseModel):
             "channel for teammate-change experiments; populated by the engine."
         ),
     )
+    scheduled_worker_disclosures: list[WorkerObservationDisclosure] = Field(
+        default_factory=list,
+        description=(
+            "Manager-facing capability projections and announcements scheduled "
+            "independently of objective worker mutations."
+        ),
+    )
+
+    _capability_overrides: dict[str, list[str]] = PrivateAttr(default_factory=dict)
+    _applied_disclosure_timesteps: set[int] = PrivateAttr(default_factory=set)
+
+    async def apply_scheduled_disclosures_for_timestep(
+        self,
+        timestep: int,
+        communication_service: "CommunicationService | None" = None,
+    ) -> list[str]:
+        """Apply this timestep's manager-facing disclosures exactly once."""
+        if timestep in self._applied_disclosure_timesteps:
+            return []
+
+        disclosures = [
+            disclosure
+            for disclosure in self.scheduled_worker_disclosures
+            if disclosure.timestep == timestep
+        ]
+        changes: list[str] = []
+        for disclosure in disclosures:
+            if disclosure.capability_override is None:
+                self._capability_overrides.pop(disclosure.agent_id, None)
+                projection = "current canonical capabilities"
+            else:
+                self._capability_overrides[disclosure.agent_id] = list(
+                    disclosure.capability_override
+                )
+                projection = "an observation-policy capability override"
+
+            if disclosure.announce:
+                if not disclosure.announcement:
+                    raise ValueError(
+                        "An announced worker disclosure requires announcement text."
+                    )
+                if communication_service is not None:
+                    await communication_service.broadcast_message(
+                        from_agent=disclosure.agent_id,
+                        content=disclosure.announcement,
+                    )
+            changes.append(
+                f"Worker observation disclosure for {disclosure.agent_id}: "
+                f"{projection}; announced={disclosure.announce}"
+            )
+
+        self._applied_disclosure_timesteps.add(timestep)
+        return changes
 
     def redact_agent_config(self, config):
         """Return a copy of an agent config filtered to this policy."""
         updates: dict = {}
+        capability_override = self._capability_overrides.get(config.agent_id)
+        if capability_override is not None:
+            updates["agent_capabilities"] = list(capability_override)
         if not self.expose_worker_system_prompts:
             updates["system_prompt"] = "[REDACTED]"
         if self.worker_metadata == "id_only":

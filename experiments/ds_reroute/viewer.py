@@ -201,6 +201,14 @@ def build_viewer(root: Path) -> None:
                         ui.label(
                             "Announced to manager" if change.get("announce") else "Unannounced"
                         ).classes("text-xs text-gray-600")
+                        if change.get("capability_projection"):
+                            ui.label(
+                                "Manager view: " + change["capability_projection"]
+                            ).classes("text-xs text-gray-600")
+                        if change.get("announcement"):
+                            ui.label(change["announcement"]).classes(
+                                "text-xs text-gray-700"
+                            )
                     with ui.column().classes("min-w-72 flex-1 gap-0"):
                         ui.label("Before").classes("text-xs font-semibold text-gray-500")
                         ui.label(", ".join(change.get("before_tools", [])) or "Unavailable").classes(

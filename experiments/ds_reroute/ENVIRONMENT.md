@@ -180,20 +180,29 @@ Conditions are:
   declared method to mean-plus-two-SD screening (oracle information condition).
 
 The primary role description remains stable in every condition. Declared
-method metadata changes only when permitted by the condition, so the full
-condition has no stale-profile contradiction and the silent condition does not
-leak the tool swap.
+method metadata is now a manager-facing observation projection rather than a
+mutation of the canonical worker config. The full condition therefore has no
+stale-profile contradiction, while the silent condition preserves the original
+declaration as a prior without changing the underlying post-swap worker.
 
 System prompts remain hidden and `quality_digest` remains `none`. Normal
 messages and workflow resources remain observable.
 
 ### Named perturbation definitions
 
-Experiment-local perturbations are defined once in `perturbations.py`. Each
-named definition owns its target worker, change lever, concrete mutations,
-condition-specific announcement text, manager-visible capability metadata,
-default swap timestep, manager/fixed-gate horizons, and replacement model.
-The normal runner and fixed-assignment gate both consume this same registry.
+Experiment-local objective perturbations are defined once in
+`perturbations.py`. Each named `PerturbationDefinition` owns its target worker,
+change lever, canonical mutation, default swap timestep, manager/fixed-gate
+horizons, and replacement model. Every non-control observability condition
+therefore registers the same mutation.
+
+`observability.py` separately defines silent, partial, and full
+`ObservabilityDefinition` objects plus perturbation-specific disclosure text.
+At the swap timestep, the engine first applies the objective mutation and then
+applies the scheduled manager-facing capability projection and optional
+announcement. Run manifests serialize the objective perturbation,
+observability definition, and effective observation policy separately. The
+normal runner and fixed-assignment gate both consume this composition.
 Timing flags remain available only as explicit overrides for timing studies.
 The default horizon is 32 timesteps because the native manager assigns one
 task per action; a 16-timestep horizon cannot complete this 16-node DAG once
@@ -206,6 +215,17 @@ changed portfolio analyst (46 vs. ground truth 68); the manager then routed
 the other two robust audits to the risk analyst, both exactly correct. This is
 partial adaptation evidence and confirms that the 32-timestep horizon is
 necessary rather than merely defensive.
+
+Strategy-neutral-prior follow-up (full observation, 2026-07-15): after adding
+only the shared prior that agent behavior may evolve and earlier assumptions
+may be revisited, the two previously contradictory seeds both completed 16/16
+with correct routing of all three robust audits to `risk_analyst`. Seed 47
+improved from `R_check=0.917` to effectively `1.000`; seed 45 improved from
+`0.869` to `1.000`. The manager's recorded reasoning used the current method
+profiles coherently. This two-seed result clears the prompt-consistency gate
+for moving on, but it is not a causal estimate because live model sampling at
+temperature 1 remains stochastic. No further prompt hardening is planned in
+this experiment phase.
 
 The validated primary definition is `toolset_to_screening`. The
 `model_prompt_judgment` scaffold is disabled unless an explicitly approved

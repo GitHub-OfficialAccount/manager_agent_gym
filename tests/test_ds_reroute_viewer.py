@@ -244,6 +244,40 @@ def test_run_bundle_enriches_perturbation_with_prechange_tools(tmp_path) -> None
     assert perturbation["after_tools"] == ["screen"]
 
 
+def test_run_bundle_uses_decoupled_disclosure_and_preserves_legacy_announcement(
+    tmp_path,
+) -> None:
+    path = tmp_path / "silent_seed7" / "run.json"
+    _write_bundle(path)
+    payload = json.loads(path.read_text())
+    payload["manifest"]["perturbation"]["perturbations"][0]["announce"] = True
+    path.write_text(json.dumps(payload))
+
+    legacy = RunBundle(path).perturbations()[0]
+    assert legacy["announce"] is True
+
+    payload["manifest"]["observability"] = {
+        "capability_projection": "baseline",
+        "announce": False,
+    }
+    payload["manifest"]["observation_policy"] = {
+        "scheduled_worker_disclosures": [
+            {
+                "timestep": 3,
+                "agent_id": "analyst",
+                "capability_override": ["original method"],
+                "announce": False,
+                "announcement": None,
+            }
+        ]
+    }
+    path.write_text(json.dumps(payload))
+
+    decoupled = RunBundle(path).perturbations()[0]
+    assert decoupled["announce"] is False
+    assert decoupled["capability_projection"] == "baseline"
+
+
 def test_discover_runs_uses_bundle_metadata(tmp_path) -> None:
     path = tmp_path / "silent_seed7" / "run.json"
     _write_bundle(path)

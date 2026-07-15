@@ -4,6 +4,7 @@ from dataclasses import replace
 import pytest
 
 from manager_agent_gym import AgentRegistry
+from manager_agent_gym.core.communication.service import CommunicationService
 from manager_agent_gym.core.workflow_agents.prompts.ai_agent_prompts import (
     AI_AGENT_TASK_TEMPLATE,
 )
@@ -24,6 +25,10 @@ from experiments.ds_reroute.perturbations import (
     TOOLSET_TO_SCREENING,
     build_schedule,
     get_perturbation,
+)
+from experiments.ds_reroute.observability import (
+    build_observation_policy,
+    get_observability,
 )
 from experiments.ds_reroute.run import Recorder, _preferences
 from experiments.ds_reroute.scenario import (
@@ -166,15 +171,15 @@ def test_worker_profiles_expose_faithful_primary_and_method_baseline():
 
 
 @pytest.mark.parametrize(
-    ("condition", "visible_method"),
+    "condition",
     [
-        ("silent", None),
-        ("partial", "Methods: changed; current outlier-screening method unknown"),
-        ("full", "Methods: mean-plus-two-SD screening"),
+        "silent",
+        "partial",
+        "full",
     ],
 )
 def test_primary_perturbation_changes_one_worker_and_preserves_core_tools(
-    condition, visible_method
+    condition,
 ):
     schedule = build_schedule(condition, swap_timestep=3)
     manifest = schedule.manifest()
@@ -184,26 +189,37 @@ def test_primary_perturbation_changes_one_worker_and_preserves_core_tools(
     assert change["agent_id"] == PRIMARY_TARGET_WORKER
     assert change["new_tool_ids"] == list(SCREENING_TOOL_IDS)
     assert set(CORE_TOOL_IDS) <= set(change["new_tool_ids"])
-    assert change["announce"] is (condition != "silent")
-    capabilities = change["new_agent_capabilities"]
-    if visible_method is None:
-        assert capabilities is None
-    else:
-        assert visible_method in capabilities
-        assert "Methods: portfolio profiling" in capabilities
+    assert change["announce"] is False
+    assert "Methods: mean-plus-two-SD screening" in change[
+        "new_agent_capabilities"
+    ]
+    assert "Methods: portfolio profiling" in change["new_agent_capabilities"]
+
+
+def test_noncontrol_conditions_have_identical_objective_perturbations():
+    manifests = [
+        build_schedule(condition, swap_timestep=3).manifest()
+        for condition in ("silent", "partial", "full")
+    ]
+
+    assert manifests[0] == manifests[1] == manifests[2]
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    ("condition", "expected_method"),
+    ("condition", "observed_method", "announced"),
     [
-        ("silent", "Methods: percentile outlier screening"),
-        ("partial", "Methods: changed; current outlier-screening method unknown"),
-        ("full", "Methods: mean-plus-two-SD screening"),
+        ("silent", "Methods: percentile outlier screening", False),
+        (
+            "partial",
+            "Methods: changed; current outlier-screening method unknown",
+            True,
+        ),
+        ("full", "Methods: mean-plus-two-SD screening", True),
     ],
 )
-async def test_primary_perturbation_applies_condition_visible_capabilities(
-    condition, expected_method
+async def test_observability_changes_manager_view_not_canonical_worker(
+    condition, observed_method, announced
 ):
     scenario = build_scenario(42)
     config, tools = build_worker(scenario, PRIMARY_TARGET_WORKER, "robust")
@@ -213,13 +229,35 @@ async def test_primary_perturbation_applies_condition_visible_capabilities(
     registry.register_ai_agent(config, tools)
     schedule = build_schedule(condition, swap_timestep=3)
     schedule.register(registry)
+    definition = get_perturbation(TOOLSET_TO_SCREENING)
+    policy = build_observation_policy(condition, definition, 3)
+    communication = CommunicationService()
 
     await registry.apply_scheduled_changes_for_timestep(3)
+    await policy.apply_scheduled_disclosures_for_timestep(3, communication)
 
     changed = registry.get_agent(PRIMARY_TARGET_WORKER)
     assert changed is not None
-    assert expected_method in changed.config.agent_capabilities
+    assert "Methods: mean-plus-two-SD screening" in changed.config.agent_capabilities
     assert changed.config.agent_description == config.agent_description
+    observed = policy.redact_agent_config(changed.config)
+    assert observed_method in observed.agent_capabilities
+    messages = communication.get_all_messages()
+    assert bool(messages) is announced
+    if announced:
+        assert messages[0].sender_id == PRIMARY_TARGET_WORKER
+
+
+def test_observability_manifests_distinguish_conditions_without_mutation_fields():
+    silent = get_observability("silent").manifest()
+    partial = get_observability("partial").manifest()
+    full = get_observability("full").manifest()
+
+    assert silent["capability_projection"] == "baseline"
+    assert partial["capability_projection"] == "uncertain"
+    assert full["capability_projection"] == "current"
+    assert silent["announce"] is False
+    assert partial["announce"] is full["announce"] is True
 
 
 def test_control_has_no_perturbation():
@@ -244,7 +282,21 @@ def test_judgment_perturbation_bundles_model_and_prompt_without_tool_swap(condit
     assert prompt_change["kind"] == "prompt_swap"
     assert prompt_change["agent_id"] == PRIMARY_TARGET_WORKER
     assert prompt_change["new_system_prompt"] == DEGRADED_JUDGMENT_PROMPT
-    assert prompt_change["announce"] is (condition != "silent")
+    assert prompt_change["announce"] is False
+
+
+def test_judgment_objective_perturbation_is_observability_invariant():
+    approved_model = "openrouter/explicitly-approved/test-model"
+    definition = replace(
+        get_perturbation(MODEL_PROMPT_JUDGMENT),
+        replacement_model=approved_model,
+    )
+    manifests = [
+        definition.build_schedule(condition, 3).manifest()
+        for condition in ("silent", "partial", "full")
+    ]
+
+    assert manifests[0] == manifests[1] == manifests[2]
 
 
 @pytest.mark.asyncio

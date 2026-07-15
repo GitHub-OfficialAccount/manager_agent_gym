@@ -6,7 +6,10 @@ from manager_agent_gym.core.manager_agent.interface import ManagerAgent
 from manager_agent_gym.core.workflow_agents.interface import AgentInterface
 from manager_agent_gym.schemas.core.workflow import Workflow
 from manager_agent_gym.schemas.execution.manager import ManagerObservation
-from manager_agent_gym.schemas.execution.observation_policy import ObservationPolicy
+from manager_agent_gym.schemas.execution.observation_policy import (
+    ObservationPolicy,
+    WorkerObservationDisclosure,
+)
 from manager_agent_gym.schemas.execution.state import ExecutionState
 from manager_agent_gym.schemas.preferences.preference import PreferenceWeights
 from manager_agent_gym.schemas.workflow_agents import AgentConfig
@@ -124,3 +127,55 @@ def test_redaction_does_not_mutate_original() -> None:
     redacted = policy.redact_agent_config(worker.config)
     assert redacted.system_prompt == "[REDACTED]"
     assert worker.config.system_prompt == "SECRET WORKER POLICY"
+
+
+@pytest.mark.asyncio
+async def test_scheduled_disclosure_overlays_capabilities_without_mutating_worker():
+    worker = _Worker("w1")
+    policy = ObservationPolicy(
+        scheduled_worker_disclosures=[
+            WorkerObservationDisclosure(
+                timestep=3,
+                agent_id="w1",
+                capability_override=["changed capability unknown"],
+            )
+        ]
+    )
+
+    assert policy.redact_agent_config(worker.config).agent_capabilities == [
+        "analysis",
+        "drafting",
+    ]
+    await policy.apply_scheduled_disclosures_for_timestep(3)
+
+    assert policy.redact_agent_config(worker.config).agent_capabilities == [
+        "changed capability unknown"
+    ]
+    assert worker.config.agent_capabilities == ["analysis", "drafting"]
+
+
+@pytest.mark.asyncio
+async def test_scheduled_disclosure_announces_once_and_serializes_in_manifest():
+    communication = CommunicationService()
+    policy = ObservationPolicy(
+        scheduled_worker_disclosures=[
+            WorkerObservationDisclosure(
+                timestep=3,
+                agent_id="w1",
+                capability_override=None,
+                announce=True,
+                announcement="Worker behavior changed.",
+            )
+        ]
+    )
+
+    first = await policy.apply_scheduled_disclosures_for_timestep(3, communication)
+    second = await policy.apply_scheduled_disclosures_for_timestep(3, communication)
+
+    assert len(first) == 1
+    assert second == []
+    assert [message.content for message in communication.get_all_messages()] == [
+        "Worker behavior changed."
+    ]
+    manifest = policy.model_dump(mode="json")
+    assert manifest["scheduled_worker_disclosures"][0]["agent_id"] == "w1"

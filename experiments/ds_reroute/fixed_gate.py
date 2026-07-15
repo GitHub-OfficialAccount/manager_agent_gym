@@ -33,7 +33,6 @@ from manager_agent_gym.schemas.execution.manager_actions import (
     NoOpAction,
     RetryTaskAction,
 )
-from manager_agent_gym.schemas.execution.observation_policy import ObservationPolicy
 
 from .perturbations import (
     DEFAULT_PERTURBATION,
@@ -42,6 +41,7 @@ from .perturbations import (
     build_schedule,
     get_perturbation,
 )
+from .observability import build_observation_policy, get_observability
 from .run import Recorder, WORKER_TIERS, _preferences
 from .scenario import Scenario, build_scenario, build_worker
 
@@ -164,10 +164,11 @@ async def run_fixed(
     )
     schedule.register(registry)
     recorder = Recorder(scenario.task_answers, scenario.task_meta)
-    observation_policy = ObservationPolicy(
-        expose_worker_system_prompts=False,
-        worker_metadata="capabilities",
-        quality_digest="none",
+    observation_condition = "control" if condition == "control" else "silent"
+    observation_policy = build_observation_policy(
+        observation_condition,
+        definition,
+        swap_timestep,
     )
     engine = WorkflowExecutionEngine(
         workflow=scenario.workflow,
@@ -202,6 +203,8 @@ async def run_fixed(
         "max_timesteps": max_timesteps,
         "assignments": assignments,
         "perturbation": schedule.manifest(),
+        "observability": get_observability(observation_condition).manifest(),
+        "observation_policy": observation_policy.model_dump(mode="json"),
         "r_check": score_summary["r_check"],
         "completed_predefined": score_summary["completed_predefined"],
         "total_predefined": score_summary["total_predefined"],

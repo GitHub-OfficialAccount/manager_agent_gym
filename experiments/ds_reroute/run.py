@@ -30,7 +30,6 @@ from manager_agent_gym.core.common.model_provider import (
 from manager_agent_gym.core.common.run_trace import RunTraceRecorder
 from manager_agent_gym.core.communication.service import CommunicationService
 from manager_agent_gym.schemas.execution.callbacks import TimestepEndContext
-from manager_agent_gym.schemas.execution.observation_policy import ObservationPolicy
 from manager_agent_gym.schemas.preferences.evaluator import (
     AggregationStrategy,
     Evaluator,
@@ -47,6 +46,7 @@ from .perturbations import (
     build_schedule,
     get_perturbation,
 )
+from .observability import build_observation_policy, get_observability
 from .scenario import build_scenario, build_worker, extract_metric, is_correct, score
 
 logging.basicConfig(
@@ -194,10 +194,10 @@ async def run_one(
         perturbation=perturbation,
     )
     schedule.register(registry)
-    observation_policy = ObservationPolicy(
-        expose_worker_system_prompts=False,
-        worker_metadata="capabilities",
-        quality_digest="none",
+    observation_policy = build_observation_policy(
+        condition,
+        definition,
+        swap_timestep,
     )
     manager = ChainOfThoughtManagerAgent(preferences=preferences)
     stakeholder = create_stakeholder_agent(persona="balanced", preferences=preferences)
@@ -212,6 +212,7 @@ async def run_one(
             "swap_timestep": swap_timestep,
             "max_timesteps": max_timesteps,
             "target_worker": definition.target_worker,
+            "observability": get_observability(condition).manifest(),
         }
     )
     engine = WorkflowExecutionEngine(
@@ -266,6 +267,7 @@ async def run_one(
         "started_at": started_at,
         "finished_at": datetime.now().isoformat(),
         "observation_policy": observation_policy.model_dump(mode="json"),
+        "observability": get_observability(condition).manifest(),
         "perturbation": schedule.manifest(),
         "final_tools": {
             agent_id: [tool.name for tool in registry.get_agent(agent_id).tools]
