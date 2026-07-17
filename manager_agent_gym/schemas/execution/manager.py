@@ -46,6 +46,13 @@ class ManagerObservation(BaseModel):
         ..., ge=0.0, le=1.0, description="Completion percentage"
     )
     observation_timestamp: datetime = Field(default_factory=datetime.now)
+    observation_aid: str | None = Field(
+        default=None,
+        description=(
+            "Optional derived representation of evidence already visible elsewhere "
+            "in this observation. It must not contain hidden environment state."
+        ),
+    )
 
     # Optional timeline awareness
     max_timesteps: int | None = Field(

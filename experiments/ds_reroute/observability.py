@@ -85,6 +85,7 @@ def build_observation_policy(
     condition: Condition,
     perturbation: PerturbationDefinition,
     swap_timestep: int,
+    observation_aid: str = "none",
 ) -> ObservationPolicy:
     """Compose a condition with a perturbation without changing the mutation."""
     observability = get_observability(condition)
@@ -115,5 +116,6 @@ def build_observation_policy(
         expose_worker_system_prompts=False,
         worker_metadata="capabilities",
         quality_digest="none",
+        observation_aid=observation_aid,
         scheduled_worker_disclosures=disclosures,
     )

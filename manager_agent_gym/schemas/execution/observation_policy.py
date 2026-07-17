@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from ...core.communication.service import CommunicationService
 
 WorkerMetadataLevel = Literal["id_only", "capabilities", "full"]
+ObservationAidMode = Literal["none", "generic_summary"]
 
 
 class WorkerObservationDisclosure(BaseModel):
@@ -74,6 +75,14 @@ class ObservationPolicy(BaseModel):
             "Per-worker quality signal in the observation: 'none' (blind) or "
             "'per_worker' (a recent-correctness summary per worker). The detection "
             "channel for teammate-change experiments; populated by the engine."
+        ),
+    )
+    observation_aid: ObservationAidMode = Field(
+        default="none",
+        description=(
+            "Optional information-preserving representation of the manager-visible "
+            "observation. 'none' is the native baseline; 'generic_summary' adds a "
+            "neutral free-form summary generated only from already-visible evidence."
         ),
     )
     scheduled_worker_disclosures: list[WorkerObservationDisclosure] = Field(

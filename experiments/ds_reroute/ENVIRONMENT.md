@@ -186,7 +186,11 @@ stale-profile contradiction, while the silent condition preserves the original
 declaration as a prior without changing the underlying post-swap worker.
 
 System prompts remain hidden and `quality_digest` remains `none`. Normal
-messages and workflow resources remain observable.
+messages and workflow resources remain observable. Phase-2 Arm 1 is selected
+independently with `--observation-aid generic_summary`; it adds a neutral summary
+derived from the exact native manager user-context. The default `none` path makes no
+summarizer call. Timestep traces retain the exact pre-action observation used by
+the manager, not a reconstruction after worker execution.
 
 ### Named perturbation definitions
 

@@ -6,7 +6,7 @@ state and take actions to influence execution.
 """
 
 from collections import deque
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Protocol
 from abc import ABC, abstractmethod
 
 from ...schemas.execution import ManagerObservation
@@ -20,6 +20,14 @@ if TYPE_CHECKING:
     from ...schemas.core.workflow import Workflow
     from ...schemas.execution.state import ExecutionState
     from ..communication.service import CommunicationService
+
+
+class ObservationAidBuilder(Protocol):
+    """Build a representation from manager-visible evidence only."""
+
+    async def build(
+        self, *, source_text: str, observation: ManagerObservation
+    ) -> str: ...
 
 
 class ManagerAgent(ABC):
@@ -59,6 +67,8 @@ class ManagerAgent(ABC):
         self._seed: int = 42
         # Observation contract (set by engine; defaults to redacted baseline)
         self._observation_policy: ObservationPolicy = ObservationPolicy()
+        self._observation_aid_builder: ObservationAidBuilder | None = None
+        self._last_decision_observation: ManagerObservation | None = None
 
     def configure_seed(self, seed: int) -> None:
         """Configure deterministic seed for this manager (overridable)."""
@@ -84,6 +94,26 @@ class ManagerAgent(ABC):
     def set_observation_policy(self, policy: ObservationPolicy) -> None:
         """Set the observation contract for this execution (set by engine)."""
         self._observation_policy = policy
+
+    def set_observation_aid_builder(
+        self, builder: ObservationAidBuilder | None
+    ) -> None:
+        """Configure the runtime builder selected by the observation policy."""
+        self._observation_aid_builder = builder
+
+    def clear_last_decision_observation(self) -> None:
+        """Clear the per-step capture before a manager decision begins."""
+        self._last_decision_observation = None
+
+    def capture_decision_observation(self, observation: ManagerObservation) -> None:
+        """Retain the exact pre-action observation values used for a decision."""
+        self._last_decision_observation = observation.model_copy(deep=True)
+
+    def get_last_decision_observation(self) -> ManagerObservation | None:
+        """Return an isolated copy of the latest pre-action observation."""
+        if self._last_decision_observation is None:
+            return None
+        return self._last_decision_observation.model_copy(deep=True)
 
     async def create_observation(
         self,
@@ -150,7 +180,7 @@ class ManagerAgent(ABC):
             # Clamp progress in [0,1]
             time_progress = min(1.0, max(0.0, float(current_timestep) / float(max_ts)))
 
-        return ManagerObservation(
+        observation = ManagerObservation(
             workflow_summary=workflow.pretty_print(),
             timestep=current_timestep,
             workflow_id=workflow.id,
@@ -176,6 +206,8 @@ class ManagerAgent(ABC):
             agent_ids=list(workflow.agents.keys()),
             stakeholder_profile=stakeholder_profile,
         )
+        self.capture_decision_observation(observation)
+        return observation
 
     # Note: take_action(observation) has been removed from the abstract interface in favor of step(...).
 

@@ -29,6 +29,9 @@ from manager_agent_gym.core.common.model_provider import (
 )
 from manager_agent_gym.core.common.run_trace import RunTraceRecorder
 from manager_agent_gym.core.communication.service import CommunicationService
+from manager_agent_gym.core.manager_agent.observation_aids import (
+    GenericSummaryObservationAid,
+)
 from manager_agent_gym.schemas.execution.callbacks import TimestepEndContext
 from manager_agent_gym.schemas.preferences.preference import (
     Preference,
@@ -143,13 +146,15 @@ async def run_one(
     swap_timestep: int | None,
     out_root: Path,
     perturbation: str = DEFAULT_PERTURBATION,
+    observation_aid: str = "none",
 ) -> Path:
     definition = get_perturbation(perturbation)
     max_timesteps = definition.max_timesteps if max_timesteps is None else max_timesteps
-    swap_timestep = (
-        definition.swap_timestep if swap_timestep is None else swap_timestep
+    swap_timestep = definition.swap_timestep if swap_timestep is None else swap_timestep
+    aid_suffix = "" if observation_aid == "none" else f"_{observation_aid}"
+    run_dir = out_root / (
+        f"{perturbation}_{condition}{aid_suffix}_t{swap_timestep}_seed{seed}"
     )
-    run_dir = out_root / f"{perturbation}_{condition}_t{swap_timestep}_seed{seed}"
     run_dir.mkdir(parents=True, exist_ok=True)
     print(
         f"DS-REROUTE perturbation={perturbation} condition={condition} seed={seed} "
@@ -176,8 +181,13 @@ async def run_one(
         condition,
         definition,
         swap_timestep,
+        observation_aid=observation_aid,
     )
     manager = ChainOfThoughtManagerAgent(preferences=preferences)
+    if observation_aid == "generic_summary":
+        manager.set_observation_aid_builder(
+            GenericSummaryObservationAid(model=manager.model_name, seed=seed)
+        )
     stakeholder = create_stakeholder_agent(persona="balanced", preferences=preferences)
     recorder = Recorder(scenario.task_answers, scenario.task_meta)
     trace_recorder = RunTraceRecorder(
@@ -191,6 +201,7 @@ async def run_one(
             "max_timesteps": max_timesteps,
             "target_worker": definition.target_worker,
             "observability": get_observability(condition).manifest(),
+            "observation_aid": observation_aid,
         }
     )
     engine = WorkflowExecutionEngine(
@@ -322,6 +333,12 @@ async def main() -> None:
     parser.add_argument(
         "--out", type=Path, default=Path("experiments/ds_reroute/outputs")
     )
+    parser.add_argument(
+        "--observation-aid",
+        choices=["none", "generic_summary"],
+        default="none",
+        help="Phase-2 representation arm; 'none' preserves the native baseline.",
+    )
     args = parser.parse_args()
     for seed in args.seeds:
         for condition in args.conditions:
@@ -332,6 +349,7 @@ async def main() -> None:
                 args.swap_timestep,
                 args.out,
                 args.perturbation,
+                args.observation_aid,
             )
 
 

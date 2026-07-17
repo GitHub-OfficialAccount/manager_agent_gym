@@ -152,6 +152,25 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
             communication_service=communication_service,
             stakeholder_profile=stakeholder_profile,
         )
+        match self._observation_policy.observation_aid:
+            case "none":
+                pass
+            case "generic_summary":
+                if self._observation_aid_builder is None:
+                    raise RuntimeError(
+                        "ObservationPolicy selects generic_summary but no "
+                        "observation-aid builder is configured."
+                    )
+                # This is the exact native user-context text the manager would
+                # otherwise receive. The summarizer therefore cannot see hidden
+                # workflow state, full tool traces, or private worker prompts.
+                source_text = self._prepare_context(observation)
+                aid = await self._observation_aid_builder.build(
+                    source_text=source_text,
+                    observation=observation,
+                )
+                observation = observation.model_copy(update={"observation_aid": aid})
+                self.capture_decision_observation(observation)
         return await self.take_action(observation)
 
     def reset(self) -> None:
@@ -277,6 +296,13 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
             "\n".join(action_lines) if action_lines else "(no prior manager actions)"
         )
 
+        observation_aid_block = ""
+        if observation.observation_aid:
+            observation_aid_block = f"""
+### Observation Aid (generic summary of already-visible evidence)
+{observation.observation_aid}
+"""
+
         # Valid ID universes (helps the model avoid fabricating IDs)
         id_guidance_lines = [
             f"- all_task_ids (count={len(observation.task_ids)}): sample={[str(x) for x in observation.task_ids[:preview_n]]}",
@@ -337,6 +363,7 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
 
 ### Manager Action History (recent)
 {actions_block}
+{observation_aid_block}
 
 ### Stakeholder Profile (public)
 {stakeholder_block}

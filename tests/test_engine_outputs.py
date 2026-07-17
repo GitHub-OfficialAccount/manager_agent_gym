@@ -14,13 +14,119 @@ from manager_agent_gym.schemas.core.resources import Resource
 from manager_agent_gym.core.workflow_agents.stakeholder_agent import StakeholderAgent
 from manager_agent_gym.schemas.workflow_agents.stakeholder import StakeholderConfig
 from manager_agent_gym.schemas.execution.state import ExecutionState
+from manager_agent_gym.schemas.execution.observation_policy import (
+    ObservationPolicy,
+    WorkerObservationDisclosure,
+)
 from manager_agent_gym.schemas.workflow_agents.stakeholder import (
     StakeholderPublicProfile,
 )
-from tests.helpers.stubs import ManagerNoOp
+from tests.helpers.stubs import ManagerAssignFirstReady, ManagerNoOp
 
 
 # Use shared Manager stub from tests.helpers.stubs
+
+
+@pytest.mark.asyncio
+async def test_timestep_result_keeps_pre_action_observation_after_task_completes(
+    tmp_path: Path,
+):
+    from manager_agent_gym.core.workflow_agents.interface import AgentInterface
+    from manager_agent_gym.schemas.unified_results import create_task_result
+    from manager_agent_gym.schemas.workflow_agents import AgentConfig
+
+    class _ImmediateAgent(AgentInterface):
+        def __init__(self):
+            super().__init__(
+                AgentConfig(
+                    agent_id="worker",
+                    agent_type="ai",
+                    system_prompt="private worker policy",
+                    model_name="none",
+                    agent_description="worker",
+                    agent_capabilities=["work"],
+                )
+            )
+
+        async def execute_task(self, task, resources):
+            return create_task_result(
+                task_id=task.id,
+                agent_id=self.agent_id,
+                success=True,
+                execution_time=0.0,
+                resources=[
+                    Resource(
+                        name="post-action artifact",
+                        description="created by worker transition",
+                        content="POST_ACTION_ONLY",
+                    )
+                ],
+            )
+
+    workflow = Workflow(name="w", workflow_goal="g", owner_id=uuid4())
+    task = Task(name="t", description="d")
+    workflow.add_task(task)
+    workflow.add_agent(_ImmediateAgent())
+    stakeholder = StakeholderAgent(
+        config=StakeholderConfig(
+            agent_id="stakeholder",
+            agent_type="stakeholder",
+            system_prompt="Stakeholder",
+            model_name="o3",
+            name="Stakeholder",
+            role="Owner",
+            initial_preferences=PreferenceWeights(preferences=[]),
+            agent_description="Stakeholder",
+            agent_capabilities=["Stakeholder"],
+        )
+    )
+    callback_contexts = []
+
+    async def capture(ctx):
+        callback_contexts.append(ctx)
+
+    engine = WorkflowExecutionEngine(
+        workflow=workflow,
+        agent_registry=AgentRegistry(),
+        manager_agent=ManagerAssignFirstReady(),
+        stakeholder_agent=stakeholder,
+        output_config=OutputConfig(
+            base_output_dir=tmp_path, create_run_subdirectory=False
+        ),
+        enable_timestep_logging=False,
+        enable_final_metrics_logging=False,
+        timestep_end_callbacks=[capture],
+        observation_policy=ObservationPolicy(
+            scheduled_worker_disclosures=[
+                WorkerObservationDisclosure(
+                    timestep=1,
+                    agent_id="worker",
+                    capability_override=["changed-visible-capability"],
+                )
+            ]
+        ),
+        max_timesteps=3,
+        seed=42,
+    )
+
+    await engine.execute_timestep()  # assignment starts the asynchronous task
+    result = await engine.execute_timestep()  # worker transition completes it
+
+    assert task.id in result.target_ids
+    assert task.id in callback_contexts[1].tasks_completed
+    decision_observation = callback_contexts[1].manager_observation
+    assert decision_observation.execution_state == ExecutionState.WAITING_FOR_MANAGER
+    assert task.id not in decision_observation.completed_task_ids
+    assert "POST_ACTION_ONLY" not in decision_observation.workflow_summary
+    worker_metadata = next(
+        item
+        for item in decision_observation.available_agent_metadata
+        if item.agent_id == "worker"
+    )
+    assert worker_metadata.agent_capabilities == ["changed-visible-capability"]
+    assert result.metadata["manager_observation"] == decision_observation.model_dump(
+        mode="json"
+    )
 
 
 @pytest.mark.parametrize("enable_logs", [True, False])

@@ -413,8 +413,10 @@ class WorkflowExecutionEngine:
         agent_coordination_changes = await self._check_and_apply_agent_changes()
 
         manager_action = None
+        observation = None
         if self.manager_agent:
             self.execution_state = ExecutionState.WAITING_FOR_MANAGER
+            self.manager_agent.clear_last_decision_observation()
             # Unified RL-style step: agent constructs observation internally
             done_flag = self._is_terminal_state() or self.workflow.is_complete()
             manager_action = await self.manager_agent.step(
@@ -429,6 +431,22 @@ class WorkflowExecutionEngine:
                 done=done_flag,
                 stakeholder_profile=self.stakeholder_agent.public_profile,
             )
+            observation = self.manager_agent.get_last_decision_observation()
+            if observation is None:
+                # Compatibility fallback for custom managers that do not call
+                # create_observation(). This still happens before action execution
+                # and worker transitions, but such a manager did not itself use an
+                # observation object that the engine can capture.
+                observation = await self.manager_agent.create_observation(
+                    workflow=self.workflow,
+                    execution_state=self.execution_state,
+                    current_timestep=self.current_timestep,
+                    running_tasks=self.running_tasks,
+                    completed_task_ids=self.completed_task_ids,
+                    failed_task_ids=self.failed_task_ids,
+                    communication_service=self.communication_service,
+                    stakeholder_profile=self.stakeholder_agent.public_profile,
+                )
             try:
                 action_result = await manager_action.execute(
                     self.workflow, self.communication_service
@@ -539,19 +557,8 @@ class WorkflowExecutionEngine:
             ),
         }
 
-        # Build observation for outputs/callbacks
-        # Note: this is a duplicicative secdondary observation, which is not used by the manager agent directly
-        # TODO: move this around so we expose the last observ
-        observation = await self.manager_agent.create_observation(
-            workflow=self.workflow,
-            execution_state=self.execution_state,
-            current_timestep=self.current_timestep,
-            running_tasks=self.running_tasks,
-            completed_task_ids=self.completed_task_ids,
-            failed_task_ids=self.failed_task_ids,
-            communication_service=self.communication_service,
-            stakeholder_profile=self.stakeholder_agent.public_profile,
-        )
+        if observation is None:  # pragma: no cover - manager is required above
+            raise RuntimeError("No pre-action manager observation was captured")
 
         # Calculate total simulated time from completed tasks in this timestep
         total_simulated_hours = 0.0
