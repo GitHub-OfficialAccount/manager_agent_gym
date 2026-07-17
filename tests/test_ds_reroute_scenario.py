@@ -420,6 +420,14 @@ def test_fixed_manager_is_constructible_and_has_no_adaptive_state():
     assert manager.get_action_buffer() == []
 
 
+def test_experiment_preferences_do_not_schedule_native_llm_evaluation():
+    preferences = _preferences().preferences
+
+    assert len(preferences) == 1
+    assert preferences[0].name == "quality"
+    assert preferences[0].evaluator is None
+
+
 @pytest.mark.asyncio
 async def test_fixed_retry_manager_retries_without_reassignment():
     scenario = build_scenario(42)

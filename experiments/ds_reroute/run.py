@@ -30,15 +30,10 @@ from manager_agent_gym.core.common.model_provider import (
 from manager_agent_gym.core.common.run_trace import RunTraceRecorder
 from manager_agent_gym.core.communication.service import CommunicationService
 from manager_agent_gym.schemas.execution.callbacks import TimestepEndContext
-from manager_agent_gym.schemas.preferences.evaluator import (
-    AggregationStrategy,
-    Evaluator,
-)
 from manager_agent_gym.schemas.preferences.preference import (
     Preference,
     PreferenceWeights,
 )
-from manager_agent_gym.schemas.preferences.rubric import RunCondition, WorkflowRubric
 
 from .perturbations import (
     DEFAULT_PERTURBATION,
@@ -63,29 +58,12 @@ _METHOD_RE = re.compile(r"method\s*[:=]\s*([a-zA-Z0-9_+\- ]+)", re.IGNORECASE)
 
 
 def _preferences() -> PreferenceWeights:
-    rubric = WorkflowRubric(
-        name="loan_audit_pack_quality",
-        llm_prompt=(
-            "Assess the completed loan-audit pack for analytical completeness, "
-            "method transparency, reconciliation of robust and rapid screens, "
-            "and an actionable capacity estimate. Use only evidence in workflow "
-            "artifacts. Return a score from 0 to 10."
-        ),
-        max_score=10.0,
-        run_condition=RunCondition.ON_COMPLETION,
-    )
     return PreferenceWeights(
         preferences=[
             Preference(
                 name="quality",
                 weight=1.0,
                 description="Complete and defensible portfolio audit",
-                evaluator=Evaluator(
-                    name="loan_audit_quality",
-                    description="Native LLM evaluation of the audit pack",
-                    aggregation=AggregationStrategy.WEIGHTED_AVERAGE,
-                    rubrics=[rubric],
-                ),
             )
         ]
     )
@@ -277,8 +255,6 @@ async def run_one(
         "final_target_model": registry.get_agent(
             definition.target_worker
         ).config.model_name,
-        "native_reward_vector": engine.validation_engine.reward_vector,
-        "native_reward_final": engine.validation_engine.most_recent_reward,
         **score_summary,
     }
     artifacts = {

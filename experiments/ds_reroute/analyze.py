@@ -1,4 +1,4 @@
-"""Aggregate deterministic and native metrics from ds_reroute runs."""
+"""Aggregate deterministic metrics from ds_reroute runs."""
 
 from __future__ import annotations
 
@@ -35,7 +35,6 @@ def analyze_run(run_dir: Path) -> dict[str, Any]:
         "condition": manifest["condition"],
         "seed": manifest["seed"],
         "r_check": manifest["r_check"],
-        "native_reward": manifest["native_reward_final"],
         "completed": manifest["completed_predefined"],
         "post_change_r_check": (
             mean(row["r_check"] for row in post_change) if post_change else None
@@ -46,7 +45,7 @@ def analyze_run(run_dir: Path) -> dict[str, Any]:
     }
     print(f"\n== {run_dir.name} ==")
     print(
-        f"  R_check={result['r_check']:.3f} native={result['native_reward']:.3f} "
+        f"  R_check={result['r_check']:.3f} "
         f"completed={result['completed']}/{manifest['total_predefined']}"
     )
     print(
@@ -79,7 +78,7 @@ def main() -> None:
         condition_means[condition] = mean(row["r_check"] for row in rows)
         print(
             f"  {condition:<8} R_check={condition_means[condition]:.3f} "
-            f"native={mean(row['native_reward'] for row in rows):.3f} n={len(rows)}"
+            f"n={len(rows)}"
         )
     if "full" in condition_means and "silent" in condition_means:
         print(

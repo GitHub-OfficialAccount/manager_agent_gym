@@ -218,8 +218,6 @@ async def run_fixed(
         "robust_audits": robust_audits,
         "completions": recorder.completions,
         "tool_calls": scenario.tool_calls,
-        "native_reward_final": engine.validation_engine.most_recent_reward,
-        "native_reward_vector": engine.validation_engine.reward_vector,
         "task_states": {
             task.name: {
                 "status": task.status.value,

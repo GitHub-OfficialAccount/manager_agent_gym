@@ -264,10 +264,12 @@ Method, cutoff error, exact correctness, tool calls, and parse failures are
 logged separately. Downstream tasks are independently graded so propagation of
 an earlier error can be measured.
 
-The native `ScalarUtilityReward` and a narrow experiment-specific native
-evaluator remain active and are logged alongside `R_check`. `R_check` does not
-replace or feed the native reward path. The manager receives no hidden truth or
-engineered correctness digest.
+`R_check` is the sole experiment endpoint. The experiment-specific native LLM
+evaluator is disabled from 2026-07-17 onward because it added one completion-time
+judge call per episode, was not used online, and was substantially noisier than
+`R_check` in the five-seed characterization. Historical manifests retain its
+output; new runs omit native reward fields. Core reward plumbing is unchanged,
+and the manager receives no hidden truth or engineered correctness digest.
 
 ## Offline Run Trace
 
