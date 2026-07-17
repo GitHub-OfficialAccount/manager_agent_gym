@@ -190,7 +190,11 @@ messages and workflow resources remain observable. Phase-2 Arm 1 is selected
 independently with `--observation-aid generic_summary`; it adds a neutral summary
 derived from the exact native manager user-context. The default `none` path makes no
 summarizer call. Timestep traces retain the exact pre-action observation used by
-the manager, not a reconstruction after worker execution.
+the manager, not a reconstruction after worker execution. Generic summaries are
+limited to 250 words by instruction, without a hard completion-token cap because
+DeepSeek reasoning consumes the same budget. Any summary failure is traced as
+`observation_aid_failed` with `invalidates_arm=true`; it does not terminate the
+environment, but the episode must be excluded or rerun for Arm-1 analysis.
 
 ### Named perturbation definitions
 

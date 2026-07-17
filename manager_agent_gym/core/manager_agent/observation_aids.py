@@ -7,7 +7,10 @@ import hashlib
 from pydantic import BaseModel, Field
 
 from ...schemas.execution import ManagerObservation
-from ..common.llm_interface import generate_structured_response
+from ..common.llm_interface import (
+    LLMInferenceTruncationError,
+    generate_structured_response,
+)
 from ..common.run_trace import record_run_event, trace_scope
 
 
@@ -48,21 +51,44 @@ class GenericSummaryObservationAid:
             )
             return cached
 
-        with trace_scope(
-            timestep=observation.timestep,
-            actor_type="observation_aid",
-            actor_id="generic_summary",
-            operation="summarize_visible_evidence",
-        ):
-            response = await generate_structured_response(
-                system_prompt=GENERIC_SUMMARY_SYSTEM_PROMPT,
-                user_prompt=source_text,
-                response_type=GenericSummaryResponse,
-                model=self.model,
-                seed=self.seed,
-                temperature=0,
-                max_completion_tokens=500,
+        try:
+            with trace_scope(
+                timestep=observation.timestep,
+                actor_type="observation_aid",
+                actor_id="generic_summary",
+                operation="summarize_visible_evidence",
+            ):
+                response = await generate_structured_response(
+                    system_prompt=GENERIC_SUMMARY_SYSTEM_PROMPT,
+                    user_prompt=source_text,
+                    response_type=GenericSummaryResponse,
+                    model=self.model,
+                    seed=self.seed,
+                    temperature=0,
+                    # DeepSeek reasoning tokens share this budget with the JSON
+                    # answer. A fixed 500-token cap truncated otherwise valid
+                    # summaries in the real Arm-1 smoke test.
+                    max_completion_tokens=0,
+                )
+        except LLMInferenceTruncationError as error:
+            # Do not let an auxiliary representation crash the environment. The
+            # explicit trace event marks this episode invalid for Arm-1 analysis.
+            # Failed results are not cached, so an identical future input retries.
+            record_run_event(
+                "observation_aid_failed",
+                {
+                    "mode": "generic_summary",
+                    "model": self.model,
+                    "source_fingerprint": fingerprint,
+                    "error_type": type(error).__name__,
+                    "error": str(error),
+                    "invalidates_arm": True,
+                },
+                timestep=observation.timestep,
+                actor_type="observation_aid",
+                actor_id="generic_summary",
             )
+            return ""
         summary = response.summary.strip()
         self._cache[fingerprint] = summary
         record_run_event(

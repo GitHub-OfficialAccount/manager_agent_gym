@@ -6,6 +6,7 @@ from manager_agent_gym.core.manager_agent.observation_aids import (
     GenericSummaryObservationAid,
     GenericSummaryResponse,
 )
+from manager_agent_gym.core.common.llm_interface import LLMInferenceTruncationError
 from manager_agent_gym.schemas.execution.manager import ManagerObservation
 
 
@@ -35,3 +36,23 @@ async def test_generic_summary_caches_identical_visible_context(monkeypatch) -> 
     assert len(calls) == 1
     assert calls[0]["model"] == "test-model"
     assert calls[0]["temperature"] == 0
+    assert calls[0]["max_completion_tokens"] == 0
+
+
+@pytest.mark.asyncio
+async def test_generic_summary_failure_returns_empty_aid(monkeypatch) -> None:
+    async def fail_generation(**kwargs):
+        raise LLMInferenceTruncationError("truncated")
+
+    monkeypatch.setattr(
+        "manager_agent_gym.core.manager_agent.observation_aids.generate_structured_response",
+        fail_generation,
+    )
+    builder = GenericSummaryObservationAid(model="test-model", seed=7)
+
+    result = await builder.build(
+        source_text="visible context",
+        observation=ManagerObservation.model_construct(timestep=3),
+    )
+
+    assert result == ""
