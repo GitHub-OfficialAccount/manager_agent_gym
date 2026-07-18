@@ -1,0 +1,69 @@
+{
+  "seed": 101,
+  "scope": "Manager-visible change-relevant facts; labels contain no hidden state.",
+  "labels": [
+    {
+      "label_id": "a_robust_method",
+      "channel": "method_statement",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch A Robust Audit",
+      "fact_pattern": "method:.*(mean.*2.*SD|zscore)"
+    },
+    {
+      "label_id": "b_robust_method",
+      "channel": "method_statement",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch B Robust Audit",
+      "fact_pattern": "method:.*(mean.*2.*SD|zscore)"
+    },
+    {
+      "label_id": "c_robust_method",
+      "channel": "method_statement",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch C Robust Audit",
+      "fact_pattern": "method:.*(mean.*2.*SD|zscore)"
+    },
+    {
+      "label_id": "a_robust_count",
+      "channel": "numeric_result",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch A Robust Audit",
+      "fact_pattern": "metric:\\s*59(?:\\D|$)"
+    },
+    {
+      "label_id": "b_robust_count",
+      "channel": "numeric_result",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch B Robust Audit",
+      "fact_pattern": "metric:\\s*71(?:\\D|$)"
+    },
+    {
+      "label_id": "c_robust_count",
+      "channel": "numeric_result",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch C Robust Audit",
+      "fact_pattern": "metric:\\s*80(?:\\D|$)"
+    },
+    {
+      "label_id": "a_downstream_zero",
+      "channel": "downstream_reconciliation",
+      "worker": "audit_coordinator",
+      "task_pattern": "Batch A Method Reconciliation",
+      "fact_pattern": "(metric:\\s*0(?:\\D|$)|Absolute difference = 0)"
+    },
+    {
+      "label_id": "b_downstream_zero",
+      "channel": "downstream_reconciliation",
+      "worker": "audit_coordinator",
+      "task_pattern": "Batch B Method Reconciliation",
+      "fact_pattern": "(metric:\\s*0(?:\\D|$)|Absolute difference = 0)"
+    },
+    {
+      "label_id": "c_downstream_zero",
+      "channel": "downstream_reconciliation",
+      "worker": "audit_coordinator",
+      "task_pattern": "Batch C Method Reconciliation",
+      "fact_pattern": "(metric:\\s*0(?:\\D|$)|Absolute difference = 0)"
+    }
+  ]
+}

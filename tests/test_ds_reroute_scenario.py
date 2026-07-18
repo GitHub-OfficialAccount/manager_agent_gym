@@ -133,6 +133,24 @@ def test_workers_use_same_model_and_prompt_with_alternative_tools():
     assert "repeating the same operation" in coordinator_description
 
 
+def test_no_method_reporting_preserves_tools_and_suppresses_method_narration():
+    scenario = build_scenario(42)
+    standard, standard_tools = build_worker(scenario, "portfolio_analyst", "robust")
+    no_method, no_method_tools = build_worker(
+        scenario,
+        "portfolio_analyst",
+        "robust",
+        artifact_reporting="no_method",
+    )
+
+    assert {tool.name for tool in no_method_tools} == {
+        tool.name for tool in standard_tools
+    }
+    assert no_method.model_name == standard.model_name
+    assert "do not include a `method:` field" in no_method.system_prompt.lower()
+    assert "`metric: <number>`" in no_method.system_prompt
+
+
 def test_worker_prompt_preserves_tool_choice_and_defines_a_stopping_policy():
     prompt = WORKER_PROMPT.lower()
 
@@ -190,9 +208,7 @@ def test_primary_perturbation_changes_one_worker_and_preserves_core_tools(
     assert change["new_tool_ids"] == list(SCREENING_TOOL_IDS)
     assert set(CORE_TOOL_IDS) <= set(change["new_tool_ids"])
     assert change["announce"] is False
-    assert "Methods: mean-plus-two-SD screening" in change[
-        "new_agent_capabilities"
-    ]
+    assert "Methods: mean-plus-two-SD screening" in change["new_agent_capabilities"]
     assert "Methods: portfolio profiling" in change["new_agent_capabilities"]
 
 

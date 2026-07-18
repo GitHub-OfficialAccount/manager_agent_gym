@@ -126,15 +126,16 @@ async def run_fixed(
     max_timesteps: int | None,
     out_root: Path,
     perturbation: str = DEFAULT_PERTURBATION,
+    artifact_reporting: str = "standard",
 ) -> dict[str, Any]:
     definition = get_perturbation(perturbation)
-    swap_timestep = (
-        definition.swap_timestep if swap_timestep is None else swap_timestep
-    )
+    if artifact_reporting == "no_method" and definition.lever != "toolset":
+        raise ValueError(
+            "The no-confession gate is defined only for the toolset perturbation."
+        )
+    swap_timestep = definition.swap_timestep if swap_timestep is None else swap_timestep
     max_timesteps = (
-        definition.fixed_gate_max_timesteps
-        if max_timesteps is None
-        else max_timesteps
+        definition.fixed_gate_max_timesteps if max_timesteps is None else max_timesteps
     )
     fixed_assignments = {
         **FIXED_ASSIGNMENTS,
@@ -154,7 +155,9 @@ async def run_fixed(
     for tool_id, tool in scenario.tools.items():
         registry.register_tool(tool_id, tool)
     for agent_id, tier in WORKER_TIERS.items():
-        config, tools = build_worker(scenario, agent_id, tier)
+        config, tools = build_worker(
+            scenario, agent_id, tier, artifact_reporting=artifact_reporting
+        )
         registry.register_ai_agent(config, tools)
 
     schedule = build_schedule(
@@ -201,6 +204,7 @@ async def run_fixed(
         "seed": seed,
         "swap_timestep": swap_timestep,
         "max_timesteps": max_timesteps,
+        "artifact_reporting": artifact_reporting,
         "assignments": assignments,
         "perturbation": schedule.manifest(),
         "observability": get_observability(observation_condition).manifest(),
@@ -232,7 +236,12 @@ async def run_fixed(
             definition.target_worker
         ).config.model_name,
     }
-    run_dir = out_root / f"fixed_{perturbation}_{condition}_t{swap_timestep}_seed{seed}"
+    reporting_suffix = (
+        "" if artifact_reporting == "standard" else f"_{artifact_reporting}"
+    )
+    run_dir = out_root / (
+        f"fixed_{perturbation}_{condition}{reporting_suffix}_t{swap_timestep}_seed{seed}"
+    )
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "result.json").write_text(json.dumps(result, indent=2))
     print(
@@ -368,6 +377,12 @@ async def main() -> None:
     parser.add_argument(
         "--out", type=Path, default=Path("experiments/ds_reroute/outputs/fixed_gate")
     )
+    parser.add_argument(
+        "--artifact-reporting",
+        choices=["standard", "no_method"],
+        default="standard",
+        help="Use 'no_method' for the no-confession manipulation gate.",
+    )
     args = parser.parse_args()
     control = await run_fixed(
         "control",
@@ -376,6 +391,7 @@ async def main() -> None:
         args.max_timesteps,
         args.out,
         args.perturbation,
+        args.artifact_reporting,
     )
     degradation = await run_fixed(
         "degradation",
@@ -384,6 +400,7 @@ async def main() -> None:
         args.max_timesteps,
         args.out,
         args.perturbation,
+        args.artifact_reporting,
     )
     recovery = await run_fixed(
         "recovery",
@@ -392,11 +409,18 @@ async def main() -> None:
         args.max_timesteps,
         args.out,
         args.perturbation,
+        args.artifact_reporting,
     )
     gate = evaluate_recovery_gate(control, degradation, recovery)
+    reporting_suffix = (
+        "" if args.artifact_reporting == "standard" else f"_{args.artifact_reporting}"
+    )
     (
         args.out
-        / f"gate_{args.perturbation}_t{control['swap_timestep']}_seed{args.seed}.json"
+        / (
+            f"gate_{args.perturbation}{reporting_suffix}_"
+            f"t{control['swap_timestep']}_seed{args.seed}.json"
+        )
     ).write_text(json.dumps(gate, indent=2))
     print(json.dumps(gate, indent=2), flush=True)
     if not gate["passed"]:

@@ -30,6 +30,8 @@ from manager_agent_gym.core.common.model_provider import (
 from manager_agent_gym.core.common.run_trace import RunTraceRecorder
 from manager_agent_gym.core.communication.service import CommunicationService
 from manager_agent_gym.core.manager_agent.observation_aids import (
+    AppendOnlySummaryLogObservationAid,
+    AtomicEvidenceLedgerObservationAid,
     GenericSummaryObservationAid,
 )
 from manager_agent_gym.schemas.execution.callbacks import TimestepEndContext
@@ -147,13 +149,21 @@ async def run_one(
     out_root: Path,
     perturbation: str = DEFAULT_PERTURBATION,
     observation_aid: str = "none",
+    artifact_reporting: str = "standard",
 ) -> Path:
     definition = get_perturbation(perturbation)
+    if artifact_reporting == "no_method" and definition.lever != "toolset":
+        raise ValueError(
+            "The no-confession cell is defined only for the toolset perturbation."
+        )
     max_timesteps = definition.max_timesteps if max_timesteps is None else max_timesteps
     swap_timestep = definition.swap_timestep if swap_timestep is None else swap_timestep
     aid_suffix = "" if observation_aid == "none" else f"_{observation_aid}"
+    reporting_suffix = (
+        "" if artifact_reporting == "standard" else f"_{artifact_reporting}"
+    )
     run_dir = out_root / (
-        f"{perturbation}_{condition}{aid_suffix}_t{swap_timestep}_seed{seed}"
+        f"{perturbation}_{condition}{aid_suffix}{reporting_suffix}_t{swap_timestep}_seed{seed}"
     )
     run_dir.mkdir(parents=True, exist_ok=True)
     print(
@@ -168,7 +178,9 @@ async def run_one(
     for tool_id, tool in scenario.tools.items():
         registry.register_tool(tool_id, tool)
     for agent_id, tier in WORKER_TIERS.items():
-        config, tools = build_worker(scenario, agent_id, tier)
+        config, tools = build_worker(
+            scenario, agent_id, tier, artifact_reporting=artifact_reporting
+        )
         registry.register_ai_agent(config, tools)
 
     schedule = build_schedule(
@@ -184,10 +196,21 @@ async def run_one(
         observation_aid=observation_aid,
     )
     manager = ChainOfThoughtManagerAgent(preferences=preferences)
+    observation_aid_builder = None
     if observation_aid == "generic_summary":
-        manager.set_observation_aid_builder(
-            GenericSummaryObservationAid(model=manager.model_name, seed=seed)
+        observation_aid_builder = GenericSummaryObservationAid(
+            model=manager.model_name, seed=seed
         )
+    elif observation_aid == "append_only_summary_log":
+        observation_aid_builder = AppendOnlySummaryLogObservationAid(
+            model=manager.model_name, seed=seed
+        )
+    elif observation_aid == "atomic_evidence_ledger":
+        observation_aid_builder = AtomicEvidenceLedgerObservationAid(
+            model=manager.model_name, seed=seed
+        )
+    if observation_aid_builder is not None:
+        manager.set_observation_aid_builder(observation_aid_builder)
     stakeholder = create_stakeholder_agent(persona="balanced", preferences=preferences)
     recorder = Recorder(scenario.task_answers, scenario.task_meta)
     trace_recorder = RunTraceRecorder(
@@ -202,6 +225,7 @@ async def run_one(
             "target_worker": definition.target_worker,
             "observability": get_observability(condition).manifest(),
             "observation_aid": observation_aid,
+            "artifact_reporting": artifact_reporting,
         }
     )
     engine = WorkflowExecutionEngine(
@@ -245,6 +269,21 @@ async def run_one(
         raise
 
     score_summary = recorder.score_summary()
+    aid_diagnostics = (
+        observation_aid_builder.diagnostics()
+        if observation_aid_builder is not None
+        and hasattr(observation_aid_builder, "diagnostics")
+        else None
+    )
+    aid_snapshot = (
+        observation_aid_builder.snapshot()
+        if observation_aid_builder is not None
+        and hasattr(observation_aid_builder, "snapshot")
+        else None
+    )
+    evidence_ledger = (
+        aid_snapshot if observation_aid == "atomic_evidence_ledger" else None
+    )
     manifest = {
         "condition": condition,
         "perturbation_name": perturbation,
@@ -253,6 +292,7 @@ async def run_one(
         "swap_timestep": swap_timestep,
         "max_timesteps": max_timesteps,
         "target_worker": definition.target_worker,
+        "artifact_reporting": artifact_reporting,
         "started_at": started_at,
         "finished_at": datetime.now().isoformat(),
         "observation_policy": observation_policy.model_dump(mode="json"),
@@ -266,6 +306,7 @@ async def run_one(
         "final_target_model": registry.get_agent(
             definition.target_worker
         ).config.model_name,
+        "observation_aid_diagnostics": aid_diagnostics,
         **score_summary,
     }
     artifacts = {
@@ -284,6 +325,10 @@ async def run_one(
             for key, spec in scenario.task_specs.items()
         },
     }
+    if evidence_ledger is not None:
+        artifacts["evidence_ledger.json"] = evidence_ledger
+    if observation_aid == "append_only_summary_log" and aid_snapshot is not None:
+        artifacts["summary_log.json"] = aid_snapshot
     for filename, payload in artifacts.items():
         (run_dir / filename).write_text(json.dumps(payload, indent=2))
     trace_recorder.write_json(
@@ -293,6 +338,8 @@ async def run_one(
         manager_actions=recorder.actions,
         tool_calls=scenario.tool_calls,
         task_ground_truth=artifacts["task_ground_truth.json"],
+        evidence_ledger=evidence_ledger,
+        observation_aid_state=aid_snapshot,
     )
     print(
         f"{condition}: R_check={score_summary['r_check']:.3f} "
@@ -335,9 +382,23 @@ async def main() -> None:
     )
     parser.add_argument(
         "--observation-aid",
-        choices=["none", "generic_summary"],
+        choices=[
+            "none",
+            "generic_summary",
+            "append_only_summary_log",
+            "atomic_evidence_ledger",
+        ],
         default="none",
         help="Phase-2 representation arm; 'none' preserves the native baseline.",
+    )
+    parser.add_argument(
+        "--artifact-reporting",
+        choices=["standard", "no_method"],
+        default="standard",
+        help=(
+            "Worker artifact contract. 'no_method' suppresses method/tool narration "
+            "for the no-confession robustness cell."
+        ),
     )
     args = parser.parse_args()
     for seed in args.seeds:
@@ -350,6 +411,7 @@ async def main() -> None:
                 args.out,
                 args.perturbation,
                 args.observation_aid,
+                args.artifact_reporting,
             )
 
 

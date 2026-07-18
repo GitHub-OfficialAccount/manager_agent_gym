@@ -155,10 +155,12 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
         match self._observation_policy.observation_aid:
             case "none":
                 pass
-            case "generic_summary":
+            case (
+                "generic_summary" | "append_only_summary_log" | "atomic_evidence_ledger"
+            ):
                 if self._observation_aid_builder is None:
                     raise RuntimeError(
-                        "ObservationPolicy selects generic_summary but no "
+                        "ObservationPolicy selects an observation aid but no "
                         "observation-aid builder is configured."
                     )
                 # This is the exact native user-context text the manager would
@@ -299,7 +301,7 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
         observation_aid_block = ""
         if observation.observation_aid:
             observation_aid_block = f"""
-### Observation Aid (generic summary of already-visible evidence)
+### Observation Aid (derived only from already-visible evidence)
 {observation.observation_aid}
 """
 

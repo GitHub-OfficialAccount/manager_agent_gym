@@ -81,6 +81,18 @@ async def test_generic_summary_runs_only_when_selected() -> None:
     assert aided_observation.observation_aid == "neutral visible-evidence summary"
     assert manager.get_last_decision_observation() == aided_observation
 
+    _, ledger_builder, ledger_observation = await _run_manager_step_with_aid(
+        "atomic_evidence_ledger"
+    )
+    assert len(ledger_builder.calls) == 1
+    assert ledger_observation.observation_aid == "neutral visible-evidence summary"
+
+    _, log_builder, log_observation = await _run_manager_step_with_aid(
+        "append_only_summary_log"
+    )
+    assert len(log_builder.calls) == 1
+    assert log_observation.observation_aid == "neutral visible-evidence summary"
+
 
 def test_observation_aid_is_rendered_for_manager() -> None:
     manager = ChainOfThoughtManagerAgent(preferences=PreferenceWeights(preferences=[]))

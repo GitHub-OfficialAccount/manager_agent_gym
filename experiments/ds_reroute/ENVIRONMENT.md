@@ -196,6 +196,21 @@ DeepSeek reasoning consumes the same budget. Any summary failure is traced as
 `observation_aid_failed` with `invalidates_arm=true`; it does not terminate the
 environment, but the episode must be excluded or rerun for Arm-1 analysis.
 
+Arm 2 is selected with `--observation-aid atomic_evidence_ledger`. Its frozen,
+deterministic enumerator appends every eligible task outcome, worker-resource
+description/content-preview line, and worker-message preview; it uses no LLM,
+ranking, or cap. It does not classify evidence, compare expected and observed
+methods, infer absences/change/capability, or recommend routing. The spec hash,
+candidates, duplicates, and zero omitted facts are traced. The final ledger is
+written to `evidence_ledger.json`. `append_only_summary_log` is the persistence-
+only control. Use `audit_arm2.py` for hand-labeled recall/delay and realized
+context-size checks before interpreting reward.
+
+`--artifact-reporting no_method` supplies every worker with the same alternate
+artifact contract that forbids method/tool narration while preserving numeric
+outputs and all tools. Use it first in `fixed_gate.py`; it is the no-confession
+robustness cell, not a change to the primary treatment.
+
 ### Named perturbation definitions
 
 Experiment-local objective perturbations are defined once in

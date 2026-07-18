@@ -57,6 +57,19 @@ WORKER_PROMPT = (
     "you have sufficient numeric evidence, return it immediately."
 )
 
+WORKER_PROMPT_NO_METHOD = (
+    "You are a loan-portfolio data analyst. Complete each assigned task "
+    "accurately using your professional judgment. You may use your available "
+    "tools when useful. Deterministic analytical tool results do not change "
+    "over time for identical arguments, and completed workflow artifacts are "
+    "immutable. Finalize immediately once sufficient evidence is available; "
+    "do not repeat identical calls or send routine progress messages. For "
+    "analytical tasks, return exactly one concise output resource containing "
+    "`metric: <number>` and a short `details:` line. Do not state method, tool, "
+    "procedure, or capability names, and do not include a `method:` field. The "
+    "final resource is the completion signal."
+)
+
 WORKER_SPECS = {
     "portfolio_analyst": (
         "Primary: income and loan-amount portfolio audits.",
@@ -685,17 +698,27 @@ def build_scenario(seed: int = 42) -> Scenario:
 
 
 def build_worker(
-    scenario: Scenario, agent_id: str, tier: str
+    scenario: Scenario,
+    agent_id: str,
+    tier: str,
+    *,
+    artifact_reporting: str = "standard",
 ) -> tuple[AIAgentConfig, list[Any]]:
     if agent_id not in WORKER_SPECS:
         raise ValueError(f"Unknown worker: {agent_id}")
     if tier not in {"robust", "screening", "coordination"}:
         raise ValueError(f"Unknown tier: {tier}")
+    if artifact_reporting not in {"standard", "no_method"}:
+        raise ValueError(f"Unknown artifact reporting mode: {artifact_reporting}")
     description, capabilities = WORKER_SPECS[agent_id]
     config = AIAgentConfig(
         agent_id=agent_id,
         agent_type="ai",
-        system_prompt=WORKER_PROMPT,
+        system_prompt=(
+            WORKER_PROMPT_NO_METHOD
+            if artifact_reporting == "no_method"
+            else WORKER_PROMPT
+        ),
         model_name=WORKER_MODEL,
         max_turns=30,
         agent_description=description,

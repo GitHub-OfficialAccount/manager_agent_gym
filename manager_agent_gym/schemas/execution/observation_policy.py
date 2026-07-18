@@ -21,7 +21,12 @@ if TYPE_CHECKING:
     from ...core.communication.service import CommunicationService
 
 WorkerMetadataLevel = Literal["id_only", "capabilities", "full"]
-ObservationAidMode = Literal["none", "generic_summary"]
+ObservationAidMode = Literal[
+    "none",
+    "generic_summary",
+    "append_only_summary_log",
+    "atomic_evidence_ledger",
+]
 
 
 class WorkerObservationDisclosure(BaseModel):
@@ -82,7 +87,10 @@ class ObservationPolicy(BaseModel):
         description=(
             "Optional information-preserving representation of the manager-visible "
             "observation. 'none' is the native baseline; 'generic_summary' adds a "
-            "neutral free-form summary generated only from already-visible evidence."
+            "neutral free-form summary; 'append_only_summary_log' retains those "
+            "summaries as a persistence-only control; 'atomic_evidence_ledger' "
+            "deterministically retains every eligible source-grounded fact. All "
+            "consume already-visible evidence only."
         ),
     )
     scheduled_worker_disclosures: list[WorkerObservationDisclosure] = Field(
