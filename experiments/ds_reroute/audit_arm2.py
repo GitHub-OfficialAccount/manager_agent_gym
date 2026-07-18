@@ -25,8 +25,16 @@ from manager_agent_gym.core.manager_agent.observation_aids import (
     _parse_workflow_summary,
 )
 
+from .judgment_protocol import JudgmentProtocol, load_protocol
+from .shadow_probe import DEFAULT_POINTS, context_fingerprint, find_probe_points
+
 
 TASK_HEADER_RE = re.compile(r"Task: (.+?) \(ID: ([0-9a-fA-F-]+)\)")
+MATCHER_VERSION = "serialization-normalization-v1"
+QUOTED_FIELD_RE = re.compile(
+    r'''(?P<quote>["'])(?P<field>[A-Za-z_][A-Za-z0-9_-]*)(?P=quote)\s*:'''
+)
+Z_SCORE_VARIANT_RE = re.compile(r"\bz[\s‐‑‒–—-]*score\b", re.IGNORECASE)
 
 
 def _load_run(run_dir: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -95,6 +103,23 @@ def _normalize_ledger(
     return normalized
 
 
+def _normalize_fact_serialization(fact: str) -> str:
+    """Normalize orthographic variants without changing evidence semantics."""
+    normalized = QUOTED_FIELD_RE.sub(
+        lambda match: f"{match.group('field')}:", fact
+    )
+    return Z_SCORE_VARIANT_RE.sub("zscore", normalized)
+
+
+def _matches_fact_pattern(pattern: str, fact: str) -> bool:
+    return bool(
+        re.search(pattern, fact, re.IGNORECASE)
+        or re.search(
+            pattern, _normalize_fact_serialization(fact), re.IGNORECASE
+        )
+    )
+
+
 def _matches(label: dict[str, Any], *, fact: str, worker: Any, task: Any) -> bool:
     if label.get("worker") and label["worker"] != worker:
         return False
@@ -102,7 +127,7 @@ def _matches(label: dict[str, Any], *, fact: str, worker: Any, task: Any) -> boo
         label["task_pattern"], str(task or ""), re.IGNORECASE
     ):
         return False
-    return bool(re.search(label["fact_pattern"], fact, re.IGNORECASE))
+    return _matches_fact_pattern(label["fact_pattern"], fact)
 
 
 def audit_recall(
@@ -135,7 +160,7 @@ def audit_recall(
                     not label.get("task_pattern")
                     or re.search(label["task_pattern"], str(task or ""), re.IGNORECASE)
                 )
-                and re.search(label["fact_pattern"], fact, re.IGNORECASE)
+                and _matches_fact_pattern(label["fact_pattern"], fact)
                 for task, fact in visible
             ):
                 first_visible = timestep
@@ -160,6 +185,7 @@ def audit_recall(
     for row in rows:
         by_channel[row["channel"]].append(row["recalled"])
     return {
+        "matcher_version": MATCHER_VERSION,
         "labeled_facts": len(rows),
         "recalled_facts": sum(row["recalled"] for row in rows),
         "recall": (sum(row["recalled"] for row in rows) / len(rows) if rows else None),
@@ -192,15 +218,147 @@ def audit_context(requests: list[tuple[int, str]]) -> dict[str, Any]:
     }
 
 
+def audit_relations(
+    protocol: JudgmentProtocol, recall: dict[str, Any]
+) -> dict[str, Any]:
+    labels = {row["label_id"]: row for row in recall["labels"]}
+    rows = []
+    for relation in protocol.relations:
+        sources = [labels[source_id] for source_id in relation.source_label_ids]
+        first_visible = (
+            max(row["first_visible_timestep"] for row in sources)
+            if all(row["first_visible_timestep"] is not None for row in sources)
+            else None
+        )
+        first_ledger = (
+            max(row["first_ledger_timestep"] for row in sources)
+            if all(row["first_ledger_timestep"] is not None for row in sources)
+            else None
+        )
+        rows.append(
+            {
+                **relation.model_dump(mode="json"),
+                "visible_in_native_context": first_visible is not None,
+                "recalled_in_ledger": first_ledger is not None,
+                "first_visible_timestep": first_visible,
+                "first_ledger_timestep": first_ledger,
+            }
+        )
+    return {
+        "protocol_version": protocol.protocol_version,
+        "protocol_sha256": protocol.fingerprint(),
+        "relations": rows,
+    }
+
+
+def _routing_vector(
+    trace: dict[str, Any], requests: list[tuple[int, str]], protocol: JudgmentProtocol
+) -> list[dict[str, Any]]:
+    names_by_id = _task_names(requests)
+    rows = []
+    for action_row in trace.get("manager_actions", []):
+        action = action_row.get("action") or {}
+        if action.get("action_type") != "assign_task":
+            continue
+        task_name = names_by_id.get(str(action.get("task_id")))
+        if task_name is None or not re.fullmatch(
+            r"Batch [ABC] Robust Audit", task_name
+        ):
+            continue
+        rows.append(
+            {
+                "task_name": task_name,
+                "timestep": int(action_row["timestep"]),
+                "assigned_agent": action.get("agent_id"),
+                "correct_route": action.get("agent_id")
+                in protocol.expected_correct_agents,
+            }
+        )
+    return sorted(rows, key=lambda row: row["task_name"])
+
+
+def audit_decision_points(
+    trace: dict[str, Any],
+    requests: list[tuple[int, str]],
+    protocol: JudgmentProtocol,
+    relations: dict[str, Any],
+    shadow_payload: dict[str, Any] | None,
+) -> dict[str, Any]:
+    points = find_probe_points(trace, DEFAULT_POINTS)
+    shadow_by_task = {
+        row["task_name"]: row for row in (shadow_payload or {}).get("results", [])
+    }
+    relation_rows = relations["relations"]
+    audited = []
+    for point in points:
+        text = f"{point['system']}\n{point['user']}"
+        timestep = int(point["timestep"])
+        visible_relations = [
+            relation
+            for relation in relation_rows
+            if relation["first_visible_timestep"] is not None
+            and relation["first_visible_timestep"] <= timestep
+        ]
+        diagnostic = [
+            relation["relation_id"]
+            for relation in visible_relations
+            if relation["polarity"] == "diagnostic"
+        ]
+        audited.append(
+            {
+                "task_name": point["task_name"],
+                "timestep": timestep,
+                "assigned_agent": point["assigned_agent"],
+                "correct_route": point["assigned_agent"]
+                in protocol.expected_correct_agents,
+                "informative_evidence_available": bool(diagnostic),
+                "visible_diagnostic_relations": diagnostic,
+                "visible_exonerating_relations": [
+                    relation["relation_id"]
+                    for relation in visible_relations
+                    if relation["polarity"] == "exonerating"
+                ],
+                "prompt_utf8_bytes": len(text.encode("utf-8")),
+                "prompt_whitespace_tokens": len(text.split()),
+                "context_sha256": context_fingerprint(point),
+                "shadow_probe": (
+                    shadow_by_task.get(point["task_name"])
+                    if shadow_by_task.get(point["task_name"], {}).get("context_sha256")
+                    == context_fingerprint(point)
+                    else None
+                ),
+            }
+        )
+    routing = _routing_vector(trace, requests, protocol)
+    for route in routing:
+        visible_diagnostic = any(
+            relation["polarity"] == "diagnostic"
+            and relation["first_visible_timestep"] is not None
+            and relation["first_visible_timestep"] <= route["timestep"]
+            for relation in relation_rows
+        )
+        route["informative_evidence_available"] = visible_diagnostic
+        route["correction_opportunity"] = visible_diagnostic
+    opportunities = [row for row in routing if row["correction_opportunity"]]
+    return {
+        "points": audited,
+        "robust_audit_routing_vector": routing,
+        "corrective_routes": sum(row["correct_route"] for row in opportunities),
+        "correction_opportunities": len(opportunities),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("run_dirs", nargs="+", type=Path)
     parser.add_argument("--labels", type=Path)
     parser.add_argument("--out", type=Path)
     args = parser.parse_args()
+    protocol = None
     label_rows = []
     if args.labels:
-        label_rows = json.loads(args.labels.read_text())["labels"]
+        protocol = load_protocol(args.labels)
+        label_rows = protocol.labels
 
     reports = []
     for run_dir in args.run_dirs:
@@ -214,7 +372,22 @@ def main() -> None:
             ),
         }
         if label_rows:
-            report["evidence_recall"] = audit_recall(label_rows, requests, ledger)
+            recall = audit_recall(label_rows, requests, ledger)
+            relations = audit_relations(protocol, recall)
+            shadow_path = run_dir / "shadow_probes.json"
+            shadow_payload = (
+                json.loads(shadow_path.read_text()) if shadow_path.exists() else None
+            )
+            if (
+                shadow_payload is not None
+                and shadow_payload.get("protocol_sha256") != protocol.fingerprint()
+            ):
+                raise ValueError(f"Shadow-probe protocol mismatch in {shadow_path}")
+            report["evidence_recall"] = recall
+            report["relation_judgments"] = relations
+            report["decision_audit"] = audit_decision_points(
+                trace, requests, protocol, relations, shadow_payload
+            )
         reports.append(report)
 
     comparison = None
@@ -239,6 +412,41 @@ def main() -> None:
                     ),
                 }
             )
+        if protocol is not None:
+            baseline_points = {
+                row["task_name"]: row for row in reports[0]["decision_audit"]["points"]
+            }
+            for comparison_row, report in zip(
+                comparison["runs"], reports[1:], strict=True
+            ):
+                point_rows = []
+                for point in report["decision_audit"]["points"]:
+                    baseline_point = baseline_points[point["task_name"]]
+                    ratio = (
+                        point["prompt_utf8_bytes"] / baseline_point["prompt_utf8_bytes"]
+                    )
+                    point_rows.append(
+                        {
+                            "task_name": point["task_name"],
+                            "byte_ratio": ratio,
+                            "within_10_percent": abs(ratio - 1.0) <= 0.10,
+                        }
+                    )
+                max_ratio = (
+                    report["context"]["prompt_utf8_bytes"]["max"] / baseline["max"]
+                    if baseline["max"]
+                    else None
+                )
+                comparison_row["decision_points"] = point_rows
+                comparison_row["max_byte_ratio"] = max_ratio
+                comparison_row["max_within_10_percent"] = (
+                    max_ratio is not None and abs(max_ratio - 1.0) <= 0.10
+                )
+                comparison_row["passes_ladder_budget_gate"] = (
+                    comparison_row["within_10_percent"]
+                    and comparison_row["max_within_10_percent"]
+                    and all(row["within_10_percent"] for row in point_rows)
+                )
     payload = {"runs": reports, "context_comparison": comparison}
     rendered = json.dumps(payload, indent=2)
     if args.out:

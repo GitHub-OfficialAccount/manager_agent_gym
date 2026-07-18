@@ -211,6 +211,20 @@ artifact contract that forbids method/tool narration while preserving numeric
 outputs and all tools. Use it first in `fixed_gate.py`; it is the no-confession
 robustness cell, not a change to the primary treatment.
 
+Shadow judgments are strictly offline. `shadow_probe.py` reads the exact saved
+manager requests before Batch B/C robust assignments, runs the two frozen probes
+independently, and writes `shadow_probes.json`; nothing returns to execution.
+`judgment_protocol.py` validates/fingerprints the per-seed atomic labels,
+relation polarities, probe wording, and deterministic response coding. Probe
+spec `shadow-probes-v1.1` asks symmetrically about all represented workers while
+enforcing at most three strongest decision-relevant evidence items per worker;
+this replaces the initial uncapped probe that encouraged task/field enumeration.
+`audit_arm2.py` reports relation availability, evidence-opportunity routing, and
+prompt size at those matched decision points in addition to episode summaries.
+Its versioned post-execution matcher normalizes quoted field names and
+orthographic `z-score` variants only for label matching; it never changes a
+saved observation, live prompt, action, reward, or semantic judgment.
+
 ### Named perturbation definitions
 
 Experiment-local objective perturbations are defined once in
