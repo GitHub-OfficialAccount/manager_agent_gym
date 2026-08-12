@@ -273,6 +273,68 @@ async def run_episode(seed: int, out_dir: Path, dry_run: bool = False,
         faulthandler.cancel_dump_traceback_later()
 
 
+def code_provenance() -> dict:
+    """Which revision produced this bundle, and was the tree modified?
+
+    ★ NO BUNDLE IN THE CORPUS RECORDS THE CODE THAT PRODUCED IT (L22). The manifest
+    carries the instance hash, models, horizon, timeout, concurrency, arrangement
+    and rosters -- and no git rev anywhere. So "which version produced this figure"
+    is unanswerable for every bundle we have, and the standing rule that running a
+    computation only counts as a review if you know which revision you ran could
+    not be satisfied.
+
+    It bites NOW because the last three days changed what a bundle CONTAINS:
+    `started_and_failed`, the 900s request bound, the tool dedup, the L17 threading.
+    Bundles from either side of those are different objects and nothing in them says
+    so.
+
+    TWO PROPERTIES THAT MATTER MORE THAN THE FIELD:
+
+      * CAPTURED AT RUN START, not at write time. An episode outlives its checkout
+        -- 40 minutes is long enough to switch branches under a running process --
+        so a rev read when the bundle is written can name code the run never used.
+      * `dirty` IS NOT OPTIONAL. A clean hash on a modified tree is WORSE than no
+        hash: it claims provenance it does not have, and nothing downstream can
+        tell the difference. `{"rev": ..., "dirty": true}` is honest; a bare rev is
+        a claim.
+
+    Never raises. A bundle from a non-git checkout should still be written, with
+    `rev: None` saying so -- refusing to run because provenance is unavailable would
+    trade a real episode for a missing field.
+    """
+    import subprocess
+
+    def _git(*args: str) -> str | None:
+        """Returns stdout UNSTRIPPED. `--porcelain` encodes status in the first two
+        COLUMNS, so ` M path` begins with a significant space -- stripping the
+        output ate it on the first line only, and `line[3:]` then cut one character
+        into the path ('xperiments/...'). Caught by printing the list rather than
+        eyeballing the JSON, where the truncation looked like a display artefact.
+        """
+        try:
+            out = subprocess.run(["git", *args], cwd=HERE, capture_output=True,
+                                 text=True, timeout=10)
+            return out.stdout if out.returncode == 0 else None
+        except Exception:
+            return None
+
+    rev = (_git("rev-parse", "HEAD") or "").strip() or None
+    status = _git("status", "--porcelain")
+    lines = [line for line in (status or "").splitlines() if line.strip()]
+    return {
+        "rev": rev,
+        "dirty": None if status is None else bool(lines),
+        # Split on the first run of whitespace after the 2-column status field
+        # rather than slicing a fixed width, so a rename ("R  old -> new") or a
+        # staged+modified entry ("MM path") cannot shift the path again.
+        "dirty_paths": [line[2:].strip() for line in lines[:20]],
+        "captured_at": "run_start",
+        "caveat": ("`dirty` true means the working tree differed from `rev` when "
+                   "the run began, so the rev names a starting point and not the "
+                   "code that ran. `rev` null means this was not a git checkout."),
+    }
+
+
 async def _run_episode_inner(
     seed: int, out_dir: Path, dry_run: bool = False,
     cell: str | None = None, concurrency: int = 1,
@@ -280,6 +342,12 @@ async def _run_episode_inner(
     shared_class_segments: int = 4,
     selection_record: Path | None = None,
 ) -> dict:
+    # CAPTURED FIRST, BEFORE ANYTHING ELSE HAPPENS (L22). Everything below this
+    # line takes time, and the point of the field is that it names the code the run
+    # STARTED under -- reading it later would let a checkout change underneath a
+    # 40-minute episode and still look authoritative.
+    provenance = code_provenance()
+
     # ★ THE SELECTION RECORD IS THE AUTHORITY, NOT A CROSS-CHECK (L17).
     #
     # This used to compare TWO named flags -- `lattice` and `shared_class_segments`
@@ -515,12 +583,28 @@ async def _run_episode_inner(
             "study_step": "S8" if cell is None else "R2-scope",
             "cell": cell,
             "cell_config": built.get("cell_config"),
-            # CONCURRENCY IS AN INSTRUMENT SETTING (LS ruling). The first four
-            # scope episodes ran at N=4 and the remaining fourteen at N=2, so it
-            # VARIES ACROSS CELLS — normally forbidden by the comparability rule.
-            # Accepted as a recorded limitation for an exploratory run, on the
-            # condition that it is auditable per bundle rather than remembered.
-            # For any powered study it is constant across cells, no exceptions.
+            # CONCURRENCY IS AN INSTRUMENT SETTING (LS ruling). Recorded here so
+            # it is auditable per bundle rather than remembered.
+            #
+            # ★ THIS COMMENT FAILED ITS OWN CONDITION AND IS CORRECTED (L21). It
+            # read: "The first four scope episodes ran at N=4 and the remaining
+            # fourteen at N=2." NO BUNDLE RECORDS N=4. Across every committed run
+            # bundle the field is {2: 14, None: 8, 1: 1} -- and the eight absent
+            # ones are all seed-3 R2 bundles that ran BEFORE the field was added.
+            #
+            # So the comment asserted a per-episode setting from memory, on exactly
+            # the four episodes for which no record exists, while demanding the
+            # setting be "auditable per bundle rather than remembered". The claim
+            # is WITHDRAWN, not restated with a different number: what those four
+            # ran at is not recoverable from any artefact.
+            #
+            # WHAT IS TRUE AND CHECKABLE: cells 3 and 4 are internally uniform;
+            # cells 0, 1, 2 and U each carry one episode at an UNRECORDED setting.
+            # The shakedown runs at concurrency=2, recorded in every bundle.
+            #
+            # And the field lives in `manifest`, not `metadata` -- reading the
+            # wrong one returns absent for all 23 bundles and looks like a
+            # recording gap that does not exist.
             "concurrency": concurrency,
             "dry_run": dry_run,
             "instance_seed": seed,
@@ -536,6 +620,7 @@ async def _run_episode_inner(
             # apart from one that had none -- and until now none of them had one.
             **_worker_request_limits(),
             "worker_run_backstop_s": _WORKER_BACKSTOP,
+            "code_provenance": provenance,
             "instance_sha256": built["instance_sha256"],
             # ★ DID ANYTHING CHECK THIS HASH? (L17). The manifest has recorded
             # `instance_sha256` all along -- which means today's mismatch would have

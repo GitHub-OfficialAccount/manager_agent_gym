@@ -855,3 +855,57 @@ Recognise these by shape, before you know what is wrong.
 _Fourteen numbered principles, twenty-odd conventions, four substitution instruments. The count is not
 the point; the origin lines are. If you are adding a rule, add its failure — and if you cannot name
 one, you are adding a preference._
+
+## Convergence is evidence only about what the two paths do NOT share
+
+**Name what the two paths SHARE. The convergence is silent about that, and informative about
+everything else.** Practical form — the differ-test asked one level down:
+
+    "what would have made these differ?"   ->   "WHAT COULD BE WRONG IN BOTH?"
+
+    two agents applying one written rule         shared: the rule       no evidence about the rule
+    record vs recomputation from the generator   shared: the generator  no evidence about the generator
+    HEAD scorer vs working-tree scorer           shared: the generator  evidence about the SCORER only
+    hash at two revisions vs a LOCAL sha256      shared: nothing that
+                                                         could be wrong GENUINE evidence
+
+**Supersedes a weaker cut (LS, 2026-08-10): "convergence on a MEASUREMENT is evidence,
+convergence on a JUDGEMENT is not."** That was tracking a correlation, not the mechanism. **A
+number and a judgement fail IDENTICALLY when the shared component is the thing in question**, and
+both are informative when it is not. RR broke it using the very example chosen to show it worked:
+**RE's recomputation of the L10 pool shares the GENERATOR with the record it checks** — 0
+mismatches in 60 and a floor matching to 17 decimals establishes the record was transcribed
+correctly, **and nothing whatever about the generator. If the generator is wrong, both agree and
+both are wrong, to 17 decimal places.**
+
+**RE-SCOPE, DO NOT DELETE.** Each convergence is evidence about *something*, just rarely what it
+was filed under; naming the shared component turns a blanket retraction into several narrower
+true statements.
+
+**The case that survives is the one where the shared component was removed ON PURPOSE:** the
+cross-revision instance check hashes the serialisation with a LOCAL sha256 rather than each
+revision's own `instance_hash`, *"so the stamp cross-check is a genuine second path rather than
+the same path twice"*. **That is this rule applied in the specific case before the general form
+existed.**
+
+## A check reports its COVERAGE, or its silence is not evidence
+
+**"A check that catches five of six is worth having ONLY because we know which one it misses.
+The value is not the four it finds; it is that the residue is NAMED AND BOUNDED rather than
+unknown. A tool reporting 'no issues' over an unstated coverage is what got us here."** (RE,
+2026-08-10.)
+
+**This is the threshold-population rule one level up.** *A threshold names the distribution it
+was derived from and the population that distribution is over* — and a CHECK names the class of
+fault it can see and the class it cannot. **A clean run must say what it did not look at**, or a
+reader takes "no issues" for "no issues of any kind".
+
+Worked instance, `check_state_count_prose.py`: it catches a stale count written as
+`the <number> <noun>` and **cannot** catch the possessive form. It prints that on success as
+well as on failure — *"This is NOT 'no stale counts' — see COVERAGE above."*
+
+**And the residue is bounded on purpose rather than by accident.** Tightening further to catch
+the possessive re-admits the false positive it was tightened to remove (`DV's three states`),
+because separating "the whole set" from "a subset" needs the sentence's meaning. **Five of six,
+honestly labelled, beats six of six with a third of the output noise** — *a check that grows a
+standing list of false positives trains people to ignore it.*

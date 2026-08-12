@@ -1,8 +1,16 @@
 """L16 — where does a worker task's time actually go? Requests, turns, and gaps.
 
-THE QUESTION, from the researcher: a segment task takes 13 minutes when it should
-take under two. One episode split cleanly — 8 tasks at a 1.6 min median, 7 tasks at
-a 24.5 min median, same work, and the 36-minute one produced a correct answer.
+THE QUESTION, from the researcher: why does a segment task take so long?
+
+★ THE FRAMING NUMBER THIS DOCSTRING OPENED WITH WAS WRONG. It said "a segment task
+takes 13 minutes when it should take under two". THAT 13 MINUTES WAS THE MEAN OF
+THE SLOW TAIL, not of the work. Measured over 299 runs with exact pairing:
+
+    corpus median   81s        segment median  136s     segment p90  489s
+
+Quote a median with a p90 beside it. The SPREAD is the finding here, and any point
+estimate hides it -- which is exactly how a tail mean became "the" task cost and
+sent the first two days of this investigation after over-engineering.
 
 WHY THIS CANNOT BE ANSWERED FROM A BUNDLE, which is unusual for us and is the
 reason this script exists at all: THE WORKER PATH EMITS NO PER-REQUEST EVENTS.

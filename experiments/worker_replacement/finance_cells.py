@@ -206,8 +206,11 @@ def active_roster(instance: dict[str, Any], cell: Cell) -> list[str]:
 # records `instance_sha256`, so today's mismatch would have been recoverable from
 # the artefact afterwards -- and flagged by nothing. A recorded fact nobody
 # compares is the shape we keep finding.
+# v3 = v2 plus `instance_sha256` stamped per chosen instance at approval
+# time. Same rule, same draw seed, same pool -- not a re-draw. Pointing here
+# is what upgrades the guard from a threading check to a provenance one.
 SELECTION_RECORD = (Path(__file__).resolve().parent / "records" / "L10"
-                    / "environment_selection_v2.json")
+                    / "environment_selection_v3.json")
 
 
 def shipped_setting(record_path: Path = SELECTION_RECORD) -> dict[str, Any]:
@@ -234,18 +237,50 @@ def assert_matches_selection(seed: int, instance: dict[str, Any],
     timestep and stops the episode.
     """
     setting = shipped_setting(record_path)
-    expected = env.instance_hash(gen.generate(seed, **setting))
     actual = env.instance_hash(instance)
+
+    # ★ PREFER THE STORED HASH; REBUILDING IS A WEAKER CHECK (RR, L22). My first
+    # version ALWAYS rebuilt the expected side with the current generator, so both
+    # sides moved together: if the generator changed, expected and actual changed
+    # in step and the guard passed. That verifies THREADING -- did the six
+    # parameters reach `generate()` -- and not PROVENANCE, while the error message
+    # claimed provenance.
+    #
+    # It is not hypothetical. L10's own history is the counterexample: the v1
+    # ceilings were priced at cap 3 against a runtime enforcing none, and a
+    # rebuild-both-sides guard would have passed that silently every time.
+    #
+    # A hash STAMPED AT APPROVAL TIME cannot move with the generator, so comparing
+    # against it catches generator drift as well as threading. Records that predate
+    # the stamp fall back to rebuilding, and the return says WHICH check ran --
+    # a guard that cannot report its own strength is the shape this whole phase has
+    # been spent removing.
+    record = json.loads(record_path.read_text())
+    stamped = {row["seed"]: row.get("instance_sha256")
+               for row in record.get("chosen", [])}
+    expected = stamped.get(seed)
+    mode = "stamped_hash"
+    if not expected:
+        expected = env.instance_hash(gen.generate(seed, **setting))
+        mode = "rebuilt_from_setting"
+
     if expected != actual:
         raise ValueError(
             f"INSTANCE MISMATCH for seed {seed}: this run built {actual[:16]} but "
-            f"{record_path.name} selected {expected[:16]}. The selection record's "
-            f"setting is {setting}. Refusing to run -- selecting on one population "
-            f"and running on another is not a degraded run, it is a run of "
-            f"something nobody chose."
+            f"{record_path.name} selected {expected[:16]} (check: {mode}). The "
+            f"record's setting is {setting}. Refusing to run -- selecting on one "
+            f"population and running on another is not a degraded run, it is a run "
+            f"of something nobody chose."
         )
     return {"instance_sha256": actual, "selection_record": record_path.name,
-            "setting": setting, "matches_selection": True}
+            "setting": setting, "matches_selection": True,
+            "check": mode,
+            "checks_generator_drift": mode == "stamped_hash",
+            "caveat": (None if mode == "stamped_hash" else
+                       "no stored hash in this record: expected was REBUILT with "
+                       "the current generator, so this verifies threading and NOT "
+                       "generator drift -- both sides move together if the "
+                       "generator changes")}
 
 
 def build_cell_environment(seed: int, cell_name: str,

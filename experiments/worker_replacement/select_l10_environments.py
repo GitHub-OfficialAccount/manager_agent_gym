@@ -39,6 +39,7 @@ from typing import Any
 
 from . import finance_admission as adm
 from . import finance_generator as gen
+from . import finance_env as sc_env
 from . import finance_scorer as sc
 from .check_l10_properties import SHIPPED, successor_unique_class
 
@@ -47,7 +48,36 @@ from .check_l10_properties import SHIPPED, successor_unique_class
 DRAW_SEED = 20260810  # re-drawn at cfc661f; the 20260809 draw priced its pool at cap 3
 
 SUITE = range(60)
-OUT = Path(__file__).resolve().parent / "records/L10/environment_selection_v2.json"
+OUT = Path(__file__).resolve().parent / "records/L10/environment_selection_v3.json"
+PRIOR = Path(__file__).resolve().parent / "records/L10/environment_selection_v2.json"
+
+# WHY v3 EXISTS, AND WHY IT IS NOT A RE-DRAW (RR, L17).
+#
+# `assert_matches_selection` REBUILDS both sides of its comparison with the current
+# generator:
+#
+#     expected = env.instance_hash(gen.generate(seed, **setting))   # re-derived NOW
+#     actual   = env.instance_hash(instance)
+#
+# so it catches parameters lost between the record and the builder -- the threading
+# bug it was written for -- and CANNOT catch the generator moving under a recorded
+# selection. Both sides move together and the hashes match.
+#
+# That is not hypothetical. It is L10's own history: the v1 record's ceilings were
+# priced at cap 3 while the runtime moved to uncapped, and a rebuild-and-compare
+# guard would have passed it silently. The guard is blind to exactly the failure
+# that forced the v1 -> v2 re-draw.
+#
+# The fix is a hash fixed AT APPROVAL TIME, so v3 carries `instance_sha256` per
+# chosen instance. The rule, the draw seed and the pool are UNCHANGED -- v3 is v2
+# plus the stamps, and `main()` asserts it reproduces v2's chosen seeds and classes
+# exactly. If that assertion ever fires, the generator has moved and the selection
+# needs the researcher, not a re-roll.
+#
+# THIS STAMP IS ONLY HONEST BECAUSE THE GENERATOR HAS NOT MOVED SINCE THE DRAW:
+# `finance_generator.py` and `instance_hash` are both untouched since the commit
+# that recorded v2. Stamping after a generator change would fabricate provenance
+# rather than record it.
 
 
 def pool() -> list[dict[str, Any]]:
@@ -113,8 +143,50 @@ def main() -> int:
         assert len(by_class[c]) > 1, f"class {c} had only one candidate above the floor"
     assert all(r["ceiling_share"] >= floor for r in chosen), "a chosen instance is below the floor"
 
+    # (7) THE STAMP, and the drift test that licenses it.
+    #
+    # Re-running an approved rule whose draw seed is fixed MUST reproduce the
+    # approved draw. If it does not, the generator has moved under the selection --
+    # which is the failure the L17 guard cannot see -- and this is the place it
+    # becomes visible. It raises rather than writing a v3 that quietly disagrees
+    # with the record it claims to extend.
+    if PRIOR.exists():
+        prior = json.loads(PRIOR.read_text())
+        before = [(c["seed"], c["sole_need_class"]) for c in prior["chosen"]]
+        after = [(c["seed"], c["sole_need_class"]) for c in chosen]
+        if before != after:
+            raise SystemExit(
+                f"THE GENERATOR HAS MOVED UNDER THE APPROVED SELECTION.\n"
+                f"  v2 chose {before}\n  this run chose {after}\n"
+                f"The draw seed and rule are unchanged, so the pool changed. This "
+                f"needs the researcher: re-drawing here would silently replace an "
+                f"approved selection with a different one."
+            )
+        print(f"\n  drift test: reproduces v2 exactly {before}")
+
+    for r in chosen:
+        r["instance_sha256"] = sc_env.instance_hash(gen.generate(r["seed"], **SHIPPED))
+        print(f"  stamped seed {r['seed']}: {r['instance_sha256']}")
+
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({
+        "supersedes_v2": "v2 IS THE APPROVED DRAW AND IS UNCHANGED. v3 is v2 plus "
+                         "`instance_sha256` per chosen instance, stamped so the run "
+                         "guard compares against a value fixed at approval time "
+                         "rather than one re-derived by the current generator (RR, "
+                         "L17). The rule, draw seed and pool are identical, and "
+                         "main() asserts the draw reproduces v2 exactly.",
+        "stamp_is_honest_because": "finance_generator.py and instance_hash are both "
+                         "untouched since the commit recording v2, so the stamp "
+                         "captures the generator that produced the approved draw. "
+                         "Stamping after a generator change would fabricate "
+                         "provenance rather than record it.",
+        "guard_limitation_this_closes": "assert_matches_selection REBUILDS both sides "
+                         "with the current generator, so it verifies THREADING, not "
+                         "PROVENANCE: if the generator moves, expected and actual "
+                         "move together and it passes. L10's own v1 record (ceilings "
+                         "priced at cap 3 against an uncapped runtime) is an instance "
+                         "that guard would have passed silently.",
         "rule": "structure decides WHICH TWO (sole-need asset class); magnitude decides "
                 "WHICH INSTANCE of each. Classes fixed before magnitude is consulted.",
         "approved_by": "researcher, 2026-08-09",

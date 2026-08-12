@@ -627,7 +627,7 @@ tasks** (8 of 9 `refine_task` requests set `new_name`), and one observed rename 
 
 ---
 
-## L3 — Re-measure at scope: does an effect appear once the instrument is honest? `[~] BLOCKER CLEARED 2026-08-10 when L10 closed. NOW THE TOPMOST OPEN STEP, and it is a RUN. Its FULL scope (6 cells x 2-3 seeds) is NOT authorised. Its AUTHORISED SUBSET is the shakedown: cells 0 and 1 on seeds 42 and 30, a few episodes, parallel, flash. Predictions from all three agents are committed (`records/L15/`). PRE-DECLARED AND BINDING: this subset is NOT POWERED for the channel question -- ceilings are 0.25x and 0.36x the declared MDE -- so it measures harness behaviour, `report_form` compliance, the timestep profile and this environment's VARIANCE, and a null from it may not be read either way. The variance is what makes L3's full scope sizable at all. Awaiting the researcher's word on whether to spend on a shakedown; declining is a defensible call and was offered.`
+## L3 — Re-measure at scope: does an effect appear once the instrument is honest? `[~] BLOCKER CLEARED 2026-08-10 when L10 closed. NOW THE TOPMOST OPEN STEP, and it is a RUN. Its FULL scope (6 cells x 2-3 seeds) is NOT authorised. Its AUTHORISED SUBSET is the shakedown: cells 0 and 1 on seeds 42 and 30, a few episodes, parallel, flash. Predictions from all three agents are committed (`records/L15/`). PRE-DECLARED AND BINDING: this subset is NOT POWERED for the channel question -- ceilings are 0.25x and 0.36x the declared MDE -- so it measures harness behaviour, `report_form` compliance, the timestep profile and this environment's VARIANCE, and a null from it may not be read either way. The variance is what makes L3's full scope sizable at all. ★ AUTHORISED AND RUNNING 2026-08-10 17:48Z — the researcher's word arrived ("authorize for few episode tests... proceed to the team"). Revision PINNED at the commit titled "R2 cell_configuration: the tool dedup lands in the record", clean tree, and it must not move while the run does. RE launched seed 42 / cell 0 ALONE into `records/L23` against `environment_selection_v3.json` under a 2.5h wall-clock stop; the other three are GATED on three first-bundle checks, all three new this week and none previously exercised on a real episode: (1) `code_provenance` present with the pinned rev and `dirty == false`, (2) `selection_provenance.check == "stamped_hash"` and NOT the rebuild fallback, (3) `five_bucket_split` runs without raising and the nine states partition with residual 0. Any failure stops the run — four bundles needing a caveat is worse than one bundle and a diagnosis. THREE STANDING CHECKS, answered on this line as required: (1) PRODUCTION-GRADE — a real orchestrator absolutely re-plans when a worker is swapped out under it, and it reads whatever the registry says the newcomer can do; this step measures that behaviour rather than inventing it, and the information the manager gets is a MANIPULATED variable, never a withheld one. PASSES. (2) NO DRIFT — cells 0 and 1 differ ONLY on `card_updated`, i.e. exactly on whether the manager is told what the replacement is approved for; that is the core question's cheapest instance. PASSES. (3) AMBIGUITY — none outstanding: `max_turns` withdrawn (L20), concurrency fixed at 2 and recorded (L21), selection stamped and enforced (L22). NOTE FOR THE NEXT FIRING — THE CRON PROMPT IS STALE IN THREE PLACES: it names L10 as topmost (L10 is `[x]`), it states worker bounds of "1200s/1 retry" (the bound is 900s since RR refuted 600s on the 2.15x hour-to-hour swing), and its 40.3-min episode median predates nothing measured here — it is an EPISODE figure and is not contradicted by L20's 81s WORKER-RUN median, which is a different population.`
 > **ORIGINAL BLOCK (RR, accepted by LS), NOW SATISFIED — retained as the record, not as the
 > current state.** As scoped this re-measures the same regret aggregate that produced four
 > retractions, without the behavioural DV. *"Unblocks when the manager action stream and the
@@ -6109,3 +6109,1417 @@ MANIPULATION got, for the same reason.**
 has still lost the work"* is true and matters for a **deployment** claim; it does not matter for
 *"does information about the newcomer change allocation decisions"*. **A named second quantity does
 not get re-litigated; a losing judgement call does.**
+
+### 2026-08-10 — L20 ★ THE 13-MINUTE TASK DOES NOT EXIST, and the turn cap does not reach the DV
+
+**Record: `records/L20/runtime_and_turn_cap_LS.md`. Instrument: `probe_runtime_by_task_class.py`,
+299 runs, exact pairing, 0 unmatched.**
+
+    population        n     mean   median     p90      max
+    ALL runs        299     190s      81s    489s    2160s
+    SEGMENT only    176     259s     136s    583s    2160s
+    over 300s        59     617s     489s   1040s    2160s
+    over 600s        20     998s     765s   1787s    2160s
+
+**The researcher was told "on average a worker task is roughly 13 minutes, and the longest is
+36." The 36 is row 1. The 13 is the mean of the SLOW TAIL. Two populations, one sentence.**
+Same defect the project already paid for — *a derived quantity is only as good as its closer
+set* — written about refusal codes and broken on durations the next day. **The researcher's own
+expectation was nearer the truth than my figure: median 81 s overall, 136 s per segment, so
+about 2x their estimate rather than 13x, plus a tail — 7% of runs exceed 10 min and carry a
+third of the clock.**
+
+**80% OF THE CLOCK IS THE MEASURED UNIT DOING ITS JOB** (SEGMENT 12.66 h of 15.8 h; UPSTREAM
+9.0%, AGGREGATION 8.2%). **There is no scaffolding overhead to cut, so the over-engineering
+hypothesis is now tested twice — inside a task (~3 calls, 100% of clock in them) and across
+tasks — and is not supported either time.**
+
+### 2026-08-10 — ★ RETRACTED: "the turn cap is a random task-killer inside the normal distribution"
+
+**The variance claim was right; the CAUSAL claim was wrong, and it was the one the
+recommendation rested on.** Deaths are concentrated, not uniform:
+
+    AGGREGATION        18 of  26   69.2%
+    UPSTREAM (prep)     5 of  93    5.4%
+    SEGMENT (the DV)    2 of 176    1.1%
+
+**They land on the tasks that must read nine upstream deliverables to answer at all** — output
+floor, aggregate RWA, the reconciliations: 100/100/100/67/60/40%.
+
+**THE SPLIT CANNOT READ ANY OF THEM.** `split()` keys on `index.segment_task_ids`, a
+segment_id -> task_id map; the scorer scores a reported RWA against *that segment's* truth.
+**An aggregation task carries no segment id, so it cannot enter the DV. Verified in the code,
+not inferred from the deaths.** And the one dying task upstream of every segment does not block
+them: `Exposure data preparation` dies 5 of 26, and **prep-died bundles average 7.7 segment
+completions against 7.5 for prep-ok** — no measurable cost.
+
+**★ THE ESCALATION IS WITHDRAWN. `WORKER_MAX_TURNS` STAYS AT 16 — this was never the
+researcher's decision to make and should not have reached them.** Raising it buys at most the
+1.1% and spends the budget on the slowest class, dying at 69%, whose output nothing reads.
+**The codebase already made this call correctly once** (`finance_env.py:456-465`): workers died
+on the cap while messaging each other and the fix was **rewriting tasks to be self-contained,
+not raising the budget** — *"a task whose completion requires unbounded coordination is not a
+reliable DAG node."*
+
+**RAISED, NOT TAKEN:** deleting the aggregation chain would return ~10% of wall clock and 18 of
+25 deaths, **but it changes the workflow the manager allocates over and every committed bundle
+was collected with it present.** That is a comparability cost, not a cleanup.
+
+**AFTER THIS: nothing is with the researcher. The shakedown is unblocked on every item the
+team owns.**
+
+### 2026-08-10 — L20 CONFIRMED by RR, with a stronger basis than mine, and the n=3 null becomes a BOUND
+
+**Record: `records/L20/runtime_and_turn_cap_LS.md` (updated).**
+
+**RR hunted the path that would have broken the withdrawal — a deliverable reaching a score —
+and found it closed in THREE places, the one LS cited being the weakest.** Mine is about how a
+completion is CLASSIFIED; RR's is about how it is COLLECTED, one stage earlier:
+`run_finance_episode.py:445` drops any completion whose `task_id` is not in the segment index,
+**so it never becomes a deliverable at all.** Plus: the index is fixed at generation
+(`finance_env.py:551-564`) so a manager-created task cannot join it, and the name path is
+retired everywhere. **Withdrawal stands; `WORKER_MAX_TURNS` stays at 16.**
+
+**★ AND RR PRICED THE COMPARISON LS OFFERED AS A NULL.** Per-bundle segment completions have
+mean 7.78, SD 0.81 — so the prep-block comparison has SE 0.50 and **could only have detected a
+block larger than ~1.4 segments.** The observed 0.2 difference is 0.4 SE.
+
+    WRONG   "prep death does not block the segments"
+    RIGHT   "no evidence of blocking; n=3, and a block of fewer than ~1.4 segments
+             would have been invisible to this comparison"
+
+**RR also ranked the two corrections, and the ranking is right:** the 13-minute slip is
+housekeeping; **the retraction of "the cap is a random killer" is the result, because that was
+a MECHANISM claim and 69%/5.4%/1.1% refutes it structurally.** And **the withdrawal never
+needed the unreachability argument** — 2 segment deaths in 176 runs fails the raise-the-cap
+recommendation on the rate alone.
+
+### 2026-08-10 — L21 ★ THE FOUR EPISODES AT A DIFFERENT SETTING ARE THE FOUR WHOSE BUNDLES CANNOT SAY SO
+
+**Record: `records/L21/concurrency_audit_LS.md`. Raised by RE.**
+
+    concurrency   bundles  runs   median      p90      max   fail%
+    <<ABSENT>>          8    100      78s     403s    1506s   11.0%
+    1                   1     15     177s    1787s    2160s   20.0%
+    2                  14    184      85s     467s     966s    7.6%
+
+**LS PREDICTION, COMMITTED BEFORE MEASURING — "parallel bundles will show a longer tail and
+more provider-side failures" — FAILED.** N=2 has the lowest failure rate and the lowest max.
+**RE's caution is not supported by the corpus; it is also not refuted**, because setting is
+confounded with study step, arrangement, revision and hour — **and the measured hour-to-hour
+provider swing (2.15x) is larger than any difference here.** Observational, not an experiment.
+
+**★ THE COMMENT ASSERTS WHAT THE ARTEFACTS CANNOT.** `run_finance_episode.py:515` states the
+first four scope episodes ran at N=4 — **no bundle records N=4**, because the field was added
+after they ran. **The comment sets its own condition, "auditable per bundle rather than
+remembered", and that condition is unmet for exactly the four bundles it is about.** Varies
+within cells 0/1/2/U, uniform in 3/4. R2 was already flagged exploratory; recorded limitation,
+retracts nothing.
+
+**LS near-miss, recorded because it nearly became a finding:** read `metadata`, got "field
+absent from all 23 bundles", was one step from reporting a recording gap. **It is in
+`manifest`.** Wrong key, not a missing quantity — *absence of a FIELD is not absence of the
+QUANTITY*, nearly demonstrated by breaking it.
+
+**★ DECISION (LS): shakedown runs at `concurrency=2`, recorded in every bundle. RE's
+sequential-vs-parallel probe is NOT taken** — the corpus already gives weak evidence against
+the concern, a four-task probe cannot separate setting from hour when the hour swing is 2.15x,
+and **the shakedown itself produces the clean same-setting data.** Preference-level, not
+validity: if RE thinks it answers something the shakedown will not, it goes on the record and
+the work proceeds.
+
+**L20's headline survives the mixing** (78s vs 85s medians on the two groups with usable n);
+**its TAIL statistics are weaker than presented** — corpus max and part of p90 come from the
+single N=1 bundle.
+
+### 2026-08-10 — L22 ★ A BUNDLE CAN SAY WHICH INSTANCE IT RAN, AND CANNOT SAY WHICH CODE RAN IT
+
+**Record: `records/L22/provenance_before_the_run_LS.md`. Two gaps, one closed, one open, both
+impossible to fix retroactively — the only reason they were worth doing before the run.**
+
+**1. CLOSED (RR's finding).** `assert_matches_selection` **REBUILDS both sides** —
+`expected = instance_hash(generate(seed, **setting))` against `actual` — so it catches
+parameters lost between record and builder and **cannot catch the generator moving under a
+recorded selection**: both sides move together and it passes. **This is L10's own history — the
+v1 ceilings priced at cap 3 against an uncapped runtime is an instance the guard would have
+passed silently, i.e. it is blind to the exact failure that forced the v1 -> v2 re-draw.**
+
+**FIX: `environment_selection_v3.json` stamps `instance_sha256` at APPROVAL time. v2 untouched.**
+
+    seed 42  bank  4.97%   ef25aa9dc76f0fd5...
+    seed 30  mdb   7.12%   fc1eac6ced1bec73...
+    drift test: reproduces v2 exactly [(42,'bank'), (30,'mdb')]
+
+**NOT A RE-DRAW, and the script proves it rather than claiming it** — same rule, same draw
+seed, same pool, and `main()` now REFUSES TO WRITE if its draw disagrees with v2. **Re-running
+an approved rule under a fixed seed IS the drift test.**
+
+**★ THE STAMP IS ONLY HONEST BECAUSE THE GENERATOR HAS NOT MOVED, VERIFIED BEFORE STAMPING:**
+`finance_generator.py` 0 commits since v2; `instance_hash` untouched. **Stamping after a
+generator change would fabricate provenance rather than record it, and the file could not tell
+the two apart.**
+
+**LS near-miss, kept because it is the alarm working:** `v2['pool'] == v3['pool']` returned
+**False**. Benign — 2 of 60 rows differ by the added stamp alone (chosen rows are references
+into the pool, mutated in place); **all 60 identical on (seed, ceiling, class).** Checked field
+by field rather than explained away.
+
+**STILL OPEN on this one: the guard does not yet READ the stamp,** so v3's hashes are a record
+and not an enforcement, and the guard's name and error message claim provenance while it
+verifies threading.
+
+**2. OPEN — NO BUNDLE RECORDS THE CODE REVISION THAT PRODUCED IT.** The manifest carries the
+instance, models, horizon, timeout, concurrency, arrangement, rosters — **and no git rev
+anywhere; the runner never captures one.** So *"which version produced this figure"* is
+unanswerable for every bundle in the corpus. **It matters NOW because the last three days
+changed what a bundle CONTAINS** — `started_and_failed`, the 900 s bound, the tool dedup, the
+L17 threading — **so bundles from before and after are different objects and nothing in either
+says so.** Violates a rule already written down: *running a computation is only a review if you
+know which revision you ran.* **We cannot satisfy that clause today.** Specified to RE with the
+two conditions that matter: captured at RUN START, and recording whether the tree was DIRTY —
+a clean hash on a modified tree is worse than no hash.
+
+**3. NOTED, NOT ACTED ON (RR) — EVERY TOOL A WORKER HOLDS IS A MESSAGING TOOL.** Verified from
+the bundles, not the code: `send_message`, `broadcast_message`, `get_recent_messages`,
+`get_conversation_with`, `get_task_messages`. **`create_ai_tools()` — search, analyse,
+calculate, generate — never reaches a worker** (`registry` passes `tools=[]`). **Consequence
+for DESCRIPTION, not validity: the competence difference between workers is entirely the IRB
+calibration they hold and not at all their tooling.** Consistent with the calculator no-go and
+the core-tools rule — nothing is withheld — **but "toolset" is in the project's vocabulary and
+does not exist on this path.** With the researcher, as it changes description not design.
+
+### 2026-08-10 — L22 addendum: the stamp's honesty condition becomes a CHECK, and it is stricter than the hand version
+
+**`check_stamp_honesty.py`. Raised by RE: the condition licensing the v3 stamp existed only as
+prose in the record (`stamp_is_honest_because`).** That is the label-over-condition shape this
+phase has been spent removing — **a claim about a design property sitting over an integer
+nobody computes.** It is a FIXED HISTORICAL FACT (both commits are in the past, the answer
+cannot change), which is what makes it worth computing once and keeping.
+
+    v2 recorded at c97c2fc94   v3 stamped at f4e61fe12
+      finance_generator.py: 0 commit(s) in the stamp window
+      finance_env.py:       1 commit(s) -- changed, but NOT instance_hash
+      seeds 42, 30: stamp matches the generator as it stands today
+      HONEST, and the guard is live.
+
+**★ THE CHECK IS STRICTER THAN THE HAND VERSION IT REPLACES.** My manual check took the LAST
+commit touching v2 as the window start; **the correct boundary is the commit that INTRODUCED
+v2, which is earlier — so the honest window is LONGER than the one I inspected.** The
+conclusion held; **the window I checked was too narrow to establish it.** The check uses
+`--diff-filter=A` and passes over the wider window.
+
+**It separates two failures that would otherwise print identically:** a DISHONEST stamp
+(generator moved BEFORE stamping, exit 1) from an HONEST stamp the runtime has outgrown
+(moved AFTER, exit 2). **The second is the researcher's call and NOT a re-stamp — re-stamping
+would erase the evidence that anything moved.**
+
+**RE landed both L22 items.** Code provenance captured at run start with `dirty` and
+`dirty_paths`, never raising (a non-git checkout writes `rev: null` saying so, rather than
+trading a real episode for a missing field). The L17 guard now points at v3 and prefers the
+STORED hash; unstamped records fall back to rebuilding **and the return says which check ran**
+— *a guard that cannot report its own strength is the shape this phase has been spent
+removing.* **Control C: a one-part-in-a-million EAD perturbation is REFUSED under v3 and PASSES
+under v2, with the return distinguishing them** — the difference between the two records made
+visible rather than asserted.
+
+### 2026-08-10 — pre-run tree clean-down: one record is EVIDENCE, one cannot be a record at all
+
+**Two files were dirty when the revision was pinned. Diffed before touching either, because the
+last regenerated record committed unexamined was a pure deletion of its own superseded block.**
+
+**`records/R2/cell_configuration.json` — COMMITTED. The diff is exactly nine deletions and
+nothing else:** `send_message`, `get_recent_messages`, `broadcast_message`, x3 cells.
+**That is RE's tool dedup landing in a record, and it independently corroborates the bundle
+count** (598 = 2 x 299 executions for the three doubled tools, 299 for the two that were not).
+
+**`records/L1/rendered_cell0_timestep0.txt` — REVERTED, and the reason is worth more than the
+file.** 32 lines removed, 32 added, **identical once UUIDs are masked**: `workflow_id` and
+every `task_id` are freshly random per build. **So this record produces a diff on every
+regeneration and none of them mean anything — it cannot distinguish a real change from a
+reshuffle, which is the one thing a record exists to do.** Reverted rather than committed;
+making it deterministic (or masking ids on write) is a small open item, not a project.
+
+### 2026-08-10 — L3 SHAKEDOWN LAUNCHED, gated on the first bundle. And the cron prompt is stale in three places
+
+**The researcher authorised the run and it is live: seed 42 / cell 0, alone, into `records/L23`,
+pinned to `environment_selection_v3.json`, 2.5h wall-clock stop.** The other three episodes are
+GATED on three checks against the first bundle — **all three mechanisms are new this week and
+none has been exercised on a real episode**, so this is the first opportunity any of them has to
+be wrong where it matters:
+
+    1  code_provenance present, rev == the pinned commit, dirty == false
+    2  selection_provenance.check == "stamped_hash", NOT the rebuild fallback
+    3  five_bucket_split runs without raising; nine states partition, residual 0
+
+**Any failure stops the run. Four bundles needing a caveat is worse than one bundle and a
+diagnosis** — and the corpus already holds 23 bundles that cannot say which code produced them,
+which is the cost of not gating.
+
+**THE REVISION IS PINNED AND MUST NOT MOVE WHILE THE RUN DOES.** A measurement whose revision
+changed under it is not a measurement; this phase has been spent paying that debt down.
+
+**★ THE CRON PROMPT IS STALE IN THREE PLACES — recorded so the next firing does not act on it:**
+
+- **It names L10 as the topmost step. L10 is `[x] CLOSED`** (seeds 42/30, both reviews
+  committed). The topmost open step is L3, and it is this run.
+- **It states worker bounds of "1200s / 1 retry / 2460s backstop". The request bound is 900s**,
+  after RR refuted 600s using the measured 2.15x hour-to-hour swing against a 1.97x margin.
+- **Its "healthy episode median 40.3 minutes" is NOT contradicted by L20's "81s median worker
+  run"** — they are different populations, an EPISODE against a WORKER RUN, and an episode
+  contains many worker runs plus the manager's timesteps. **Naming that explicitly because
+  reading one as refuting the other is exactly the closer-set error L20 exists to record.**
+
+**Timing expectation for this run, stated as a RANGE because a schedule quoted without one is
+the same defect as a ceiling quoted without an interval:** the episode baseline is a median of
+**40.3 min** and a maximum of **83 min** over 20 committed bundles. **Do not kill on elapsed
+time** — kill only on heartbeat silence >1200s (longest silence in a successful episode: 715s),
+with 2.5h as the wall-clock stop, which is what the launch carries.
+
+### 2026-08-10 — ★ RR RETIRES A WHOLE TECHNIQUE, NOT ONE CHECK: recompute the artefact at both revisions
+
+**Record: `records/L22/`. Replacement for `check_stamp_honesty.py`'s substring test — HELD, not
+committed, while the episode runs (see the note at the end of this entry).**
+
+LS's check asked *"could something relevant have changed?"* by testing whether a diff mentions
+`instance_hash`. **RR's replacement asks the question itself: generate the chosen instances at
+BOTH revisions and compare.**
+
+    seed 42   at c97c2fc94  ef25aa9dc76f0fd5a8   at f4e61fe12  ef25aa9dc76f0fd5a8   same
+    seed 30   at c97c2fc94  fc1eac6ced1bec7324   at f4e61fe12  fc1eac6ced1bec7324   same
+
+**Three reasons it is strictly better, and the second is the one that condemns the original:**
+it tests the conclusion instead of a proxy for it; **it cannot be defeated by a change that
+never contains the string** — a generator edit, a reference-table edit, an rng change; and its
+failure mode is LOUD. **It generalises: any "did X move between revisions" question about a
+deterministic artefact is answered by recomputing the artefact at both revisions, which retires
+the diff-inspection family rather than this one instance of it.**
+
+**IT ALSO CANNOT MAKE LS'S WINDOW ERROR** — it takes revisions as arguments instead of deriving
+them from file history, which is where taking the LAST commit touching v2 rather than the one
+that INTRODUCED it came from.
+
+**THE COMPARATOR IS HELD FIXED AND ONLY THE ARTEFACT VARIES:** the serialisation is hashed with
+a LOCAL sha256, not each revision's own `instance_hash`. **That makes the stamp cross-check a
+genuine second path** — and naming what would have made the two differ, as required: any change
+to `instance_hash` beyond the `sha256(to_json(...))` form. They agree, so there is none.
+
+**The first implementation FAILED LOUDLY**, which is the property the technique was chosen for:
+hand-loading module specs made `finance_generator` a package and sent its lazy relative import
+to `gpkg.finance_generator.finance_scorer`. A traceback, not a silent pass.
+
+**★ HELD, NOT COMMITTED, AND THE DISTINCTION IS THE POINT.** The episode is running under a
+pinned revision. **The rule is that the CODE must not move under a measurement — so `.py`
+changes wait for the bundle; records and this log do not.** Every commit made during this run is
+verified `0 python files changed` against the pinned revision, so the rev the bundle records
+still identifies the code that produced it. **A bundle's rev will routinely differ from HEAD;
+the check that matters is not "rev == HEAD" but "does the diff between them touch executable
+code".**
+
+### 2026-08-10 — ★ RETRACTED BY MEASUREMENT (RR): workers do not differ in CALIBRATION, they differ in COVERAGE
+
+**Record: `records/L22/provenance_before_the_run_LS.md` §3.** LS wrote that the competence
+difference between workers is *"entirely the IRB calibration they hold"*. **Measured on seed 42,
+every worker holds the SHARED class-level value for every class it covers:**
+
+    w_9f1635 [bank, retail]  w_721a8b [bank, corporate]
+    w_c0dd2b [retail, sovereign]  w_613442 [corporate, sovereign]      all: calibration == shared table
+
+**So calibration is DOWNSTREAM of coverage, not a second axis.** *"The calibration they hold"*
+invites a graded reading — workers holding calibrations of differing accuracy — **which was true
+before R1 and is not true now.** The difference is **binary coverage**.
+
+**PRECISE FORM:** *the competence difference is WHICH ASSET CLASSES A WORKER IS IRB-APPROVED FOR
+— calibration values are shared and class-level since R1 — and NOT its tooling, which is
+identical on every worker execution in the committed bundles.* **The tooling half keeps its
+scope on purpose: a measurement on this harness at this revision, not a claim about the design
+space. "Workers have no tools" would be far larger than the bundles support.**
+
+**NOT COSMETIC: the brief's vocabulary includes `toolset` as a competence axis and the bundles
+say that axis does not exist on this path — a paper describing a toolset difference would be
+describing a design we did not run.**
+
+### 2026-08-10 — ★ THE NON-SPEND WAS RIGHT AND BOTH OF LS'S REASONS FOR IT WERE WRONG (RR)
+
+**Record: `records/L21/non_spend_rejustified_LS.md`.**
+
+**(b) WITHDRAWN — "the shakedown gives us the same data for free" is FALSE.** It runs at ONE
+setting; **a single-setting run has no counterfactual.** Four episodes at N=2 say nothing about
+what N=1 or N=4 would have done. **A non-spend justified on a premise that is not true is the
+version that gets re-litigated.**
+
+**(a) WITHDRAWN — it condemned a BADLY-DESIGNED probe, not the probe.** "Four tasks cannot
+separate setting from hour at a 2.15x swing" holds only if the arms run in SEPARATE BLOCKS.
+**Interleave them within the hour and the hour effect largely cancels — that is blocking, it is
+free, and it is the standard answer to this exact confound.**
+
+**THE JUSTIFICATION THAT HOLDS: nothing currently depends on the answer.** The corpus points
+away from the worry (N=2 lowest failure rate and lowest max; **LS's committed prediction that
+parallelism would cost reliability FAILED against it**) — but **RR's sharpest point is that this
+evidence is confounded IN THE SAME WAY LS argued would defeat the probe:** settings were never
+randomised, so concurrency is tangled with time and revision. **LS applied the confound to RR's
+proposal and not to LS's own measurement.**
+
+**★ EXPIRY CONDITION RECORDED, because a decision without one is a decision nobody revisits: if
+a reliability question becomes load-bearing, RUN THE PROBE, BLOCKED-INTERLEAVED WITHIN THE
+HOUR.**
+
+**CORRECTED — "22 of 37 bundles have no concurrency field" COUNTS TWO STUDIES AS ONE.** 14 of
+RR's 37 are `records/preserved_outputs/toolset_to_screening_*/**/run.json` — **the ABANDONED
+prior study.** One instance printed before deriving from it: task names *Batch A Rapid Screen /
+Robust Audit / Method Reconciliation*, manifest keys *arm, lever, perturbation,
+observation_policy, matrix_hash*. **A different environment with no concurrency concept at all,
+so counting them as "missing the field" counts bundles that never had one.**
+
+    finance corpus:  N=2 14   N=1 1   ABSENT 8   total 23
+
+**RR's "15 recorded" is exactly right; the denominator is 23, not 37. AND THE CONCLUSION
+SURVIVES THE ARITHMETIC** — 8 unrecorded of 23 is still thin, still observational, still
+unrandomised, which is why the decision moves off the measurement and onto "nothing depends on
+it".
+
+### 2026-08-10 — ★ THE PROVENANCE GAP IS A REGRESSION, NOT AN OVERSIGHT
+
+**Found while chasing RR's denominator, and it is worth more than the correction was.**
+
+    abandoned study (preserved_outputs)   13 of 14 bundles carry `code_commit`
+    current finance corpus                 0 of 23 carry code_commit or code_provenance
+
+**L22 §2 recorded "no bundle records the code revision that produced it" as a gap never closed.
+It is a REGRESSION — the capability existed and the rebuild dropped it.**
+
+**That changes what the finding is for. A gap invites "add the field"; a REGRESSION invites the
+question of what ELSE the rewrite dropped** — `arms_spec_hash`, `matrix_hash` and `code_commit`
+were all provenance fields in the schema we replaced. **Not audited here; named so it is not
+rediscovered a third time.** Does NOT establish the old `code_commit` was correct — only that
+the field was populated and is now absent.
+
+### 2026-08-10 — RR's provenance audit: a FOURTH lost field, and why the timing objection does not bind
+
+**Record: `records/L21/non_spend_rejustified_LS.md` §6.**
+
+    code_commit  13/14   arms_spec_hash  13/14   matrix_hash  13/14
+    working_tree_clean  13/14   <- LS did not name this one, and it is the one that matters
+
+**RR is right about why: a commit id with a dirty tree is a revision nobody can reconstruct. So
+the regression is worse than "we lost the commit id" — we lost the commit id AND the flag that
+says the commit id means anything.**
+
+**★ RR'S STRUCTURAL DIAGNOSIS IS THE DURABLE PART: NOBODY DROPPED PROVENANCE DELIBERATELY.** It
+sat in the same manifest as the design vocabulary; the design vocabulary was correctly replaced
+(`arm`, `lever`, `perturbation` are the retired study's terms); **provenance went with it because
+it was never separated from it.** 39 old fields absent, most correctly so, 36 new ones added.
+**The fix is provenance in its own block, so the next redesign cannot take it along by accident.**
+
+**RR RECOMMENDED LANDING NOTHING UNTIL ALL FOUR BUNDLES ARE IN** — a field arriving mid-run gives
+3 of 4 bundles a schema the fourth lacks, **the concurrency confound reproduced deliberately in
+the field whose purpose is to prevent it.** The principle is right. **IT DOES NOT BIND HERE, and
+the check was one command:** `code_provenance` landed THREE COMMITS BEFORE the pinned revision,
+the running episode is executing it, **all four bundles carry it, and `dirty`/`dirty_paths` are
+already in it.**
+
+**★ TWO AGENTS CONVERGED ON THE SAME REQUIREMENT FROM OPPOSITE DIRECTIONS.** RR found
+`working_tree_clean` by auditing the old schema; RE made `dirty` mandatory from first principles
+— *"a clean hash on a modified tree is WORSE than no hash"*. **What would have made them differ,
+as the rule requires: the flag being a nice-to-have. Both independently made it load-bearing,
+neither having seen the other's reasoning.** Corroboration, not agreement by contact. **And RE's
+field is already a nested block, which IS the structural fix RR's diagnosis calls for — arrived
+at before the diagnosis existed.**
+
+**Caveat kept: this does NOT establish the old fields were correct.** Both are 13/14, so one
+bundle lacked both — the old schema had a hole too.
+
+### 2026-08-10 — ★ `dirty` IS HONEST ABOUT THE TREE AND WRONG ABOUT THE CONSEQUENCE (RR), and my convergence claim overstated
+
+**RR ran the negative case on `code_provenance` before three more episodes use it — the field
+CAN report True, `dirty_paths` survives the `--porcelain` column handling, RE's slicing fix
+held. Negative case answered rather than assumed.**
+
+**★ BUT `dirty: True` CONFLATES "EXECUTABLE CODE CHANGED" WITH "A MARKDOWN FILE CHANGED", AND
+THAT IS THE EXACT DISTINCTION MY OWN OPERATING RULE TURNS ON.** I wrote: *"the check is never
+'rev == HEAD' but 'does the diff between them touch executable code'."* **The field records the
+coarse flag while the rule uses the fine one.**
+
+Verified on the live run:
+
+    dirty_paths   ['experiments/worker_replacement/records/L23/']     python files: 0
+    caveat says   "the rev names a starting point and NOT THE CODE THAT RAN"
+
+**That sentence is FALSE for a record-only diff — the code that ran is exactly `rev` — and it is
+the sentence a future reader will act on.** Because records are committed during runs BY DESIGN,
+**this is not an edge case; it is the normal state of every bundle this study will produce.**
+
+**FIX: one field, `dirty_code`, true only when a dirty path is executable.** Then
+`dirty: true, dirty_code: false` says *"records moved, the code did not, this bundle is
+reproducible"* — **which is what I verify by hand every time and what nobody downstream can
+currently recover.**
+
+**DEFERRED UNTIL ALL FOUR BUNDLES ARE IN, on RR's own argument applied to RR's own proposal:**
+adding it mid-corpus gives one bundle the old schema and three the new — **the concurrency
+confound reproduced deliberately, in the field whose purpose is preventing unreconstructable
+revisions.** The four stay uniform; **the caveat must be read with this correction beside it**,
+which is why it is in the log rather than only in a record.
+
+**★ AND IT CORRECTS WHAT I RECORDED AN HOUR AGO.** I wrote up RR and RE independently making
+`dirty` load-bearing as corroboration. **RR's sharper reading: neither of us tested whether it
+could report True, and neither noticed it cannot make the distinction my rule turns on.**
+
+    CORROBORATION ON THE NECESSITY OF A FIELD IS NOT CORROBORATION ON ITS SUFFICIENCY.
+
+**Two people agreeing a flag matters is different from either checking what it says** — and the
+convergence I recorded was on the first only. The finding stands as stated; **the weight I put
+on it does not.**
+
+### 2026-08-10 — "0 of 20 bundles can be split" IS STALE. It is 3 of 23 — and exactly ONE is a prior
+
+**The cron prompt still carries "0 of 20 committed bundles can be split at all". That predates
+the structured refusal-code fix and the ninth state. Re-measured by running
+`five_bucket_split.five_bucket` over every committed bundle:**
+
+    all committed bundles              23
+      splittable                        3
+      splittable AND shipped            1     (not _FAILED / _INCOMPLETE)
+      splittable, shipped, ran work     1     <- the only real prior
+
+    R3/run_cell0_seed26   DV 0   MANIPULATION 0   BUDGET_HORIZON 0   DEFECT 2   MEASUREMENT 7
+    S8/..._attempt1_FAILED      DV 9, all else 0      — 7 worker runs, marked FAILED
+    S8/..._attempt5_INCOMPLETE  DV 2, MEASUREMENT 7   — marked INCOMPLETE
+
+**★ THE POPULATION IS THE WHOLE POINT, AND I HAD NOT STATED IT.** I have been calling R3 *"the
+only classifiable bundle"*. That is true of the SHIPPED population and false of the committed
+one — **two more split, and one of them reports DV 9, which read without its population looks
+like a manager that allocated nothing.** It is a FAILED attempt, and `never_assigned` is already
+established as indistinguishable from *"the manager never tried"*. **A bucket count without its
+population is the same defect as a threshold without its distribution**, which this phase has
+now paid for three times.
+
+**The other 20 refuse LOUDLY and uniformly** — *"deferral on <task_id> carries no
+refusal_codes; this bundle predates [the fix]"* — naming the first offending deferral rather
+than guessing a state. **The split refusing is the behaviour it was built for.**
+
+**CONSEQUENCE FOR THE INCOMING L23 BUNDLE: it has exactly ONE prior, n=1, and that prior is a
+cell-0 episode whose DV is 0 for reasons RR showed are PARTLY STRUCTURAL** (`refused_allotment`
+has no emission site since the allotment was removed; `never_assigned` cannot be distinguished
+from never-tried). **So "the new bundle's DV matches the prior" would be agreement between one
+observation and one structurally-constrained observation, and must not be reported as
+replication.**
+
+### 2026-08-10 — L3 run status: healthy at 28 min, by the criterion that is not elapsed time
+
+**Heartbeat 159 s at check (threshold: silence > 1200 s). 6 of 16 tasks complete through
+timestep 6; segment work underway.** `partial_seed42.json` is written every timestep — *"so a
+killed run is not a total loss; the bundle is only written on completion"* — which is what makes
+a heartbeat check possible at all.
+
+**Elapsed is 28 min against a 40.3 min median and 83 min maximum. NOT ACTED ON, and deliberately
+not projected:** the cron's own history is three runs misdiagnosed as hung by an elapsed-time
+rule, and per-timestep extrapolation is invalid here because segment tasks (mean 259 s) are the
+expensive ones and they start late. **Recorded as an observation, not a forecast.**
+
+### 2026-08-10 — ★ OUR OWN OUTPUT WOULD HAVE DIRTIED OUR OWN PROVENANCE FLAG. Caught before episodes 2-4
+
+**RR's mid-corpus objection arriving through a different door: not a SCHEMA change this time, a
+VALUE change driven by our workflow, in the field whose purpose is to say whether the revision
+means anything.**
+
+Verified in the code and against the clock, not inferred:
+
+    line 349   provenance = code_provenance()      <- run start
+    line 467   out_dir.mkdir(...)                  <- AFTER
+    run started 17:48:44   records/L23/ created 17:49:45
+
+**So episode 1 captures a CLEAN tree and its bundle should read `dirty: false`.** The gate check
+as written to RE stands for it.
+
+**★ EPISODES 2-4 WOULD NOT.** By the time they start, `records/L23/` is untracked and on disk, so
+`code_provenance()` returns `dirty: true, dirty_paths: ['experiments/worker_replacement/records/
+L23/']`. **The four bundles would split one clean and three dirty for a reason that has nothing
+to do with code** — and per RR's finding the caveat on those three would assert *"the rev names
+a starting point and not the code that ran"*, **which would be false for all three.**
+
+**FIX, free, one step in the sequence: episode 1 finishes -> gate checks -> COMMIT the bundle ->
+then launch 2, 3, 4 against a clean tree.** All four then carry the same rev and `dirty: false`,
+and the flag means what it says. Sent to RE before the launches rather than discovered in the
+bundles afterwards.
+
+**Note what made this findable: RR ran the negative case on `dirty` and found it reports the
+COARSE fact.** Without that, four bundles would have carried a flag nobody had reason to
+question. **Corroboration on necessity is not corroboration on sufficiency — and the sufficiency
+test is what surfaced this.**
+
+### 2026-08-10 — L3 run status at 58 min: healthy, unremarkable, not projected
+
+**Timestep 12, 12 of 16 tasks complete, heartbeat 16 s (kill threshold: silence > 1200 s).**
+Elapsed is above the 40.3 min median and inside the 83 min maximum, **so it is unremarkable and
+no forecast is recorded** — per-timestep extrapolation is invalid when the expensive tasks
+(segments, mean 259 s) start late, and this project's history is three runs misdiagnosed as hung
+by an elapsed-time rule.
+
+### 2026-08-10 — ★ RETRACTED: LS read a directory's MTIME as its creation time. And RE's correction is also wrong.
+
+**Both agents produced a confident account of episode 1's `dirty` value from outside the bundle,
+by two different wrong inferences. The bundle decides, and neither of us could.**
+
+**LS's error, retracting the previous entry:** I wrote *"run started 17:48:44, records/L23/
+created 17:49:45, so provenance was captured before the directory existed"*. **A directory's
+mtime is its LAST MODIFICATION, not its creation** — it updates whenever a file is written into
+it, and 17:49:45 is when the first partial landed.
+
+**RE's correction — that they created the directory with `mkdir -p` in the shell BEFORE
+launching — does not survive the birth time either:**
+
+    episode process started   17:48:44          (ps, second resolution)
+    records/L23/ BIRTH        17:48:45.353      <- 1.3 s AFTER the process started
+
+**So it was not pre-created in the shell.** But this project's import chain is heavy, so
+`code_provenance()` at line 349 very likely ran after 17:48:45.353 anyway — **which makes RE's
+CONCLUSION (`dirty: true`) probably right and RE's MECHANISM wrong.**
+
+**★ THIS IS THE "TWO CORRECTIONS BRACKET THE TRUTH" SHAPE, THIRD INSTANCE.** The shared
+assumption underneath both accounts is that **the value is derivable from outside the artefact
+that records it.** It is not. **The bundle carries the answer; everything before it is
+inference, and we each dressed an inference as a finding.**
+
+### 2026-08-10 — GATE 1 RESTATED BEFORE THE BUNDLE EXISTS, not after it fails
+
+**RE proposed, and LS accepts:**
+
+    PASS   rev matches the pinned revision AND every dirty path is the run's own output dir
+    FAIL   any dirty path outside `records/L23/`  -> the run stops
+
+**This is a reinterpretation of a gate after learning it may trip, which is the shape to be
+suspicious of. It is legitimate here for three reasons, in order of weight:**
+
+1. **RR had already established the defect independently, BEFORE anyone knew episode 1 would
+   trip it** — `dirty` reports the coarse fact and cannot distinguish a code change from a
+   records change. **This applies a correction already on the record; it does not invent one.**
+2. **It NARROWS rather than widens.** Any dirty path outside the run's own output is a hard
+   FAIL that stops the run. The old criterion had no such clause.
+3. **It is stated BEFORE the bundle exists**, so it cannot be tuned to whatever the value turns
+   out to be.
+
+**The gate result goes into a record with the actual `dirty_paths` PRINTED, not summarised as
+"passed"** — a pass nobody can re-derive is the green signal this phase has repeatedly found to
+be the untrustworthy one.
+
+**OPEN ITEM, deliberately not fixed now: `code_provenance()` should exclude the run's own
+`out_dir` from the dirty computation.** RE identified it, sized it at two lines, and **declined
+to make it mid-run for the reason they were given: the revision must not move while it runs.**
+Recorded rather than patched.
+
+**RE's own framing kept, because it is the correct diagnosis of the flag: a provenance flag that
+trips on the artefact the run is currently writing is measuring our workflow, not our code.**
+
+### 2026-08-10 — RE WAS RIGHT, LS'S CORRECTION OF RE WAS WRONG, and chasing it found a defect in LS's own file
+
+**Closing the birth-time chain rather than leaving it at "neither of us can know".**
+
+    records/       mtime = 2026-08-10 17:48:45.353848553
+    records/L23/   birth = 2026-08-10 17:48:45.353848553      <- identical to the nanosecond
+
+**The parent's mtime IS the child's creation instant, and `ps -o lstart` reports the BASH
+WRAPPER, not python.** So a wrapper starting 17:48:44 and reaching `mkdir -p` 1.3 s later is
+ordinary tool overhead: **the shell created the directory before python existed. RE's original
+account holds and LS's objection to it was wrong.**
+
+**The correction chain in order: LS wrong (mtime read as creation) -> RE right -> LS "corrects"
+RE wrongly (ps read as python's start) -> RE re-corrects with exact evidence.** The standing
+lesson survives intact and RE stated it against their own message: **a better-argued guess about
+what the bundle says is still a guess, and the bundle settles it in one read.**
+
+### 2026-08-10 — ★ RE's proposed fourth gate is ALREADY ENFORCED — and looking found "eight states" in a nine-state file
+
+**RE added a gate: every one of the nine states must map to a bucket, since an unmapped state
+would let the split partition cleanly while falling out of the five-bucket reading entirely.**
+
+**It is already enforced.** `_check_partition()` runs at the top of `five_bucket()` and raises on
+unmapped, invented, or duplicated states — it is what fired when `started_and_failed` was added.
+Verified: `STATE_PREDICATES` holds **9**, `BUCKETS` map **9**. **Redundancy in a gate is not a
+fault and it stays; RE should know the coverage exists rather than assume it was missing.**
+
+**★ BUT THE ASSERTION MESSAGE SAYS "EIGHT STATES", AND SO DOES THE MODULE DOCSTRING — THREE
+PLACES, IN THE FILE WHOSE JOB IS ENFORCING THE PARTITION.**
+
+    line   1   "The FIVE-BUCKET reading of `finance_split`'s eight states."
+    line  13   "the whole point of the ruling is that the eight states do ..."
+    line 162   f"mapping does not partition the eight states. "
+
+**The CODE is right — it reads `set(STATE_PREDICATES)`, which is now nine.** The prose is stale,
+and **line 162 is the worst of the three: it would print "does not partition the eight states"
+while listing a ninth, at the exact moment it fires.** A message that misleads precisely when the
+check catches something is worse than no message.
+
+**Label-over-condition, instance N, in LS's own module — found by checking a peer's proposal for
+redundancy rather than by reading the file.** HELD, not fixed: it is a `.py` change and the
+revision must not move while the run does. **Open item for immediately after the bundle lands.**
+
+### 2026-08-10 — ★ A POSITIVE CONTROL THAT CANNOT GO POSITIVE. RE found two vacuous controls before a real one
+
+**The result, once the test could actually fail: aggregation failures CANNOT move the split.**
+
+    injected 3 AGGREGATION failures (MaxTurnsExceeded) into a real bundle
+    states identical: True    counts identical: True    failure_causes: segment-only, unchanged
+
+**So LS's predicted ending — the last three tasks dying on the turn cap — leaves gate 3 passing
+and the split byte-identical. Confirmed rather than assumed, which is why it was worth doing
+BEFORE the bundle rather than explaining afterwards.**
+
+**★ BUT THE TWO FAILED CONTROLS ARE WORTH MORE THAN THE CLEAN RESULT, and RE showed them rather
+than the tidy version.**
+
+    attempt 1   injection list came back EMPTY (wrong key for the board rows)
+                -> "states identical: True"  A PERFECT PASS PROVING NOTHING
+    attempt 2   counter-control injected on seg_07 and nothing moved -- because seg_07
+                COMPLETED and `executed_*` correctly beats a failure. RE's own precedence
+                rule working, and it made the control INCAPABLE OF MOVING.
+
+**The working control needs the completion removed first:** drop seg_07's completion
+(`executed_and_parsed` -> `unexecuted_no_refusal`), then inject (-> `started_and_failed`, causes
+`['MaxTurnsExceeded']`). **Only then is the negative a real negative.** Without it RE would have
+reported *"aggregation failures are harmless"* from a mechanism never shown to work at all.
+
+**★ THE RULE THIS PAYS FOR, AND IT IS THE SAME ONE RR PAID FOR AN HOUR AGO IN A DIFFERENT
+DOMAIN:**
+
+    RR   corroboration on the NECESSITY of a field is not corroboration on its SUFFICIENCY
+    RE   a positive control that cannot go positive is not a control
+    ->   DEMONSTRATE THE MECHANISM CAN MOVE BEFORE READING ITS STILLNESS AS INFORMATION
+
+**Two agents, two domains — a provenance flag and an injection harness — same defect, neither
+having seen the other's case.** What would have made them differ: either could have accepted a
+silent pass as evidence; both independently refused to. **That is the sufficiency test applied
+to the sufficiency rule itself.**
+
+**AND RE'S GATE IS NOT REDUNDANT WITH `_check_partition()` AFTER ALL — a correction to LS's
+reading.** LS's raises INSIDE `five_bucket()`; RE's asserts from OUTSIDE on the bundle. **If a
+future path stopped calling `five_bucket()`, LS's check would go quiet and RE's would not.** A
+check that can be bypassed by not calling it is not the same as one that cannot.
+
+### 2026-08-10 — L3 run at 1h08m: timestep 14, 13 of 16, heartbeat 230s
+
+**Healthy.** Elapsed is past the 40.3 min median, inside the 83 min maximum. **Three tasks
+outstanding and they are the aggregation chain**, the class that dies at 69% on the turn cap and
+that RE has now PROVEN cannot move the split. **So the expected ending is pre-classified: not a
+run failure, and it will be said so in the gate record rather than discovered as a bad ending.**
+
+### 2026-08-10 — ★ RETRACTED: "two agents converged" IS NOT CORROBORATION IN THIS TEAM. Rule kept, evidence dropped
+
+**RR refuted the corroboration claim LS attached to the control finding, and the refutation
+generalises to a CLASS of claim LS has made repeatedly — LS asked whether it was a real
+convergence or pattern-matching, and it was pattern-matching.**
+
+**THE ARGUMENT: apply the differ-test to the claim itself.** For RE and RR agreeing to be
+corroboration, there must be a plausible world where one of them accepts a silent pass. **There
+is not.** The can't-fire-control family is already written in `METHODOLOGY_RULES` with several
+instances and has been flagged by all three agents. **They were not two observers with disjoint
+priors; they were two agents applying the same recently-written rule. Convergence is exactly
+what that predicts — it is evidence THE RULE IS BEING APPLIED, not evidence the rule is
+correct.**
+
+**RR notes this is the THIRD instance of this failure, twice already flagged by them:** LS
+recording RR as a privileged source of numbers, and RE and RR both reading the same "dead code"
+annotation without either checking. **Shared priors produce agreement that LOOKS independent
+because the derivations were.**
+
+**★ AND THE TELL WAS THE SHAPE.** *"The sufficiency test applied to the sufficiency rule
+itself"* is appealing because it is recursive and tidy. **Recursive tidiness is a warning sign,
+not a confirmation** — RR made the same error this morning on a coherence claim, called it
+*"elegant, which is why I should have distrusted it"*, and LS caught that one. **Same object,
+opposite direction.**
+
+**THE RULE STAYS; THE SUPPORT CHANGES.** *Demonstrate the mechanism can move before reading its
+stillness as information* earns its place on **four independent failures** — RE's empty
+injection list, RE's counter-control on a completed segment, RR's `_fixture_p6` column, the
+constant `agent_available`, the unreachable `refused_unavailable`. **Attaching "two agents
+agreed" weakened a rule that did not need it.**
+
+**★ THE CRITERION LS IS ADOPTING, since a blanket ban would throw away the cases that ARE
+evidence:**
+
+    convergence on a MEASUREMENT  -- two paths computing the same NUMBER --  IS evidence,
+      because the shared methodology prior does not determine the number
+    convergence on a JUDGEMENT shaped by a shared written rule  --  IS NOT,
+      because the rule predicts the agreement
+
+**By that criterion, of LS's recorded convergences: RE's independent recomputation of the L10
+pool (0 mismatches in 60, floor identical to 17dp) SURVIVES — that is a number. The `dirty`
+convergence and the control convergence DO NOT — both are judgements downstream of written
+rules.** Corrected at both sites.
+
+### 2026-08-10 — Correction to LS's own correction: NEITHER partition check is bypass-proof
+
+LS wrote that RE's external gate beats `_check_partition()` because *"a check that can be
+bypassed by not calling it is not the same as one that cannot"*. **RR: RE's gate can also be
+bypassed — by not running the gate. Neither is unconditional.**
+
+**They fail on DIFFERENT conditions, and that is the actual argument for keeping both:** LS's
+goes quiet if a future path stops calling `five_bucket()`; RE's goes quiet if the gate is
+dropped from the run. **A single omission cannot silence both.** Stated that way because
+*"cannot be bypassed"* is the kind of claim that gets relied on.
+
+### 2026-08-10 — Pre-classifying the expected ending is a PREDICTION, and only because it was done first
+
+**RR, worth naming as a method rather than a convenience:** establishing *"aggregation failures
+cannot move the split"* **BEFORE** the last three tasks die on the turn cap makes the benign
+reading a prediction. **Established afterwards it would be indistinguishable from explaining
+away — and nobody could tell which, including us.** Same structure as committing predictions
+before a run.
+
+### 2026-08-10 — ★ RR REPLACES LS'S CRITERION BY BREAKING LS'S OWN EXAMPLE. Name what the paths SHARE
+
+**Record: `METHODOLOGY_RULES.md`, new entry. LS proposed "measurement is evidence, judgement is
+not" one message ago. RR refuted it with the example LS chose to show it working.**
+
+**RE's recomputation of the L10 pool SHARES THE GENERATOR with the record it checks** — RE
+recomputed *from the generator* rather than reading the record, so both sides trace to
+`finance_generator`. **0 mismatches in 60 and a floor identical to 17 decimals establishes the
+record was transcribed correctly from the generator, and NOTHING about the generator. If the
+generator is wrong, both agree and both are wrong, to 17 decimal places.** That is the arm-3
+comparator failure realised inside the example picked to demonstrate the criterion.
+
+**THE CRITERION THAT WORKS — name what the two paths SHARE; the convergence is silent about that
+and informative about the rest:**
+
+    two agents applying one written rule       shared: the rule       -> nothing about the rule
+    record vs recomputation from generator     shared: the generator  -> nothing about the generator
+    HEAD scorer vs working-tree scorer         shared: the generator  -> the SCORER only
+    hash at two revisions vs a LOCAL sha256    shared: nothing that
+                                                       could be wrong -> GENUINE evidence
+
+**Practical form, the differ-test one level down: "what would have made these differ?" becomes
+"WHAT COULD BE WRONG IN BOTH?"**
+
+**Why it beats LS's cut: it does not require classifying the KIND of thing converged on, which is
+where the ambiguity lived. A number and a judgement fail identically when the shared component is
+the thing in question.**
+
+**★ THE ONE CASE THAT SURVIVES IS THE ONE WHERE THE SHARED COMPONENT WAS REMOVED ON PURPOSE** —
+the cross-revision instance check hashes with a LOCAL sha256 rather than each revision's own
+`instance_hash`, *"so the stamp cross-check is a genuine second path rather than the same path
+twice"*. **LS applied this rule in the specific case before either agent had the general form,
+and then proposed a weaker general form anyway.**
+
+**RE-SCOPED, NOT DELETED (RR), because each is evidence about something:**
+
+    RE/RR on `dirty` being load-bearing   shared: the provenance discipline
+                                          -> shows the rule was applied twice. Nothing more.
+    RE/RR on can't-fire controls          shared: METHODOLOGY_RULES' can't-fire family
+                                          -> same. Rule stands on its four instances, not this.
+    RE's L10 pool recomputation           shared: finance_generator
+                                          -> the RECORD is faithfully transcribed. Good enough
+                                             for what the L17 guard needs; NOT evidence the pool
+                                             is right, and the L10 cap-3 episode is the standing
+                                             proof that the generator moving is the failure that
+                                             actually happens here.
+
+### 2026-08-10 — RR: "the ending you EXPECT may be the one that costs you the bundle." Resolved from the code — it does not
+
+**RR raised at timestep 16, which is the right time to raise it, that the benign-for-the-split
+ending and the loses-the-bundle ending could be the same event — and only the first had been
+pre-classified.** Answered from the engine rather than assumed:
+
+**(1) THE LOOP DOES NOT EXIT EARLY ON FAILED TASKS.**
+
+    while (not self._is_terminal_state() and self.current_timestep < self.max_timesteps):
+        ...
+        if self.workflow.is_complete(): break
+
+`_is_terminal_state()` is true only for COMPLETED / FAILED / CANCELLED, and **FAILED is set AFTER
+the loop** (`if current_timestep >= max_timesteps and not is_complete()`). **So three dead
+aggregation tasks leave the workflow incomplete, the loop runs on to the horizon at t22, sets
+FAILED, and RETURNS NORMALLY.** `run_full_execution` is not wrapped in a try/except on this path
+and the bundle write follows it, **so the bundle IS written** — carrying execution_state FAILED
+and 13 completions. Task failures do not raise; the corpus already holds written bundles
+containing `worker_execution_failed`.
+
+**(2) `progress_path` IS WIRED** (`_Recorder(progress_path=out_dir / ...)`), and
+`partial_seed42.json` is live and updating. **So even the exception path keeps the completions
+and the timestep record.**
+
+**The remaining single points of loss are the 2.5 h wall-clock stop — not close at 1h13m with
+~6 timesteps left — and an unhandled exception. Neither is the ending predicted.**
+
+**★ RR's SMALLER POINT STANDS AND IS THE ONE THAT SURVIVES THIS: the partial file carries
+completions and last timestep, NOT `code_provenance`.** If the bundle were ever lost, what
+survives is **the data without the revision that produced it** — precisely the gap this morning
+was spent closing, reopened in the fallback artefact. **One line, added to the deferred batch
+with `dirty_code` and the out_dir exclusion, not now.**
+
+**Worth naming the asymmetry RR exposed: a benign classification was carried across from the
+SPLIT to the RUN without being re-derived for the run.** "Aggregation failures cannot move the
+split" is proven; "aggregation failures cannot cost the bundle" is a different claim about a
+different object, and it was being treated as the same one until RR separated them.
+
+### 2026-08-10 — ★ THE 715s HEALTH COMPARATOR IS CONDITIONED ON SUCCESS. And 338s discriminates nothing
+
+**RR, on LS's wording. No operational change — the correction is about what reaches the record,
+because the next person to see a lengthening heartbeat will cite it.**
+
+**LS wrote that a 338 s silence was *"consistent with the aggregation tasks being the expensive
+class rather than with a stall"*. That asserts a discrimination the number cannot make: a stall
+at 338 s and a slow task at 338 s are THE IDENTICAL OBSERVATION.** They separate only once the
+silence exceeds what a successful episode ever showed. **Honest form: "338 s does not distinguish
+the two."**
+
+**★ AND THE 715 s COMPARATOR IS SELECTED ON THE OUTCOME.** It is the longest silence in episodes
+**that finished**, over ~12 of them. **That makes it a FLOOR on what a healthy run can look like,
+not a CEILING:**
+
+    a stalling episode's silence exceeds 715 s BY DEFINITION
+    the successful-episode tail PAST 715 s is unmeasured — those episodes are not in the sample
+
+**Usable as a "not yet alarming" threshold. NOT usable as evidence of health.** LS has been
+quoting it as the latter all day.
+
+**This is the threshold-population rule again — *a threshold names the distribution it was
+derived from AND the population that distribution is over* — and the population here is
+`episodes that succeeded`, which is exactly the conditioning that makes it silent about failure.
+Third distinct instance of that rule biting this phase, and the first where LS produced it rather
+than caught it.**
+
+**What actually happened next is not a defence:** the timestep advanced to 17 and the heartbeat
+returned to 66 s, **so the silence was a step in progress — which does not retroactively license
+an inference that was invalid when made.**
+
+### 2026-08-10 — L3 episode exceeds 83 min: a new observation, one line as the rule requires
+
+**1h28m elapsed, timestep 20 of a 22 horizon, 14 of 16 tasks, heartbeat 62 s. Healthy. No
+action** — the band 83 min–2.5 h is *"a genuinely new observation worth ONE LINE, not a kill"*,
+and the kill criterion remains silence > 1200 s.
+
+**With RR's conditioning caveat attached, because it applies to this maximum exactly as it
+applied to the 715 s one: 83 min is the longest episode AMONG THOSE THAT FINISHED.** So
+exceeding it is **new information about the upper tail of finishing episodes, not evidence of a
+problem** — a healthy episode slower than any previously observed is precisely the case the
+sample cannot contain. **It becomes the new maximum if it completes and tells us nothing if it
+does not.**
+
+**This is the first episode in the study to run under a recorded code revision, and the first
+whose bundle can be split by the nine-state instrument.**
+
+### 2026-08-10 — ★★ FIRST BUNDLE: THREE GATES GREEN, NINE OF NINE SEGMENTS MEASURED, ALL THREE PREDICTIONS MISSED
+
+**Record: `records/L23/L23_gate_output_LS.md`. Bundle: `records/L23/run_cell0_seed42.json`.**
+
+    GATE 3 (split first, as the rule requires)
+      DV 0   MANIPULATION 0 [UNINFORMATIVE]   BUDGET_HORIZON 0   DEFECT 0   MEASUREMENT 9
+      residual 0.  Runner agrees independently: n_parsed 9, n_missing 0, n_declined 0,
+      n_unreadable 0, n_unstaffed 0.
+
+    GATE 1  rev == pinned, dirty FALSE, dirty_paths (none), captured_at run_start   PASS
+    GATE 2  check == "stamped_hash" (not the rebuild fallback), checks_generator_drift true,
+            matches_selection true, caveat null                                     PASS
+
+**The provenance chain closes end to end: the hash stamped at approval time is the hash the
+episode ran, compared against the STORED value rather than re-derived. First episode in the study
+whose environment provenance is checkable rather than asserted, and first whose bundle names the
+code that produced it.**
+
+**★ PREDICTION PROTOCOL: THREE MISSES.** LS said BUDGET_HORIZON largest, RE and RR said DV.
+**Every non-MEASUREMENT bucket is zero, so there is no largest — a four-way tie, scored as three
+misses, which is correct. Nobody predicted a clean sweep.** The MANIPULATION predictions are
+**VOID not correct**: `refused_unavailable` cannot fire, so the quantity could not have come out
+otherwise.
+
+**★ AND THE BUNDLE SETTLED THE `dirty` ARGUMENT AGAINST BOTH AGENTS.** LS predicted false from
+the code ordering **on invalid evidence** (a directory's mtime read as its creation time); RE
+predicted true because their shell `mkdir -p` preceded python. **It is false — so the directory
+did not exist at capture. LS's conclusion was right and LS's reasoning was not, and that is
+recorded as NOT being vindication.** The lesson stands as RR put it: a better-argued guess about
+what the bundle says is still a guess.
+
+**THE ENDING WAS THE PRE-DECLARED ONE:** `MaxTurnsExceeded x2`, **both AGGREGATION**, 15 of 16
+complete, one task left `ready`. **Pre-classified as normal BEFORE it happened, on RE's injection
+test with a control that could fire — afterwards it would have been indistinguishable from
+explaining away.**
+
+**RE's REFINEMENT ADOPTED for episodes 2-4:** a segment missing because it FAILED
+(`started_and_failed`, DEFECT) is stop-and-diagnose; a segment missing because the HORIZON ended
+(`unexecuted_no_refusal`, BUDGET_HORIZON) is **a recorded limitation of a 22-timestep horizon,
+not a defect.**
+
+    episode 90.2 min   NEW MAXIMUM (previous 83.0 among FINISHERS)
+    worker runs n=17   median 487s   max 1293s   over 966s: 2   over the 2460s backstop: 0
+
+**Both comparators are conditioned on success, so this is a new maximum rather than an anomaly
+against one.** `agent_available` now present on **0** events — the decorative field is gone.
+
+**DOES NOT ESTABLISH: anything about the channel question.** Cell 0 alone, the
+information-absent control, no cell 1 beside it, one episode, no interval. **The
+`achieved`/`oracle_capacitated` ratio is NOT quoted — the oracle is priced at cap 3 against an
+uncapped runtime, the exact mismatch L14-b removed.**
+
+### 2026-08-10 — ★ LS'S OWN LAUNCH INSTRUCTION WAS SELF-CONTRADICTORY: "commit first" and "same revision" cannot both hold
+
+**RE caught it before launching rather than after. Committing episode 1's bundle MOVES HEAD — it
+could not not have — so the four bundles span two revisions, which was the opposite of the stated
+purpose of committing first.**
+
+    episode 1        16362c5...
+    episodes 2-4     31384f9...
+
+**RE verified the difference is benign AND CHECKABLE rather than assuming it, and LS re-verified
+independently:**
+
+    git diff --name-only 16362c5 31384f9 | grep -c '\.py$'   ->   0
+    7 files: BACKLOG, METHODOLOGY_RULES, the L21/L22 records, the gate output,
+             and episode 1's OWN bundle and partial
+    environment_selection_v3.json (the only runtime INPUT in reach): 0 lines changed
+
+**So the honest corpus statement is NOT "four bundles at one revision" but "four bundles at TWO
+revisions differing only in records, with the code diff empty and re-derivable in one command."
+Weaker than intended and true, which is the right trade.**
+
+**RE'S JUDGEMENT TO LAUNCH RATHER THAN BLOCK WAS CORRECT and is endorsed on the record.** The
+instruction was contradictory; resolving it in the direction that is VERIFIABLE and reporting
+immediately beats holding three episodes for ~90 minutes over a diff proven empty of code.
+**When an instruction cannot be satisfied as written, the resolution that leaves a checkable
+artefact is the right one.**
+
+**★ THE RESOLUTION FOR FUTURE RUNS, and it makes the deferred batch's payoff concrete.** The two
+properties looked mutually exclusive only because `dirty` is coarse:
+
+    commit BETWEEN episodes   clean tree, MULTIPLE revisions
+    commit AFTER the last     ONE revision, but dirty:true during the run
+    with `dirty_code`         commit AFTER the last -> ONE revision AND dirty_code:false
+                              proving the tree difference is records-only
+
+**Once `dirty_code` exists, hold every commit until the final episode: one revision for the whole
+batch, with a precise flag instead of an ambiguous one.** This is a SEQUENCING decision, not a
+bug, and it recurs on every multi-episode run. Added to the deferred batch.
+
+### 2026-08-10 — Batch 1 of the remainder launched
+
+**seed 30 cell 0 and seed 42 cell 1 in parallel; seed 30 cell 1 follows when a slot frees.**
+Wall-clock stop raised 9000 -> 12000 s on the strength of episode 1's 90.2 min, which is a CLI
+argument and not a code change — the revision is unmoved by it. **RE added no `mkdir` this time;
+the directory is now tracked and cannot dirty the tree either way.**
+
+### 2026-08-10 — ★ THE PARTIAL-PROGRESS FILE IS KEYED ON SEED, NOT CELL. Collision already realised
+
+**RE found it; it had already happened by the time LS checked.**
+
+    bundle    f"run_{tag}seed{seed}.json"    tag = f"cell{cell}_"   -> cell-tagged, NO collision
+    partial   f"partial_seed{seed}.json"     NO cell tag            -> COLLIDES across cells
+
+    committed partial_seed42.json   t=21 done=14   (episode 1, seed 42 cell 0)
+    on disk                          t=4  done=5   (episode 3, seed 42 cell 1)
+    git status                       M records/L23/partial_seed42.json
+
+**Nothing is lost — episode 1's content is in git and the BUNDLE is the artefact — but a
+committed file now describes a different episode than its commit says.**
+
+**★ AND THE DECIDING CONSEQUENCE IS ONE NEITHER AGENT RAISED FIRST: two LIVE episodes on the same
+seed do not merely dirty a file, they ALTERNATE it.** The recorder writes wholesale every
+timestep (`progress_path.write_text(...)`), so episode 4 (seed 30 cell 1) launched alongside the
+still-running episode 2 (seed 30 cell 0) would leave:
+
+    the recovery artefact useless for BOTH episodes -- the one thing it exists for
+    the heartbeat meaningless, updating from whichever process wrote last
+    a killed run yielding a partial describing the OTHER episode
+
+**DECISION (LS): HOLD episode 4 until episode 2's bundle lands.** Under RE's framing — a dirty
+flag only — RE's lean to launch was correct. **Under the live collision it is not, and the
+difference is that the same-seed pair would be CONCURRENT rather than sequential.** The running
+pair is fine: seed 30 cell 0 and seed 42 cell 1 are different seeds.
+
+**Not fixed now — a `.py` change with two episodes in flight, which is the patch-under-a-run RE
+was told to stop for. RE declined to make it, correctly, for the second time today.**
+
+**DEFERRED BATCH, one commit after the last episode:** `dirty_code`; `out_dir` excluded from the
+dirty computation; `code_provenance` in the partial; **cell-tag the partial**; the three "eight
+states" strings; **and the sequencing decision — once `dirty_code` exists, commit everything
+after the FINAL episode so a batch carries one revision.**
+
+**OPEN QUESTION for that batch, put to RE rather than ruled on: should the partial be TRACKED at
+all?** It is a transient recovery artefact, and **committing it is what turned a harmless
+overwrite into a committed file describing the wrong episode.** Cell-tagging fixes the collision
+and does not settle this. **LS leans to tracking it once cell-tagged and carrying provenance — a
+crashed episode with no bundle is exactly when the record needs it — but it is RE's call to
+argue.**
+
+### 2026-08-10 — DECISION: the partial is NOT tracked by default (RE's call, LS deferring) — with the flip condition recorded
+
+**RE argued against LS's lean and LS is deferring. It is a preference with real arguments on both
+sides, RE owns the runner, and RE named the condition under which their own answer flips — which
+is the disposition that makes deferring cheap.**
+
+**RESOLUTION: gitignore the partial pattern; `git add -f` deliberately when an episode dies
+without a bundle, with a commit message saying why. REVISIT THE MOMENT WE RUN UNATTENDED** —
+RE's own stated counter-case: an untracked file is one `git clean` from gone, and if nobody is
+watching when an episode dies overnight the artefact vanishes with no trace.
+
+**★ BUT RE'S STRONGEST ARGUMENT IS NEUTRALISED BY ANOTHER ITEM IN THE SAME BATCH, and RE should
+know which of their arguments is carrying the decision.** RE argued that tracking makes
+`dirty: false` unattainable during any run. **Measured — untracking does not fix that:**
+
+    git status --porcelain
+     M records/L23/partial_seed42.json      <- tracked, modified
+    ?? records/L23/partial_seed30.json      <- UNTRACKED
+    lines counted by code_provenance(): 2   <- BOTH count
+
+**`code_provenance()` counts untracked files too, so an untracked partial reads `dirty: true`
+exactly as a tracked one does.** Only gitignoring it — or item 2 of the batch, excluding the
+run's own `out_dir` from the dirty computation — achieves a clean read, **and item 2 achieves it
+for BOTH options.**
+
+**So the decision rests on RE's REMAINING arguments, which LS finds sufficient:** the artefact
+does its job on disk, where the recovering process looks; a crash is precisely when a person is
+present and deciding, so a deliberate force-add loses nothing and gains a reason in the commit
+message; **and it was TRACKING, not naming, that turned a harmless overwrite into a committed
+file describing the wrong episode.**
+
+**RE also drew the distinction LS had not: SEQUENTIAL collision is a stale file; LIVE collision
+is a file alternating between two unrelated states every timestep.** RE's own diagnosis of their
+miss — *"I checked the bundle names were cell-tagged, saw the artefact was only a partial, and
+stopped without asking what it is FOR"* — is the general fault, and the heartbeat consequence is
+**the population fault this phase has hit repeatedly, arriving through a file rather than a
+number.**
+
+**Episodes 2 and 3 healthy at t06/t05, 8 of 16 each, heartbeats 83 s and 86 s. Episode 4 held.**
+
+### 2026-08-10 — ★★ `concurrency` CONTROLS NOTHING AND IS NOT VERIFIED. Episode 1 recorded 2 and ran ALONE
+
+**Found while checking whether the instrument setting LS ruled on actually does anything in a
+single-episode invocation. It does not.**
+
+**IT IS A SELF-REPORTED LABEL, NOT A CONTROL.** Traced from the CLI argument: it reaches the
+function signature, is passed to `_run_episode_inner`, and is written to the manifest. **That is
+all.** The engine constructor takes no concurrency parameter; nothing anywhere reads it to affect
+execution. Every other hit in the tree is `refused_concurrency` — a different thing, the
+per-worker task limit — or reporting code reading the manifest value back.
+
+**Its own documented meaning says so** (`finance_comparability.py:43`):
+*"episodes running in parallel when this one ran"* — **a description of the launch environment
+typed by the operator.** The actual parallelism comes from launching multiple OS processes.
+
+**★ AND NOTHING CHECKS THE LABEL AGAINST REALITY. It is already wrong in a committed, gated
+bundle:**
+
+    episode 1 manifest concurrency:  2
+    episode 1 processes observed:    one timeout wrapper + its child, on every check
+                                     across 90 minutes, 17:48 -> 19:19
+    -> RECORDED 2, RAN ALONE
+
+**CONSEQUENCE FOR L21, which is LS's own work: the three-group comparison (ABSENT / 1 / 2) sorted
+bundles by an UNVERIFIED LABEL.** It compared groups defined by what an operator typed, not by
+what happened. **The failure-rate and duration differences between those groups are therefore
+about group membership of unknown fidelity** — on top of the confounds already recorded.
+
+**CONSEQUENCE FOR LS'S DECISION: "hold the shakedown at `concurrency=2`, recorded in every
+bundle" holds a LABEL constant, not a condition.** What is actually held constant is RE's launch
+practice, which no bundle records.
+
+**★ AND IT MAKES RR'S EARLIER INSISTENCE LOOK BETTER THAN CORRECT — IT LOOKS FORTUNATE.** RR
+refused to let the non-spend rest on that corpus measurement and forced it onto *"nothing
+currently depends on the answer"*. **The measurement it would otherwise have rested on turns out
+to be grouped by an unverified label.** The conclusion is unaffected because it was already moved
+off that footing.
+
+**DOES NOT ESTABLISH that the earlier labels were wrong** — only that nothing verified them and
+that one is now demonstrably wrong. **The `<<ABSENT>>` group is untouched by this: those bundles
+predate the field and were never claiming anything.**
+
+**FIX, deferred to the batch, NOT patched under a running episode:** either derive the value by
+observation at run start (count sibling episode processes) or keep it and mark it explicitly
+operator-supplied and unverified. **A field that looks like a measurement and is a claim is the
+`agent_available` fault with the sign reversed — that one was constant and useless; this one
+VARIES and feeds comparability analysis, so it can be wrong in a direction that changes a
+reading.**
+
+### 2026-08-10 — RE's fix for `concurrency`: the RENAME is the repair, the observable makes the claim FALSIFIABLE
+
+**RE owns it — *"my hand on the field: I passed `--concurrency 2` to a single-episode launch
+because that is what the config said, and the manifest recorded a condition that did not
+exist."***
+
+**★ RE'S DIAGNOSIS IS BETTER THAN LS'S FIX-LIST: the field is CALLED `concurrency`, which names a
+SETTING, and it is a DECLARATION. That gap IS the defect.** Renaming it
+`declared_parallel_episodes` stops the name asserting control, **so no reader can take it as a
+condition the harness held.** RE places it in the family catalogued this week —
+`agent_available`, "capacity binds", `3_scripted_baseline_below_oracle`, "eight states", and now
+this. **Five instances of a name asserting what nothing enforces.**
+
+**LS ACCEPTS THE OBSERVABLE, having leaned against it, and the reason for reversing is the one
+that settles it.** LS objected that a process count is not provider contention and that measuring
+the wrong thing precisely is worse than declaring the right thing loosely. **That objection is
+about the observable as a MEASUREMENT. Its actual job is different: it makes the declaration
+FALSIFIABLE FROM THE ARTEFACT.**
+
+**Right now a false declaration is undetectable from the bundle.** LS caught episode 1's only by
+watching `pgrep` in real time across 90 minutes — **evidence that does not survive the run.** The
+observable turns *"recorded 2, ran alone"* into something the file itself can show. **That is
+precisely the "auditable per bundle rather than remembered" standard the stale N=4 comment set
+and failed.**
+
+**Agreed name and framing: `sibling_episode_processes_at_start`, stated as a fact about processes
+on this machine, with an explicit note that it is NOT a measure of provider contention.**
+
+### 2026-08-10 — ★ THE SHAKEDOWN IS NOT "FOUR BUNDLES AT ONE SETTING". Recorded before it is quoted as one
+
+**RE raised the consequence of LS's hold before episode 4 could repeat episode 1's error:**
+
+    episode 1   declared 2   ACTUALLY RAN ALONE (1)
+    episodes 2,3 declared 2  genuinely 2, two live processes confirmed
+    episode 4   held; its TRUE parallelism depends on whether ep3 is still running when
+                it launches — if ep3 has finished, ep4 runs ALONE and declaring 2 would
+                repeat episode 1 exactly
+
+**RE will pass the value matching what is actually running at launch and report both it and the
+observed process count.** That keeps episode 4 honest **with no code change** — but it means the
+batch spans both declared and true values. **Stated here so nobody later writes "four bundles at
+concurrency 2", which would be false twice over: false as a control, and false as a description.**
+
+**On L21: RE and LS agree the typed-label grouping is a real limitation to sit BESIDE the
+recorded confounds rather than a fatal one** — the hour-swing confound is larger than any
+difference in that table, so the conclusion never rested on the grouping. **It rests on "nothing
+currently depends on the answer", which is where RR moved it.**
+
+### 2026-08-10 — ★★ THE THREE GATES WERE A HABIT, NOT A CHECK — and two thirds of LS's gate record had no script behind it
+
+**RE prototyped a detector for the name-asserts-more-than-condition family and REPORTED ITS
+FAILURE FIRST: it does not catch the `concurrency` fault.** That field has three readers, so
+"written but never read back" passes it clean. **The fault is "read — into a comparability
+analysis — while controlling nothing", and a field that is load-bearing downstream and inert
+upstream is strictly harder to detect than a dead one.** Reporting the miss before the find is
+the discipline; the prototype addresses a different class and is not presented as the answer.
+
+**★ WHAT IT DID FIND IS WORSE THAN WHAT IT MISSED: `code_provenance` and `selection_provenance`
+have ZERO repo-side readers. The provenance chain built today is verified by nothing committed.**
+The three gates existed only in an inline heredoc and in LS's judgement — **so if either agent
+stops running them by hand, a bundle with a wrong rev, a dirty tree, or a rebuild-fallback
+selection check ships and nothing objects.** Same shape as `instance_sha256` sitting in every
+manifest while nothing compared it, one week later, in fields we added ourselves.
+
+**★ THE SHARPER FORM IS LS'S OWN, AND IT IS A RULE VIOLATION AN HOUR AFTER THE RULE WAS QUOTED.**
+`records/L23/L23_gate_output_LS.md` reports three PASS verdicts:
+
+    gate 3 (split)              analyse_first_bundle.py   COMMITTED
+    gate 1 (code provenance)    inline heredoc            NO COMMITTED SCRIPT
+    gate 2 (selection)          inline heredoc            NO COMMITTED SCRIPT
+
+**Two thirds of that record is a green signal nobody can re-derive** — *"a figure enters a
+decision record ONLY with a committed script behind it"*, and *"a green signal is the one nobody
+re-derives"*. **Both standing rules, both broken by the artefact written to demonstrate the gates
+had been run.**
+
+**FIXED AS AN INSTRUMENT, NOT AS AN APOLOGY: `accept_bundle.py` runs all three and REPRODUCES
+episode 1's verdicts exactly** — GATE 3 PASS (9 MEASUREMENT, residual 0), GATE 1 PASS (rev ==
+pin, dirty false), GATE 2 PASS (`stamped_hash`). **It also runs gate 3 FIRST as a property of the
+CODE rather than of whoever runs it** — LS ran the split first from memory of the rule; now the
+ordering cannot be forgotten. It prefers `dirty_code` over the path test the moment that field
+exists.
+
+**HELD IN SCRATCHPAD, NOT COMMITTED, because two episodes are in flight and it is a `.py`
+change.** RE has declined to patch mid-run twice today on that instruction; **applying a weaker
+standard to LS's own code than to RE's would be worth less than the forty minutes it saves.**
+Lands with the batch, and episodes 2-4 are gated with it once committed.
+
+**ON GENERALISING THE FIVE INSTANCES INTO ONE DETECTOR — RE argues against and LS agrees.** They
+failed in five different ways: a constant never written, an assertion comparing two integers, a
+name describing a retired test, a docstring counting states, and a field read but inert. **What
+they share is a NAME and a CONDITION drifting apart, which is a reading discipline, not a static
+property — a detector that caught all five would be a linter for intent.** The tractable version
+is checking the condition when you quote the name, **and that caught all five, by three different
+people, inside a week.**
+
+### 2026-08-10 — ★★ THE CAN'T-FAIL SHAPE INSIDE THE INSTRUMENT BUILT TO CATCH IT — and the file warned me in the exact place
+
+**RE reviewed `accept_bundle.py` rather than rebuilding it, and found gate 3's stated criterion
+cannot fail.**
+
+    accept_bundle.py       return not result["residual"]
+    finance_split.py:378   if residual: raise AssertionError(...)   <- BEFORE it can return
+
+**`split()` raises on a non-zero residual, so a RETURNED result always has residual 0 and
+`not result["residual"]` is a tautology.** The gate was working — via the `try/except`, which
+catches that raise — **but the line it PRINTED as the criterion was a green that could not have
+been red.** A reader of the gate record sees "residual 0" and concludes something was checked.
+
+**★ AND THE COMMENT DIRECTLY ABOVE THAT RAISE NAMES THE FAULT: *"a check that cannot fail on data
+is documentation wearing an assertion's clothes"*. It was read while writing the tautology on top
+of it.** The file said the thing, in the place, at the moment.
+
+**FIXED — the criterion is now the one that can fail on data: THE SPLIT RETURNED AT ALL.** That
+means every refusal code was known, the segment index resolved, and `_check_partition()` accepted
+every state. **The residual is still printed, labelled an INVARIANT and not the criterion.**
+
+**SECOND DEFECT (RE): `--pin` was optional, so gate 1 could report PASS without comparing the
+revision** — `if pin and rev != pin` silently skips. **In a gate whose entire purpose is that a
+bundle names the code that made it.** Now it REFUSES without `--pin`, or takes
+`--allow-unpinned` for a deliberately weaker acceptance, which prints WEAKENED and says the
+acceptance is not full. **Negative case exercised: it refuses.** Both fixes re-verified against
+episode 1 — verdicts unchanged.
+
+**A FOURTH STALE "EIGHT", found in passing:** the raise message itself says *"every state is one
+of the eight literals"*. Three were in `five_bucket_split`; this one is in `finance_split`, **in
+the assertion that fires when the classifier and `STATE_PREDICATES` have diverged — i.e. it
+misreports the count at exactly the moment a state has been added.** Added to the batch.
+
+**★ RE'S FRAMING OF THE SYMMETRY, ACCEPTED AS ACCURATE RATHER THAN AS CONSOLATION:** LS put two
+of three gates in an uncommitted heredoc an hour after quoting the rule; **RE's N=4 comment
+demanded "auditable per bundle rather than remembered" and then asserted four episodes from
+memory.** Same distance between a stated standard and an applied one. **Neither agent caught
+their own; each caught the other's within a day. That is an argument for the peer structure, not
+against either agent** — and it is the third time today the same pairing has produced a catch
+neither would have made alone.
+
+### 2026-08-10 — SIX stale state-counts, three each. And the check LS built to catch them asserts wrongly itself
+
+**RE corrected the attribution and undercounted their own. Verified:**
+
+    five_bucket_split.py   1, 13, 162    "eight states"                  LS
+    finance_split.py       368, 382, 410 "eight literals / predicates"   RE   <- 410 too
+
+**Six, three each, `len(STATE_PREDICATES) == 9`.** RE's 382 remains the worst: **it is the
+assertion message that fires when the classifier and `STATE_PREDICATES` have diverged, so it
+misreports the count at exactly the moment a state has been added — which is what happened to
+it.**
+
+**★ RE'S GENERALISATION IS THE BEST THING TO COME OUT OF THIS: "our controls test the behaviour
+we just added and never the claims the file makes about itself. Every instance this week is a
+SENTENCE, not a BRANCH — and we have no check that reads sentences."** RE wrote four controls
+proving the ninth state fired and not one asked whether the module still described itself.
+
+**LS BUILT THE TRACTABLE SLICE — and is reporting its failure rather than committing it.** This
+is narrower than the name-versus-intent family we agreed NOT to detect: a **spelled number
+disagreeing with a counted quantity** is mechanical.
+
+    first version    9 hits: 6 TRUE + 3 FALSE
+                     false: "exactly ONE state", "one bucket ... names a state",
+                            "one of DV's THREE states" -- subsets and quantifiers,
+                            not claims about the whole set
+    tightened        require "the" before the number -> 5 hits, 0 false positives
+                     misses only five_bucket_split.py:1, a module docstring with no
+                     "the" to key on
+
+**A 33% false-positive rate is exactly the failure RE named — *"a check that grows a standing
+list of false positives trains people to ignore it"* — so the first version is NOT proposed.**
+And the plainer statement: **a check built to catch sentences that assert wrongly asserted
+wrongly in three of its own nine lines.**
+
+**PUT TO RE RATHER THAN RULED ON, since RE owns the batch: take the tightened form (5 of 6, no
+noise) or take neither.** LS leans tightened — the missed one is a docstring and the worst
+instance is caught — **but 5 of 6 dressed as a guard is its own small version of this fault, so
+if it ships it ships saying it catches five of six and why.**
+
+**Batch now ten items** (RE's nine plus this, if taken).
+
+### 2026-08-10 — RE takes the tightened check, and gives the rule that makes a partial check worth having
+
+**Record: `METHODOLOGY_RULES.md`, new entry. RE's call, RE's formulation.**
+
+    5 hits, 0 false positives, all three of RE's and two of LS's
+    misses only five_bucket_split.py:1, a possessive with no "the" to key on
+
+**RE argued AGAINST tightening further and the argument is the reason the residue is bounded on
+purpose:** matching possessives recovers the miss and **re-admits `DV's THREE states`, the exact
+false positive the `the` requirement removed** — separating "the whole set" from "a subset" needs
+the sentence's meaning, which is the linter-for-intent line already declined.
+
+**★ THE RULE, PROMOTED TO `METHODOLOGY_RULES` BECAUSE IT IS NOT ABOUT THIS CHECK: "a check that
+catches five of six is worth having ONLY because we know which one it misses. The value is not
+the four it finds; it is that the residue is NAMED AND BOUNDED rather than unknown. A tool
+reporting 'no issues' over an unstated coverage is what got us here."** That is the
+threshold-population rule one level up — **a threshold names its population; a CHECK names its
+coverage.**
+
+**IMPLEMENTED AS OUTPUT, NOT AS A DOCSTRING:** the check prints its coverage on SUCCESS as well
+as failure — *"This is NOT 'no stale counts' — see COVERAGE above."* **A clean run that does not
+say what it skipped is the thing the rule exists to stop.**
+
+**RE also identified which of their three they would have defended hardest: line 410, "The eight
+predicates and the partition are untouched" — a comment CERTIFYING THE SAFETY OF A CHANGE USING A
+NUMBER THAT CHANGE INVALIDATED.**
+
+**Batch: ten items, all held until episode 4's bundle is down.**
+
+### 2026-08-10 — ★ PRE-COMMITTED BEFORE THE CELL-1 BUNDLE EXISTS: the split is a GATE, not the DV
+
+**Record: `records/L23/L23_analysis_precommit_LS.md`. Written with episodes 2 and 3 at 13 of 16
+and no cell-1 bundle in existence. Episode 1's ALLOCATION deliberately NOT read, so the plan
+cannot be fitted to half the comparison.**
+
+**Cell 0 returned `MEASUREMENT 9`, every other bucket 0. If cell 1 returns the same, the two are
+identical on the instrument — and the instrument is not the measurement.** The split answers
+*"did this episode execute cleanly enough to be read?"* **The sentence "the split is the same in
+both cells, therefore the card made no difference" would be wrong, and it is the most available
+sentence once four green gates sit in a row.**
+
+**THE QUANTITIES THAT COULD DISCRIMINATE, named now:** `allocation` (which worker got which
+segment), score against per-segment truth, and **`mismatch` — segments routed to a worker whose
+IRB coverage excludes that class.** The manipulation is `card_updated`, so **the discriminating
+prediction is that a stale-card manager routes by the PREDECESSOR's coverage and an updated-card
+manager by the SUCCESSOR's. Where those coverages agree, the manipulation cannot act — and if
+they overlap on every routed segment, the two cells are indistinguishable BY CONSTRUCTION for
+that instance.** That is a property of the drawn environment and must be checked before any
+difference OR non-difference is interpreted.
+
+**BINDING AT n=1 PER CELL, stated before the data:** a cell-0/cell-1 difference on one seed is an
+**OBSERVATION, not a finding** — reported as two raw numbers, with **no ratio, no percentage
+change, and no language implying direction was established.** Agreement across the two seeds is
+**not replication**. **A null may not be read either way**, as pre-declared when the subset was
+authorised.
+
+**★ THE ONE COMPARISON AVAILABLE AT n=1: is the manager's allocation CONSISTENT WITH THE CARD IT
+HOLDS?** A within-episode property — read the card given, read where each segment went, ask
+whether routing follows that card's coverage. **No second episode and no interval needed, because
+it is not a comparison of outcomes but a check of whether the manipulated input reached the
+decision at all.** If cell 1's manager routes as though holding the stale card, **the channel did
+not land — a harness finding worth having before spending on a powered run. This is the quantity
+to compute FIRST when the bundles are in.**
+
+**Its limit, stated with it: the check can show the channel FAILED to land; it cannot show the
+channel WORKED** — correct routing could come from coincidence, from segment difficulty, or from
+the manager ignoring the card and asking. **Separating those needs cells the shakedown does not
+run.**
+
+### 2026-08-10 — ★★ THE FIRST NON-ZERO DV IS STRUCTURAL, and the same condition lands in two different buckets
+
+**Record: `records/L23/L23_structural_uncovered_LS.md`. Instances only, zero model calls. RE named
+the condition and had not checked it; LS checked it.**
+
+    seed 30   IRB classes NO post-swap worker covers: ['bank']   -> seg_02, seg_06
+    seed 42   IRB classes NO post-swap worker covers: ['mdb']    -> seg_04
+    the uncovered set is IDENTICAL pre-swap and post-swap in both
+
+**So it is not caused by the replacement — it is a property of the generated environment.
+Episode 2's DV of 2 is exactly `seg_02` and `seg_06`, `n_unstaffed 0`, and NO ROUTING DECISION
+AVAILABLE TO THE MANAGER would have produced a correct IRB number for them. The first non-zero DV
+in the study is not a manager outcome.**
+
+**★ AND THE SAME CONDITION LANDS IN TWO DIFFERENT BUCKETS BECAUSE THE WORKERS BEHAVED
+DIFFERENTLY:**
+
+    seed 42 seg_04 (uncovered)  FELL BACK: "no MDB PD calibration exists ... Application:
+                                Basel Standardised Approach"  rwa 213,254,911.30
+                                declined=False  ->  MEASUREMENT
+    seed 30 seg_02/06 (uncovered) DECLINED: "rwa: unavailable ... outside my approved IRB
+                                model scope"                   rwa None
+                                declined=True   ->  DV
+
+**Both are correct behaviour for a worker outside its approval. The fallback is scored against
+the IRB truth, so it is a WRONG ANSWER counted as a MEASUREMENT; the decline is NO ANSWER counted
+as a DV outcome.**
+
+**CONSEQUENCE: `DV=0` in episode 1 and `DV=2` in episode 2 DO NOT mean the seed-42 manager
+allocated better.** Both instances contain undeliverable segments; the difference is what the
+workers did on meeting one. **Reading those two numbers as a manager comparison would be wrong,
+and it is the comparison the bucket names invite.**
+
+**★ THE CARD'S ACTION SPACE IS ONE SEGMENT PER INSTANCE:**
+`successor_strictly_required_segments: ['seg_00']` for BOTH seeds. **Exactly one segment can only
+be done by the successor; everywhere else another worker covers the class or nobody does.** Not a
+complaint about the draw — it follows from the approved sole-need-class rule — **but it bounds
+what any cell-0/cell-1 comparison can show, and it was invisible until the instances were read
+this way.**
+
+**★ THE PRE-COMMITMENT FIRED.** Written three hours earlier, before any of this was known: *"if
+the successor's coverage overlaps the predecessor's on every segment the manager routed, cell 0
+and cell 1 are indistinguishable BY CONSTRUCTION for that instance ... must be checked before any
+difference OR non-difference is interpreted."* **Episode 4 will meet the same two uncovered
+`bank` segments, and whatever it reports for them is NOT evidence about the card.**
+
+**DOES NOT ESTABLISH: that the instances are badly drawn** (an uncovered class is realistic, and
+the SA fallback is the core-tool rule working); **that fallback-vs-decline is systematic** — 3
+segments, 2 episodes, one fallback and two declines, and **the split cannot answer it because it
+puts the two in different buckets by construction**; or anything about effect size.

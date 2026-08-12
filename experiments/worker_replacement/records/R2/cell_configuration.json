@@ -82,32 +82,23 @@
   "tools_by_cell": {
     "0": [
       "broadcast_message",
-      "broadcast_message",
       "get_conversation_with",
       "get_recent_messages",
-      "get_recent_messages",
       "get_task_messages",
-      "send_message",
       "send_message"
     ],
     "3": [
       "broadcast_message",
-      "broadcast_message",
       "get_conversation_with",
       "get_recent_messages",
-      "get_recent_messages",
       "get_task_messages",
-      "send_message",
       "send_message"
     ],
     "4": [
       "broadcast_message",
-      "broadcast_message",
       "get_conversation_with",
       "get_recent_messages",
-      "get_recent_messages",
       "get_task_messages",
-      "send_message",
       "send_message"
     ]
   }

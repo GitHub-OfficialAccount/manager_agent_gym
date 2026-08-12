@@ -1,0 +1,148 @@
+{
+  "record": "partial_progress",
+  "note": "written EVERY timestep so a killed run is not a total loss; the bundle is only written on completion",
+  "last_timestep": 21,
+  "n_completed": 15,
+  "completions": [
+    {
+      "timestep": 1,
+      "task_id": "70b27e59-8c73-4fe4-b5ea-889fe9697443",
+      "task_name": "Scope and approval inventory",
+      "agent_id": "w_9f1635",
+      "output_resource_ids": [
+        "96716447-ee95-4f8e-abe6-a598bbbc0629",
+        "b88644ce-8254-4560-995a-1b82244e7797"
+      ]
+    },
+    {
+      "timestep": 1,
+      "task_id": "579b421e-f64f-4972-b7a2-de3f36ddbdd8",
+      "task_name": "Approval scope note",
+      "agent_id": "w_613442",
+      "output_resource_ids": [
+        "8b746d72-f6d4-4c1b-b626-2ea95af14c56"
+      ]
+    },
+    {
+      "timestep": 1,
+      "task_id": "ed981f8f-d63e-4d8c-ad4d-97b9ca13c506",
+      "task_name": "Exposure data preparation",
+      "agent_id": "w_c0dd2b",
+      "output_resource_ids": [
+        "f1bfe7dd-9510-49b5-bd1c-eef69ae603b3",
+        "1578c79e-21a4-4c88-88d3-adc0abb5ab38"
+      ]
+    },
+    {
+      "timestep": 2,
+      "task_id": "7ba11b98-3158-47b1-ab0b-61d01dd78f1f",
+      "task_name": "Data quality checklist",
+      "agent_id": "w_613442",
+      "output_resource_ids": [
+        "d8186eb5-ad79-4211-9471-b6bc1b9db463"
+      ]
+    },
+    {
+      "timestep": 3,
+      "task_id": "21413ec3-fe89-42a1-9f76-d3ed316adff6",
+      "task_name": "Risk-weighted assets \u2014 seg_03",
+      "agent_id": "w_c0dd2b",
+      "output_resource_ids": [
+        "5c900297-8081-4034-86e7-486121a0acfd",
+        "53826618-219a-43b0-ad34-62e167a45b88"
+      ]
+    },
+    {
+      "timestep": 4,
+      "task_id": "5dd12450-a425-456e-85ea-6f378033b5fa",
+      "task_name": "Risk-weighted assets \u2014 seg_00",
+      "agent_id": "w_9f1635",
+      "output_resource_ids": [
+        "d58059e3-f7ee-4a37-9d29-75bac396506c",
+        "48c16bda-7c6b-40fd-ab30-da867415b89f"
+      ]
+    },
+    {
+      "timestep": 4,
+      "task_id": "a1f6cb18-84ab-4d3c-bb17-81ca90f03e5e",
+      "task_name": "Risk-weighted assets \u2014 seg_01",
+      "agent_id": "w_613442",
+      "output_resource_ids": [
+        "3a819e2b-c3d5-4a1d-976d-46d4143a4651"
+      ]
+    },
+    {
+      "timestep": 4,
+      "task_id": "69342ea6-44da-4442-9f14-cbd1a9dd79e5",
+      "task_name": "Risk-weighted assets \u2014 seg_02",
+      "agent_id": "w_721a8b",
+      "output_resource_ids": [
+        "6eb340fe-0d33-4e6a-abd3-b49a992bdc7d"
+      ]
+    },
+    {
+      "timestep": 6,
+      "task_id": "a7659368-6cad-45c6-b8c3-c7179670dfb7",
+      "task_name": "Risk-weighted assets \u2014 seg_05",
+      "agent_id": "w_c0dd2b",
+      "output_resource_ids": [
+        "0fc2e043-5c27-4bbb-87fb-1ca7e87b55e3"
+      ]
+    },
+    {
+      "timestep": 6,
+      "task_id": "6479e23e-474d-44e0-bd13-7500b9a4d428",
+      "task_name": "Risk-weighted assets \u2014 seg_08",
+      "agent_id": "w_721a8b",
+      "output_resource_ids": [
+        "89d24ce6-3d74-4197-b5a2-9b3edbea5cb3",
+        "097ff070-a510-44a6-8737-4e57602366ee"
+      ]
+    },
+    {
+      "timestep": 7,
+      "task_id": "98b764c4-6120-45a1-bef9-6e00a3094d7d",
+      "task_name": "Risk-weighted assets \u2014 seg_06",
+      "agent_id": "w_613442",
+      "output_resource_ids": [
+        "58d543b3-2123-42e5-89d8-0bc7e34e2c3e"
+      ]
+    },
+    {
+      "timestep": 8,
+      "task_id": "e0f7091b-d30b-4584-b0d0-bc1dfb67a3ae",
+      "task_name": "Risk-weighted assets \u2014 seg_04",
+      "agent_id": "w_721a8b",
+      "output_resource_ids": [
+        "3eb03299-ef24-442e-83b3-63651735e3dd"
+      ]
+    },
+    {
+      "timestep": 9,
+      "task_id": "becba15f-1e3a-4335-9689-37572d1529a5",
+      "task_name": "Risk-weighted assets \u2014 seg_07",
+      "agent_id": "w_c0dd2b",
+      "output_resource_ids": [
+        "40a50448-2b53-4bf2-b1b3-140f8a5cd527"
+      ]
+    },
+    {
+      "timestep": 13,
+      "task_id": "eb0f8e80-ca1e-40f0-b2a1-248738cc9bd2",
+      "task_name": "Aggregate risk-weighted assets",
+      "agent_id": "w_613442",
+      "output_resource_ids": [
+        "ab4dba37-2558-4848-aa02-d37e934de490"
+      ]
+    },
+    {
+      "timestep": 20,
+      "task_id": "f8658fdf-771b-49bc-afec-7aafb6b72b7f",
+      "task_name": "Output floor check",
+      "agent_id": "w_613442",
+      "output_resource_ids": [
+        "e74f58ae-2b14-4f08-97d4-9d2d520624ad"
+      ]
+    }
+  ]
+}
