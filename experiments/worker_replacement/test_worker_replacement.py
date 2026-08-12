@@ -51,6 +51,31 @@ def test_best_possible_is_unchanged():
     assert _close(sc.best_possible(cap=3), 8.3613)  # capacity does not bind
 
 
+def test_the_successor_card_contradicts_its_own_system_prompt():
+    """The manipulation, checked at its narrowest point (RR).
+
+    The stale card is the successor carrying the PREDECESSOR's approvals in
+    `agent_description` while its `system_prompt` names its true ones. If those
+    two ever agreed, the manipulation would retire silently while every other
+    check still passed — so the disagreement is asserted directly, and only for
+    the successor.
+    """
+    import re
+    from .team import create_team_configs
+
+    team = create_team_configs(card_updated=False)
+    for worker_id, config in team.items():
+        carded = set(re.findall(r"IRB model approval: (\w+)", config.agent_description))
+        prompted = set(re.findall(r"IRB model approval: (\w+)", config.system_prompt))
+        truth = set(IRB_COVERAGE[worker_id])
+        assert prompted == truth, f"{worker_id}: the prompt must carry the truth"
+        if worker_id == SUCCESSOR:
+            assert carded != prompted, "the successor's card must be stale"
+            assert carded == set(IRB_COVERAGE[PREDECESSOR])
+        else:
+            assert carded == truth, f"{worker_id}: only the successor is stale"
+
+
 def test_only_three_segments_discriminate():
     """This environment's known weakness, asserted so it cannot drift unnoticed:
     on six of nine segments more than one analyst attains the maximum, so no

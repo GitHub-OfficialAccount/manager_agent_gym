@@ -263,8 +263,17 @@ def discriminating_segments(after_swap: bool = True) -> list[dict[str, Any]]:
     return rows
 
 
-def card_believing_play(cap: int | None = 3) -> dict[str, Any]:
+def card_believing_play(cap: int | None = None) -> dict[str, Any]:
     """What a manager that BELIEVED the stale card would get, scored under truth.
+
+    UNCAPPED BY DEFAULT, and the default matters more than it looks. This
+    defaulted to ``cap=3`` — three segments per worker — which the runtime does
+    NOT enforce: the engine limits an agent to ``max_concurrent_tasks`` (1, one
+    task at a time), not to a total over the episode, and 22 timesteps leave room
+    for far more than three each. Pricing the counterfactual under a capacity
+    nobody applies is exactly the L14-b defect ("the ceiling follows the
+    runtime"), and it moved the answer: 18 tied allocations and 0.4618 expected
+    cost under the phantom cap, 144 and 0.4156 without it.
 
     The card is a REPLACEMENT description of the successor, so it has two errors:
     it CLAIMS coverage the successor lacks, and it is SILENT about coverage the
