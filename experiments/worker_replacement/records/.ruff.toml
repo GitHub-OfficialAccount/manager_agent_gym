@@ -1,9 +1,0 @@
-# Archived measurement scripts, kept exactly as they were RUN.
-#
-# These are evidence, not source: each one produced a committed result file and
-# a stdout log, and the point of keeping them is that a reader can see what was
-# executed. Reformatting or "fixing" them would break that correspondence, and
-# several deliberately import names that no longer exist (`_is_gate_diagnostic`
-# was renamed) so they fail loudly rather than silently computing something
-# else. Lint is therefore off for this directory by design.
-exclude = ["*"]

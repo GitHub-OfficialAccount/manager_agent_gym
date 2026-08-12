@@ -1,59 +1,114 @@
-# worker_replacement
+# Worker replacement
 
-**A manager agent's worker is replaced mid-workflow by an event it did not choose. Which sources
-of information about the newcomer change its allocation decisions?**
+**A manager plans a Basel capital calculation. Partway through, one of its analysts is
+replaced by someone it did not choose — and the staff record still describes the person
+who left.**
 
-The newcomer is fully capable but qualified for different things. The manager can learn what it
-got from four channels: the registry **card** (still describing the predecessor — stale by
-succession), the newcomer's **self-descriptions**, **asking** it, and its execution **trace**.
-We measure what the manager does on the margin it owns: **who gets which task.**
+The question the environment asks: does the manager's plan follow the team, and what does
+it need to know for that to happen?
 
-**Environment:** a Basel capital calculation. Nine exposure segments, three workers, each
-qualified for some asset classes and not others. Ground truth is computable without an LLM judge.
+## Running it
 
----
+```bash
+python -m examples.run_examples --workflow_name worker_replacement --max-timesteps 22
+python -m examples.run_examples --workflow_name worker_replacement_updated_card --max-timesteps 22
+```
 
-## Read in this order
+`--max-timesteps 22` matters. The default is 50, which costs more than it buys; 22 is
+enough for the graph to finish and short enough that an unfinished segment is a real
+outcome rather than an artefact of an unlimited clock.
+
+You need one API key for whatever provider `team.WORKER_MODEL` names, and nothing else.
+
+The two differ in **one boolean** — whether the newcomer's staff record was updated at the
+swap. Everything else is byte-identical, so a difference between them is attributable to
+the record and to nothing else.
+
+## Scoring it
+
+The run writes to `simulation_outputs/<scenario>/run_seed_<n>/` — note the scenario
+subdirectory; it is not `simulation_outputs/run_<timestamp>/`.
+
+```python
+from examples.end_to_end_examples.worker_replacement import format_run, score_run
+
+print(format_run("simulation_outputs/worker_replacement/run_seed_42"))
+```
+
+Scoring reads the per-timestep dump the engine already writes, so it needs nothing saved
+alongside the run and it can score an episode that was killed part-way — a segment nobody
+reached scores zero and is listed as unallocated rather than silently dropped.
+
+The same three numbers are also computed live during the run, as preference rubrics. Both
+paths go through one reader, so they cannot disagree.
+
+## What it measures
+
+Every segment has exactly one right answer, so nothing here needs a judge. Three scores,
+deliberately not one:
+
+| | what it asks |
+|---|---|
+| **accuracy** | what the team actually delivered, against the best available |
+| **routing** | what the manager's **allocation** made reachable, against the same |
+| **coverage** | whether every segment got priced at all |
+
+**`routing` is the one to watch.** It isolates the manager's own decision from its workers'
+arithmetic. On the reference episode the routing loss is exactly `0.0000` while the
+execution loss is `1.6882` — the manager allocated perfectly and the workers spent it. A
+single combined score hides which of the two happened.
+
+Routing is weighted but not dominant, on purpose. Making it the objective would tell the
+manager that checking its team's work does not count.
+
+## The environment
+
+Nine exposure segments, four analysts, each holding IRB model approval for two asset
+classes and the standardised approach for everything. **Nobody is ever switched off** — an
+analyst without the relevant approval still returns a real figure, just a worse one. The
+competence gap grades the answer; it never denies an output.
+
+At timestep 3 the predecessor rolls off and a successor joins. In the stale condition the
+successor inherits the predecessor's `agent_description` verbatim: nobody authors a false
+description, the record simply was not updated when the person changed.
+
+Everything is a literal. There is no generator and no data file, so *which environment
+produced this figure* has one answer.
+
+## Known limitation, stated up front
+
+**On six of the nine segments more than one analyst attains the maximum, so no allocation
+can be wrong there.** The routing choice only matters on three, and the newcomer is the
+sole holder of just one of them — worth 0.27% of the total.
+
+A manager that ignores the swap entirely scores optimally on this environment, and does so
+correctly. **That is a property of the environment, not a finding about managers.** Anyone
+using this to compare manager policies should expect routing scores near 1.0 and should
+read `discriminating_segments()` before concluding anything from that.
+
+## Portability
+
+Imports nothing outside `manager_agent_gym.schemas`. Two optional fields are detected at
+import and skipped when absent, so it runs on a library without them:
+
+- `Task.task_class` — without it, segments are matched by the `seg_NN` in their name.
+  Weaker: rename a segment task and it stops being scored.
+- `AIAgentConfig.max_turns` — without it, workers use the library default of 10 turns and
+  some executions will be lost to the limit. A lost execution is recorded as an unpriced
+  segment rather than hidden.
+
+Roster removal (`("remove", cfg, reason)` in the team timeline) is standard and needs
+nothing extra.
+
+## Files
 
 | | |
 |---|---|
-| **`../../RESEARCH-CRON-STATUS.md`** | Where it stands, the one open decision, what is live. **Start here** — it is at the repo root. |
-| `STUDY1_FOUNDATION.md` | The authoritative brief, with dated amendments (★). |
-| `BACKLOG.md` | Current steps; the **findings log** at the bottom is the whole phase in one place. |
-| `METHODOLOGY_RULES.md` | Rules, each naming the failure that paid for it. |
-| `INDEX.md` | Full document and code map. |
+| `workflow.py` | the nine segments and the task graph |
+| `team.py` | the four analysts, the swap, the stale record |
+| `scoring.py` | the Basel formula, best possible, the two losses, the reader |
+| `preferences.py` | the three rubrics — all Python functions, no LLM |
+| `test_worker_replacement.py` | acceptance; every number above is asserted here |
 
-## State in one paragraph
-
-The instrument is repaired and the manipulation is priced. **Knowing the newcomer's true
-qualifications is worth 1.24% of achievable score — 0.16σ, ~616 episodes per arm — so it is real
-and undetectable at any affordable sample.** One ceiling bounds all four channels. A lattice
-repair is proposed but its value depends on an unset parameter it also disables. **One decision
-is open and everything waits on it (`RESEARCH-CRON-STATUS.md` §1, at the repo root).** Nothing has run since the scope run.
-
-## Layout
-
-```
-finance_*.py     the environment, its scoring, and the measurements
-check_*.py       offline pricing — each answers a design question before anything is built
-test_*.py        acceptance scripts, run as modules, not pytest:
-                   python -m experiments.worker_replacement.test_finance_split
-records/         per step: acceptance output + two independent reviews
-archive/         superseded documents. Governs nothing.
-outputs/         run bundles (untracked)
-```
-
-**Core plumbing outside this directory** — nine deliberate deviations from upstream in
-`manager_agent_gym/`, documented in `CHANGED.md` at the repo root. A fresh clone behaves
-differently; read that before assuming parity.
-
-## Two conventions worth knowing
-
-**Every reported quantity states its population, its comparator and its plausible range** — the
-emitter refuses to print one that does not. Six of this project's failures were a number that was
-arithmetically right and semantically wrong.
-
-**Price the ceiling offline before spending on a contrast.** Compute the best effect a
-manipulation could have, convert to σ and episodes-per-arm. If the ceiling is below detectability,
-no run answers the question. That check costs nothing and this project learned it the expensive
-way.
+Run the tests with `pytest examples/end_to_end_examples/worker_replacement/`. They need no
+API key and no run directory.

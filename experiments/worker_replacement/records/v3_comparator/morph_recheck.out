@@ -1,9 +1,0 @@
-  round 5/20
-  round 10/20
-  round 15/20
-  round 20/20
-
-PINNED MORPH, production payload, INTERLEAVED
-  cached        contradicts= 4/20  cache-warm calls=10/20  {'supports_fit': 16, 'contradicts_fit': 4}
-  nonce-busted  contradicts= 4/20  cache-warm calls= 0/20  {'supports_fit': 16, 'contradicts_fit': 4}
-  providers served: ['Morph']

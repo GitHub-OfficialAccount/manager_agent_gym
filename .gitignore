@@ -46,3 +46,18 @@ Thumbs.db
 simulation_outputs*/
 analysis_outputs*/
 examples/analysis/*
+
+# ★ THE PARTIAL-PROGRESS FILE IS A CRASH ARTEFACT, NOT A RECORD (L22 decision).
+#
+# It is rewritten WHOLESALE every timestep, so tracking it means the tree is dirty
+# for the whole of every run -- and committing it is what turned a harmless
+# overwrite into a committed file describing the wrong episode.
+#
+# It does its job ON DISK, which is where a recovering process looks. When an
+# episode dies WITHOUT a bundle, the partial IS the record: `git add -f` it then,
+# with a commit message saying why that one is in the record.
+#
+# FLIP CONDITION, stated so it is not rediscovered: if we ever run UNATTENDED,
+# this inverts -- an untracked file is one `git clean` from gone, and nobody is
+# there to force-add it.
+experiments/worker_replacement/records/**/partial_*.json

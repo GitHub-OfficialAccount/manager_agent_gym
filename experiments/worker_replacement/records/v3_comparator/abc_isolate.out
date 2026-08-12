@@ -1,9 +1,0 @@
-Batch A asis       n=20  contradicts=19/20  {'contradicts_fit': 19, 'supports_fit': 1}
-Batch A reordered  n=20  contradicts=20/20  {'contradicts_fit': 20}
-Batch A isolated   n=20  contradicts=20/20  {'contradicts_fit': 20}
-Batch B asis       n=20  contradicts= 2/20  {'supports_fit': 18, 'contradicts_fit': 2}
-Batch B reordered  n=20  contradicts= 0/20  {'supports_fit': 20}
-Batch B isolated   n=20  contradicts= 2/20  {'supports_fit': 18, 'contradicts_fit': 2}
-Batch C asis       n=20  contradicts= 0/20  {'supports_fit': 19, 'neutral': 1}
-Batch C reordered  n=20  contradicts= 0/20  {'supports_fit': 20}
-Batch C isolated   n=20  contradicts= 0/20  {'supports_fit': 20}

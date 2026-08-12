@@ -1,3 +1,0 @@
-Batch A TRUE-isolated n=20  contradicts=17/20  {'contradicts_fit': 17, 'neutral': 1, 'supports_fit': 2}
-Batch B TRUE-isolated n=20  contradicts=14/20  {'supports_fit': 6, 'contradicts_fit': 14}
-Batch C TRUE-isolated n=20  contradicts=20/20  {'contradicts_fit': 20}

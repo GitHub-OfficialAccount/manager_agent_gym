@@ -108,7 +108,21 @@ from ...config import settings
 # (15 started, 12 completed). They are absent from the paired data, they did not
 # hang against the bound, and a shorter timeout does nothing for them. They remain
 # the open question and the more damaging population.
-WORKER_REQUEST_TIMEOUT_S = float(os.getenv("MAG_WORKER_REQUEST_TIMEOUT_S", "900"))
+# ★ RAISED 900 -> 1500 (L24, 2026-08-11). The observed maximum single request moved
+# from 305.1s to 682.1s in the L24 probe -- ABOVE the 655s "bad-hour edge" (305 x
+# the measured 2.15x hour-to-hour swing) that justified 900. RR's rule prices the
+# bound at observed_max x swing = 682.1 x 2.15 = 1466s.
+#
+# LS FIRST SET THIS TO 1200, constrained by "2 x bound must clear the 2460s
+# backstop". THAT CONSTRAINT WAS FABRICATED FROM A STALE CONSTANT: the backstop is
+# 3600 (raised deliberately at L13), and 2460 was a hardcoded copy in
+# analyse_first_bundle.py -- LS's own file. With the real backstop, 2 x 1500 = 3000
+# clears 3600 with 600s to spare, so the swing argument is satisfiable and was only
+# ever blocked by a number nobody re-derived.
+#
+# Margin 1500 / 682.1 = 2.20x, at or above the 2.15x the rule asks for. CHOSEN, not
+# bounded -- which is the difference from the 1200 it replaces.
+WORKER_REQUEST_TIMEOUT_S = float(os.getenv("MAG_WORKER_REQUEST_TIMEOUT_S", "1500"))
 WORKER_MAX_RETRIES = int(os.getenv("MAG_WORKER_MAX_RETRIES", "1"))
 def _apply_worker_request_limits() -> dict[str, float | int]:
     """Bound the worker path's request time. Returns what was applied, for the record."""
@@ -175,9 +189,10 @@ _apply_worker_request_limits()
 # `experiments/worker_replacement/probe_worker_requests.py`. The bound is no longer
 # unverified: longest observed live worker request 305.14s over ~20 requests.
 #
-# 3600 IS KEPT AND IS NOW MORE GENEROUS THAN IT READS. With the request bound at
-# 600 and one retry, a task that hangs twice terminates near 1200s, so the backstop
-# sits ~3x clear of the worst mechanical case rather than +67% over a contaminated
+# 3600 IS KEPT. With the request bound at 1500 (L24) and one retry, a task that
+# hangs twice terminates near 3000s, so the backstop sits ~1.2x clear of the worst
+# mechanical case -- NOT the ~3x this sentence claimed while the bound was 600.
+# THE BACKSTOP IS NOW THE BINDING CONSTRAINT on any further raise rather than +67% over a contaminated
 # maximum. The asymmetry above still decides it: firing wrongly costs a task,
 # firing late only delays a detection the heartbeat already makes.
 WORKER_RUN_BACKSTOP_S = float(os.getenv("MAG_WORKER_RUN_BACKSTOP_S", "3600"))

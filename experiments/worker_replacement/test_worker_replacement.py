@@ -1,0 +1,68 @@
+"""Six checks. Each one guards a number a later finding would rest on.
+
+Deliberately short — these are not a test suite for a library, they are the
+handful of assertions that would catch an edit to the environment silently
+moving the ground under an earlier result.
+
+No API key, no run directory, about a second.
+"""
+
+from __future__ import annotations
+
+import math
+
+from . import scoring as sc
+from .team import IRB_COVERAGE, PREDECESSOR, SUCCESSOR
+from .workflow import SEGMENTS
+
+
+def _close(a: float, b: float) -> bool:
+    return math.isclose(a, b, abs_tol=1e-4)
+
+
+def test_basel_formula_matches_published_risk_weights():
+    """The only check against something outside our own work.
+
+    BCBS Basel II Annex 5, "Illustrative IRB Risk Weights for UL", Corporate
+    Exposures, LGD 45%, M 2.5y. Tolerance is one unit in the published last place.
+    """
+    for pd, expected in {0.0003: 14.44, 0.0010: 29.65, 0.0100: 92.32,
+                         0.0500: 149.86, 0.2000: 238.23}.items():
+        assert abs(12.5 * sc.capital_requirement(pd, 0.45, 2.5) * 100.0
+                   - expected) <= 0.01, pd
+
+
+def test_no_worker_is_ever_switched_off():
+    """The standardised approach is universal, so every analyst can price every
+    segment. The competence gap grades the answer; it never denies an output."""
+    for segment in SEGMENTS:
+        for worker in IRB_COVERAGE:
+            assert sc.attainable_report(segment, worker) > 0.0
+
+
+def test_the_swap_is_one_for_one():
+    roster = sc.active_roster(after_swap=True)
+    assert PREDECESSOR not in roster and SUCCESSOR in roster and len(roster) == 3
+
+
+def test_best_possible_is_unchanged():
+    """8.3613 is the denominator every reported share divides by."""
+    assert _close(sc.best_possible(), 8.3613)
+    assert _close(sc.best_possible(cap=3), 8.3613)  # capacity does not bind
+
+
+def test_only_three_segments_discriminate():
+    """This environment's known weakness, asserted so it cannot drift unnoticed:
+    on six of nine segments more than one analyst attains the maximum, so no
+    allocation can be wrong there."""
+    rows = {r["segment_id"]: r for r in sc.discriminating_segments()}
+    assert {s for s, r in rows.items() if r["discriminates"]} == {
+        "seg_00", "seg_03", "seg_07"}
+    assert _close(rows["seg_00"]["gap"], 0.0225)  # and one of the three is near-free
+
+
+def test_report_parsing():
+    assert sc.parse_report("method: IRB\nrwa: 1,234.50") == (1234.50, False)
+    assert sc.parse_report("method: none\nrwa: unavailable") == (None, True)
+    assert sc.parse_report("rwa: 1.0\nrwa: 2.0") == (None, False)   # contradiction
+    assert sc.parse_report("RWA = 100 x 0.75 = 75.0") == (None, False)  # reasoning

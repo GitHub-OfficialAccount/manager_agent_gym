@@ -1,4 +1,0 @@
-L0prime  (short prompt + plain) contradicts=19/20  {'contradicts_fit': 19, 'supports_fit': 1}
-shipped  (v3.0 prompt + JSON)  contradicts= 0/20  {'supports_fit': 20}
-prompt-only change             contradicts=19/20  {'supports_fit': 1, 'contradicts_fit': 19}
-payload-only change            contradicts= 2/20  {'contradicts_fit': 2, 'supports_fit': 18}

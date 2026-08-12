@@ -151,6 +151,13 @@ from examples.end_to_end_examples.airline_launch_program import (
     create_preference_update_requests as airline_update_requests,
     create_evaluator_to_measure_goal_achievement as airline_goal_achievement,
 )
+from experiments.worker_replacement import (
+    create_workflow as create_worker_replacement_workflow,
+    create_preferences as create_worker_replacement_preferences,
+    create_team_timeline as create_worker_replacement_team_timeline,
+    create_preference_update_requests as worker_replacement_update_requests,
+    create_evaluator_to_measure_goal_achievement as worker_replacement_goal,
+)
 
 
 class ScenarioSpec(BaseModel):
@@ -325,5 +332,25 @@ SCENARIOS: dict[str, ScenarioSpec] = {
         create_team_timeline=create_airline_team_timeline,
         create_preference_update_requests=airline_update_requests,
         create_evaluator_to_measure_goal_achievement=airline_goal_achievement,
+    ),
+    # Worker replacement — the team changes mid-episode and the staff record does
+    # not. The two entries differ in ONE boolean: whether the newcomer's record
+    # was updated at the swap. Everything else is byte-identical, so a difference
+    # between them is attributable to the record and to nothing else.
+    "worker_replacement": ScenarioSpec(
+        create_workflow=create_worker_replacement_workflow,
+        create_preferences=create_worker_replacement_preferences,
+        create_team_timeline=lambda: create_worker_replacement_team_timeline(
+            card_updated=False),
+        create_preference_update_requests=worker_replacement_update_requests,
+        create_evaluator_to_measure_goal_achievement=worker_replacement_goal,
+    ),
+    "worker_replacement_updated_card": ScenarioSpec(
+        create_workflow=create_worker_replacement_workflow,
+        create_preferences=create_worker_replacement_preferences,
+        create_team_timeline=lambda: create_worker_replacement_team_timeline(
+            card_updated=True),
+        create_preference_update_requests=worker_replacement_update_requests,
+        create_evaluator_to_measure_goal_achievement=worker_replacement_goal,
     ),
 }
