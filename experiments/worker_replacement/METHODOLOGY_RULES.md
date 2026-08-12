@@ -523,6 +523,55 @@ _Origin: the M3RL lesson, which cuts both ways. [§119]_
 
 ---
 
+### A provenance field is asserted against its source at emission, or it is not written.
+
+_Origin: three instances of one defect. The selection record carried `"rule":
+"ceiling_vs_ignorant"` while the code ranked on the stale card; `parameters.coverage_size`
+recorded the module constant, so a size-3 instance reported `2`; and the §B
+population-named-not-predicated family. In all three the field was written once, from a
+literal or a constant near to hand, and then trusted forever._
+
+A field that names **what produced a value** — a rule name, a criterion, a parameter, a
+population, a baseline — is a claim about the code path, and nothing in a record checks that the
+claim is still true. It is written beside the value, not derived from it, so it survives every
+refactor that invalidates it and it survives silently.
+
+So: **derive the provenance field from the thing it describes, or assert it.** Not
+`{"rule": "ceiling_vs_ignorant"}` next to a call to the stale-card function, but the
+function's own name, or a check that the named rule is the one that ran. Not
+`parameters.coverage_size = COVERAGE_SIZE` but the coverage size **measured from the
+instance emitted**. Where neither is possible, omit the field: a missing provenance field
+sends the reader to the code, and a wrong one stops them looking.
+
+**The asymmetry that makes this worth a rule.** A wrong *value* tends to be caught — it is
+what people examine, and it has a plausible range. A wrong *provenance field* is caught only
+by someone who re-derives the value from scratch, which is precisely the work the field exists
+to save. **It is the highest-trust, lowest-checked content in any record.**
+
+### Print the intermediate quantity a verdict is computed from, not only the verdict.
+
+_Origin: the empty-collector failure, four occurrences. Most recently the truncation audit
+reported `all passed t_swap: False` from a collector that returned `None` on all 18 rows,
+because the timestep was read from `payload.id` when it is a top-level field. What caught it
+was that the `None` was VISIBLE in a printed column — not suspicion, and not a positive
+control._
+
+A collector that fails to empty produces a **clean, confident, wrong answer**: the verdict
+computed from nothing is well-formed, and it usually agrees with whatever you expected, which
+is why it gets sent. The positive-control rule addresses the same failure but only fires if
+someone thinks to run one. **A printed intermediate catches it passively, every time, at no
+cost.**
+
+So: when a verdict is a reduction over a collected quantity — a count, a max, an argmax, a
+share, an "all"/"any" — **print the quantity beside the verdict.** Row counts, the extracted
+values, the size of the set being reduced over. `all passed: False` is unreadable;
+`all passed: False (max_t = None on 18/18 rows)` diagnoses itself.
+
+**Corollary, and it is the actionable half:** a reduction over an empty or all-`None`
+collection must never render as an ordinary verdict. `all([])` is `True`, `any([])` is `False`,
+and both are lies about a measurement that did not happen. **Either raise, or print the
+denominator.**
+
 ## H. Failure classes, indexed by signature
 
 Recognise these by shape, before you know what is wrong.
@@ -547,6 +596,10 @@ Recognise these by shape, before you know what is wrong.
 | an empty result that agrees with you | never checked | B-positive-control, P1b corollary |
 | a quantity whose plausible range nobody stated | units/scale substitution | B-plausible-range, A-absolute-margins |
 | a clean N/N on a construct built from a fixed template | the test restates its own construction | B-confirming-test, C-manufactured-fixture |
+| a provenance field naming the rule, criterion or parameter that produced a value | written once, trusted forever | E-provenance-asserted |
+| a record field that repeats a module constant | constant recorded instead of the value used | E-provenance-asserted |
+| a verdict printed without the quantity it reduces over | empty collector rendered as a result | G-print-the-intermediate, B-positive-control |
+| an `all(...)`/`any(...)` over a collection nobody sized | `all([])` is True | G-print-the-intermediate |
 
 ---
 

@@ -11,11 +11,24 @@ from pydantic import BaseModel, Field
 
 
 class ScheduledAgentChange(BaseModel):
-    """A scheduled agent change at a specific timestep."""
+    """A scheduled agent change at a specific timestep.
+
+    `replace` models an EXOGENOUS REPLACEMENT: an event the manager did not choose
+    substitutes a different worker for one already on the roster — a model upgrade
+    or a restaffing — reusing the outgoing worker's `agent_id` so the roster size
+    and the task graph are undisturbed.
+
+    It is NOT a worker changing its own behaviour mid-episode. That reading is
+    scoped out (see CLAUDE.md): workers here get changed, they do not change. The
+    id reuse is a mechanism for holding everything except the worker constant, not
+    a claim that the same agent persists.
+    """
 
     timestep: int = Field(..., description="Timestep when change should occur")
     action: Literal["add", "remove", "replace"] = Field(
-        ..., description="Add, remove, or replace (in-place mutation) an agent"
+        ...,
+        description="Add or remove an agent, or replace one in place — same id, "
+        "different worker",
     )
     agent_config: Any = Field(default=None, description="Agent config for addition")
     agent_id: str | None = Field(
@@ -23,26 +36,31 @@ class ScheduledAgentChange(BaseModel):
     )
     new_system_prompt: str | None = Field(
         default=None,
-        description="Replacement system prompt for 'replace' (same id, new policy)",
+        description="Replacement system prompt for 'replace' — the incoming worker's "
+        "policy, carried on the outgoing worker's id",
     )
     new_model_name: str | None = Field(
         default=None,
-        description="Replacement model name for 'replace' (same id, new capability)",
+        description="Replacement model name for 'replace' — e.g. a model upgrade, "
+        "carried on the outgoing worker's id",
     )
     new_tool_ids: list[str] | None = Field(
         default=None,
         description="Replacement task-tool ids for 'replace', resolved via the "
-        "registry's tool registry (same id, new toolset — e.g. a downgrade)",
+        "registry's tool registry — the incoming worker's toolset",
     )
     new_agent_capabilities: list[str] | None = Field(
         default=None,
-        description="Optional replacement for manager-visible declared capabilities",
+        description="Optional replacement for manager-visible declared capabilities. "
+        "Leaving this unset is what makes the manager's registry card go STALE "
+        "across a replacement",
     )
     announce: bool = Field(
         default=False,
         description=(
-            "For 'replace': broadcast the change to all agents. False = silent "
-            "swap (behavior changes with no observable announcement)."
+            "For 'replace': broadcast the change to all agents. False = the manager "
+            "is not told, so it must find out from the newcomer's own information "
+            "interface (card, declaration, ask, trace) or not at all."
         ),
     )
     reason: str = Field(..., description="Reason for this agent change")

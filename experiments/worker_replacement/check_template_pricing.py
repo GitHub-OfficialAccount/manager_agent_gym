@@ -1,8 +1,15 @@
 """Pricing candidate lattice templates — offline, no generator change.
 
-The card channel prices at 1.24% of oracle / 0.16sigma on the CURRENT template,
-below detectability at any affordable n. Two candidate repairs are priced here
-against the same instances.
+The card channel prices low on the CURRENT template. Two candidate repairs are
+priced here against the same instances.
+
+THE CEILING IS NOT COMPUTED HERE. It comes from `finance_scorer.ceiling_vs_stale_
+card`, the single shipped implementation. This module used to carry its own copy,
+which went stale when D19 added the expectation tie-break: the two disagreed in
+public, 8.51% against 9.03%, on one quantity. Delegating moved this module's
+figure to 9.57% -- that is the SAME implementation on a DIFFERENT population
+(30 seeds under each instance's own labeling, versus 10 seeds x the
+labelings that yield nA=4), not a third answer.
 
 HOW THIS PRICES A TEMPLATE WITHOUT CHANGING THE GENERATOR. A lattice change alters
 only WHO COVERS WHAT. The segments — their classes, ratings, exposures and
@@ -23,9 +30,9 @@ number of IRB segments in the successor-unique class and it is what the effect
 scales with. RR's independent probe (10 seeds x all 120 labelings, 1200 cells)
 decomposes it:
 
-    nA = 0    0.16 sigma    32% of labelings    <- IDENTICAL to the current template
-    nA = 1    0.44 sigma    natural round-robin mix
-    nA = 4    1.02 sigma    where this file's headline figure lives
+    nA = 0    32% of labelings
+    nA = 1    48%  — the natural round-robin mix
+    nA = 4    20%  — where this file's headline figure lives
 
 So the headline is the most favourable case in the range, not a property of the
 template. `nA` only ever takes 0, 1 or 4 and never 2 or 3: the fingerprint of the
@@ -33,12 +40,17 @@ forcing. AND THE 30/30-NONZERO RESULT GOES WITH IT — every seed showed an effe
 because nA = 4 in every seed. A repair that fires on every single seed is not a
 repair with a distribution; it is a constant being reported as a finding.
 
-The honest statement is a range with a dependency: the disjoint template is worth
-between NOTHING and ~6x the current ceiling depending on one unset parameter — and
-that same parameter sets how well a dump-on-newcomer shortcut does, so the two
-constraints pull on the same knob. Deferring the mix does not leave it neutral; it
-silently adopts the most favourable value. See `check_mix_sweep.py`, which prices
-across the mix instead of inheriting it.
+ONE CLAIM FROM THAT DECOMPOSITION IS WITHDRAWN. An earlier version of this caveat
+said nA=0 was "IDENTICAL to the current template" (RR's line, which I adopted
+without measuring). At MATCHED mix it is not: the disjoint template beats the
+current one ~6-7x at EVERY nA including nA=0. The comparison that made it look
+identical was disjoint-at-nA=0 against the current template AS SHIPPED, which
+carries its own forcing — a different comparator, not the same one.
+
+So the forcing inflated the ABSOLUTE LEVEL; it did not manufacture the template
+DIFFERENCE. Deferring the mix still does not leave it neutral — it silently adopts
+the most favourable value. See `check_mix_sweep.py`, which prices across the mix
+instead of inheriting it.
 
 WHAT THIS STILL DOES NOT PRICE: substitution re-uses instances the CURRENT
 generator produced, so it inherits that generator's forcing. A revised generator
@@ -107,10 +119,22 @@ def labels_of(instance: dict[str, Any]) -> dict[str, str]:
 
 
 def card_ceiling_for_template(seed: int, template: tuple[str, str, str, str]) -> dict[str, Any]:
+    """Price one template by SUBSTITUTING coverage, scored by the SHIPPED function.
+
+    THIS USED TO CARRY ITS OWN COPY OF THE CEILING, and the copy went stale. It
+    reimplemented the belief model and the capacitated enumeration locally, so when
+    D19 added the expectation tie-break to `finance_scorer.ceiling_vs_stale_card`
+    this module did not pick it up — and the two implementations of one quantity
+    disagreed in public, 8.51% here against 9.03% from the scorer, on the same
+    template and the same seeds.
+
+    That is the single-source rule this project already applies to the IRB capital
+    function and the SA tables, arriving in the one place it had not been applied.
+    A local copy of a quantity does not stay a copy; it becomes a second answer.
+    """
     instance = gen.generate(seed)
     lab = labels_of(instance)
     calibration = instance["class_calibration"]
-    segments = instance["segments"]
 
     roles = ["_pred", "_succ", "_w2", "_w3"]
     coverage = {lab[r]: tuple(lab[ch] for ch in spec)
@@ -122,62 +146,26 @@ def card_ceiling_for_template(seed: int, template: tuple[str, str, str, str]) ->
     # exactly the shared table's entry for it.
     real = {w["worker_id"]: w for w in instance["workers"]}
     workers = []
-    for r in roles:
-        wid = lab[r]
-        row = dict(real[wid])
-        row["irb_coverage"] = coverage[wid]
-        row["private_pd_calibration"] = {
-            c: instance["class_calibration"][c] for c in coverage[wid]}
+    for worker in instance["workers"]:
+        row = dict(worker)
+        wid = worker["worker_id"]
+        if wid in coverage:
+            row["irb_coverage"] = coverage[wid]
+            # Class-level calibration since R1, so a holder holds exactly the
+            # shared table's entry. Substituting anything else would break the
+            # scorer's class-level assertion, which is the point of that assertion.
+            row["private_pd_calibration"] = {
+                c: calibration[c] for c in coverage[wid]}
         workers.append(row)
-    by_id = {w["worker_id"]: w for w in workers}
 
-    predecessor, successor = lab["_pred"], lab["_succ"]
-    roster = [by_id[lab[r]] for r in ("_succ", "_w2", "_w3")]
-    card_claims = set(coverage[predecessor])
-
-    def true_score(segment, worker):
-        return sc.s(segment, worker, calibration)
-
-    # THE CARD HAS TWO ERRORS, NOT ONE, AND THE FIRST VERSION MODELLED ONLY ONE.
-    # It gave the successor a believed 1.0 where the card FALSELY CLAIMS coverage,
-    # and otherwise fell through to the TRUE score — so where the card is SILENT
-    # about a class the successor really covers, the manager was credited with
-    # knowing it anyway. That is the card's OMISSION, and under the current
-    # template it costs nothing (the silent class is always incumbent-covered, 60
-    # of 60), which is why the omission never mattered and the model survived.
-    # Under a template where the successor SOLE-holds a silent class it is the
-    # larger half of the effect, and a model blind to it prices exactly the
-    # property the template was designed to add at zero.
-    believed_coverage = card_claims          # the manager believes the card, entire
-    succ_as_believed = dict(by_id[successor])
-    succ_as_believed["irb_coverage"] = tuple(believed_coverage)
-    succ_as_believed["private_pd_calibration"] = {
-        c: instance["class_calibration"][c] for c in believed_coverage}
-
-    def believed(segment, worker):
-        if worker["worker_id"] != successor:
-            return sc.s(segment, worker, calibration)
-        # Scored as the CARD describes the successor: false claims grant coverage
-        # it lacks, and omissions withhold coverage it has.
-        return sc.s(segment, succ_as_believed, calibration)
-
-    def best(scoref):
-        best_v, best_a = -1.0, ()
-        for combo in product(range(len(roster)), repeat=len(segments)):
-            if any(combo.count(i) > CAP for i in range(len(roster))):
-                continue
-            value = sum(scoref(sg, roster[w]) for sg, w in zip(segments, combo))
-            if value > best_v:
-                best_v, best_a = value, combo
-        return best_v, best_a
-
-    true_value, _ = best(true_score)
-    _, card_alloc = best(believed)
-    realised = sum(true_score(sg, roster[w])
-                   for sg, w in zip(segments, card_alloc))
-    return {"seed": seed, "true_optimum": true_value, "realised": realised,
-            "ceiling": true_value - realised,
-            "share": (true_value - realised) / true_value}
+    out = sc.ceiling_vs_stale_card({**instance, "workers": workers}, cap=CAP)
+    return {"seed": seed, "true_optimum": out["oracle"],
+            "realised": out["card_believing_play_realises"],
+            "ceiling": out["ceiling"], "share": out["ceiling_share"] or 0.0,
+            "share_min": out["ceiling_share_min"] or 0.0,
+            "share_max": out["ceiling_share_max"] or 0.0,
+            "baseline": out["baseline"], "belief_model": out["belief_model"],
+            "tie_break": out["tie_break"]}
 
 
 def main() -> int:

@@ -1,0 +1,94 @@
+{
+  "both_falsified": true,
+  "caps": [
+    3,
+    4,
+    5,
+    9
+  ],
+  "caveats": [
+    "every cell here is nA=1; the mix forcing that produced nA=4 at five classes is DISABLED on the coverage_override path, so this says nothing about size-3 at a forced mix",
+    "the carrier contrast is confounded by construction with whether the successor-unique class is the shared one (6480 templates, 0 counterexamples), so neither variable is isolated here",
+    "a mechanism consistent with the sweep is not a mechanism demonstrated by it"
+  ],
+  "results": {
+    "h1": {
+      "falsified": true,
+      "sweep": {
+        "cap3|corporate": {
+          "gap": 0.0031428485022128617,
+          "inverted": true,
+          "one_carrier": 0.018916193264247712,
+          "two_carriers": 0.01577334476203485
+        },
+        "cap3|mdb": {
+          "gap": 0.004918379434995087,
+          "inverted": true,
+          "one_carrier": 0.01837401926635524,
+          "two_carriers": 0.013455639831360151
+        },
+        "cap4|corporate": {
+          "gap": 0.005250854986528226,
+          "inverted": true,
+          "one_carrier": 0.021030101342991873,
+          "two_carriers": 0.015779246356463647
+        },
+        "cap4|mdb": {
+          "gap": 0.006847029242741578,
+          "inverted": true,
+          "one_carrier": 0.020337778931460077,
+          "two_carriers": 0.013490749688718499
+        },
+        "cap5|corporate": {
+          "gap": 0.006258733162453491,
+          "inverted": true,
+          "one_carrier": 0.022064551105232658,
+          "two_carriers": 0.015805817942779167
+        },
+        "cap5|mdb": {
+          "gap": 0.007796577389282779,
+          "inverted": true,
+          "one_carrier": 0.021325624223756872,
+          "two_carriers": 0.013529046834474093
+        },
+        "cap9|corporate": {
+          "gap": 0.006419979775511987,
+          "inverted": true,
+          "one_carrier": 0.02223459011367024,
+          "two_carriers": 0.01581461033815825
+        },
+        "cap9|mdb": {
+          "gap": 0.007945961897190167,
+          "inverted": true,
+          "one_carrier": 0.021485984264236396,
+          "two_carriers": 0.013540022367046229
+        }
+      }
+    },
+    "h2": {
+      "by_group": {
+        "corporate|1": {
+          "absolute": 0.16777164417089271,
+          "oracle": 8.779004875482785,
+          "share": 0.018916193264247712
+        },
+        "corporate|2": {
+          "absolute": 0.1419441462278291,
+          "oracle": 8.85180906368506,
+          "share": 0.01577334476203485
+        },
+        "mdb|1": {
+          "absolute": 0.16336686863619873,
+          "oracle": 8.827207524429726,
+          "share": 0.01837401926635524
+        },
+        "mdb|2": {
+          "absolute": 0.12108480185175684,
+          "oracle": 8.860914256047277,
+          "share": 0.013455639831360151
+        }
+      },
+      "falsified": true
+    }
+  }
+}

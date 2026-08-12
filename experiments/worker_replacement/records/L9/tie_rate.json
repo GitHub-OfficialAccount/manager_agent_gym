@@ -61,19 +61,33 @@
       "seeds_with_tie_believed": 20,
       "seeds_with_tie_true": 20
     },
+    "reordering": {
+      "five_class": {
+        "max_distinct_ceilings": 1,
+        "orders_per_seed": 8,
+        "seeds_unstable": 0,
+        "worst_spread": 0.0
+      },
+      "six_class_clone": {
+        "max_distinct_ceilings": 1,
+        "orders_per_seed": 8,
+        "seeds_unstable": 0,
+        "worst_spread": 0.0
+      }
+    },
     "six_class_clone": {
-      "ceiling_spread_max": 0.1409649136770113,
-      "ceiling_spread_mean": 0.07002116386563838,
+      "ceiling_spread_max": 0.0,
+      "ceiling_spread_mean": 0.0,
       "feasible_allocations": 1680,
-      "max_optima_believed": 49,
-      "max_optima_true": 30,
-      "mean_optima_believed": 30.95,
-      "mean_optima_true": 29.45,
-      "seeds_with_ambiguous_ceiling": 20,
+      "max_optima_believed": 6,
+      "max_optima_true": 6,
+      "mean_optima_believed": 6,
+      "mean_optima_true": 6,
+      "seeds_with_ambiguous_ceiling": 0,
       "seeds_with_tie_believed": 20,
       "seeds_with_tie_true": 20
     }
   },
   "tie_eps": 1e-12,
-  "tie_rate_rises_with_clone": true
+  "tie_rate_rises_with_clone": false
 }

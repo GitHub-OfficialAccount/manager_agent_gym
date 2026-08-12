@@ -50,7 +50,7 @@ output plus both reviews under `records/`.
 
 ---
 
-## L9 — THE TEMPLATE DECISION: price partial overlap, then choose `[ ]`
+## L9 — THE TEMPLATE DECISION: price partial overlap, then choose `[~] (MATCHED-CELL RATIO EXISTS: size-3 pools to 0.69x disjoint, card-silent half 0.89x, card-names half 0.28x, all at nA=1 unamplified on one path. HELD on ONE item: rebuild the six-class lattice through _lattice_from_template BEFORE the package (D56) -- the override path is documented as never used by study instances, has leaked FOUR mechanisms, and check_path_alignment cannot test six classes at all. Standing checks: production test n/a (design choice); no drift - decides what the manipulation IS; ambiguity - team discussion open and running.)`
 **Depends:** none · **Owner:** LS (RE prices, RR attacks the enumeration) · **Cost: no model spend,
 but NOT free — it needs a generator change (step 3) that the first version of this step assumed
 away.** · **Production test: n/a (design choice).** · **Serves the question: DIRECTLY** — it
@@ -973,3 +973,548 @@ Records: `records/L9/D1_D2_implementation.md` (RE), `CHANGED.md` entries 1–7 (
   the layout is theirs.
 - **Lesson worth keeping (RR): diff line count is a bad proxy for significance.** `communication_di.py`
   at +9/−1 was the most significant item in the batch and a size filter excluded it.
+
+### 2026-08-08 — the tie check blocked step 4; tie-break by expectation
+
+Record: `records/L9/tie_rate.json` (RE), `records/L9/L9_decisions_LS.md` D19–D22.
+
+- **★ THE REQUIRED TIE CHECK BLOCKED STEP 4** — the largest finding this phase after the belief
+  model, and it was raised as "optional".
+- **The tie RATE is not the quantity; CEILING SPREAD ACROSS THE BELIEVED-OPTIMAL SET is.** Ties in
+  the TRUE optimum are harmless — every tied allocation has the same value by definition. **The
+  exposure is entirely on the BELIEVED side**: allocations tied under the card are re-scored under
+  truth, where they are not tied, so the ceiling is decided by `product()`'s visit order.
+
+      five_class        11.70 tied optima   spread 0.00% mean / 0.00% max    0/20 ambiguous
+      six_class_clone   29.45 tied optima   spread 7.00% mean / 14.10% max  20/20 ambiguous
+
+- **Five-class already carried ~12 tied optima and a spread of EXACTLY ZERO on 20/20 seeds, so
+  nothing published moves — including 8.51%.** The check discriminates: null where ties are
+  harmless, large where they are not, which is what makes the non-null credible.
+- **With the clone the spread is the same order as the entire effect being measured.**
+- **DECIDED: tie-break by EXPECTATION over the believed-optimal set, with [min, max] alongside.**
+  Under the card those allocations are indistinguishable to the manager, so any deterministic rule
+  (first-visited, best, worst) **attributes a discrimination it cannot make**. **Expectation is NOT
+  an upper bound** — a manager tie-breaking worse than chance puts the true ceiling above it — so
+  the interval is load-bearing. Coincides exactly with current behaviour at five classes.
+- **REJECTED: perturbing the clone's economics to break ties.** It would work and would silently
+  reintroduce the between-class bias the bracket exists to handle.
+- **★ A CEILING NOW DECLARES THREE THINGS: BASELINE, BELIEF MODEL, TIE-BREAK RULE.** Each was added
+  after it silently decided a number. General form: **wherever a reported quantity depends on a
+  choice the code makes for us, the choice is named in the function or the number is not
+  reportable.**
+- **D14 NARROWED (LS): the clone's bias is signable on ECONOMICS, UNSIGNED OVERALL.** The tie rate
+  is a consequence of the clone being EXACT — **its virtue and this hazard are the same property** —
+  and RR's divergence argument does not cover the manufactured indifference. **An ε-perturbation is
+  offered as an optional DIAGNOSTIC to sign it; the exact clone remains the instrument.**
+- **D3 otherwise complete:** `register_synthetic_clone` clones SA table, PD floor and rating pool;
+  `assert_no_synthetic_classes` raises on a study path; a `coverage_override` naming a class with
+  no segments now raises. **Retail refused as a clone source** — its SA weight is reached by a name
+  test rather than a table lookup, so a clone of it would silently get different SA treatment and
+  stop being a clone. Five-class path verified unchanged.
+- **★ THIRD INSTANCE OF ONE DEFECT — a provenance field naming a source that did not produce the
+  value:** the selection record's `"rule": "ceiling_vs_ignorant"` while the code ranked on stale
+  card; `parameters.coverage_size` recording the module constant so a size-3 instance reported 2;
+  and the original §B family. **Candidate rule raised for `METHODOLOGY_RULES.md`: a provenance
+  field is asserted against its source at emission, or it is not written.**
+
+### 2026-08-08 — the `end_workflow` exposure was LATENT, never realised; audit clean
+
+Record: `records/L9/truncation_audit_RR.md` (RR, `63dff6c`). **No bundle ended before its swap.
+Nothing is re-derived or withdrawn, and this does NOT go to the researcher.**
+
+    all 18 study bundles (R2, 6 cells x 3 seeds):
+      horizon 22, timesteps 0..21, n(timestep_completed) = 22 on all 18
+      t_swap = 3, reached by all 18; swap event at exactly t=3 in 15/15 swap cells
+      cellU carries no swap BY DESIGN (unswapped control)
+    end_workflow across all 36 run bundles on disk:  0 occurrences
+    control from the SAME tool list: send_message 2,605 across the 18
+
+- **This is a measurement, not a comfortable null, for two reasons.** The check rests on a count
+  that would be **LOWER under truncation** (`n(timestep_completed)`), not on the absence of a
+  termination event — **so it can fail.** And the zero on `end_workflow` sits beside thousands of
+  calls to sibling tools **from the same list**, so tool activity is demonstrably recorded.
+  The swap detector was validated on a known-positive case first.
+- **The one short run is a legitimate finish** — `S8/run_seed7.json`, 18/22 timesteps, 16/16 tasks
+  completed, `n_missing 0`, `n_unstaffed 0`, last timestep `success=True`.
+- **★ WHAT THE AUDIT CANNOT ESTABLISH, stated by RR rather than left implicit:** whether
+  `end_workflow` was **absent from the toolset** or **present and never called**. Both give 0
+  invocations, because **bundles record tool CALLS, not tool INVENTORIES.** The verdict holds
+  either way — no run truncated — but the tool can only be certified unused, not unavailable.
+  **Forward-looking: anyone re-running on a pre-fix checkout is still exposed.**
+- **DECIDED (LS): recording each agent's TOOL INVENTORY at setup is REQUIRED, not optional** —
+  though it does **not** block step 4. One line in the bundle writer. **This study's whole subject
+  is what the manager can and cannot access**, so an inventory is provenance for our own design,
+  not merely for this audit. It converts a permanently unanswerable question into a recorded fact.
+- **Entry 4 fixed:** `ScheduledAgentChange` now documents `replace` as an exogenous replacement the
+  manager did not choose, with id reuse as the mechanism for holding everything but the worker
+  constant, and self-change explicitly scoped out. **Made explicit what was only implicit: leaving
+  `new_agent_capabilities` unset is what makes the registry card go stale.**
+- **Entry 7 retained and documented** — header records that it is kept for the learning-teammate
+  horizon and that `core/evaluation/` implies no detection measure in the current study.
+- **★ FOURTH OCCURRENCE of the empty-collector failure**, in this audit's own first pass: a
+  collector returned `None` on all 18 rows and the verdict printed `all passed t_swap: False`.
+  **What caught it was that the emptiness was VISIBLE ON SCREEN — not that anyone was suspicious.**
+  **Candidate rule for `METHODOLOGY_RULES.md`: print the intermediate quantity a verdict is
+  computed from, not only the verdict.** A positive control catches this only if someone thinks to
+  run one; a printed intermediate catches it passively.
+- **PROCESS: a second `git add -A` collision**, RR's this time, sweeping RE's in-flight
+  `finance_scorer.py` and `tie_rate.json`. **Disclosed, attribution amended rather than history
+  rewritten, and RE asked to confirm the captured state was not mid-edit.** Explicit-path staging
+  is now stated by all three agents. **Twice in one session is the rule earning itself.**
+
+### 2026-08-08 — STEP 4 PRICED: size-3 partial overlap is 0.35–0.49× the disjoint template
+
+Record: `records/L9/size3_pricing.json` (RE), `records/L9/L9_decisions_LS.md` D23–D26.
+**27s of CPU. No model spend.**
+
+    reference: size-2 disjoint, five classes
+       nA=0  2.02%   nA=1  3.84%   nA=4  9.03%   pooled 4.30%
+
+    size 3, six classes  (nA=1 in EVERY cell)
+       clone      carriers   mean share   ratio to disjoint@nA=1
+       corporate      1        1.89%          0.49x
+       corporate      2        1.58%          0.41x
+       mdb            1        1.84%          0.48x
+       mdb            2        1.35%          0.35x
+
+- **Ratios and squares only — no σ anywhere, per D11 and the two-removes constraint.** These are a
+  **LATTICE COMPARISON, not an effect size.**
+- **PREDICTIONS SCORED. RR's is the only one the result confirms** (<0.5; pooled 2–5%). **RE
+  directionally right with the right mechanism, ~2× optimistic** (≈0.78 predicted vs 0.35–0.41).
+  **LS WRONG ON BOTH AXES** — predicted two-carrier within a factor of 2 of disjoint (it is
+  0.35–0.41×) and single-carrier near zero (it is 1.84–1.89% and **higher** than two-carrier).
+  **The loosest of the three predictions, and it still failed.**
+- **The clone bracket is NARROW — 1.84 vs 1.89, 1.35 vs 1.58 — so the clone SOURCE is not where the
+  uncertainty lives**, as RR's within-vs-between-class variance predicted. **A control that turns
+  out not to matter is the right outcome for a control.**
+- **★ THE TWO-CARRIER INVERSION, UNEXPLAINED, AND IT BLOCKS THE READING.** Two carriers price
+  **LOWER** than one — the **opposite** of the stratification's prediction, since the second
+  carrier IS the card's omission and should ADD effect. **Not a mix confound: nA=1 in every cell of
+  both groups.** Three candidate explanations on the record:
+  - **H1 capacity saturation** — more segments need the successor, `cap=3` binds, **the ORACLE
+    already pays the penalty** and the gap compresses. *Predicts the inversion weakens or reverses
+    at higher cap.* **(LS declares a bias: this is the same capacity-displacement mechanism as the
+    original card-channel finding, so it is the one LS is most likely to believe for bad reasons.)**
+  - **H2 denominator artefact** — ceiling SHARE divides by oracle. *Predicts the inversion vanishes
+    on ABSOLUTE ceilings.* **Cheapest test; a re-read of existing numbers, no new pricing.**
+  - **H3 the labels are wrong** — the carrier definition was chosen by testing four candidates
+    against RR's COUNTS, which establishes it matches the counts, **not that it matches the
+    concept.** If the labels are subtly wrong, H1 and H2 answer the wrong question.
+- **★ AND THE QUESTION THAT DECIDES WHETHER THE COMPARISON IS FAIR: is `nA=1` in every size-3 cell
+  a fact about SIX CLASSES or a fact about the CURRENT GENERATOR?** `shared_class_segments = 4`
+  forced four segments into one class at five classes; nothing obviously prevents it at six.
+  **If forcing is merely unimplemented, we compared disjoint across its whole mix range against
+  size-3 at a single point of its own.** **NO READING SHIPS UNTIL THIS IS SETTLED** — it is the
+  difference between *"partial overlap costs half the channel"* and *"costs half the channel at the
+  one mix we happened to price."*
+- **★ 8.51% BECOMES 9.03%, and "D19 changes no reported number" was wrong.** The claim held for the
+  natural five-class template (0.00% spread, 20/20 — what the tie check measured) and **not for the
+  SUBSTITUTED disjoint template, which was never tested.** Cause: **`check_template_pricing`
+  computes the ceiling with its OWN local enumeration instead of calling the shipped scorer**, so
+  it never saw D19 — **two sources of truth for one quantity, now visibly disagreeing.**
+  **Delegation approved; the correction sweep is part of that change, not a follow-up.** 8.51%
+  appears in D1's acceptance, D5's realism table, RR's realism probe and both ledgers.
+- **Paired exclusion handled correctly:** 6 of 240 (template, seed) cells fail serviceability under
+  `corporate` and not `mdb`; **dropped from BOTH arms**, since dropping each arm's own failures
+  would compare the arms on different populations and corrupt the bracket the two sources exist to
+  provide.
+- **WHAT THIS DOES NOT ESTABLISH:** no detectability verdict (ratios by construction); "size 3 is
+  worse" holds **only at the mix six classes naturally produce**; and the sixth class does not
+  exist — its weights are copied and the clone manufactures indifference whose sign is unasserted.
+
+### 2026-08-08 — the inversion is LOCATED, the clone is EXONERATED, and the band is sized
+
+Records: RE's carrier proof; RR's `records/L9/clone_indifference_RR.md`;
+`records/L9/L9_decisions_LS.md` D27–D31.
+
+- **★ THE "CARRIER COUNT" LABEL IS RETIRED. It asserts a decomposition the design cannot support.**
+  Proved exhaustively over all 6,480 admissible templates, **0 counterexamples**, and **forced
+  rather than sampled** — `|w0 ∩ w1| = 1` in every admissible partial template, so:
+
+      carriers = 1  <=>  the successor-unique class IS the shared class      (card NAMES it)
+      carriers = 2  <=>  the successor-unique class is one the card never mentions (card SILENT)
+
+  **No sampling design can separate them, because they are the same property.** **Of LS's three
+  rivals, H3 lands** — the labels do not mean what their name says, and **H1/H2 were asked about a
+  variable that does not exist as stated.** Contrast renamed: *does the card NAME the class the
+  successor is uniquely required for, or is it SILENT about it?* **RE cleared their own sampling
+  first (12/12 match on five structural properties).** It also makes RR's "the single-carrier group
+  has the current template's structure" **provable rather than descriptive**.
+- **THE INVERSION IS LOCATED, NOT EXPLAINED — and it is MORE counterintuitive after renaming: the
+  case where the card CORRECTLY names the critical class prices HIGHER.** Both groups carry the
+  same number of false claims (2), so "more card error" is not it. **RE's capacity guess is the
+  surviving mechanism and is flagged as a guess**, not a finding.
+- **★ THE CLONE IS EXONERATED: COVERAGE SIZE 3 manufactures the indifference, not the clone.**
+
+      size 2, 5 classes (shipped)     spread 0.00%    0/10 ambiguous
+      size 3, 5 classes, NO CLONE     spread 3.94%   10/10 ambiguous
+      size 3, 6 classes with CLONE    spread 7.36%   10/10 ambiguous
+
+  A ±20% perturbation of the sixth class's SA table leaves the tie set unchanged at 30.00, **with a
+  live-knob control** (50% does move an SA number), so the invariance is a result, not a dead
+  parameter. **LS's ε-diagnostic is INERT, not confounded — RE told not to spend on it.**
+  **D21 is CORRECTED: "virtue and hazard are the same property" is wrong; D14 returns to
+  signable-and-bounded on economics.**
+- **★ THE TIE-BREAK IS PERMANENT, NOT SCAFFOLDING.** Expectation-plus-interval was adopted as a fix
+  for a clone artefact. **It is not one — any size-3 design carries it, including a real
+  transcribed sixth class. D19 ships with the study.**
+- **RR's limitation on their own control, stated unprompted:** their five-class size-3 template puts
+  `sovereign` in all four workers (102 tied optima vs the clone arm's 30), so **the 2× amplification
+  3.94% → 7.36% cannot be attributed to the clone rather than to lattice structure.**
+- **THE AMBIGUITY BAND, SIZED (LS) rather than repeated. It is RELATIVE to the ceiling — 7.00% mean,
+  14.10% max — not percentage points of oracle** (a 14-point absolute spread on a ~1.5-point ceiling
+  is impossible; the units settle it). Conservatively applying the per-instance band undiminished to
+  a group mean:
+
+      size-3 vs disjoint@nA=1        gap 2.44x    band ±0.03 / ±0.07 max   separated overwhelmingly
+      within size-3, named vs silent gap 1.365x   band ±0.03 / ±0.07 max   separated MARGINALLY
+                                     (mdb 0.478 vs 0.350; max-band 0.411 vs 0.399)
+
+  **The band does NOT threaten the headline; RR's caveat stands where they aimed it, at a
+  near-threshold call, and the headline is 2.44× from threshold.** It DOES make the renamed
+  within-size-3 contrast thin — **it must be reported with the band attached.** **The band remains a
+  real, previously unaccounted COST of size 3**: ambiguity about *what the ceiling is*, an offline
+  design quantity, not extra noise in what a run would measure.
+- **Two methodology rules landed in `METHODOLOGY_RULES.md` §E and §G, both sharpened past LS's
+  proposal.** Provenance: **a wrong VALUE is caught because it has a plausible range and people
+  examine it; a wrong PROVENANCE FIELD is caught only by re-deriving the value from scratch — the
+  exact work the field exists to save.** Where it cannot be derived or asserted, **omit it**: a
+  missing field sends the reader to the code, a wrong one stops them looking. Verdicts: **a
+  reduction over an empty or all-`None` collection must never render as an ordinary verdict** —
+  `all([])` is `True`, `any([])` is `False`, and both are lies about a measurement that did not
+  happen.
+- **★ D26 IS THE SOLE REMAINING BLOCKER ON L9**, unanswered by either peer: **is `nA=1` in every
+  size-3 cell a fact about SIX CLASSES or a fact about the CURRENT GENERATOR?** If forcing is
+  merely unwired, the trade-off compares disjoint across its whole mix range against size-3 at one
+  point of its own. **Nothing goes to the researcher until it is settled.**
+
+### 2026-08-08 — both inversion hypotheses falsified; the mechanism found; blocker 2 resolves AGAINST us
+
+Records: `records/L9/inversion_diagnosis.json` (RE), `records/L9/L9_decisions_LS.md` D32–D35.
+
+- **H2 (denominator artefact) FALSIFIED** — absolute ceilings invert identically (corporate
+  0.1678 → 0.1419; mdb 0.1634 → 0.1211) and **oracles differ by 0.8% against a ceiling gap of
+  15–26%**, so there is nothing for the denominator to do.
+- **H1 (capacity saturation) FALSIFIED by its own falsifier** — the inversion persists at **cap=9**,
+  no constraint at all on 9 segments over 3 workers.
+- **★ THE CAP SWEEP FOUND THE MECHANISM, AND IT IS H1'S MIRROR: capacity AMPLIFIES the card-names
+  group rather than compressing the card-silent one.**
+
+      corporate  card-names   1.89% -> 2.10% -> 2.21% -> 2.22%   (cap 3, 4, 5, 9)
+                 card-silent  1.58% -> 1.58% -> 1.58% -> 1.58%   EXACTLY FLAT
+      mdb        card-names   1.84% -> 2.03% -> 2.13% -> 2.15%
+                 card-silent  1.35% -> 1.35% -> 1.35% -> 1.35%   EXACTLY FLAT
+
+  **Flat in cap means the loss is ONE un-routed segment and nothing else.** The rise on the other
+  group is the manager piling onto a successor it believes serves three classes, **two of the
+  claims false, damage scaling in how much it can pile.**
+- **LS's declared bias, scored:** LS flagged H1 as *the one I am most likely to believe for bad
+  reasons*. **H1 as stated is FALSE — and capacity-displacement is nevertheless the live mechanism,
+  acting on the other group.** Right about the ingredient, wrong about the direction; **the
+  pre-committed falsifier is the only reason that cost nothing.**
+- **★ BLOCKER 2 (D26) RESOLVES AGAINST US: `nA=1` is a fact about the GENERATOR, not six classes.**
+  `shared_class = _template_shared_class(chosen) if coverage_override is None else None` — **mix
+  forcing is switched off on the `coverage_override` path, the only path that can generate six
+  classes.** `shared_class_segments` is ignored there; **nA=4 has never been reachable.**
+  **CONSEQUENCE: the matched-cell ratio (0.35–0.49× at nA=1) STANDS as a fair cell-to-cell
+  comparison. Any statement of the form "size 3 is weaker" DOES NOT** — it is established at one
+  point of size-3's mix range against disjoint across all of its own.
+- **APPROVED: mix forcing on the override path.** The mechanism predicts **the omission cost scales
+  with nA while the lie's capacity amplification does not, so the inversion should REVERSE at
+  higher nA** — and **the regime that tests the inversion is the same regime that tests fairness.**
+  Two open questions collapse into one offline measurement.
+- **PREDICTION PROTOCOL RUNNING** (this could flip a design decision, which is the case the rule
+  exists for). RE's and LS's are committed; RR's requested privately, neither relayed.
+  **LS: the inversion reverses decisively; card-silent rises ≥3× its nA=1 value; card-names rises
+  <1.5× and may FALL; size-3-at-nA=4 vs disjoint-at-nA=4 lands ≥0.7. Falsifier: card-silent rises
+  <2×, or the ordering does not reverse.**
+- **BUILD REQUIREMENT carried from the five-class trap: MEASURE nA per cell rather than requesting
+  it**, and report the achieved distribution beside the price. `shared_class_segments` produced
+  nA=4 in 30/30 seeds and **a forced parameter landing on one value in every cell is a constant
+  being reported as a variable.**
+- **★ AND FORCING RE-OPENS THE REALISM AXIS PARTIAL OVERLAP WAS CHOSEN FOR.** Forcing the mix is
+  **deliberately choosing the favourable value of the parameter we criticised for being silently
+  inherited.** Legitimate only if declared and defended. **Is 4 of 9 segments in one asset class a
+  realistic portfolio?** Weak prior yes — real Basel books are concentrated — **but it must be
+  argued, not assumed. Put to RR as a lattice-realism question. If the size-3 verdict rests on
+  nA=4, the REALISM of nA=4 goes to the researcher WITH the number, not after it.**
+
+### 2026-08-08 — the zero best case, a peer contradiction, and the ratio SUSPENDED
+
+Records: `records/L9/step4_audit_RR.md` (RR), `records/L9/L9_decisions_LS.md` D36–D40.
+
+- **★ THE SIZE-3 BEST-CASE CEILING IS EXACTLY 0.00%** on every sampled instance, in both groups —
+  the believed-optimal tie set **always contains an allocation that is also truth-optimal**.
+  **LS CORRECTION TO THE READING:** *"a manager can reach the true optimum knowing nothing, provided
+  it breaks ties favourably"* **overstates it — the proviso requires exactly the information under
+  study**, so it is a BOUND, not a scenario a card-believing manager can occupy.
+  **What it DOES establish is a qualitative difference worth keeping in the paper whichever
+  template wins: at size 3 the stale card NEVER RULES OUT the true optimum — the manager is never
+  forced into a worse allocation, it just cannot tell which member of the tie set is right, so the
+  whole effect is FAILURE-TO-DISCRIMINATE. At size 2 the card can force a genuinely worse
+  allocation — it EXCLUDES rather than fails to guide.**
+- **★ LS REFRAMING, against the option LS and the researcher both prefer: the 0.35–0.49× ratio
+  UNDERSTATES size-3's cost.** Required n scales with (effect/σ)², and **size 3 adds a σ that size
+  2 does not have** — tie-break dispersion (best 0.00%, expectation ~2.2–2.4%, worst ~5.0%) is
+  variance in the DV **driven by something other than the manipulation**, and the shipped size-2
+  lattice has NONE of it. **Not a reason to drop size 3 — the variance is bounded and D19's
+  interval carries it — but the interval now travels with every size-3 number and is not summarised
+  away.**
+- **★ THE TWO PEERS CONTRADICT EACH OTHER ON THE SAME QUANTITY UNDER THE SAME RULE.**
+
+      RE, D19 expectation:  card-silent LOWER  (1.35-1.58% vs 1.84-1.89%)   inverted
+      RR, D19 expectation:  card-silent HIGHER (2.43% vs 2.17%)             NOT inverted
+
+  RR's four-rule table shows **the inversion appears under worst-case ONLY** — not under D19, not
+  under bare visit order. **So there may be no stable inversion, and LS's H1/H2 may have been
+  falsified against something that does not exist.** **Neither peer claims the other has a bug and
+  LS is not adjudicating by preference. Resolution is mechanical: ONE shared sample — same
+  templates, same seeds — both implementations, under D19.** **Until then the inversion is NOT a
+  finding and is not reported as one.**
+- **★ THE MATCHED-CELL RATIO IS SUSPENDED — RR upheld over RE.** The `coverage_override` path
+  disables **BOTH** mix amplifiers, not just `shared_class_segments`; the divergence-selection
+  branch never fires either. **So even at matched nA=1 the five-class arm carries an amplifier the
+  six-class arm does not.** RR's same-lattice demonstration is better evidence than either
+  code-read: seed 0's own natural template handed back through the override path prices
+  **0.00% vs 3.50%**. **ONE TEST RESTORES OR KILLS IT: five-class at nA=1 with divergence selection
+  OFF.**
+- **ORDER OF OPERATIONS, adopted from RR, superseding the previous approval:** (1) fix the forcing
+  defect — **for a partial override the shared class is UNIQUE (`w0 ∩ w1` has size exactly 1), so
+  DERIVE it; handle the empty case for disjoint rather than disabling the parameter for every
+  override**; (2) re-price BOTH arms with the amplifiers on for each; (3) reconcile RE and RR on
+  one shared sample under D19; (4) **only then** ask whether the inversion exists.
+- **All three nA=4 predictions are committed and unrelayed** — LS, RE and RR all predict reversal,
+  differing on magnitude. **The measurement's JOB has changed: it is no longer a prediction test,
+  it must settle a contradiction between two peers and a suspended ratio.** That is a better reason
+  to run it than the one originally given.
+- **RR declared a bias unprompted and against their own ranking** — the zero-best-case cuts against
+  the option they ranked first, and they found it while testing LS's H2 rather than while defending
+  their position. **Second declared-then-scored bias on the record this phase.**
+
+### 2026-08-08 — SIX-CLASS FIGURES INVALIDATED. The debt list predicted this exact failure
+
+Records: RE's round-trip test; RR's `records/L9/nA4_realism_RR.md`;
+`records/L9/L9_decisions_LS.md` D41–D44.
+
+- **★ THE WARNING WAS IN THE RECORD, WITH ITS TRIGGER, AND NOBODY RE-READ IT.**
+  `RESEARCH-CRON-STATUS.md` §5, written before any six-class work: *"`_designate_swap_pair` is a
+  second source of truth for roles the template already declares. It agrees today only by
+  construction. **It must be retired if the lattice changes.**"* **The lattice changed. It was not
+  retired.** `coverage_override` routed to it, and **it SEARCHES for a two-holder class instead of
+  reading declared positions:**
+
+      natural    pred=w0, succ=w1, shared=retail      ceiling 0.00%
+      override   pred=w1, succ=w2, shared=corporate   ceiling 7.08%
+
+  Same lattice, different roles. **Every L9 size-3 template declares roles POSITIONALLY and the
+  carrier stratification is DEFINED on those positions — so the templates being priced were not the
+  templates being described, and nA was measured against the wrong class.**
+  **RULE RAISED for `METHODOLOGY_RULES.md`: when a step changes something the technical-debt list
+  conditions on, the debt list is RE-READ as part of that step.** A conditional warning with no
+  trigger attached fires after the damage.
+- **INVALIDATED pending re-run:** the step-4 table, the carrier means, the inversion, the cap sweep,
+  the forced-mix sweep, and the D26 forcing result. **SURVIVES:** the carrier confound proof (pure
+  enumeration), the belief-model fix and its acceptance, the tie-break, **and everything
+  five-class** — the natural path never entered that function.
+- **THIS LIKELY DISSOLVES THE PEER CONTRADICTION RATHER THAN RESOLVING IT.** If RR assigns roles
+  positionally and RE did not, that alone explains card-silent LOW for one and HIGH for the other
+  under the same tie-break. **The inversion may never have needed H1 or H2 — it may be an artefact
+  of role assignment, which is H3, raised and then not pressed.** RE states RR's figures are the
+  ones more likely to be right.
+- **RE's own note, kept because it is the useful part:** the function they had written up in
+  `records/L9` as *"dead code, not on the template path"* **was true of the template path and false
+  of the override path — the one they then built every six-class figure on. The correction they
+  wrote for that record is the source of the error.** Third time this phase of generalising from
+  the population in front of them; **found by a round-trip test they did not have to run.**
+- **RULING 1 — ALIGN THE RNG STREAM; THE RE-RUN IS PAIRED.** `rng.shuffle` consumes the stream on
+  the natural path and not the override path. **Consume identical draws on both, discarding where
+  unused — common random numbers, not tuning: the arms then differ in THE LATTICE AND NOTHING
+  ELSE.** **Assert the alignment at generation.** This is the third silent divergence between those
+  paths (forcing, roles, RNG) and the next one should raise.
+- **RULING 2 — SURVIVORSHIP IS CHARACTERISED, NOT REPORTED.** **28 of 60 seeds fail generation on
+  the override path and none on the natural path**, and it is already known not to be benign
+  (forced-mix survivors 2.68% vs 1.89% for the full population). (1) **Compare on the INTERSECTION,
+  paired**, stating the drop. (2) **Diagnose on the arm where the dropped seeds ARE measurable** —
+  natural-path ceilings, 28 failing vs 32 surviving. **No difference → benign and say so;
+  difference → every six-class figure is conditional on a biased subpopulation and carries that.**
+  (3) **Say which assertion fails and why.**
+- **★ RR's REALISM RESULT SURVIVES AND REFRAMES THE DECISION.** They granted the prior and refused
+  the inference: 44% of a book in one class is ordinary (Pillar 2 exists because it is the norm),
+  **but the design needs the book concentrated IN THE CLASS WHERE THE STAFFING CHANGE BITES** —
+  a different proposition. **STAFFING FOLLOWS VOLUME:** the dominant exposure is the BEST-covered;
+  sole coverage attaches to **niches**, where one approved reviewer is normal because volume does
+  not justify two. **Concentration and thin coverage are NEGATIVELY correlated in practice and the
+  design needs them maximally POSITIVELY correlated. The realistic nA is 1.**
+- **THREE amplifiers, not one** (RE's count confirming RR's two): segment count, divergence
+  selection on that class's ratings, **and IRB-approval priority** — all gated on `shared_class`.
+  **"4 of 9 segments in one class" understates it: the ratings inside the concentrated class are
+  selected adversarially and its segments are approved for IRB first.**
+- **★ AND IT IS A CONDITION ON A SHARED HEADLINE, NOT AN ARGUMENT BETWEEN THE OPTIONS:**
+
+      disjoint, nA=4 (forced)     0.0851 of oracle   1.11 sigma   ~13 episodes/arm
+      disjoint, nA=1 (realistic)  0.0347 of oracle   0.45 sigma   ~64 episodes/arm
+
+  **Realism costs the DISJOINT template 2.4× in effect and ~6× in n — same mechanism and magnitude
+  as it costs size 3.** *"13 episodes per arm"* is a statement about a book whose dominant business
+  line has one qualified reviewer. **ADOPTED: nA=1 PRIMARY, nA=4 a DECLARED UPPER BOUND, all three
+  amplifiers declared whenever a forced figure is quoted.**
+- **NEW LEVER, COMMISSIONED: buy detectability with BOOK SIZE rather than CONCENTRATION.** The
+  effect as a share of oracle is scale-invariant while the allocation component of σ falls ~1/√n,
+  **so a bigger book at a realistic niche concentration gains sensitivity WITHOUT touching the
+  mix.** RR bounds it themselves: only the allocation component shrinks (~0.041 of a published
+  0.0768), so the gain is **sub-√n**, and bigger books cost episode length and a more expensive
+  exact DP. **First proposal this phase that buys sensitivity without spending realism.**
+- **LOAD-BEARING JUDGEMENT, LABELLED AS ONE:** *"staffing follows volume, so sole coverage attaches
+  to niches"* is a judgement about how institutions staff, **not a measurement.** RR holds it
+  firmly, LS holds it too, and **it goes to the researcher AS A JUDGEMENT rather than folded into
+  the numbers around it.**
+
+### 2026-08-08 — the inversion DISSOLVES; the headline moves toward partial overlap but is misstated
+
+Record: `records/L9/L9_decisions_LS.md` D45–D50; RE's path-alignment fix and re-price.
+
+- **FOUR PATH DIVERGENCES, ALL ONE DEFECT CLASS: `if coverage_override is None` guards on logic
+  that has nothing to do with where the lattice came from** — mix forcing, role assignment, the RNG
+  label draw, and **the TOTALITY REPAIR (sole-class rating re-draw)**. **General form: a guard keyed
+  on the PROVENANCE of an input, applied to logic that does not depend on provenance.**
+- **★ RULING 2 DISSOLVES rather than needing its diagnosis. The 28-of-60 survivorship filter was
+  NOT a design fact about six classes — it was a repair switched off for every instance six classes
+  can be built from.** Round-trip 32/60 with 6 of 10 ceilings mismatching → **60/60 with ZERO
+  divergent fields**; paired exclusion 6/240 → 1/240.
+- **The checkpoint is read from `getstate()` rather than by drawing a probe** — a probe would
+  advance the stream and **silently move every five-class figure already reported**, making the
+  alignment check the cause of the next divergence. **`check_path_alignment.py` is the acceptance:
+  a fifth divergence now FAILS A CHECK instead of being found while fixing the fourth.**
+  **RULE (RE's, adopted): when an input path is first used to produce a REPORTED number,
+  round-trip it.** All four would have been caught by that test.
+- **★ THE INVERSION IS NOT A PHENOMENON — it was the MIX, and it follows from the carrier confound
+  already proved.** The amplifier forces the SHARED class; **for carrier-1 templates the shared
+  class IS the successor-unique class (so nA=4 automatically), for carrier-2 it is not (nA stays 0
+  or 1).** The groups **never shared a mix**. **So H1 and H2 were falsified against something that
+  did not exist and H3 accounts for the whole of it** — the carrier confound and the inversion are
+  ONE fact. **RR's failure to reproduce it was the correct result, not a sampling difference.**
+- **★ BUT THE CORRECTED TABLE DOES NOT SUPPORT ITS OWN ORDERING CLAIM — same confound, one level
+  up.**
+
+      carriers=1 @ nA=4   0.18x     carriers=2 @ nA=1   0.72x     carriers=2 @ nA=0   0.55x
+
+  **"Matched mix" matches each size-3 cell to DISJOINT at the same nA. It does NOT match the two
+  CARRIER GROUPS to each other — 0.72× is at nA=1 and 0.18× is at nA=4.** Normalising by
+  disjoint@nA neutralises the mix only if the nA-response is a common multiplicative factor, and
+  **it demonstrably is not: forcing HALVES size-3 while roughly TRIPLING disjoint**
+  (0.0347 → 0.0851). **RULING: no ordering claim between the carrier groups until both are measured
+  AT THE SAME nA. The missing cell is `carriers=1 @ nA=1`, and it is reachable.**
+- **★ THE HEADLINE IS REAL AND MISSTATED: 0.72× is a CARRIER-2 figure, not a size-3 figure.**
+  Size-3 is **2,160 carrier-1 and 4,320 carrier-2**, so a pooled number is a weighted mix and sits
+  **below 0.72× if carrier-1 at nA=1 is lower.** Correct sentence today: *at the realistic mix, the
+  CARD-SILENT HALF of the size-3 design reaches 0.72× the disjoint channel.* **The direction is
+  genuinely good — the trade-off may be a quarter of the channel rather than two-thirds — but the
+  number that would say so does not exist yet.** **Third time this phase a group mean has been
+  quoted as a design property; the fix is to name the subpopulation in the sentence.**
+- **PREDICTIONS: none cleanly confirmed; NOT reported as a prediction test.** **LS REFUTED by a
+  factor of four** (predicted ≥0.7 for size-3-at-nA=4 vs disjoint-at-nA=4; the cell is 0.18×).
+  **RE** lands near 0.72 and **declines to claim it** — predicted for the wrong mechanism, with an
+  intervening "refuted" verdict computed on void figures. **RR** holds at nA=4 and fails at nA=1.
+  The measurement's value was settling a contradiction and an invalidation, which it did.
+- **ORDER TO THE PACKAGE: (1) the missing `carriers=1 @ nA=1` cell; (2) D40 — five-class at nA=1
+  with divergence selection OFF, on positional roles and aligned streams; (3) then the researcher.**
+- **Five-class regression across all of it: NOTHING MOVED.** Pricing 0.85/9.57/0.00, selection 21
+  seeds [7, 20, 30], belief acceptance PASS/PASS, tie-break exposure closed, tests 3 passed.
+
+### 2026-08-08 — book-size lever priced DOWN by its proposer; the DP cost does not bind; D47 unblocks
+
+Record: `records/L9/booksize_lever_RR.md` (RR); `records/L9/L9_decisions_LS.md` D51–D54.
+
+- **★ THE DP COST DOES NOT BIND, AND THIS SURVIVES UNCONDITIONALLY.** The capacitated optimum is a
+  **transportation problem** — with three workers, an exact DP over `(used_0, used_1)` in
+  **O(n·cap²)**. Positive-controlled against the shipped 1,680-allocation enumeration on 10 seeds ×
+  both belief models: **max difference 1.78e-15.** **72 segments cost the same as 9.**
+  **The enumeration has been read as a mathematical limit on book size and it is an IMPLEMENTATION
+  CHOICE** — book size is not compute-bounded anywhere in this study.
+- **THE LEVER ITSELF DOES NOT CHANGE THE OPTION SET.** Effect share is scale-invariant and
+  `sd_alloc` falls as ~1/√k (0.33 at k=8 vs 1/√8 = 0.354) — **both exactly as predicted, and both
+  irrelevant, because the allocation component is 25% of the variance:**
+
+      sigma_total 0.0768 (published)   sigma_alloc 0.0384 (measured)   sigma_manager 0.0665
+      8x book, manager variance PER-EPISODE   -> detectability x1.01, n/arm x0.98   NO GAIN
+      8x book, manager variance PER-DECISION  -> detectability x2.56, n/arm x0.15
+- **RR CORRECTED THEIR OWN PROPOSAL: "real but sub-√n" becomes "may be ZERO"**, and named the error
+  — **pitched on the component they could measure without weighting it against the one they could
+  not.** Same shape as the episode-count error, from the other direction, **caught by the proposer.**
+- **THE CATCH-22, named because it recurs: pricing the lever requires the measurement it exists to
+  make affordable.** Separating per-decision from per-episode manager variance needs σ at two book
+  sizes, which needs runs. **The corpus cannot settle it** — all 18 bundles are 9-segment.
+  **STANDING RIDER: if any run is authorised, ONE cell at 2× book size goes with it** (at k=2 the
+  bounds are 1.08 vs 1.43, so a single cell discriminates). **Goes to the researcher inside the run
+  package, not as a separate ask.**
+- **★ D47 UNBLOCKS: FORCING TARGETS THE SUCCESSOR-UNIQUE CLASS, NOT THE SHARED CLASS.** Verified
+  20/20 — **in `_lattice_from_template` the shared class IS the successor-unique class post-swap**
+  (`w1` sole-holds A once `w0` leaves, by construction), so `"shared_class"` is a name that merely
+  **coincides** with "successor-unique" in that one template. **Targeting successor-unique directly
+  is therefore NOT a departure from the five-class arm — it is what the five-class arm ALREADY
+  does, matched by MECHANISM instead of by LABEL.** And it **breaks the carrier/nA lock without a
+  new asymmetry**, so **`carriers=1 @ nA=1` is reachable and D47's missing cell can be measured.**
+  **A case where matching the NAME across arms would have been the error.**
+- **RR's AMENDMENT TO THE DEBT-LIST RULE, adopted over LS's version: the trigger must be
+  MECHANICAL, or the rule is the same class as "run a positive control" and fires only when someone
+  remembers.** Their form: **the debt entry names its CONDITION in a form a step can CHECK.**
+  **This is exactly what voided the six-class figures** — §5's *"must be retired if the lattice
+  changes"* was a correct condition, in prose, checkable by nobody.
+- **ORDER, now unblocked:** (1) `carriers=1 @ nA=1`, forcing on successor-unique; (2) D40 —
+  five-class at nA=1 with divergence selection OFF, positional roles, aligned streams; (3) package
+  to the researcher.
+
+### 2026-08-08 — THE MATCHED-CELL RATIO EXISTS; and the six-class path is rebuilt BEFORE the package
+
+Record: `records/L9/L9_decisions_LS.md` D55–D57; RE's L9-aa/ab/ac.
+
+- **★ THE RATIO, at genuinely matched mix, on ONE path, nA=1, unamplified throughout:**
+
+      disjoint size-2 @ nA=1               4.76%
+      size-3 carriers=1 (card NAMES)       1.31%    0.28x
+      size-3 carriers=2 (card SILENT)      4.24%    0.89x
+      size-3 POOLED (4320:2160)            3.26%    0.69x
+
+  **Card-SILENT is 3.2× card-NAMES — RR's direction. The inversion was ENTIRELY the mix**, and the
+  mechanism is clean: **amplifying pulls segments INTO the shared class, which for card-silent is
+  NOT the successor-unique one, draining nA from 1 to 0 in 103 of 119 cells. The amplifier actively
+  HARMS the group whose value lies in the omission.**
+- **`amplify_mix=False` is DELIBERATE, SYMMETRIC absence — a different object from the silent
+  asymmetry it replaces.** And **the reference was matched too**, closing the error one level up:
+  the old 3.84% came from substitution onto instances amplified on the FIVE-class template's shared
+  class; regenerated through the same path it is **4.76%**. **Free consistency check: amplified and
+  unamplified are IDENTICAL for the disjoint template, which has no shared class for the amplifier
+  to act on.**
+- **THE DEFENSIBLE SENTENCE, subpopulation named: *at the realistic mix the CARD-SILENT HALF of the
+  size-3 design reaches 0.89× the disjoint channel; size-3 AS A WHOLE reaches 0.69×.*
+  This SUPERSEDES both 0.72× and 0.35–0.49×.** LS's expectation that carrier-1 would drag the pool
+  down holds — **0.28×**.
+- **§B FLAG: the disjoint reference appears as 4.76% AND 5.03% in one message** (presumably nA=1 vs
+  all-cells). **Two values for one named quantity is what §B exists for — the package names the
+  population for each or quotes neither.**
+- **★ RULING (D56): REBUILD THE SIX-CLASS PATH BEFORE THE PACKAGE.** RR's structural challenge, and
+  LS's approval of `check_path_alignment` did not see it: **a parity check that can only run where a
+  natural counterpart EXISTS cannot certify the case that has NONE.** It proves parity for
+  five-class lattices and **cannot test a six-class lattice at all.** **The blind spot is exactly
+  where the risk is.** Base rate: **the path is documented as *"never used by study instances"* — an
+  S5 negative-case fixture — and has leaked FOUR mechanisms. Four found is not evidence the list is
+  complete.**
+  **Fix: extend `ASSET_CLASSES` and build the six-class lattice through `_lattice_from_template`
+  the way the five-class one is built, so every mechanism applies BY DEFAULT and nothing must be
+  remembered.**
+  **Why before: we would hand the researcher a decision that COSTS A SIXTH ASSET CLASS, resting on
+  a path not meant for study use, which has leaked four mechanisms, and which cannot be checked for
+  a fifth by the acceptance we have. "Do not build on an unverified instrument" is the rule this
+  phase exists to enforce — sending the package first breaks it at the last step.**
+  **Cheap, and it carries its own test:** five-class figures untouched (they never used that path);
+  the `rng.shuffle` asymmetry removed **structurally** rather than by a discard patch;
+  `check_path_alignment` becomes **meaningful** for six classes; and **the re-price IS the
+  acceptance — it either reproduces 0.69×/0.89× or it does not.** **Scope is the generator path
+  only**; decisions, belief model, tie-break, realism analysis and enumeration all stand.
+- **D40 MAY ALREADY BE ANSWERED — one question settles it: does `amplify_mix=False` disable ALL
+  THREE amplifiers (segment count, divergence selection, IRB approval priority) or only the count?**
+  **All three → the 4.76% reference IS the divergence-selection-off number, D40 is answered, and
+  D39's SUSPENSION OF THE MATCHED-CELL RATIO LIFTS.** Count only → D40 runs after the rebuild.
+- **STANDING PRINCIPLE (RR, second time today): on a path documented as never used by study
+  instances, FOUND FAULTS BOUND NOTHING.** First raised on the truncation audit's limits.

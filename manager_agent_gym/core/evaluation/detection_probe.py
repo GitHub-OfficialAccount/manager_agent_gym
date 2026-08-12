@@ -1,6 +1,13 @@
 """
 Out-of-band detection probe for teammate-change experiments.
 
+RETAINED, NOT CURRENTLY USED. Nothing references this module: the worker-replacement
+study does not measure whether the manager NOTICES a change, it measures whether
+information about the newcomer changes the manager's ALLOCATION. This probe belongs
+to the silent-behavioural-change direction retired 2026-08-04, and is kept for the
+learning-teammate horizon named in CLAUDE.md. Do not assume `core/evaluation/`
+implies a detection measure in the current study.
+
 Each timestep, an independent LLM is shown the SAME observation the manager
 received and asked whether any worker's behavior looks anomalous. The probe
 runs as an engine timestep-end callback: it never touches the manager's

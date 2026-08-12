@@ -1,0 +1,166 @@
+{
+  "caveats": [
+    "RATIOS ONLY. No sigma appears anywhere and no figure here is an episodes/arm budget. An absolute detectability verdict needs a post-L1 sigma, which only L3 can supply (D11).",
+    "the sixth class DOES NOT EXIST: its risk weights are copied from an existing class and carry no BCBS transcription",
+    "the clone MANUFACTURES INDIFFERENCE \u2014 identical economics create exact ties. D19 makes the ceiling deterministic across them; the SIGN of their effect on the level is not known and is not asserted",
+    "templates are an evenly spaced deterministic sample of each carrier group, not the full 6480, so group means are sample means",
+    "a CEILING under exact optimal play; it does not say any manager realises it"
+  ],
+  "clone_bracket": {
+    "1": {
+      "max": 0.015956748109170835,
+      "min": 0.015893661370496942,
+      "spread_factor": 1.0039693017992066
+    },
+    "2": {
+      "max": 0.013290963362106502,
+      "min": 0.013163900563409927,
+      "spread_factor": 1.0096523669473587
+    }
+  },
+  "declares": {
+    "baseline": "stale card",
+    "belief_model": "whole card \u2014 the OMISSION costs as well as the LIE (D1)",
+    "tie_break": "expectation over the believed-optimal set; NOT an upper bound, so intervals travel with it (D19)"
+  },
+  "effect_ratios": {
+    "corporate|1|nA=4": {
+      "n_a": 4,
+      "ratio": 0.17605508012007134,
+      "ratio_squared": 0.03099539123608474,
+      "reference_share": 0.09027664160362373
+    },
+    "corporate|2|nA=0": {
+      "n_a": 0,
+      "ratio": 0.5477406807888786,
+      "ratio_squared": 0.30001985339106424,
+      "reference_share": 0.02023354208992102
+    },
+    "corporate|2|nA=1": {
+      "n_a": 1,
+      "ratio": 0.7162288710477912,
+      "ratio_squared": 0.5129837957223935,
+      "reference_share": 0.0384045383058863
+    },
+    "mdb|1|nA=4": {
+      "n_a": 4,
+      "ratio": 0.1767538958663514,
+      "ratio_squared": 0.031241939703932995,
+      "reference_share": 0.09027664160362373
+    },
+    "mdb|2|nA=0": {
+      "n_a": 0,
+      "ratio": 0.5403791070162918,
+      "ratio_squared": 0.29200957929972493,
+      "reference_share": 0.02023354208992102
+    },
+    "mdb|2|nA=1": {
+      "n_a": 1,
+      "ratio": 0.7165892620015247,
+      "ratio_squared": 0.5135001704158898,
+      "reference_share": 0.0384045383058863
+    }
+  },
+  "paired_exclusion": {
+    "dropped_cells_by_carrier": {
+      "1": 0,
+      "2": 1
+    },
+    "total_cells": 240,
+    "total_dropped": 1
+  },
+  "reference_pooled_mean_share": 0.04296424017632489,
+  "reference_size2_disjoint_by_n_a": {
+    "0": {
+      "mean_share": 0.02023354208992102,
+      "n": 384
+    },
+    "1": {
+      "mean_share": 0.0384045383058863,
+      "n": 576
+    },
+    "4": {
+      "mean_share": 0.09027664160362373,
+      "n": 240
+    }
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "size3_results": {
+    "corporate|1": {
+      "by_n_a": {
+        "4": {
+          "mean_share": 0.015893661370496942,
+          "n": 120
+        }
+      },
+      "cells": 120,
+      "clone_source": "corporate",
+      "interval_mean_width": 0.0,
+      "mean_believed_optima": 12.666666666666666,
+      "mean_share": 0.015893661370496942,
+      "n_carriers": 1
+    },
+    "corporate|2": {
+      "by_n_a": {
+        "0": {
+          "mean_share": 0.011082734119103769,
+          "n": 103
+        },
+        "1": {
+          "mean_share": 0.027506439113936593,
+          "n": 16
+        }
+      },
+      "cells": 119,
+      "clone_source": "corporate",
+      "interval_mean_width": 0.02946576967545589,
+      "mean_believed_optima": 235.41176470588235,
+      "mean_share": 0.013290963362106502,
+      "n_carriers": 2
+    },
+    "mdb|1": {
+      "by_n_a": {
+        "4": {
+          "mean_share": 0.015956748109170835,
+          "n": 120
+        }
+      },
+      "cells": 120,
+      "clone_source": "mdb",
+      "interval_mean_width": 0.0,
+      "mean_believed_optima": 12.666666666666666,
+      "mean_share": 0.015956748109170835,
+      "n_carriers": 1
+    },
+    "mdb|2": {
+      "by_n_a": {
+        "0": {
+          "mean_share": 0.010933783406328074,
+          "n": 103
+        },
+        "1": {
+          "mean_share": 0.027520279762124348,
+          "n": 16
+        }
+      },
+      "cells": 119,
+      "clone_source": "mdb",
+      "interval_mean_width": 0.02842646234987902,
+      "mean_believed_optima": 235.41176470588235,
+      "mean_share": 0.013163900563409927,
+      "n_carriers": 2
+    }
+  },
+  "templates_per_group": 12
+}

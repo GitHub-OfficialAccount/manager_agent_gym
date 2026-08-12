@@ -304,6 +304,9 @@ def generate(
     coverage_override: list[tuple[str, ...]] | None = None,
     force_irb_segment_ids: tuple[str, ...] = (),
     asset_classes: tuple[str, ...] | None = None,
+    force_mix_class: str | None = None,
+    amplify_mix: bool = True,
+    positional_roles: bool = True,
 ) -> dict[str, Any]:
     """Emit one complete instance. Deterministic in `seed` alone.
 
@@ -373,10 +376,34 @@ def generate(
     rng = random.Random(f"finance-instance::{seed}")
 
     # --- coverage lattice: distinct equal-size subsets => pairwise incomparable ---
+    #
+    # COMMON RANDOM NUMBERS ACROSS BOTH PATHS (D42). `_lattice_from_template` draws
+    # a label permutation; a supplied lattice does not need one, and used not to
+    # draw it — so the two paths left the rng at DIFFERENT stream positions and
+    # every downstream draw diverged. Calibration, ratings, EADs and IRB approvals
+    # were all different, which meant a supplied lattice could not be compared to a
+    # generated one seed-for-seed at all: the arms differed in the lattice AND in
+    # the instance draw, which is exactly what substitution exists to avoid.
+    #
+    # The override path now CONSUMES the same draw and DISCARDS it. Over the real
+    # five classes in both cases, so a six-class instance sits at the same stream
+    # position as the five-class instance of the same seed. This is common random
+    # numbers, not tuning: it removes a difference, it does not choose one.
     if coverage_override is not None:
         chosen = [tuple(c) for c in coverage_override]
+        _discarded_label_draw = list(ASSET_CLASSES)
+        rng.shuffle(_discarded_label_draw)
     else:
         chosen = _lattice_from_template(rng)
+
+    # THE STREAM CHECKPOINT, so the NEXT divergence raises instead of being found
+    # by a round-trip test months later. Forcing, roles and the rng stream have now
+    # each diverged silently between these two paths; this records where the stream
+    # actually is, and `check_path_alignment.py` asserts the two paths agree on it.
+    # Read from `getstate()` rather than by DRAWING one: a probe draw would advance
+    # the stream and silently move every five-class figure already reported, which
+    # would make an alignment check the cause of the next divergence.
+    rng_checkpoint = hash(rng.getstate()[1]) & 0xFFFFFFFF
 
     # --- THE CLASS CALIBRATION (R1). One validated table per asset class ------
     #
@@ -430,7 +457,67 @@ def generate(
     # So the shared class is given `shared_class_segments` slots rather than its
     # round-robin share. This is a MIX change, not a lattice change: the template,
     # the non-nestedness and the sole-class guarantee are untouched.
-    shared_class = _template_shared_class(chosen) if coverage_override is None else None
+    # THE MIX FORCING WAS UNREACHABLE ON THE OVERRIDE PATH, AND THAT MADE A
+    # COMPARISON UNFAIR RATHER THAN MERELY INCOMPLETE (D26).
+    #
+    # This line used to read `... if coverage_override is None else None`, so
+    # `shared_class_segments` was silently IGNORED whenever a lattice was supplied
+    # — which is the only way to build a six-class instance. Every size-3 cell
+    # therefore came out at nA=1, and "size 3 is weaker" was measured by comparing
+    # the size-2 template across its WHOLE mix range against size-3 at a single
+    # point of its own. Nothing about six classes forbids a forced mix; it had
+    # simply never been wired up.
+    #
+    # `force_mix_class` names the class to over-weight when a lattice is supplied.
+    # It is explicit rather than derived: on an override lattice there is no single
+    # "shared class" to infer — that is what `_designate_swap_pair` got wrong on a
+    # path it does not run — so the caller states which class carries the mix, and
+    # the generator does not guess.
+    # THERE ARE THREE AMPLIFIERS GATED ON `shared_class`, NOT ONE, AND THE OVERRIDE
+    # PATH TURNED OFF ALL THREE (D36):
+    #
+    #   1. SEGMENT COUNT      — `shared_class_segments` slots instead of the
+    #                           round-robin share (just below);
+    #   2. DIVERGENCE SELECTION — the rating is chosen by bounded search to maximise
+    #                           the SA fallback penalty, shared class only;
+    #   3. IRB-APPROVAL PRIORITY — shared-class segments are approved FIRST, so the
+    #                           strictly-required set is non-empty.
+    #
+    # This line used to read `... if coverage_override is None else None`, so a
+    # supplied lattice — the only way to build a six-class instance — silently lost
+    # every one of them. Naming only `shared_class_segments` as the defect
+    # understated it: even at MATCHED nA the five-class arm carried amplifiers 2 and
+    # 3 that the six-class arm did not, so the arms were never comparable.
+    #
+    # DERIVED, not requested. `w0 & w1` has size exactly one on every admissible
+    # PARTIAL template, so there is nothing to guess; `_template_shared_class`
+    # already returns None on a DISJOINT pair, which is the honest answer there —
+    # a disjoint lattice has no shared class, so the parameter has no referent and
+    # the amplifiers correctly do not fire. `force_mix_class` remains as an
+    # explicit override for pricing a mix OTHER than the shared class.
+    if not amplify_mix:
+        # EXPLICITLY UNAMPLIFIED, which is not the same as the old silent absence.
+        # The amplifiers were previously OFF on the override path by accident, and
+        # the arms were incomparable because one had them and the other did not.
+        # Turning them off DELIBERATELY and SYMMETRICALLY is a different thing: it
+        # is what a within-size-3 comparison needs, because the amplified class is
+        # the SHARED class, and the shared class IS the successor-unique class for
+        # carrier-1 templates and is NOT for carrier-2 ones. Amplifying therefore
+        # puts the two carrier groups at systematically different nA and no
+        # ratio-to-a-common-reference removes that -- the nA response is not a
+        # common multiplicative factor (forcing HALVES size-3 and TRIPLES disjoint).
+        # Every figure produced this way must say it was unamplified.
+        shared_class = None
+    elif force_mix_class is not None:
+        if force_mix_class not in classes:
+            raise ValueError(
+                f"force_mix_class {force_mix_class!r} is not in asset_classes "
+                f"{list(classes)}: forcing segments into a class no worker can be "
+                f"approved for would price the mix against nothing"
+            )
+        shared_class = force_mix_class
+    else:
+        shared_class = _template_shared_class(chosen)
     class_sequence: list[str] = []
     if shared_class is not None:
         class_sequence += [shared_class] * min(shared_class_segments, n_segments)
@@ -535,8 +622,22 @@ def generate(
     # sole-class approval, not only to the promoted one — an earlier version
     # guarded only the promotion and seed 21 still failed the A4 canary, because a
     # naturally-approved sole-class segment clipped.
+    # THE FOURTH SILENT DIVERGENCE BETWEEN THESE PATHS (D42), after forcing, roles
+    # and the rng stream. This read `if coverage_override is None`, so the TOTALITY
+    # REPAIR below never ran on a supplied lattice — and ASSERTION 7 then failed on
+    # 27 of 60 seeds handed their OWN natural lattice back. That was the entire
+    # "survivorship filter" on the six-class arm: not a property of six classes,
+    # but a repair that had been switched off for every instance six classes can be
+    # built from.
+    #
+    # `sole_class` is derived from the WORKERS, not from the template, so there was
+    # never a reason to gate it on how the lattice arrived. It is gated instead on
+    # `positional_roles`, which is the actual precondition: the derivation assumes
+    # workers[0] is the predecessor and workers[1:] the post-swap roster, and that
+    # is exactly what positional roles guarantee. Under the derived-roles opt-out
+    # it would be reading the wrong worker, so there it correctly stays None.
     sole_class = None
-    if coverage_override is None:
+    if positional_roles:
         post_coverage = {c for w in workers[1:] for c in w.irb_coverage}
         sole_held_classes = sorted(set(workers[0].irb_coverage) - post_coverage)
         sole_class = sole_held_classes[0] if sole_held_classes else None
@@ -647,6 +748,32 @@ def generate(
         swap_shared_class = sorted(
             set(workers[0].irb_coverage) & set(workers[1].irb_coverage)
         )[0]
+    elif positional_roles:
+        # THE OVERRIDE PATH SILENTLY RE-DERIVED THE ROLES, AND THAT INVALIDATED
+        # EVERY SIX-CLASS FIGURE BUILT ON IT (D41).
+        #
+        # A supplied lattice used to go to `_designate_swap_pair`, which SEARCHES
+        # for a two-holder class instead of reading the declared positions. Handing
+        # a seed's OWN natural lattice back through the override path returned a
+        # DIFFERENT instance: seed 0 went from (pred=w0, succ=w1, shared=retail) to
+        # (pred=w1, succ=w2, shared=corporate), and its ceiling from 0.00% to 7.08%.
+        #
+        # Every size-3 template in L9 declares its roles POSITIONALLY — w0 is the
+        # predecessor, w1 the successor — and the carrier stratification is defined
+        # on those positions. With the roles re-derived, the templates being priced
+        # were not the templates being described: `successor_unique(template)` named
+        # one class while the instance's actual successor held another, so nA was
+        # measured against the wrong class.
+        #
+        # This is the SAME function I recorded in records/L9 as "dead code, not on
+        # the template path". That was true of the template path and false of the
+        # override path, which is the one everything six-class was then built on.
+        predecessor_id, successor_id = worker_ids[0], worker_ids[1]
+        shared = sorted(set(workers[0].irb_coverage) & set(workers[1].irb_coverage))
+        # DISJOINT PAIRS ARE LEGAL HERE and must not raise: `sorted(...)[0]` is the
+        # IndexError recorded in the L9 proposal. A disjoint pair genuinely has no
+        # shared class, and None is the honest value.
+        swap_shared_class = shared[0] if shared else None
     else:
         predecessor_id, successor_id, swap_shared_class = _designate_swap_pair(workers)
     instance = {
@@ -667,7 +794,24 @@ def generate(
             "max_timesteps": max_timesteps,
             "min_successor_routed": min_successor_routed,
             "shared_class_segments": shared_class_segments,
-            "shared_class_divergence_selection": True,
+            # ASSERTED AGAINST ITS SOURCE AT EMISSION, not written once and
+            # trusted. This field was a hardcoded `True` and reported divergence
+            # selection as having run on every override instance, where
+            # `shared_class` was None and it had not run at all. That is the FOURTH
+            # instance of one defect -- with the `rule` string, `coverage_size`, and
+            # the original §B family -- so it now derives from the same variable the
+            # branch is gated on.
+            "shared_class_divergence_selection": shared_class is not None,
+            "mix_amplified_class": shared_class,
+            "mix_class_source": (
+                "UNAMPLIFIED (amplify_mix=False)" if not amplify_mix
+                else "force_mix_class" if force_mix_class is not None
+                else "derived from w0 & w1"),
+            "mix_amplified": amplify_mix,
+            # Where the rng stream stood after lattice selection. Identical across
+            # the two paths iff their draws are aligned (D42).
+            "rng_checkpoint_post_lattice": rng_checkpoint,
+            "positional_roles": positional_roles,
             "capacity_cap": capacity_cap,
         },
         "event": {
@@ -1083,8 +1227,18 @@ def _lattice_from_template(rng: random.Random) -> list[tuple[str, ...]]:
         w3               = {C, D}
 
     Four properties hold SIMULTANEOUSLY, which is why this is constructed rather
-    than drawn and rejected (free draws at five classes satisfy them only 57.1% of
-    the time — 210 lattices enumerated by LS):
+    than drawn and rejected (free draws at five classes satisfy them 90.5% of the
+    time — all 210 lattices enumerated; construction is used because it makes
+    generation TOTAL, not because rejection is expensive):
+
+    THE 57.1% THIS REPLACES DOES NOT REPRODUCE (RR). The 210 is right — C(10,4),
+    the unordered 4-subsets of the ten 2-subsets of five classes — but enumerating
+    them against the properties named below gives 190/210 = 90.5%, or 61.9% also
+    requiring all five classes covered, or 26.2% also requiring the sole-held class
+    to be the derived predecessor's. No conjunction of plausible atoms gives
+    120/210. The argument the sentence is making survives the correction untouched:
+    it never rested on the rejection rate, only on generation TERMINATING without
+    an unbounded retry loop, which holds at 90.5% exactly as it would at 57.1%.
 
       * all four sets are distinct and equal-size -> NON-NESTED by construction;
       * class A has exactly two holders, the swap pair -> the successor is

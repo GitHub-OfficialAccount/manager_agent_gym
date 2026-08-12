@@ -14,9 +14,20 @@ the quantity the template decision is made on. Tie-break luck is the reason this
 project permutes class labels at all; manufacturing ties ourselves, in the optimum
 that produces the headline, would be the same fault deliberately introduced.
 
-WHAT IS MEASURED: among all capacity-feasible allocations, how many attain the
-optimum. A rate of 1 means the optimum is unique. Six-class clone instances are
-compared against five-class ones on the same seeds.
+THREE THINGS ARE MEASURED, because the first two can both pass while the hazard is
+fully present:
+
+  1. TIE COUNT — how many capacity-feasible allocations attain the optimum. This
+     is the obvious measurement and it is the least informative: five-class
+     instances already carry ~12 tied optima and are completely safe.
+  2. CEILING SPREAD across the believed-optimal tie set — the range of answers one
+     instance could give depending on which tied allocation is returned. This is
+     what decides whether ties matter, and it separates the two cases cleanly:
+     0.00% at five classes, 7.00% mean with the clone.
+  3. DETERMINISM UNDER A REORDERED SEGMENT LIST (RR) — because enumeration order
+     IS the hazard, a stable tie rate measured under one fixed order would look
+     like a pass. Permuting segments cannot change the optimum's VALUE, so any
+     spread across orderings is tie-break luck and nothing else.
 
 Run:  python3 -m experiments.worker_replacement.check_tie_rate
 """
@@ -24,6 +35,7 @@ Run:  python3 -m experiments.worker_replacement.check_tie_rate
 from __future__ import annotations
 
 import json
+import random
 import statistics as st
 from itertools import product
 from pathlib import Path
@@ -160,18 +172,67 @@ def main() -> int:
               f"{s['ceiling_spread_max']:>8.2%} "
               f"{s['seeds_with_ambiguous_ceiling']:>9}/{len(rows[name])}")
 
+    # --- RR's requirement: DETERMINISM UNDER A REORDERED SEGMENT LIST -----------
+    # A stable tie RATE measured under one fixed order would look like a pass while
+    # the hazard was fully present, because enumeration order IS the hazard. This
+    # runs the shipped ceiling on permuted segment lists and reports the spread of
+    # the answers. Permuting segments is a relabelling: it cannot change the
+    # optimum's VALUE, so any spread here is tie-break luck and nothing else.
+    print("\nDETERMINISM UNDER A REORDERED SEGMENT LIST (RR). Permuting segments")
+    print("cannot change the optimum's value, so any spread is tie-break luck:")
+    print(f"{'instance set':<18} {'distinct ceilings':>18} {'spread':>9} {'unstable':>10}")
+    reorder = {}
+    for name, builder in (
+            ("five_class", lambda s: gen.generate(s)),
+            ("six_class_clone", lambda s: gen.generate(
+                s, coverage_override=six_template, asset_classes=six_classes))):
+        worst_spread, unstable, max_distinct = 0.0, 0, 1
+        for seed in SEEDS:
+            instance = builder(seed)
+            rng = random.Random(f"segment-order::{seed}")
+            values = []
+            for _ in range(8):
+                order = list(instance["segments"])
+                rng.shuffle(order)
+                values.append(sc.ceiling_vs_stale_card(
+                    {**instance, "segments": order}, cap=CAP)["ceiling_share"] or 0.0)
+            spread = max(values) - min(values)
+            max_distinct = max(max_distinct, len({round(v, 12) for v in values}))
+            worst_spread = max(worst_spread, spread)
+            unstable += spread > 1e-9
+        reorder[name] = {"max_distinct_ceilings": max_distinct,
+                         "worst_spread": worst_spread,
+                         "seeds_unstable": unstable, "orders_per_seed": 8}
+        print(f"{name:<18} {max_distinct:>18} {worst_spread:>8.2%} "
+              f"{unstable:>7}/{len(list(SEEDS))}")
+    summary["reordering"] = reorder
+
     five, six = summary["five_class"], summary["six_class_clone"]
     rose = (six["mean_optima_true"] > five["mean_optima_true"] + 1e-9
             or six["seeds_with_tie_true"] > five["seeds_with_tie_true"])
     print()
+    # The two halves say DIFFERENT things and both must hold. The tie set is a
+    # property of the LATTICE and the clone genuinely enlarges it — that does not
+    # go away and should not be reported as if it had. What the D19 tie-break
+    # removes is the EXPOSURE: the shipped ceiling no longer depends on which
+    # member of that set the enumeration happens to reach first.
+    stable = all(r["seeds_unstable"] == 0 for r in reorder.values())
     if rose:
-        print("TIE RATE RISES WITH THE CLONE. The optimum is not unique, so which")
-        print("allocation `best()` returns is decided by enumeration order — inside")
-        print("the ceiling the template decision rests on. THE TIE-BREAK MUST BE")
-        print("MADE EXPLICIT before any size-3 figure is quoted.")
+        print("THE HAZARD IS REAL: the clone enlarges the believed-optimal tie set")
+        print(f"({five['mean_optima_true']:.1f} -> {six['mean_optima_true']:.1f} mean "
+              f"optima) and the ceiling spread ACROSS that set is")
+        print(f"{six['ceiling_spread_mean']:.2%} mean / {six['ceiling_spread_max']:.2%} "
+              f"max — the same order as the effect being measured.")
     else:
-        print("Tie rate does NOT rise with the clone. The ceiling is not exposed to")
-        print("enumeration order by the sixth class.")
+        print("The clone does not enlarge the tie set on these seeds.")
+    print()
+    if stable:
+        print("AND THE EXPOSURE IS CLOSED: under the D19 expectation tie-break the")
+        print("shipped ceiling is IDENTICAL across every segment ordering, on both")
+        print("class counts. The tie set remains; the arbitrariness does not.")
+    else:
+        print("EXPOSURE STILL OPEN: the shipped ceiling changes with segment order,")
+        print("so a size-3 figure would be decided by list order. Do not quote one.")
     print("\nNOTE ON WHAT A NULL HERE DOES AND DOES NOT LICENCE: it says THIS")
     print("template on THESE seeds does not manufacture ties. It is not a property")
     print("of clones in general — a template placing source and clone on the SAME")
@@ -194,7 +255,7 @@ def main() -> int:
         ],
     }, indent=2, sort_keys=True) + "\n")
     print(f"\nwritten: {out_dir / 'tie_rate.json'}")
-    return 0
+    return 0 if stable else 1
 
 
 if __name__ == "__main__":

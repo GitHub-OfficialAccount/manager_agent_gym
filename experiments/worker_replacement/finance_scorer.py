@@ -45,7 +45,7 @@ from itertools import product
 from typing import Any, Iterable
 
 from manager_agent_gym.core.common.run_trace import record_run_event
-from .finance_generator import irb_risk_weight_for, sa_risk_weight
+from .finance_generator import TIE_EPS, irb_risk_weight_for, sa_risk_weight
 
 # Reported numbers are compared to truth with a relative tolerance. Below it, a
 # report counts as exact; above it, the score degrades linearly to zero at 100%
@@ -812,20 +812,56 @@ def ceiling_vs_stale_card(
             return s(segment, worker, calibration)
         return s(segment, successor_as_carded, calibration)
 
-    def best(scoref):
-        best_value, best_alloc = -1.0, ()
+    # Score matrices, so the enumeration sums cached floats. Also makes the tie
+    # comparison exact: the same float is compared against itself rather than
+    # recomputed down a possibly different path.
+    true_m = [[true_score(sg, w) for w in workers] for sg in segments]
+    believed_m = [[believed_score(sg, w) for w in workers] for sg in segments]
+
+    def feasible():
         for combo in product(range(len(workers)), repeat=len(segments)):
-            if any(combo.count(i) > cap for i in range(len(workers))):
-                continue
-            value = sum(scoref(sg, workers[w]) for sg, w in zip(segments, combo))
+            if all(combo.count(i) <= cap for i in range(len(workers))):
+                yield combo
+
+    def best(matrix):
+        best_value, best_alloc = -1.0, ()
+        for combo in feasible():
+            value = sum(matrix[j][w] for j, w in enumerate(combo))
             if value > best_value:
                 best_value, best_alloc = value, combo
         return best_value, best_alloc
 
-    true_value, true_alloc = best(true_score)
-    _, believed_alloc = best(believed_score)
-    realised = sum(true_score(sg, workers[w])
-                   for sg, w in zip(segments, believed_alloc))
+    true_value, true_alloc = best(true_m)
+    believed_value, believed_alloc = best(believed_m)
+
+    # TIE-BREAK: EXPECTATION OVER THE BELIEVED-OPTIMAL SET (D19).
+    #
+    # The believed optimum is routinely NOT UNIQUE, and its members are equal only
+    # UNDER THE CARD — re-scored under TRUTH they differ. So which one is returned
+    # decides the ceiling, and `best()` returns whichever `product()` visited
+    # first, i.e. Python list order. Measured on a six-class clone lattice: up to
+    # FOUR different ceilings for one instance across eight segment orderings,
+    # spanning 14.10% — larger than the effect being measured (check_tie_rate.py).
+    #
+    # Expectation, because under the card those allocations are INDISTINGUISHABLE
+    # TO THE MANAGER: it holds no information that separates them, so any
+    # deterministic rule (first-visited, best, worst) credits it with a
+    # discrimination it cannot make.
+    #
+    # EXPECTATION IS NOT AN UPPER BOUND. A manager that tie-breaks worse than
+    # chance realises less, and the true ceiling is then ABOVE this figure. That
+    # is why `ceiling_min`/`ceiling_max` are returned beside it and are not
+    # decoration: reporting the point alone restates a range as a point.
+    #
+    # At five classes the spread is EXACTLY ZERO on 20/20 seeds, so this changes
+    # no previously reported number.
+    realised_over_ties = [
+        sum(true_m[j][w] for j, w in enumerate(combo))
+        for combo in feasible()
+        if abs(sum(believed_m[j][w] for j, w in enumerate(combo))
+               - believed_value) <= TIE_EPS
+    ]
+    realised = sum(realised_over_ties) / len(realised_over_ties)
 
     # A CEILING IS NON-NEGATIVE BY CONSTRUCTION — the true optimum cannot be beaten
     # by play under a false belief — so a negative one is either float noise or a
@@ -846,15 +882,31 @@ def ceiling_vs_stale_card(
             )
         ceiling = 0.0
 
+    # min/max over the tie set. NOT decoration: expectation is not an upper bound,
+    # so a point estimate without these restates a range as a point.
+    ceiling_hi = max(0.0, true_value - min(realised_over_ties))
+    ceiling_lo = max(0.0, true_value - max(realised_over_ties))
+
     return {
         "ceiling": ceiling,
         "ceiling_share": ceiling / true_value if true_value else None,
+        "ceiling_min": ceiling_lo,
+        "ceiling_max": ceiling_hi,
+        "ceiling_share_min": ceiling_lo / true_value if true_value else None,
+        "ceiling_share_max": ceiling_hi / true_value if true_value else None,
+        "n_believed_optima": len(realised_over_ties),
         "oracle": true_value,
         "card_believing_play_realises": realised,
         "allocation_differs": true_alloc != believed_alloc,
-        "baseline": ("optimal play believing the predecessor's card AS A "
-                     "REPLACEMENT description of the successor — its OMISSION "
-                     "costs as well as its LIE (D1)"),
+        # THE THREE THINGS THAT SILENTLY DECIDED THIS NUMBER, each added only
+        # after it was caught doing so. Declared on every result so a reader never
+        # has to know which version produced a figure.
+        "baseline": ("stale card — oracle minus optimal play under the "
+                     "predecessor's card. NOT the ignorant baseline"),
+        "belief_model": ("the card as a REPLACEMENT description of the successor: "
+                         "its OMISSION costs as well as its LIE (D1)"),
+        "tie_break": ("EXPECTATION over the believed-optimal set, which is not an "
+                      "upper bound — read ceiling_min/ceiling_max with it (D19)"),
     }
 
 
