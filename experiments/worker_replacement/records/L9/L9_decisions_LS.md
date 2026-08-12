@@ -2485,3 +2485,47 @@ rather than folded in.**
 **RR's reason is the right one and I am adopting it as the framing: two of the three zeros this
 phase turned out to BE the finding. The pattern is that the unexplained one is where the next
 result lives.**
+
+---
+
+# Addendum 25 — a derived figure was in the record as a measured one, and the rule fired on my own writing
+
+Input: RR's direct measurement of the per-seed split.
+
+## D123 — ★ THE 41/19 SPLIT WAS AN INFERENCE FROM A MEAN. It is now measured, and it is STRONGER
+
+    distribution of IRB-applicable lied-class segments   {0: 19, 1: 41}   mean 0.683
+    seeds WITH a lied IRB segment and ceiling EXACTLY zero        41
+    seeds WITH a lied IRB segment and ceiling NONZERO              0
+
+**RR reported only the mean, 0.683. The 41/19 split reached me as a per-seed fact and I recorded it
+in D118 as measured without asking whether it was measured or derived** — and a mean of 0.683 over
+60 seeds is equally consistent with distributions containing a 2.
+
+**The inference was right and it is now measured rather than derived. And the measured form is a
+stronger refutation than either of us stated: 41 of 60 seeds have exactly the segment the draining
+hypothesis says is missing, and ALL 41 price exactly zero. Not 41 mostly-zero — 41 of 41, none
+non-zero.** The draining account predicts those seeds should show *some* channel. **Zero of 41 do.
+The starvation account cannot survive that, and the free-slot mechanism is the only thing left
+standing.**
+
+**D118 is corrected: the split is measured, and its strength is upgraded.**
+
+## D124 — The provenance rule fired on my own record within hours of being written
+
+RR raised this **under the rule they had just written, not because it changed the conclusion**: *a
+provenance field is asserted against its source at emission, or it is not written.*
+
+**It was a DERIVED figure sitting in the record as a MEASURED one, on its way to the researcher, and
+the distribution could have been otherwise.** That is precisely the asymmetry the rule names — **a
+wrong value gets caught because it has a plausible range and people examine it; a wrong provenance
+claim is caught only by someone re-deriving from scratch.** Here someone did.
+
+**Two things worth keeping:**
+- **The rule caught something in the record of the phase that produced it, within hours.** That is
+  the strongest evidence it is worth the friction.
+- **It was raised on a figure that was RIGHT.** Raising provenance only when a number turns out
+  wrong teaches the opposite lesson; raising it on a correct number is what makes it a standard
+  rather than a post-mortem.
+
+**Nothing else in the package is affected. This is the last correction on L9.**

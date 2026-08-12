@@ -819,9 +819,49 @@ class RefineTaskAction(BaseManagerAction):
         task = workflow.tasks[self.task_id]
         updates = []
 
+        name_before = task.name
+        # GUARDED ON THE NAME CHANGING, not on `new_name` being SET (LS). The
+        # previous `if self.new_name:` emitted `task_renamed` when a manager
+        # re-sent the CURRENT name, giving `name_before == name_after` — so the
+        # event did not mean "renamed", which is the same defect as everything
+        # else in this arc: a field asserting more than its condition establishes.
+        #
+        # It matters here specifically because this event's whole justification is
+        # that without it "no rename occurred" and "a rename occurred and was not
+        # logged" are indistinguishable. A no-op emission reintroduces exactly that
+        # ambiguity from the other side.
+        #
+        # The `updates` summary keeps the old condition: a re-sent name is still a
+        # refinement the manager performed, and that is a different question from
+        # whether the name changed.
         if self.new_name:
             task.name = self.new_name
             updates.append(f"name -> '{self.new_name}'")
+        if self.new_name and self.new_name != name_before:
+            # A RENAME EMITTED NO EVENT AT ALL unless a description also changed:
+            # `task.name` mutates HERE, while `record_run_event("task_refined")`
+            # sits inside the `if self.new_description:` block below. So a rename
+            # that changed no description left NO TRACE, and the analysis joined
+            # segments to tasks on that same mutable name — meaning the one thing
+            # that would reveal a silent join miss was the thing not logged.
+            #
+            # Analysis now joins on `task_id` (L8), so this is no longer
+            # load-bearing for the DV. It is emitted anyway because the record must
+            # be able to show that a rename HAPPENED: without it, "no rename
+            # occurred" and "a rename occurred and was not logged" are the same
+            # observation. Measured on the 18 existing bundles: 8 `task_refined`
+            # events, ZERO carrying name provenance.
+            from ...core.common.run_trace import record_run_event
+
+            record_run_event(
+                "task_renamed",
+                {
+                    "task_id": str(self.task_id),
+                    "name_before": name_before,
+                    "name_after": task.name,
+                    "with_description_change": bool(self.new_description),
+                },
+            )
 
         if self.new_description:
             previous_description = task.description
@@ -841,7 +881,12 @@ class RefineTaskAction(BaseManagerAction):
                 "task_refined",
                 {
                     "task_id": str(self.task_id),
+                    # `task_name` is the name AFTER any rename in the same action,
+                    # which read as the name the description belonged to. Both are
+                    # carried so the reader does not have to assume.
                     "task_name": task.name,
+                    "name_before": name_before,
+                    "name_after": task.name,
                     "description_before": previous_description,
                     "description_after": self.new_description,
                 },

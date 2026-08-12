@@ -50,7 +50,7 @@ output plus both reviews under `records/`.
 
 ---
 
-## L9 — THE TEMPLATE DECISION: price partial overlap, then choose `[~] (GATE PASSED, standing rule 7 satisfied. At the realistic mix, natively, five classes: current 0.000%, partial overlap 2.258%, disjoint 5.272%. Partial needs no sixth class, no roster change, ships UNAMPLIFIED, and is STRONGEST exactly where realism wants it. AWAITING THE RESEARCHER'S CHOICE -- the only open item is theirs. Standing checks: production test n/a (design choice); no drift - decides what the manipulation IS; ambiguity - resolved by team discussion.)`
+## L9 — THE TEMPLATE DECISION: price partial overlap, then choose `[!] BLOCKED ON THE RESEARCHER (team side CLOSED, standing rule 7 satisfied). At the realistic mix, natively: current 0.000%, partial overlap 2.258%, disjoint 5.272%. LS recommends partial overlap -- no sixth class, no roster change, ships unamplified. Nothing further the team can do without the choice.)`
 **Depends:** none · **Owner:** LS (RE prices, RR attacks the enumeration) · **Cost: no model spend,
 but NOT free — it needs a generator change (step 3) that the first version of this step assumed
 away.** · **Production test: n/a (design choice).** · **Serves the question: DIRECTLY** — it
@@ -314,6 +314,7 @@ four of the brief's five failure modes are manager behaviours and are currently 
 **CORRECTION 1 — RE's "`rerouted_share`: zero hits, confirmed" is FALSE, and it is my error
 reproduced.** Positive-controlled recursive grep: **19 hits across FOUR files** —
 `check_variance.py`, `check_announcement.py`, `check_announcement_clean.py`, and RE's own new
+<!-- citation-check: superseded --> _(those three were deleted in the 2026-08-08 cleanup; named here as the historical record of where the DV went.)_
 `check_reroute_recoverability.py`. RE confirmed my false claim independently, which makes this
 the **third** null-without-positive-control in one week and the first where the error
 PROPAGATED between us. The true finding stands and is worse: the DV, its variance estimate and
@@ -411,7 +412,7 @@ The regret decomposition stays as the outcome measure; neither substitutes for t
 **Reading limit, standing:** 3 episodes per cell. No contrast verdict in either direction.
 Cell 3's zero moves across three seeds is not a result.
 
-## L2a — the split CODE against the repaired schema `[~] (built fd42a82; LS blocker fixed 0720cf3 and verified; LS PASSES; awaiting RR review file)`
+## L2a — the split CODE against the repaired schema `[~] TWO OF THREE FIXED. B2 (executed segment absent from parse_detail -> classified executed_but_unparseable) is STILL SILENT while the acceptance reports PASS -- RR re-ran the named case rather than reading the report. Does the acceptance fixture even REACH the B2 branch? If its parse_detail is complete it cannot, and it would pass indefinitely.`
 **Depends:** L1 · **Owner:** RE · **Production test: n/a (analysis).**
 
 > **★ CIRCULAR DEPENDENCY IN MY OWN BACKLOG, found 2026-08-08 and fixed here.** L2 says
@@ -436,7 +437,7 @@ constraint. Re-derive it, and state each population as a PREDICATE per standing 
 
 ---
 
-## L8 — Retire the display-name join, and log renames `[ ]`
+## L8 — Retire the display-name join, and log renames `[x] (all four sites converted; null holds 18/18 and the control was BUILT FIRST and fired against the code as it stood, 9 hits -> 8. Standing rule 7 satisfied: acceptance output + L8_review_RR.md + L8_review_LS.md. One non-blocking finding open: task_renamed fires on new_name being SET rather than on the name CHANGING.)`
 **Depends:** none · **Owner:** RE · **Production test: FAILS today** — no system keys a join on a
 mutable display string, and none mutates a name without recording the previous value.
 **Serves the question:** indirectly — it protects joins that every published number passes through.
@@ -456,6 +457,30 @@ tasks** (8 of 9 `refine_task` requests set `new_name`), and one observed rename 
 3. **The dry-run site last** (`run_finance_episode.py:133`) — machinery only, never a live run.
 
 **Not a blocker on anything:** no display-name site executes during a live episode.
+
+> **★ STANDING CHECKS, answered 2026-08-09 as required before implementing.**
+>
+> **1. PRODUCTION-GRADE TEST — FAILS TODAY, so the fix is warranted and we are NOT manufacturing a
+> problem.** No production system keys a join on a mutable display string, and none mutates a name
+> without recording the previous value. A real orchestrator joins on IDs and emits a rename event
+> carrying both values. **We are removing a behaviour production would never ship, not adding one.**
+>
+> **2. NO DRIFT — it serves the question by PROTECTING THE MEASUREMENT, not by improving the
+> environment.** The primary DV is defined over ASSIGNMENTS, and these four joins are how segments
+> are matched to tasks in every analysis path we publish from. **A silent join miss corrupts the DV
+> directly.** That is inside the rule rather than the detour it warns about.
+>
+> **3. AMBIGUITY — none.** The three analysis sites go to `index.segment_task_ids`
+> (`finance_split.py:90`, already present); `RefineTaskAction` records `name_before`/`name_after`;
+> the dry-run site last. No team discussion needed.
+>
+> **VERIFIED STILL LIVE 2026-08-09** — the four sites survived the rebuild and the renames:
+> `finance_scope_report.py:204,:332` · `finance_logging.py:472` · `finance_fabrication.py:230` ·
+> `run_finance_episode.py:133`.
+>
+> **★ ONE ADDITION: item 2 touches a CORE file** (`schemas/execution/manager_actions.py`), **so it
+> needs a `CHANGED.md` entry with it** — not after it. That file is the deviation record and it has
+> already been caught trailing the code once this phase.
 
 ---
 
@@ -509,7 +534,7 @@ re-reading its acceptance criterion against the repaired environment. Reassess w
 
 ---
 
-## L6 — §B enforcement: population predicates in reported quantities `[~] (all three blockers fixed — LS's at de32dff, RR's two at e3f4e78 with the range rule; LS PASSES; RR's review file is on record but its verdict PREDATES the fixes and has not been lifted)`
+## L6 — §B enforcement: population predicates in reported quantities `[x] (verdict WAS lifted in RR's file -- RESOLUTION section, both blockers checked against code, "L6 passes". The file's HEADER still said "TWO BLOCKERS", so it contradicted itself depending on where a reader stopped; fixed by a pointer at the top rather than a rewrite, 2026-08-09.)`
 > _Marker corrected 2026-08-08: this line still read "NOT implemented" after the build, the LS
 > review and the blocker fix — the same stale-marker class as the L1 race. The design discussion
 > below is retained as the record of how the spec was settled._
@@ -2213,3 +2238,610 @@ Record: `records/L9/L9_gate_review_RR.md` (RR); `records/L9/L9_decisions_LS.md` 
   RR's recommendation) is ACTIVELY HARMFUL here** — right for the uncovered-lie regime only.
 - **★ STANDING RULE 7 SATISFIED — acceptance output (`native_lattices.json` + regression), RR's
   review, LS's review. RR reports NO REMAINING BLOCKERS. THE DECISION GOES TO THE RESEARCHER.**
+
+### 2026-08-09 — ★ THE THREE STRUCTURAL ZEROS ARE ONE FACT. L9 closes to the researcher
+
+Record: `records/L9/L9_decisions_LS.md` D117–D122.
+
+- **★ `nA = cap` IS THE TRANSITION, and which side carries the channel is set by whether the LIE
+  points at a COVERED class. RE stated the prediction BEFORE running and it confirmed exactly:**
+
+      lattice   cap    nA=1    nA=2    nA=3    nA=4    nA=5
+      current     3   0.00%   0.00%   0.98%   1.24%   1.41%
+      current     4   0.00%   0.00%   0.00%   0.79%   1.22%
+      current     5   0.00%   0.00%   0.00%   0.00%   0.83%
+      partial     3   2.26%   1.25%   0.00%   0.00%   0.00%
+      partial     4   2.34%   1.73%   0.66%   0.00%   0.00%
+      partial     5   2.41%   2.02%   1.04%   0.50%   0.00%
+
+      partial's first ZERO    at nA = [3, 4, 5]  against cap [3, 4, 5]
+      current's first NONZERO at nA = [3, 4, 5]  against cap [3, 4, 5]
+
+  **A lie only costs by being ACTED ON: the uncovered lie needs CONTENTION to displace into, the
+  covered lie needs a FREE SLOT to be misrouted into.** **A clean prediction success, stated in
+  advance, after a long run of refutations.**
+- **LS's DRAIN HYPOTHESIS IS REFUTED AS INSUFFICIENT, and the refutation is better than a mean.**
+  RR counted exactly the requested quantity — **IRB-applicable** segments in the lied class,
+  filtered on `irb_approved`: **1.30 → 1.00 → 0.68 → 0.55**, so the starvation is REAL. **And per
+  seed at nA=3, only 19 of 60 zeros have an empty lied class — 41 seeds have a lied IRB segment and
+  still price EXACTLY ZERO.** **Testing sufficiency instead of stopping at the mean is what caught
+  it: a mean moving in the predicted direction is precisely how a partial mechanism passes for a
+  complete one.**
+- **BOTH DISCRIMINATING TESTS HAD OUTCOME SPACES THAT COULD NOT CONTAIN THE ANSWER.** LS's D93
+  omitted **falling**; RE's cap sweep, framed as *"does the threshold move with cap"*, **could not
+  have surfaced a SECOND lattice turning the opposite way at the same point.** **General hazard,
+  recorded beside the differ-test rule: a binary test on a continuous mechanism will answer, and the
+  answer will be lucky.**
+- **★ RE's REFRAMING ACCEPTED AS THE DIAGNOSIS AND NARROWED FOR THE DECISION.** *"`partial` and
+  `current` are not ranked options — they occupy disjoint regions of the portfolio space"* is right
+  and is the sharper diagnosis: **the shipped design was not WEAK, it was measuring in a region the
+  realism work says banks are not in.** **But `disjoint` is FLAT in nA — alive across the whole
+  space, not in a complementary region:**
+
+      current vs partial    complementary regions  -- the DIAGNOSIS
+      partial vs disjoint   both alive at nA=1     -- the DECISION, and it IS ranked
+                            2.26% vs 5.27%, with the realism argument against disjoint
+
+  **The insight strengthens the case for CHANGING the lattice; it does not bear on WHICH candidate.
+  Two claims, kept apart in the package.**
+- **THE THREE METHODOLOGY RULES ARE WRITTEN, with the fifth instance** (`METHODOLOGY_RULES.md` §B,
+  §E ×2, four index rows in §H). **§B's framing, as settled: the positive control asks whether a
+  measurement can fire AT ALL; the differ-test asks whether two measurements COULD HAVE CONFLICTED —
+  same defect, opposite faces, and this project has been caught by each twice.**
+  **And the sentence that names what actually went wrong here: EVERY withdrawn version of the L9
+  ratio was a §E instance, and NOT ONE was arithmetic.**
+- **RR's CORRECTION TO LS's CLOSING NOTE, accepted as a fact about the record:** the mechanism that
+  closed the arc came out of testing **LS's** H2, and the realism inversion out of answering **LS's**
+  question about worker count — **neither was RR attacking their own side; both were RR checking
+  LS's and finding something else.**
+- **★ THE OPEN ITEM SHIPS VISIBLE: the six-class card-NAMES zero at nA=2 has NO mechanism**, and
+  RE's candidate for it is refuted (`partial` is also card-NAMES and is 1.252% at nA=2 < cap).
+  **It travels as an acknowledged gap rather than folded in — two of the three zeros this phase
+  turned out to BE the finding, and the pattern is that the unexplained one is where the next result
+  lives.**
+- **L9 IS CLOSED TO THE TEAM. The only remaining item is the researcher's choice.**
+
+### 2026-08-09 — final correction: a DERIVED figure was in the record as a MEASURED one
+
+Record: `records/L9/L9_decisions_LS.md` D123–D124.
+
+- **★ THE 41/19 PER-SEED SPLIT WAS AN INFERENCE FROM A MEAN, recorded by LS as measured.** RR
+  reported only **mean 0.683** IRB-applicable lied-class segments at nA=3; **a mean of 0.683 over
+  60 seeds is equally consistent with distributions containing a 2.** Measured directly:
+
+      distribution of IRB-applicable lied-class segments   {0: 19, 1: 41}   mean 0.683
+      seeds WITH a lied IRB segment and ceiling EXACTLY zero        41
+      seeds WITH a lied IRB segment and ceiling NONZERO              0
+
+- **THE MEASURED FORM IS A STRONGER REFUTATION THAN EITHER AGENT STATED: not "41 mostly-zero" —
+  41 of 41, NONE non-zero.** The draining account predicts those seeds should show *some* channel;
+  **zero of 41 do.** **The starvation account cannot survive it and the free-slot mechanism is the
+  only thing left standing.** D118 corrected, strength upgraded.
+- **★ THE PROVENANCE RULE FIRED ON THE RECORD OF THE PHASE THAT PRODUCED IT, WITHIN HOURS** — *a
+  provenance field is asserted against its source at emission, or it is not written.* **A derived
+  figure was sitting in the record as a measured one, on its way to the researcher, and the
+  distribution could have been otherwise.**
+- **TWO THINGS ABOUT HOW IT WAS RAISED, worth more than the number:**
+  **it was raised UNDER THE RULE rather than because it changed the conclusion** — the difference
+  between a standard and a post-mortem; **and it was raised on a figure that turned out to be
+  RIGHT.** Checking provenance only when a number is wrong teaches that provenance is a debugging
+  step; **checking a correct one is what makes it a habit.**
+- **LAST CORRECTION ON L9. The package stands and the decision is the researcher's.**
+
+---
+
+## PHASE NOTE — FIRST VERSION, SUPERSEDED (LS, 2026-08-09)
+
+_Kept as a record. The claim that the movers were refusals **and not measurements** is corrected
+below, on RR's objection: it invites the next phase to treat doubt as sufficient._
+
+**The two things that actually moved this study were both REFUSALS, and neither was a measurement:
+refusing to park an unexplained zero, and refusing to let agreement count as evidence.**
+
+Three structural zeros were chased rather than parked; **two of them turned out to BE the finding**
+and the third collapsed all three into one mechanism (`nA = cap`, with the side that carries the
+channel set by whether the lie points at a covered class). **Four separate agreements were caught
+being one thing counted twice** — the 60/60 card claim, the 6,480 enumeration, the builder
+mismatch, and a two-path check that matched in every digit because unamplified generation does not
+depend on the lattice.
+
+**Every withdrawn version of the L9 ratio was a comparator error. Not one was arithmetic.**
+
+## PHASE NOTE — CORRECTED, and this is the version to carry (LS, 2026-08-09)
+
+**Superseding the version above, on RR's objection, which is right about the part most likely to be
+quoted.**
+
+**The refusals located where to point the instrument. A CHEAP MEASUREMENT settled every one of
+them.** Refusing to park the nA≥3 zero produced nothing until someone counted lied-class segments
+per seed. Refusing to let matching digits count produced nothing until someone asked what
+`amplify_mix=False` does to segment generation. **The partial-overlap resurrection — arguably the
+single biggest result of the phase — was a POSITIVE CONTROL: a measurement run because someone
+distrusted a null.**
+
+**SCEPTICISM ALONE WOULD HAVE PRODUCED AN OBJECTION, NOT A FINDING.** *"Refusals move studies"*
+invites the next phase to treat doubt as sufficient. **The accurate lesson is narrower and more
+useful: DOUBT DIRECTED AT A SPECIFIC CHECKABLE CLAIM, THEN CHECKED.** Every one cashed out in
+seconds of offline computation.
+
+**★ AND THE CLOSING FACT IS THE ONE ALREADY AT THE TOP OF THIS FILE: EVERY DECISIVE FACT THIS PHASE
+WAS COMPUTABLE FROM THE GENERATOR BEFORE A SINGLE EPISODE.** The 12,960 enumeration; the zero at
+nA=1; the free-slot rule; the tie-set asymmetry; the substitution artefact; the whole `nA = cap`
+mechanism. **That is the price-the-ceiling-offline rule, which this phase then spent two days
+re-earning.** It survived contact and it is the one to carry.
+
+**Two findings that are NOT implied by it and should travel separately:**
+- **Check provenance on a figure that turned out RIGHT.** Doing it only when a number is wrong
+  teaches that provenance is a debugging step. Doing it on a correct one makes it a standard.
+- **Every withdrawn version of the L9 ratio was a COMPARATOR error. Not one was arithmetic.**
+
+**Total model spend for the phase: ZERO.**
+
+### 2026-08-09 — L9 BLOCKED ON THE RESEARCHER; the firing goes to L8
+
+- **L9 is `[!]` blocked on the researcher.** The team side is closed, standing rule 7 is satisfied,
+  and **nothing further can be done without the choice.** Not invented work: L8 depends on nothing
+  and the lattice decision does not touch it.
+- **L8 STARTED, with its three standing checks answered on the step line:**
+  **(1) PRODUCTION TEST — FAILS TODAY**, so the fix is warranted and we are not manufacturing a
+  problem: no production system keys a join on a mutable display string, and none mutates a name
+  without recording the previous value. **We are REMOVING a behaviour production would never ship.**
+  **(2) NO DRIFT — it serves the question by PROTECTING THE MEASUREMENT.** The primary DV is defined
+  over ASSIGNMENTS and these four joins are how segments are matched to tasks in every analysis path
+  we publish from — **a silent join miss corrupts the DV directly.** Inside the rule, not the detour
+  it warns about. **(3) AMBIGUITY — none.**
+- **VERIFIED STILL LIVE after the rebuild and the renames:** `finance_scope_report.py:204,:332`,
+  `finance_logging.py:472`, `finance_fabrication.py:230`, `run_finance_episode.py:133`.
+  `segment_task_ids` already exists at `finance_split.py:90`.
+- **★ ITEM 2 TOUCHES A CORE FILE** (`schemas/execution/manager_actions.py`), **so it ships WITH its
+  `CHANGED.md` entry, not after it** — that document has already been caught trailing the code once
+  this phase, and it is the one `CLAUDE.md` names.
+- **ACCEPTANCE REQUESTED, and the second half is the point:** the three analysis sites must produce
+  **identical output on existing bundles** (a null that must hold), **PLUS A POSITIVE CONTROL — a
+  bundle with a task renamed to collide with the segment prefix, where the ID join survives and the
+  name join would not.** **Without the positive control this is a change nobody can show was
+  needed.**
+- **Why it is not cosmetic:** `record_run_event("task_refined")` sits inside `if self.new_description:`
+  while the name mutates **outside** it, **so a rename that changes no description emits NO EVENT AT
+  ALL** — the thing that would tell us a join silently missed is the thing not logged. **Correct for
+  18 episodes by luck**; one observed rename was a single editorial decision from colliding.
+- **TWO CLOSEOUT ITEMS WITH RR, neither needing new measurement:** **L2a** is `[~]` awaiting their
+  review file under standing rule 7; **L6** is `[~]` because **their review file's verdict PREDATES
+  the fixes and has never been lifted** — a stale FAIL on a step whose blockers are closed is the
+  provenance problem their own rule names, on our own record.
+- **No run spend. Nothing in this firing waits on the researcher.**
+
+### 2026-08-09 — L6 closes; L2a gets three blockers; and LS's L8 justification is CORRECTED
+
+Record: RR's review closeouts; RE's narrowing fix.
+
+- **★ LS CORRECTION: "correct for 18 episodes by luck" IS NOT SUPPORTABLE and is withdrawn.**
+  Measured across all 18 bundles:
+
+      task_refined events                                    8
+      of which carry `new_name` or `name_before`             0
+      whose `task_name` collides with the segment prefix     0
+
+  **Zero name provenance on any of them** — and the un-logged path (`record_run_event` inside
+  `if self.new_description:`) means **a rename with no description change leaves NO TRACE AT ALL.**
+  So the 8 logged refinements show no collision *in their post-rename name*, **which is not the same
+  as showing no join ever missed**, and the invisible path cannot be checked in either direction.
+  **RESTATED: "NOT RECOVERABLE FROM THESE BUNDLES."** **That is a STRONGER reason for the fix, not a
+  weaker one** — the argument becomes *we cannot audit the past, so the join must not depend on names
+  going forward*, rather than a claim about the past we cannot support.
+  **★ AND IT PROPAGATES: any L2a or L3 figure derived BY NAME from these 18 bundles carries this as
+  a stated limitation.**
+- **L6 → `[x]`. The verdict WAS already lifted** — RR's file carries a `RESOLUTION — verdict LIFTED,
+  verified against the code` section ending "L6 passes", both blockers checked against the code and
+  the second fixed better than recommended. **LS's concern was half-right and the half that is right
+  is the document's: the HEADER still announces "TWO BLOCKERS", so the file contradicts itself
+  depending on where a reader stops, and anyone grepping for the verdict gets the STALE one.**
+  Fixed by a pointer at the top rather than a rewrite, per annotate-in-place.
+- **★ L2a — THREE BLOCKERS, all the same shape, and ALL leave every check the module has still
+  passing.** Demonstrated on constructed bundles rather than argued:
+
+      task_assigned payload missing `task_class` -> "never_assigned", residual 0, NO RAISE
+      task_assigned payload missing `applied`    -> "never_assigned",             NO RAISE
+      executed segment absent from parse_detail  -> "executed_but_unparseable",   NO RAISE
+
+  **Blocker 1:** `.get("task_class")` and `.get("applied")` default to `None`, **indistinguishable
+  from "not a segment" / "not applied"** — and **`never_assigned` ASSERTS THE MANAGER NEVER STAFFED
+  IT, which is the exact false claim v1 made and this module exists to stop making.**
+  **Blocker 2:** a missing `parse_detail` entry makes an executed segment read as **unparseable**,
+  so **a bundle gap is reported as a worker failure.**
+  **Blocker 3:** **the residual check CANNOT FIRE ON ANY DATA CONDITION** — `states` is only ever
+  assigned from the eight literals `counts` sums over, so `sum(counts) == len(by_segment)` **by
+  construction**, verified zero on well-formed input *and* on all three malformed ones. It can only
+  catch a typo in the same file. **"A check that cannot fail on data is documentation."**
+  **Replacement suggested and endorsed: assert every `task_assigned` segment task id appears in
+  `by_segment`** — an index/event disagreement passes silently today.
+  **Blockers 1 and 2 are the DEFAULT-MUST-NOT-BE-A-LEGAL-VALUE rule, violated in our own new code**
+  — a missing field defaulting to a value that is itself a legal, meaningful state. **Nothing
+  touches the design or the eight predicates, which are better than what they replace.**
+- **★ RE's NARROWING FIX CAUGHT A FAULT OF ITS OWN, and it is the general lesson worth keeping.**
+  `print(TWO_CLAIMS)` landed without its definition: the module raised `NameError`, **exited 1, and
+  wrote NO RECORD — while the printed output looked COMPLETE, because the failure came after the
+  last table.** **Found by checking the EXIT CODE rather than reading the output.** Had it been
+  eyeballed, the package would have cited a record the last run never wrote.
+  **The empty-sample defect wearing different clothes: a run that looks finished and is not.**
+  **RE's own summary, adopted over the credit they declined: CHECK THE EXIT CODE, AND TEST
+  SUFFICIENCY RATHER THAN DIRECTION.**
+- **RE encoded LS's `disjoint`-is-flat narrowing in the module and record, quoted rather than
+  re-phrased** — the overreach never reached the code, and they encoded the separation anyway
+  because **the table alone invites the same collapse and the module is what the package cites.**
+
+### 2026-08-09 — `check_record_citations.py`: the one rule from this phase that is MECHANICAL
+
+Record: `check_record_citations.py` (LS, on RR's proposal). **RR proposed the check, supplied both
+the rule and the violation, and asked that someone else write it.**
+
+- **THE VIOLATION THAT PROMPTED IT, found by RR auditing their OWN committed work against RE's
+  exit-code lesson: `step4_audit_RR.md` cited `step4_audit.py`, WHICH WAS NEVER COMMITTED.** <!-- citation-check: superseded --> The
+  figures came from inline invocations that were not saved — **and that is why its `n=30` could not
+  be reconstructed and turned out to be 7 per group. The thing that produced it no longer existed
+  to re-run.** **A record naming a script that does not exist is the provenance rule broken in the
+  file that applies it to others.**
+- **THE RULE: A RECORD CITING AN ARTIFACT ASSERTS THE ARTIFACT EXISTS, AND NOTHING CHECKS THAT.**
+  **Mechanical, which is the point — it is the one rule from this phase that does not depend on
+  anyone remembering it.**
+- **WHAT IT DOES:** resolves every backtick-quoted `.py`/`.json`/`.jsonl` citation in every markdown
+  file under the experiment, nearest-first (beside the record → experiment-relative → repo-relative
+  → basename anywhere), **and SPLITS LIVE FROM `archive/`** — an archived record citing a deleted
+  module is **the archive working, not a defect**. **The archive count is REPORTED, not suppressed:
+  "stopped looking" and "nothing there" must not look the same.**
+- **THREE GUARDS, each answering a failure this project has actually had:** a **POSITIVE CONTROL**
+  runs first (a citation that cannot exist must be flagged AND a real file must resolve — otherwise
+  a clean report can mean the resolver is pointed at the wrong place, which is `check_announcement`'s
+  alarm never firing); **an EMPTY citation set RAISES rather than passing** (`all([])` is True, and a
+  regex that stopped matching would report a clean tree); and **the intermediate quantities print,
+  not just the verdict.**
+- **SILENCING WORKS TWO WAYS AND BOTH KEEP THE ESCAPE NEXT TO THE CLAIM:** a marker in the first
+  four lines declares a whole document superseded; a marker on or beside a line silences just those
+  citations. **The second form exists because a LIVE document legitimately names things its own
+  history deleted** — the findings log citing `check_variance.py` is the record working.
+  <!-- citation-check: superseded -->
+- **FIRST RUN: 18 LIVE UNRESOLVED.** Three documents declared superseded in their headers
+  (`BRAINSTORM.md`, `STUDY1_LOGGING_AND_ORDERING.md`, `records/L9/step4_audit_RR.md`), three
+  historical citations silenced in place. **Live unresolved now 0; archive 36, reported. Counters
+  reconcile exactly: 27 silenced + 136 resolved + 36 archive + 0 live = 199.**
+- **★ AND THE TOOL CARRIED THE PROJECT'S OWN DEFECT BEFORE IT WAS COMMITTED: it summed annotated
+  FILES and silenced CITATIONS into ONE counter — two populations under one name, the §B defect,
+  inside the tool written to enforce §E.** Caught because the printed number did not reconcile with
+  the drop in total citations. **Fixed before commit, with the comment in the code saying what it
+  was.**
+- **RR's GENERALISATION, worth more than the check: *the absence of the thing you would check with
+  is invisible by construction.*** A missing script, an unwritten record, a raise after the last
+  print — **none of them leave a gap where you are looking.** The check covers one instance
+  mechanically; **the general form still needs a person.**
+
+### 2026-08-09 — L2a's three blockers fixed; and TWO checks caught their own authors in one day
+
+- **ALL THREE L2a BLOCKERS FIXED, acceptance PASS, and all three were in the module's OWN new code**
+  — **the default-must-not-be-a-legal-value rule violated by the module written to enforce it.**
+  **1 & 2:** `payload.get("applied")` / `.get("task_class")` returned `None`, which is falsy, so the
+  task fell out of `assigned` and its segment was classified **`never_assigned` — the state that
+  ASSERTS THE MANAGER NEVER STAFFED IT, reachable by a payload merely LACKING A FIELD, and the exact
+  false claim v1 made.** **Absence is now an error, not a state.**
+  **3:** `detail.get(segment_id) or {}` collapsed *absent from `parse_detail`* into *present but
+  unparseable*, **blaming the worker for a gap in our own analysis path.**
+  **4:** the by-construction residual is **kept as an internal invariant** (`AssertionError` — bundle
+  data cannot cause it) **and replaced as the guard** by the index/event agreement check: every task
+  logged as an assigned segment task must appear in the segment index. **The old one could only
+  catch a typo in its own file; the new one catches the DV's numerator and denominator sitting on
+  different populations.**
+- **★ RE's FIRST POSITIVE-CONTROL RUN WAS INVALID AND LOOKED LIKE FOUR CLEAN PASSES.** All four
+  controls "raised" — **on the PRE-EXISTING `refusal_codes` guard, before reaching any new check**,
+  because the 18 R2 bundles predate the structured-code fix and none of them splits at all.
+  **A control that fires on the wrong assertion proves nothing.** Rebuilt on constructed bundles,
+  each now demonstrably firing on its own guard with the well-formed null holding.
+  **The positive-control rule catching itself: RE had no known-positive case, only a
+  differently-broken one.**
+- **SCOPE CORRECTION the acceptance found:** raising on ANY absent parse entry rejected the
+  machinery episode, which legitimately has **no parsing pass at all** (zero model calls). Narrowed
+  to a **partial** gap.
+- **★ RULING (LS) on the limitation RE stated rather than fixed: NO ninth state, NO
+  `parsing_performed` flag.** Both change the partition, **and the partition is the one thing here
+  reviewed twice and passed.** **The problem is the SENTENCE, not the count** —
+  `executed_but_unparseable` predicated on *"the DELIVERABLE yielded no rwa value"* is a claim about
+  the worker that a machinery run cannot support. **Fix: when `parse_detail` is entirely empty, the
+  module reports the split with an explicit banner that NO PARSING PASS RAN and that bucket is NOT
+  INTERPRETABLE.** **A quantity whose predicate does not hold for a population should REFUSE TO BE
+  INTERPRETED for that population — not be re-partitioned around it.**
+- **★ RR VERIFIED THE CITATION CHECK CAN REPORT NONZERO, which is the test LS did not run.** Two
+  invented citations caught, exit 1, positive control passing. **A check that reports zero is only
+  worth having if it can report nonzero.** **And it found `main` exiting 1 on a citation LS's own
+  run had not seen: the findings-log entry recording RR's defect NAMES the missing file in order to
+  say it is missing.** **Writing down a broken citation creates a broken citation.**
+  **Two consequences, both now IN THE TOOL rather than left to adjudication:**
+  **(1) A clean report is a STATEMENT ABOUT A MOMENT, not a property of the tree** — the checker's
+  own findings-log entry broke the checker's own invariant within minutes of the run reporting zero.
+  **(2) That class RECURS BY CONSTRUCTION, so the marker is the STANDARD FORM for records of
+  missing-artifact defects, not a case-by-case exception.**
+- **★ TWO CHECKS CAUGHT THEIR OWN AUTHORS IN ONE DAY, in the same shape:** RE's four controls firing
+  on a pre-existing guard, and LS's citation tool summing two populations into one counter.
+  **What caught the second was the counters not reconciling — a PRINTED INTERMEDIATE rather than a
+  review. The rule caught itself, through the other rule**, which is stronger evidence for both than
+  any finding they produced, because it is evidence they work **when nobody is looking for the thing
+  they catch.**
+
+### 2026-08-09 — LS's banner ruling is OVERTURNED on the point LS flagged as uncertain
+
+- **★ LS RULED: report the split with a printed banner saying the bucket is not interpretable, and
+  flagged ONE uncertainty — "specifically if you think a reader can be relied on to see the banner
+  and not the bucket name."** **RE: they cannot, and the evidence is this project's own record.**
+  **A banner is dropped by the first summariser that reformats the output, and every consumer of
+  this split reads `counts`, not the surrounding prose.** Three instances already:
+  **a figure quoted without its `segs`; a comparator quoted without its construction path; a record
+  whose `rule` string named a source that did not produce it.** **Relying on adjacency is how all
+  three happened.**
+- **★ ACCEPTED IN FULL. The non-interpretability travels IN THE RECORD, with the numbers rather than
+  beside them:**
+
+      parsing_performed        False
+      uninterpretable_states   ["executed_but_unparseable"]
+      uninterpretable_reason   "...its predicate is a claim about the WORKER and is NOT
+                                SUPPORTED here. The count is correct; the state's sentence
+                                must not be quoted for this bundle."
+
+  **Still the §B move and NOT a schema change** — nothing re-partitioned, no state added, the eight
+  predicates untouched, and a well-formed bundle carries `uninterpretable_states: []`.
+  **It is the same refusal LS ruled for, placed where a MACHINE can enforce it instead of where a
+  HUMAN has to notice it.** **LS's principle was right and its LOCATION was wrong.**
+  **Both ship: the field for consumers, the banner for whoever reads the acceptance output. The
+  banner ALONE was the error.**
+- **★ RE's GENERALISATION OF THE POSITIVE-CONTROL NEAR-MISS IS NARROWER AND BETTER THAN LS's.**
+  Not *"controls can fire on the wrong assertion"* but: **WHEN A CONTROL FIRES, CHECK WHICH GUARD
+  RAISED.** **A control that raises is the outcome you are hoping for, which is exactly when nobody
+  looks closer.** RE had four hoped-for outcomes and stopped.
+- **AND THE PRACTICE THAT FOLLOWS, adopted for L8: build the positive control FIRST, so you know it
+  can FAIL before you trust it passing.** Same shape as RR verifying the citation checker could
+  report NONZERO rather than trusting that it reported zero.
+- **PROCESS NOTE: this is a disagreement resolved on evidence, where the peer was right on the exact
+  point LS had flagged as uncertain.** Flagging the uncertainty is what made the objection cheap to
+  raise and cheap to accept.
+
+### 2026-08-09 — L2a is NOT closed; L8's sites are converted; and a rule that fires on a PASS
+
+- **★ L2a: TWO OF THREE FIXED. B2 IS STILL LIVE AND THE ACCEPTANCE REPORTS PASS.**
+  `detail.get(segment_id) or {}` → `rwa is None` → **`executed_but_unparseable`: a gap in the
+  BUNDLE reported as a WORKER producing an unreadable deliverable.** B1a, B1b and B3 all raise as
+  intended; **B2 does not.**
+  **RR re-ran the named cases rather than reading the report**, for the reason given one message
+  earlier: **RE's first control run had four controls all firing on a PRE-EXISTING guard, which
+  looked like four clean passes. So "acceptance passing" is not evidence that a particular NAMED
+  BLOCKER is closed.** Open question to RE: **does the acceptance fixture reach the B2 branch at
+  all?** If its `parse_detail` is complete it cannot, **and it would pass indefinitely.**
+- **★★ THREE INSTANCES IN ONE DAY OF A CHECK PASSING WHILE THE THING IT WAS MEANT TO CATCH WAS
+  UNTOUCHED** — RE's four controls, LS's citation tool reporting a stale zero, and now B2.
+  **All three were caught by someone RE-RUNNING THE SPECIFIC CASE rather than reading the report.**
+  **RR's observation, which is the gap the three share: every rule written this phase fires on a
+  SUSPICIOUS result — an unexplained zero, a null that agrees with you, matching digits. NONE fire
+  on a PASS. Green signals are the ones nobody re-derives.**
+- **★ LS's PROPOSED STANDARD, the one that fires on a pass: AN ACCEPTANCE THAT CLOSES NAMED BLOCKERS
+  MUST MAP EACH BLOCKER TO THE CONTROL THAT FIRES FOR IT, AND REPORT ANY BLOCKER WITH NO FIRING
+  CONTROL AS *UNCOVERED* RATHER THAN PASSING.** RE's failure was a MODULE-level control standing in
+  for four blockers; B2's is a blocker with no control that reaches it. **Both become visible the
+  moment the mapping is required and neither is visible without it.** *(Raised for
+  `METHODOLOGY_RULES.md`; RR owns that file's shape.)*
+- **L8: ALL FOUR SITES CONVERTED, and RE BUILT THE CONTROL FIRST — it failed against the code as it
+  stood, which is the point.** Renaming one segment task: **NAME join 9 hits → 8, losing the segment
+  SILENTLY; ID join 9 → 9.** **A lost row means no assignee, which reads as `never_assigned` — the
+  exact false claim L2a exists to prevent, manufactured by an editorial rename.**
+- **★ TWO REASONS THE NAME WAS NEVER A SAFE KEY, neither previously raised:** the board **already
+  carries `task_id`**, so the name was never the only option; and **the prefix is NOT UNIQUE — one
+  real bundle has TEN rows matching "Risk-weighted assets" for NINE segments**, so **a collision does
+  not even need a rename.** The risk was closer than "one editorial decision away".
+- **AND THE FIXTURE WAS NOT EXERCISING THE PRODUCTION PATH:** `test_finance_fabrication` built
+  `worker_run_completed` events with `task_name` and **no `task_id`**, and its bundle had **no
+  segment index at all** — so every id join found nothing and the test failed the moment the real
+  code joined the way real bundles support. **Same defect as the override path: a fixture shaped
+  unlike production, passing while the thing it stands for is broken.**
+- **Core change:** `task_renamed` emitted whenever `task.name` changes, carrying
+  `name_before`/`name_after`/`with_description_change`; `task_refined` carries the same provenance.
+  **`name_before` is captured BEFORE the mutation and the acceptance asserts it — reading it after
+  is the whole defect in miniature.**
+- **Verification:** null — `segment_states` identical on all 18 bundles, deterministic 18/18;
+  positive control — states identical across a rename the name join could not survive; acceptances
+  split / logging / fabrication / load_feedback / quantity_kinds all exit 0; pytest 3 passed.
+
+### 2026-08-09 — the rule generalises, and it catches the tool it was diagnosed on
+
+- **★ RR's GENERALISATION SUBSUMES LS's, and the diagnosis of why is exact: LS stated the property
+  over BLOCKERS when it belongs to CONTROLS.** The general form:
+
+  > **A control states the outcome of its own NEGATIVE case** — not *"the check passed"* but
+  > *"the check FAILED on the input it exists to reject, and passed on the real one."*
+  > **A control that passes BOTH is broken, and today that is indistinguishable from one that
+  > works.**
+
+  It **subsumes** LS's mapping form (a blocker with no control has no negative case to exhibit, so
+  it shows up missing) **and covers the general case LS had nothing for**, because it binds every
+  check rather than only acceptances closing named blockers.
+- **★ SECOND HALF, and it lands on LS's own citation tool:**
+
+  > **The positive control must traverse the SAME PATH as the reported verdict, end to end — not a
+  > COMPONENT of it.**
+
+  **LS's control proved the RESOLVER could flag an unresolvable name. Nobody had shown the REPORT
+  could come back non-zero** — different claims, and **only the second is what the exit code
+  asserts.** RR's comparison: **a component-level control on a pipeline-level claim is the same
+  substitution as a mean standing in for a per-seed split.**
+- **FIXED RATHER THAN NOTED.** `check_record_citations.py` now runs an **end-to-end control before
+  the scan**: the full `scan()` against a temp tree containing one unresolvable citation, asserting
+  the verdict returns non-zero — **then against a tree whose only citation resolves, asserting it
+  returns zero. Both directions, because passing both is the broken case.** **And the control was
+  verified able to fire**, by stubbing `scan` to report clean and confirming it raises.
+- **THE SCOPE LIMIT IS WRITTEN INTO THE RULE rather than left implicit:** *a green signal from a
+  check whose negative case nobody wrote is still invisible, and re-running the named case by hand
+  remains the only backstop — a habit, not a standard.* **A rule that overstates its coverage is
+  worse than the gap it names.**
+- **★ THE COLLISION MAY BE MORE THAN AN UNDERSTATEMENT, and RR is checking before it enters either
+  record.** *"Not recoverable from these bundles"* says **we cannot tell whether a join missed.**
+  **A bundle where the join key is PROVABLY AMBIGUOUS says something stronger: figures derived by
+  name from THAT bundle may be WRONG, not merely unverifiable.** **That is a different class — a
+  limitation becomes a defect with a named scope.**
+  **IF IT HOLDS, the follow-on is not a wording change: every published figure derived by name from
+  that specific bundle gets RE-DERIVED BY ID, and the difference is reported whether or not it
+  moves.**
+
+### 2026-08-09 — L4 DRIFT CHECK: the brief names a perturbation the study no longer uses
+
+Record: `records/L4/drift_check_LS_2026-08-09.md`. **Run because L9 is blocked on the researcher
+and L2a/L8 are with peers — the cron's stated condition for the drift check rather than invented
+work.**
+
+**VERDICT: the brief's QUESTION is intact and every finding this phase serves it. Its DESIGN
+section describes a perturbation the study does not use, and its GATE cannot be run as written.**
+
+- **NO DRIFT:** §1 the question and its scoped-out clause; §5's L7-amended DV (assignments,
+  forced/discretionary separated, conditioned share primary); §5's estimator.
+- **★ DRIFT 1 — THE BRIEF NAMES TWO MANIPULATIONS AND DOES NOT SAY WHICH THE STUDY RUNS.** §4's
+  perturbation is *"prompt-level METHOD SUBSTITUTION"* with trace-distinguishability via a distinct
+  tool call or truth value. **Everything measured this phase is a COVERAGE LATTICE — the successor
+  is APPROVED for different classes, not computing differently.** And §4's own scope condition
+  already says *"COVERAGE information cannot address the dominant allocation error"*. **Largest
+  drift; the researcher's to settle, because it decides what the paper's manipulation IS.
+  REPORTED, NOT FIXED.**
+- **★ DRIFT 2 — THE GATE CANNOT BE RUN AS WRITTEN.** §6 PASS requires *"≥1 correct post-swap outcome
+  demonstrably via the SUBSTITUTED METHOD"*. **Under a coverage perturbation there is no substituted
+  method to demonstrate** — criterion (i) has no referent, (ii) still does. **§10's item 5 ("the go:
+  build delta §8, then the gate §6") is stale by the same amount.** Settled with Drift 1.
+- **DRIFT 3 — THE SCOPE CONDITION IS CORRECT AND MUCH WEAKER THAN WHAT WE NOW KNOW.** *"Capacity
+  binds exactly"* is right; the exact rule underneath it is `nA ≥ cap` for uncovered-lie lattices
+  and `nA < cap` for covered-lie. **As written it reads as "the effect is small in this regime",
+  and the measurement is that the shipped lattice is EXACTLY ZERO at a realistic mix. Updating it
+  STRENGTHENS the claim discipline.**
+- **DRIFT 4 — §4 NEVER NAMES THE LATTICE**, now the central design parameter, **and §10's five open
+  researcher decisions do not include the template choice — the only one actually blocking.**
+- **★ DRIFT 5 — FOUND BY THIS CHECK, INSIDE THE CITATION CHECKER WRITTEN YESTERDAY.** §5 cites
+  `check_announcement.py:168–191` as the evidence for the superseded-DV amendment, **and that module
+  was deleted in the cleanup — so the evidence for a standing amendment in the AUTHORITATIVE BRIEF
+  is no longer inspectable at source** (the finding survives in
+  `records/L7/rerouted_share_definition_v1.md`, and the brief now says so).
+  **AND THE CHECKER DID NOT CATCH IT: its pattern required a backtick immediately after the
+  extension, so EVERY LINE-RANGED CITATION WAS SILENTLY SKIPPED** — and records cite
+  `file.py:168–191` far more often than the bare name. **Fixing it took citations found from 201 to
+  287 (30% previously invisible) and live unresolved from 0 to 5, one in the brief.**
+  **So yesterday's "UNRESOLVED IN LIVE DOCS 0" was true of what the checker LOOKED AT and false of
+  the TREE — the defect the tool exists to catch, in the tool, found by a check run for another
+  purpose.**
+  **★ AND THE END-TO-END CONTROL ADDED YESTERDAY COULD NOT HAVE CAUGHT IT: it proves the VERDICT
+  CAN FAIL, not that the SCAN LOOKS AT EVERYTHING. A control shows the path can fail; it does not
+  show the path is COMPLETE.** That is a third face of the same rule and neither existing form
+  covers it.
+- All five now resolve or carry an in-place marker; **the brief's is annotated EVIDENCE-DELETED,
+  not silenced.**
+
+### 2026-08-09 — the collision escalation is RETRACTED, and the narrower question closes clean
+
+Record: `records/L8/name_key_ambiguity_RR.md` (RR).
+
+- **★ THE STRONGER READING IS WRONG AND RR RETRACTED IT BEFORE ANYONE ACTED.** Measured across all
+  18 bundles:
+
+      bundle                  prefix rows  segments  in index  NOT in index  duplicate names
+      run_cell0_seed23.json            10         9         9             1  none
+      (no other bundle has an extra prefix row or a duplicate name)
+
+      INDEX seg_08     "Risk-weighted assets — seg_08"
+      NOT-IN-INDEX     "Risk-weighted assets — seg_08 standardised recalculation"
+
+  **It is a manager-created REMEDIATION whose name STARTS WITH the prefix but is a different
+  string.** **Every segment's exact name appears exactly once in every one of the 18 bundles.
+  THERE ARE NO DUPLICATE KEYS.**
+- **★ LS's FOLLOW-ON IS WITHDRAWN.** *"Every published figure derived by name from that bundle gets
+  re-derived by id"* was conditioned on ambiguity holding. **It does not hold. Nothing is
+  re-derived on ambiguity grounds, and "not recoverable from these bundles" stays exactly as
+  recorded — not strengthened, not withdrawn.**
+- **THE REAL EXPOSURE IS A MISS, NOT A COLLISION.** The remediation resolves to no segment under an
+  exact-key lookup, so its work is **ABSENT** from anything that lookup feeds — **UNATTRIBUTED, not
+  MISATTRIBUTED.** That is the defect already on record (the manager remediation invisible to the
+  metering path), **seen from the join side instead of the capacity side.**
+- **WHERE A PREFIX PREDICATE IS USED THE EXPOSURE IS REAL AND ALREADY DOCUMENTED** —
+  `finance_env.py:171`, `task.name.startswith(SEGMENT_TASK_PREFIX)`, which is **how the remediation
+  got charged against the segment allotment.** **So the L8 conversion is still right and its
+  argument changes: "a PREFIX PREDICATE captures things that are not segments", NOT "the key is
+  ambiguous."**
+- **★ RR's NARROWER QUESTION — *does any published figure route segment work through
+  `segment_lookup` and drop the remediation?* — CLOSES CLEAN (LS).** All three occurrences of
+  `segment_lookup` are inside **`_install_dry_run_stubs()`** in `run_finance_episode.py`.
+  **It is DRY-RUN MACHINERY ONLY, never a live run, and NO PUBLISHED FIGURE ROUTES THROUGH IT.**
+  Which is exactly what L8's own spec said when it put that site last. **The miss is real in the
+  machinery path and reaches no reported number.**
+- **★ THE CONSTRUCTION-PATH RULE, A FOURTH TIME AND THIS TIME ON RR — and they named it themselves:
+  A COUNT NAMED THE POPULATION WHILE THE SHAPE THAT PRODUCED IT WENT UNNAMED.** *"Ten rows for nine
+  segments"* is consistent with **two different defects with different consequences, and only one
+  was real.** **RE explicitly declined to state the consequence before knowing which shape it was,
+  and was right to** — they said so in the same message that handed over the count.
+  **The instinct to check before it reached a record was right; the message that preceded the check
+  should have said "if" rather than "then".**
+
+### 2026-08-09 — NO BACKLOG STEP IS ACTIONABLE. The drift findings are attached to the L9 package
+
+**Stated rather than worked around, per the cron's own instruction.**
+
+    L9   [!]  blocked on the RESEARCHER -- team side closed, standing rule 7 satisfied
+    L2a  [~]  B2 with RE
+    L8   [~]  awaiting RR's review under standing rule 7
+    L3   [!]  blocked on L9
+    L5   [!]  blocked on L9
+    L1, L4, L6, L7  [x]
+
+**Every step is done, blocked, or has the ball with a peer. Nothing is the lead's to advance, and
+the L4 drift check — the cron's fallback — was run LAST firing; the brief has not changed since, so
+re-running it would be inventing work.**
+
+- **★ WHAT WAS ACTUALLY OUTSTANDING AND MINE: the drift findings were in the record but NOT attached
+  to the decision the researcher is holding.** They had the L9 choice (partial overlap vs disjoint)
+  and the drift check (the brief names two manipulations) **as two disconnected items, and DRIFT 1
+  bears directly on the L9 choice rather than sitting beside it.**
+- **NOW ATTACHED in `RESEARCH-CRON-STATUS.md`'s CURRENT STATE, above the open-item note:**
+  **the whole partial-overlap/disjoint comparison is a comparison of COVERAGE LATTICES. If the
+  intended manipulation is METHOD SUBSTITUTION, the L9 decision is well-posed but answers a question
+  the brief does not ask — and the four channels would carry a different kind of fact about the
+  newcomer. If it is COVERAGE, §4 and §6 need amending and the decision stands as put.**
+  **Read the drift check BEFORE deciding, because it may reframe the question rather than answer
+  it.**
+- **Header corrected:** the status file still said *"2026-08-08, after the cleanup and the ceiling
+  fix"* while carrying 2026-08-09 content — **a document whose own date names a state it no longer
+  describes**, which is the provenance defect in the file that exists to prevent it.
+
+### 2026-08-09 — L8 CLOSES `[x]`. One non-blocking finding, and a pattern with a direction
+
+Records: `records/L8/L8_review_RR.md`, `records/L8/L8_review_LS.md`.
+
+- **STANDING RULE 7 SATISFIED** — acceptance output, RR's review (no blockers), LS's review (one
+  non-blocking finding). **Both reviews verified against the CODE rather than the report**, because
+  three checks this week passed while the thing they were meant to catch was untouched.
+- **VERIFIED IN SOURCE (LS):** three analysis sites join on task id and **no live name join
+  remains** (the only surviving mention is a docstring describing what was replaced);
+  **`name_before` is captured at `manager_actions.py:822` and the mutation is at `:824` — correct
+  order**; `task_renamed` is emitted at `:842`, **outside** the `if self.new_description:` block;
+  RR's finding 2 is closed — `finance_fabrication.py:261` is `segment_tasks[segment_id]`, which
+  **raises on a missing key** instead of defaulting to `None`; and the retracted collision claim is
+  removed with the retraction stated in place.
+- **THE CONTROL WAS BUILT FIRST AND FAILED AGAINST THE CODE AS IT STOOD — 9 hits → 8 on a rename.**
+  **That ordering is why the null is worth anything: a null from a control never shown able to fail
+  is not evidence.**
+- **★ FINDING (LS, non-blocking): `task_renamed` fires on `new_name` BEING SET, not on the name
+  CHANGING.** `manager_actions.py:823` guards on `if self.new_name:`, so **a manager re-sending the
+  current name emits `task_renamed` with `name_before == name_after`.** Not a blocker — the event
+  carries both values and nothing branches on its presence — **but it undercuts the justification
+  RE gave, which is the right justification:** *"without it, 'no rename occurred' and 'a rename
+  occurred and was not logged' are the same observation."* **A no-op emission makes `task_renamed`
+  not mean renamed**, which is the same shape as everything else in this arc: **a field whose name
+  asserts more than its condition establishes.** One-line guard.
+- **WHAT L8 DOES NOT ESTABLISH:** the null shows the conversion **changed nothing on data we already
+  hold**. It cannot show the old join never missed on those bundles — **"not recoverable from these
+  bundles" stands and propagates.** **The conversion's value is FORWARD-LOOKING and the record says
+  so rather than implying an audit it did not perform.**
+- **★ A PATTERN WITH A DIRECTION, worth its own rule rather than folding into an existing one.**
+  RE propagated RR's collision escalation into a docstring and a commit message **without
+  checking**, after RR had withdrawn it. **Third instance this phase of one agent adopting
+  another's number unchecked:** RE adopting RR's *"nA=0 is identical to the current template"*, LS
+  adopting RR's 41/19 per-seed split, and now this.
+  **All three were RR's figures, adopted by someone else, and all three were later corrected by
+  RR.** The flow is **one-directional**, and the reason is visible: **RR reports MEASUREMENTS, and a
+  measurement reads as settled in a way an argument does not.**
+  **The differ-test rule covers AGREEMENT BETWEEN TWO RESULTS. It does not cover A SINGLE RESULT
+  BEING CARRIED FORWARD BY SOMEONE WHO DID NOT PRODUCE IT.**

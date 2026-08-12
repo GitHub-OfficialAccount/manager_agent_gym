@@ -1,5 +1,9 @@
 # Study 1 — cell ordering and logging spec (research-engineer draft)
 
+<!-- citation-check: superseded -->
+
+_**Superseded record.** A pre-revamp draft whose rulings lived in BRAINSTORM; the modules cited below were deleted in the 2026-08-08 cleanup. Governs nothing._
+
 **Status:** draft for the lead's design doc, per §97/§98/§100. Nothing here is a
 ruling; the rulings are in BRAINSTORM. This is the buildable form of them, with the
 engineering consequences stated where they bite.

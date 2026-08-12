@@ -1,4 +1,36 @@
 {
+  "blocker_coverage": [
+    {
+      "blocker": "B1a  task_assigned missing `task_class`",
+      "covered": true,
+      "evidence": "ValueError: task_assigned on t_a carries no 'task_class'. A missing 'tas"
+    },
+    {
+      "blocker": "B1b  task_assigned missing `applied`",
+      "covered": true,
+      "evidence": "ValueError: task_assigned on t_a carries no 'applied'. A missing 'applie"
+    },
+    {
+      "blocker": "B2a  executed segment absent from a PARTIAL parse_detail",
+      "covered": true,
+      "evidence": "ValueError: segment seg_x executed (task t_x) but is absent from a NON-E"
+    },
+    {
+      "blocker": "B2b  executed segment with NO parsing pass -> flagged uninterpretable",
+      "covered": true,
+      "evidence": "uninterpretable_states=['executed_but_unparseable']"
+    },
+    {
+      "blocker": "B2c  parsing ran -> NOT flagged uninterpretable (other direction)",
+      "covered": true,
+      "evidence": "uninterpretable_states=[]"
+    },
+    {
+      "blocker": "B3   assigned segment task absent from the index",
+      "covered": true,
+      "evidence": "ValueError: 1 task(s) logged as assigned segment tasks are absent from t"
+    }
+  ],
   "controls": [
     {
       "control": "no segment index -> refuses (a name-based split would reintroduce the criterion (e) predicate)",

@@ -219,6 +219,7 @@ def scan_bundle(bundle: dict[str, Any], instance: dict[str, Any]) -> dict[str, A
     workers = {w["worker_id"]: w for w in instance["workers"]}
     allocation = bundle.get("allocation", {})
     deliverables = bundle.get("deliverables", {})
+    segment_tasks = (bundle.get("index") or {}).get("segment_task_ids") or {}
     calls_by_task = flog.tool_calls_by_task(bundle)
     readable_by_task = flog.history_readable_by_task(bundle)
 
@@ -227,9 +228,39 @@ def scan_bundle(bundle: dict[str, Any], instance: dict[str, Any]) -> dict[str, A
         worker_id = allocation.get(segment_id)
         worker = workers.get(worker_id) if worker_id else None
         parsed = rp.parse_report(deliverables.get(segment_id))
-        task_name = f"Risk-weighted assets — {segment_id}"
-        tool_calls = calls_by_task.get(task_name, [])
-        readable = readable_by_task.get(task_name, False)
+        # JOINED ON TASK ID. The display name is mutable (RefineTaskAction), so a
+        # rename silently yields NO tool calls and readable=False -- which here
+        # reads as a worker that produced nothing, a fabrication signal. See
+        # finance_scope_report._board_by_task_id.
+        # THE ID JOIN FIXED MUTABILITY AND LEFT THE SILENT DEFAULT UNDERNEATH IT
+        # (RR). `segment_tasks.get(segment_id)` returns None on a missing or
+        # partial index, and `calls_by_task.get(None, [])` then yields NO tool
+        # calls with `readable=False` — which is the same signature this module's
+        # own comment names for a rename: a worker that produced nothing.
+        #
+        # The same key was guarded OPPOSITELY in two modules. Remove
+        # `index.segment_task_ids` and `finance_split.split()` RAISES, while this
+        # scan returned nine rows with `task_key` None throughout. Two modules
+        # reading one key with opposite guards is how the weaker one gets used and
+        # believed.
+        #
+        # SCOPED HONESTLY, because RR measured it rather than assuming: this does
+        # NOT manufacture fabrication hits — the value test is the hit-creating leg
+        # and does not use `task_key`. What a missing key silently zeroes is the
+        # TRACE and ABSENCE detectors, which CLASSIFY hits. So the exposure was
+        # unreliable classification, not phantom findings, and no current bundle
+        # lacks the index.
+        if segment_id not in segment_tasks:
+            raise ValueError(
+                f"segment {segment_id} is absent from index.segment_task_ids, so "
+                f"its worker run cannot be joined. Under the previous default this "
+                f"yielded no tool calls and readable=False — indistinguishable from "
+                f"a worker that produced nothing, which is a fabrication signal. "
+                f"finance_split.split() already refuses the same bundle"
+            )
+        task_key = segment_tasks[segment_id]
+        tool_calls = calls_by_task.get(task_key, [])
+        readable = readable_by_task.get(task_key, False)
 
         value = classify_value(segment, worker, parsed.rwa)
         trace = detect_trace(tool_calls, worker)

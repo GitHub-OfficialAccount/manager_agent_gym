@@ -69,6 +69,11 @@ def _faithful_bundle(instance: dict) -> dict:
             "sequence": 100 + index,
             "event_type": "worker_run_completed",
             "actor_id": worker_id,
+            # TASK ID, because the analysis joins on id and not on the display
+            # name (L8). A fixture that carried only the name would not exercise
+            # the production path -- which is how the override path went five
+            # faults undetected.
+            "task_id": f"t_{segment_id}",
             "task_name": f"Risk-weighted assets — {segment_id}",
             "payload": {"history": [
                 {"type": "function_call", "name": "compute_rwa",
@@ -79,6 +84,11 @@ def _faithful_bundle(instance: dict) -> dict:
             ]},
         })
 
+    # The segment index the analysis joins through. Absent from this fixture
+    # before L8, so every id join silently found nothing.
+    bundle["index"] = {**(bundle.get("index") or {}),
+                       "segment_task_ids": {s["segment_id"]: f"t_{s['segment_id']}"
+                                            for s in instance["segments"]}}
     bundle["allocation"] = allocation
     bundle["deliverables"] = deliverables
     bundle["events"] = events

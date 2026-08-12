@@ -98,6 +98,40 @@ def segment_task_ids(bundle: dict[str, Any]) -> dict[str, str]:
     return {segment_id: str(task_id) for segment_id, task_id in index.items()}
 
 
+def interpretable_counts(result: dict[str, Any]) -> dict[str, int]:
+    """`counts`, but it RAISES rather than hand back a number that asserts
+    something the bundle cannot support.
+
+    WHY THIS EXISTS RATHER THAN A FIELD (RR). `split()` already reports
+    `uninterpretable_states`, and that is strictly better than the printed banner
+    it replaced — but **the argument against the banner applies to a field too.**
+    `counts` still carries an ordinary-looking integer for a state whose PREDICATE
+    does not hold, and a consumer that reads `counts` and ignores the flag
+    reproduces exactly the claim the flag exists to prevent. A default one level
+    up: the safe read is the one that requires an extra step, so the unsafe read
+    is the one that happens.
+
+    So the guard is a CODE PATH, not a rule for readers. Anything reporting these
+    counts calls this; anything needing the raw partition (residual, arithmetic)
+    reads `counts` directly and knowingly.
+
+    THE LIMITATION THAT REMAINS, stated rather than papered over: nothing PREVENTS
+    a consumer reading `result["counts"]`. Removing the state from `counts` would
+    break the partition — the one thing here reviewed twice and passed — so the
+    residual risk is accepted, and this makes the safe path the easy one rather
+    than the only one.
+    """
+    blocked = result.get("uninterpretable_states") or []
+    if blocked:
+        raise ValueError(
+            f"{blocked} cannot be interpreted for this bundle: "
+            f"{result.get('uninterpretable_reason')} "
+            f"Read `counts` directly if you need the partition arithmetic, but do "
+            f"not report these states' predicates for this bundle."
+        )
+    return dict(result["counts"])
+
+
 def split(bundle: dict[str, Any]) -> dict[str, Any]:
     """Per-segment state, plus counts, plus a residual that must be zero."""
     by_segment = segment_task_ids(bundle)
@@ -108,10 +142,34 @@ def split(bundle: dict[str, Any]) -> dict[str, Any]:
             "predicate criterion (e) removed"
         )
 
+    # THE DEFAULT-MUST-NOT-BE-A-LEGAL-VALUE RULE, VIOLATED IN THIS MODULE'S OWN
+    # NEW CODE (RR). `payload.get("applied")` and `payload.get("task_class")` both
+    # returned None on a MISSING field, which is falsy — so the task fell out of
+    # `assigned` and its segment was classified **never_assigned**.
+    #
+    # That is not a conservative default. `never_assigned` ASSERTS THE MANAGER
+    # NEVER STAFFED THE SEGMENT — the exact false claim v1 made and that this
+    # module exists to stop making — and it was reachable by a payload merely
+    # lacking a field. Demonstrated on constructed bundles with every existing
+    # check still passing.
+    #
+    # Absence is now an ERROR, not a state. A bundle that cannot say whether an
+    # assignment was applied cannot be split, and saying so beats inventing the
+    # most damaging answer.
     assigned: set[str] = set()
     for payload in _payloads(bundle, "task_assigned"):
-        if payload.get("applied") and payload.get("task_class") == SEGMENT_TASK_CLASS:
-            assigned.add(str(payload.get("task_id")))
+        task_id = str(payload.get("task_id"))
+        for field in ("applied", "task_class"):
+            if field not in payload:
+                raise ValueError(
+                    f"task_assigned on {task_id} carries no {field!r}. A missing "
+                    f"{field!r} used to fall through to `never_assigned`, which "
+                    f"asserts the manager never staffed the segment — a stronger "
+                    f"claim than the data supports and the one this split exists "
+                    f"to stop making"
+                )
+        if payload["applied"] and payload["task_class"] == SEGMENT_TASK_CLASS:
+            assigned.add(task_id)
 
     # THE REASON COMES FROM THE LOGGED ENUM, computed at the refusal site.
     # Deriving it from `agent_current_task_count` / `agent_max_concurrent` would
@@ -146,8 +204,43 @@ def split(bundle: dict[str, Any]) -> dict[str, Any]:
 
     states: dict[str, str] = {}
     for segment_id, task_id in by_segment.items():
-        parsed = detail.get(segment_id) or {}
         if task_id in executed:
+            # ABSENT FROM `parse_detail` IS NOT THE SAME AS PRESENT-AND-UNPARSEABLE
+            # (RR). `detail.get(segment_id) or {}` collapsed the two: a segment the
+            # parser never saw got `rwa is None` and was classified
+            # **executed_but_unparseable**, which asserts the WORKER produced
+            # something unreadable. The real condition is that our own parser has
+            # no record of a segment that demonstrably executed — a defect in the
+            # analysis path, not an observation about the worker.
+            #
+            # SCOPED TO A **PARTIAL** parse_detail, which is the condition RR
+            # demonstrated. An ENTIRELY EMPTY parse_detail is a different and
+            # legitimate thing: no parsing pass was run at all, which is how a
+            # MACHINERY episode arrives (zero model calls, so there are no
+            # deliverables to parse). Raising on that would reject a bundle whose
+            # only fault is having no worker output, and the L2a acceptance's own
+            # case 1 is exactly it.
+            #
+            # LIMITATION, STATED RATHER THAN FIXED: with an empty parse_detail the
+            # executed segments still land in `executed_but_unparseable`, whose
+            # predicate says "the DELIVERABLE yielded no rwa value" — a claim about
+            # the worker that a machinery run does not support. The count is right
+            # and the sentence over-claims. Fixing it needs a ninth state
+            # (`executed_not_parsed`) or an explicit `parsing_performed` flag, and
+            # that changes the partition, which is outside what these blockers
+            # authorise.
+            if detail and segment_id not in detail:
+                raise ValueError(
+                    f"segment {segment_id} executed (task {task_id}) but is absent "
+                    f"from a NON-EMPTY parse_detail. That used to be recorded as "
+                    f"`executed_but_unparseable`, which blames the worker for a "
+                    f"gap in our own parsing; the two are different conditions and "
+                    f"only one of them is a finding"
+                )
+            # `.get` is safe ONLY because the partial-gap case raised above: the
+            # sole way to reach here without an entry is a wholly empty
+            # parse_detail, i.e. no parsing pass.
+            parsed = detail.get(segment_id) or {}
             if parsed.get("declined"):
                 states[segment_id] = "executed_and_declined"
             elif parsed.get("rwa") is None:
@@ -182,14 +275,59 @@ def split(bundle: dict[str, Any]) -> dict[str, Any]:
 
     counts = {state: sum(1 for s in states.values() if s == state)
               for state in STATE_PREDICATES}
-    # THE BUCKETS PARTITION THE SEGMENTS. A residual is a defect, not a
-    # measurement — the same discipline as the regret decomposition's.
+
+    # THE RESIDUAL CHECK COULD NOT FIRE ON ANY DATA, AND THAT IS WORSE THAN NOT
+    # HAVING IT (RR). `states` is only ever assigned one of the eight literals that
+    # `counts` sums over, so `sum(counts) == len(states) == len(by_segment)` holds
+    # BY CONSTRUCTION. Verified zero on well-formed input and on all three
+    # malformed bundles above — a check that cannot fail on data is documentation
+    # wearing an assertion's clothes, and it was the thing standing where a real
+    # guard should have been while all three defects above passed silently.
+    #
+    # It is kept as an INVARIANT (it should hold, and a code change that breaks it
+    # is a bug) but it is no longer the partition guard.
     residual = len(by_segment) - sum(counts.values())
     if residual:
-        raise ValueError(
-            f"the split does not partition: {len(by_segment)} segments, "
-            f"{sum(counts.values())} classified, residual {residual}"
+        raise AssertionError(
+            f"internal invariant broken: {len(by_segment)} segments, "
+            f"{sum(counts.values())} classified, residual {residual}. This cannot "
+            f"be caused by bundle data — every state is one of the eight literals "
+            f"counts sums over — so it means the classifier and STATE_PREDICATES "
+            f"have diverged"
         )
+
+    # THE GUARD THAT ACTUALLY CHECKS THE DATA (RR's replacement): every segment
+    # task the bundle says was ASSIGNED must appear in the segment index. If it
+    # does not, the index and the event stream disagree about which tasks are
+    # segments — a real, silent index/event divergence that the residual could
+    # never have caught, and which would put the DV's denominator and its numerator
+    # on different populations.
+    indexed = set(by_segment.values())
+    orphans = sorted(assigned - indexed)
+    if orphans:
+        raise ValueError(
+            f"{len(orphans)} task(s) logged as assigned segment tasks are absent "
+            f"from the segment index: {orphans[:5]}. The index and the event "
+            f"stream disagree about which tasks are segments, so the split's "
+            f"denominator and the assignment evidence describe different "
+            f"populations"
+        )
+
+    # A QUANTITY WHOSE PREDICATE DOES NOT HOLD FOR A POPULATION REFUSES TO BE
+    # INTERPRETED FOR IT, rather than the partition being rebuilt around the gap.
+    #
+    # `executed_but_unparseable` is predicated on "the DELIVERABLE yielded no rwa
+    # value" — a claim about the WORKER. With no parsing pass at all (a machinery
+    # run: zero model calls, so no deliverables exist) the COUNT is right and the
+    # SENTENCE does not hold. The eight predicates and the partition are untouched;
+    # what changes is that the bucket declines to be read for this bundle.
+    #
+    # CARRIED IN THE RECORD, NOT ONLY IN A PRINTED BANNER. A banner is dropped by
+    # the first summariser that reformats the output, and every consumer of this
+    # split reads `counts` — so the non-interpretability travels with the data
+    # structure the numbers travel in.
+    parsing_performed = bool(detail)
+    uninterpretable = [] if parsing_performed else ["executed_but_unparseable"]
 
     return {
         "states": states,
@@ -197,6 +335,17 @@ def split(bundle: dict[str, Any]) -> dict[str, Any]:
         "predicates": dict(STATE_PREDICATES),
         "n_segments": len(by_segment),
         "residual": residual,
+        "parsing_performed": parsing_performed,
+        "uninterpretable_states": uninterpretable,
+        "uninterpretable_reason": (
+            None if parsing_performed else
+            "NO PARSING PASS RAN on this bundle (parse_detail is empty), so "
+            "`executed_but_unparseable` counts segments that executed and were "
+            "never parsed. Its predicate — 'the DELIVERABLE yielded no rwa "
+            "value' — is a claim about the WORKER and is NOT SUPPORTED here. The "
+            "count is correct; the state's sentence must not be quoted for this "
+            "bundle."
+        ),
         "comparator": "the segment denominator for this episode",
         "establishes": "where each segment ENDED UP, by cause",
         "does_not_establish": (

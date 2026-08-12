@@ -1,8 +1,22 @@
 # Step-4 audit — the inversion, the nA question, and what the size-3 ceiling actually is (RR)
 
+<!-- citation-check: superseded -->
+
+_**Superseded.** `step4_audit.py` was never committed — the figures came from inline invocations that were not saved, which is why this file's `n=30` could not be reconstructed and was 7 per group. Superseded by `override_path_audit_RR.md` and `matched_mix_check_RR.md`._
+
 Four things asked of me: verify RE's theorem about my carrier split, settle whether
 `nA=1` is a fact about the generator or about six classes, and attack LS's H1/H2 for
-the inversion. All offline. Script: `step4_audit.py`.
+the inversion. All offline.
+
+> **PROVENANCE CORRECTION (added later, RR).** This file originally cited a script
+> `step4_audit.py`. **No such file was ever committed** — the figures below came from
+> inline one-off invocations that were not saved, which is why the `n=30` in the H2 and
+> tie-break tables could not be reconstructed and turned out to be 7 per group. The
+> committed scripts for this phase are the other `.py` files in this directory; the
+> theorem check and the nA/mix figures here are superseded by
+> `override_path_audit_RR.md` and `matched_mix_check_RR.md`. **A record naming a script
+> that does not exist is the provenance rule broken in the file that applies it to
+> others.**
 
 **Headline: the inversion is not a property of the lattice — it is a property of the
 tie-break. And under the most favourable tie-break the size-3 ceiling is EXACTLY ZERO

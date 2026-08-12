@@ -178,7 +178,13 @@ def _tool_calls_in_history(history: Any) -> list[dict[str, Any]]:
 
 
 def tool_calls_by_task(bundle: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
-    """Tool calls per completed worker run, keyed by task name.
+    """Tool calls per completed worker run, keyed by TASK ID.
+
+    KEYED BY ID, NOT NAME. The event carries `task_id` at top level and always
+    has; the name is a MUTABLE display string that RefineTaskAction can change
+    mid-episode. Under the name key a renamed task yielded NO tool calls and
+    `readable=False`, which the fabrication detector reads as a worker that
+    produced nothing -- a fabrication signal manufactured by a rename.
 
     `history_readable` is tracked separately from "no calls": the absence-based
     detector must not read an unparseable history as evidence of in-head work.
@@ -187,19 +193,19 @@ def tool_calls_by_task(bundle: dict[str, Any]) -> dict[str, list[dict[str, Any]]
     for event in _events(bundle, "worker_run_completed"):
         payload = event.get("payload") or {}
         history = payload.get("history") if isinstance(payload, dict) else None
-        task = event.get("task_name") or f"seq_{event.get('sequence')}"
+        task = event.get("task_id") or f"seq_{event.get('sequence')}"
         out[task] = _tool_calls_in_history(history)
         out.setdefault("__readable__", [])  # type: ignore[arg-type]
     return {k: v for k, v in out.items() if k != "__readable__"}
 
 
 def history_readable_by_task(bundle: dict[str, Any]) -> dict[str, bool]:
-    """Whether each worker run's history could be parsed at all."""
+    """Whether each worker run's history could be parsed at all. Keyed by TASK ID."""
     out: dict[str, bool] = {}
     for event in _events(bundle, "worker_run_completed"):
         payload = event.get("payload") or {}
         history = payload.get("history") if isinstance(payload, dict) else None
-        task = event.get("task_name") or f"seq_{event.get('sequence')}"
+        task = event.get("task_id") or f"seq_{event.get('sequence')}"
         out[task] = isinstance(history, list)
     return out
 
@@ -386,6 +392,12 @@ def record_deferrals(bundle: dict[str, Any]) -> dict[str, Any]:
         "deferrals_by_task": by_task,
         "tasks_ever_deferred": sorted({d["task_name"] for d in deferrals
                                        if d["task_name"]}),
+        # THE JOIN KEY. `tasks_ever_deferred` is kept because it is already a
+        # published field and readers use it, but it holds DISPLAY NAMES, which
+        # RefineTaskAction can change mid-episode -- so a renamed task drops out of
+        # it silently and reads as never-deferred. Every join now uses this one.
+        "task_ids_ever_deferred": sorted({d["task_id"] for d in deferrals
+                                          if d["task_id"]}),
     }
 
 
@@ -465,14 +477,13 @@ def unstaffed_segment_count(bundle: dict[str, Any]) -> dict[str, Any]:
     """
     unstaffed = list(bundle.get("unstaffed_segments") or [])
     deferrals = record_deferrals(bundle)
-    deferred_names = set(deferrals["tasks_ever_deferred"])
+    # JOINED ON TASK ID, not on the display name. The name is MUTABLE --
+    # RefineTaskAction renames tasks -- so a rename silently drops the segment from
+    # this set and it reads as never-deferred. See _board_by_task_id in
+    # finance_scope_report for the demonstration and the provenance limitation.
+    deferred_names = set(deferrals["task_ids_ever_deferred"])
     index = bundle.get("index", {})
-    name_by_segment = {
-        seg: name for seg, name in (
-            (seg, f"Risk-weighted assets — {seg}")
-            for seg in index.get("segment_task_ids", {})
-        )
-    }
+    name_by_segment = dict(index.get("segment_task_ids", {}))
     unstaffed_after_deferral = [
         seg for seg in unstaffed if name_by_segment.get(seg) in deferred_names
     ]

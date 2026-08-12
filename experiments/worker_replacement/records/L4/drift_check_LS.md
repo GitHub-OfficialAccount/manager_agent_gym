@@ -1,5 +1,9 @@
 # L4 — DRIFT CHECK against STUDY1_FOUNDATION.md (LS)
 
+<!-- citation-check: superseded -->
+
+_`check_announcement.py` and `check_variance.py` were deleted in the 2026-08-08 cleanup; named below as the historical record of where the pre-revamp DV lived._
+
 **Standing checks for this step.** *Production test:* n/a — L4 is analysis, nothing is built.
 *No drift:* L4 IS the drift check. *Ambiguity:* none; the four sub-questions are specified.
 

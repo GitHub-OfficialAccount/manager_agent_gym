@@ -55,6 +55,15 @@
     },
     "n_deferrals": 10,
     "record": "deferrals",
+    "task_ids_ever_deferred": [
+      "2e987909-bba8-44eb-9273-90d6aeefd946",
+      "a042e141-ec15-41e4-96ae-44e3c1d039a8",
+      "a086829e-e1fa-420f-8d18-4635f2b22e06",
+      "afba8aac-8a22-4f87-b74c-8db4f84a8052",
+      "b516031d-9615-4b29-9e37-80c5a8794573",
+      "b66adc53-3efd-441a-ba08-71d5973689b9",
+      "d36286c7-0876-41f5-845b-aeea086de47c"
+    ],
     "tasks_ever_deferred": [
       "Exposure data preparation",
       "Risk-weighted assets \u2014 seg_02",

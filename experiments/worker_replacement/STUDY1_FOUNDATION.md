@@ -192,7 +192,10 @@ already in `_audit_total`), and **successor-reachable** (see gate). [§92, §98,
   denominators; constant n makes shares comparable; any future size-changing variant invalidates
   cross-variant comparison until re-derived. [§116]
   **★ AMENDED 2026-08-08 (L7). The pre-revamp `rerouted_share` is SUPERSEDED, not restored.** It
-  was COMPLETION-DERIVED (`check_announcement.py:168–191`), so work assigned to the swap target
+  <!-- citation-check: superseded -->
+  was COMPLETION-DERIVED (`check_announcement.py:168–191` — **that module was DELETED in the
+  2026-08-08 cleanup, so this amendment's evidence is no longer inspectable at source; the
+  finding survives in `records/L7/rerouted_share_definition_v1.md`**) <!-- citation-check: superseded -->, so work assigned to the swap target
   and never executed left BOTH numerator and denominator — biasing the share UPWARD exactly in
   the capacity-refusal regime, the same defect as the `allocation`-from-completions bug that cost
   four retracted claims. **The DV is now defined over ASSIGNMENTS**, with: an explicit denominator

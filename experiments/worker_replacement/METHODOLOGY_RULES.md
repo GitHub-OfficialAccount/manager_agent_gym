@@ -351,6 +351,18 @@ the instrument, which is the thing that differed every time.
 This is the §E provenance rule applied to comparisons rather than to record fields, and it was
 written about fields while the identical failure was live in the comparators for the whole phase.
 
+**"Construction" is not only the code path — a fourth instance had an unnamed SHAPE (LS).** *"Ten
+rows for nine segments"* is a COUNT, and it is consistent with two different defects: a
+non-segment task sharing the name prefix (segment rows still distinguishable) or two rows for one
+segment (the key genuinely ambiguous). **Only the second makes name-derived figures wrong, and
+only the first was real.** The count named the population; the shape that produced it went
+unnamed, and a consequence was pre-specified against the reading that turned out false.
+
+So: **name whichever construction the claim actually turns on** — the path, the builder, the
+amplification state, or the shape of the thing counted. The test is not "did I say where it came
+from" but **"could two different constructions produce this same number, with different
+consequences?"** If yes, the number does not identify its own claim.
+
 ## C. Claim rules — what you may write
 
 ### P4. Write access claims as rendering or as existence, never in the ambiguous form.
@@ -631,6 +643,74 @@ collection must never render as an ordinary verdict. `all([])` is `True`, `any([
 and both are lies about a measurement that did not happen. **Either raise, or print the
 denominator.**
 
+### A control reports its own NEGATIVE case, or its pass is vacuous.
+
+_Origin: three green signals in one day, each reporting a pass while the thing it existed to catch
+was untouched. RE's L2a acceptance — four named blockers, four controls that all fired on a
+PRE-EXISTING guard before reaching any new check, which read as four clean passes. The citation
+checker's "live unresolved 0" — true when run, false minutes later, and its positive control
+exercised the RESOLVER rather than the report. And L2a blocker B2, still silent, with the
+acceptance passing because its fixture could not reach the branch._
+
+**Every rule in this file fires on a suspicious result** — an unexplained zero, a null that agrees
+with you, matching digits, a defaulted absence. **None of them fire on a pass, and a pass is the
+signal nobody re-derives.**
+
+So: **a control states the outcome of its own negative case.** Not "the check passed" but "the check
+FAILED on the input it exists to reject, and passed on the real one." A control that passes both is
+broken, and today that is indistinguishable from a control that works.
+
+Two forms, and the second is the one the first misses:
+
+- **Per blocker (LS).** An acceptance closing NAMED blockers maps each blocker to the control that
+  fires for it, and reports any blocker with no firing control as **UNCOVERED rather than passing**.
+  This catches one control standing in for four claims, and a blocker whose control cannot reach it.
+- **Per control, and this is the general case.** The positive control must traverse **the same path
+  as the reported verdict, end to end** — not a component of it. The citation checker's control
+  proved the *resolver* could flag an unresolvable name; nobody had shown the *report* could come
+  back non-zero. Those are different claims and only the second is what the verdict asserts.
+
+**The cheap test, when a report says a named thing is closed: break that thing deliberately and
+confirm the report notices.** Two invented filenames in a markdown file; one field deleted from a
+payload. Seconds, and it caught three passes today that reading could not.
+
+**What this does NOT cover, stated so nobody mistakes the scope:** a green signal from a check whose
+negative case nobody wrote is still invisible, and re-running the named case by hand remains the
+only backstop. That is a habit, not a standard, and this rule narrows the gap rather than closing
+it.
+
+### Before building on a number you did not produce, state its construction. If you cannot, you are quoting it, not using it.
+
+_Origin: three instances of one number crossing between agents and being built on unchecked. RE
+adopting RR's "nA=0 is identical to the current template" (a comparison without its comparator).
+LS adopting RR's 41/19 split (a MEAN reported, a DISTRIBUTION assumed). And RR building on RE's
+"ten rows for nine segments" — a COUNT consistent with two defects of different consequence —
+before asking which shape it was, after which RE propagated RR's escalation into a docstring._
+
+**This is the comparator-path rule with the arrow reversed.** That rule binds the PRODUCER: a
+comparator names its construction path. Nothing binds the RECIPIENT, and a number arrives looking
+complete — it has a value, a unit, and a decimal point, and none of those reveal that the
+construction is missing.
+
+The failing move is always the same: **a figure is carried one step further than the thing that
+justifies it.** `nA=0` was right about a different comparator; `0.683` was right as a mean; ten-for-nine
+was right as a count. **Each was true, and each was used for a claim it did not license.**
+
+So, on receiving a number you intend to build on: **say what produced it.** The path, the builder,
+the population, the shape of the thing counted. **If you cannot say it, you may report the number
+as someone else's and stop there — but you may not draw a consequence from it.** Naming a
+consequence makes the antecedent feel established (LS), so a conditional consequence is not a
+substitute for the check.
+
+**The mitigation that actually worked, twice, was neither care nor vigilance: it was a QUESTION —
+"which row is the tenth?", "is that a mean or a distribution?" A question terminates; vigilance
+does not.**
+
+**Not one-directional, and the record should not read as if it were.** The third instance contains
+an unchecked adoption in each direction within two steps — RR built on RE's count before verifying
+its shape, and RE then built on RR's escalation before verifying it had survived. Whoever happens
+to run the measurements will appear to be the source; the defect is in the handoff, not in a person.
+
 ## H. Failure classes, indexed by signature
 
 Recognise these by shape, before you know what is wrong.
@@ -662,7 +742,14 @@ Recognise these by shape, before you know what is wrong.
 | two measurements agreeing to the last digit | one computation reached twice | B-differ-test |
 | "same templates, same seeds" as a specification | the instrument went unnamed | E-comparator-path |
 | a comparison whose two sides came from different builders | comparator construction unnamed | E-comparator-path |
+| a count consistent with two defects of different consequence | shape unnamed, not just path | E-comparator-path |
+| a number quoted from a peer and built on | construction not carried with it | E-quoting-vs-using |
+| a consequence pre-specified on an unverified antecedent | 'if' that reads as 'then' | E-quoting-vs-using |
 | an unqualified "best case" on an `ideal − actual` quantity | superlative inverted | E-names-whose |
+| an acceptance reporting a pass on named blockers | no mapping from blocker to firing control | G-control-negative-case |
+| one control standing in for several named blockers | coverage asserted, not shown | G-control-negative-case |
+| a positive control exercising a COMPONENT of the checked path | the verdict's own path untested | G-control-negative-case |
+| a check reporting zero that has never reported nonzero | pass is vacuous | G-control-negative-case |
 
 ---
 

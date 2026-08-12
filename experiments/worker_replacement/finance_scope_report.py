@@ -194,14 +194,14 @@ def coverage_misrouting(bundles: dict[tuple[str, int], dict]) -> dict[str, Any]:
         roster = set(_fc.active_roster(instance, _fc.CELLS[cell]))
         by_id = {w["worker_id"]: w for w in instance["workers"]}
         active = [by_id[r] for r in roster if r in by_id]
-        board = {r["task_name"]: r
-                 for r in (bundle.get("task_board_final") or [])}
+        board = _board_by_task_id(bundle)
+        segment_tasks = (bundle.get("index") or {}).get("segment_task_ids") or {}
         allocation = bundle.get("allocation", {})
         for segment in instance["segments"]:
             if not segment["irb_approved"]:
                 continue
             sid = segment["segment_id"]
-            row = board.get(f"Risk-weighted assets — {sid}") or {}
+            row = board.get(segment_tasks.get(sid)) or {}
             assignee = row.get("assigned_agent_id")
             if not assignee or assignee not in by_id:
                 continue
@@ -299,6 +299,41 @@ def coverage_misrouting(bundles: dict[tuple[str, int], dict]) -> dict[str, Any]:
     }
 
 
+def _board_by_task_id(bundle: dict[str, Any]) -> dict[str, Any]:
+    """The task board keyed by TASK ID, never by display name.
+
+    THE JOIN THIS REPLACES KEYED ON `f"Risk-weighted assets — {segment_id}"`, a
+    MUTABLE DISPLAY STRING. `RefineTaskAction` renames tasks, so a rename breaks
+    the join and the segment silently reads as UNASSIGNED — no row found, no
+    assignee, no error, and `never_assigned` is the exact false claim L2a exists
+    to prevent. Measured: renaming one segment task takes the name join from 9
+    hits to 8 while the id join stays at 9.
+
+    The board already carries `task_id`, so the name was never the only key
+    available.
+
+    A CLAIM THAT WAS HERE AND IS RETRACTED. An earlier version said the prefix is
+    not unique, so "a collision does not even need a rename". RR supplied that
+    escalation and then withdrew it, and I had propagated it without checking.
+    **Every segment's exact name appears exactly once across all 18 bundles, so
+    under an exact-name key there is no collision.**
+
+    The accurate form reaches the same conclusion by a different route: a PREFIX
+    predicate over the name captures tasks that are not segments — one bundle has
+    ten prefix-matching rows for nine segments, the tenth being
+    `"Risk-weighted assets — seg_08 standardised recalculation"`, a MANAGER
+    REMEDIATION. Under an exact-name key that row does not collide; it MISSES. So
+    the name is safe against collision and unsafe against mutation, which is
+    exactly the failure a rename produces.
+
+    NOT RECOVERABLE FROM THE 18 EXISTING BUNDLES: `task_refined` is emitted inside
+    `if self.new_description:` while the name mutates outside it, so a rename that
+    changes no description leaves no trace at all. Any figure derived by name from
+    those bundles carries that as a stated limitation.
+    """
+    return {r["task_id"]: r for r in (bundle.get("task_board_final") or [])}
+
+
 def segment_states(bundle: dict[str, Any]) -> dict[str, str]:
     """Four states per segment, reconstructed from the ASSIGNMENT record.
 
@@ -323,13 +358,13 @@ def segment_states(bundle: dict[str, Any]) -> dict[str, str]:
         return dict(bundle["segment_states"])
 
     index = bundle.get("index", {}).get("segment_task_ids", {})
-    board = {r["task_name"]: r for r in (bundle.get("task_board_final") or [])}
+    board = _board_by_task_id(bundle)
     detail = bundle.get("parse_detail") or {}
     allocation = bundle.get("allocation", {})
 
     out: dict[str, str] = {}
-    for segment_id in index:
-        row = board.get(f"Risk-weighted assets — {segment_id}") or {}
+    for segment_id, task_id in index.items():
+        row = board.get(task_id) or {}
         assignee = row.get("assigned_agent_id")
         executed = (allocation.get(segment_id)
                     not in (None, "__unstaffed__"))

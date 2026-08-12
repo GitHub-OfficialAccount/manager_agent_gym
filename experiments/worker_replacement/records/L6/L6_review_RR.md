@@ -1,5 +1,10 @@
 # L6 — review (RR)
 
+> **STATUS (added later): VERDICT LIFTED — L6 PASSES.** Both blockers were fixed and verified
+> against the code; see the RESOLUTION section at the end of this file. The verdict below is the
+> ORIGINAL one and is retained unrewritten, but a reader stopping at this header would get the
+> stale answer — which is why this pointer is here rather than an edit to the text.
+
 **Verdict: the design is right and the two things LS asked me to attack both break. TWO BLOCKERS,
 both cheap to fix, one of them live rather than hypothetical. Two limitations.**
 

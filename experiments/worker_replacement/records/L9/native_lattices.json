@@ -3,8 +3,11 @@
   "caveats": [
     "a CEILING under exact optimal play; not what any manager realises",
     "no sigma anywhere; nothing here is an episodes/arm budget",
-    "the interval is the range believed-indifference leaves open, NOT error bars on a point estimate",
-    "an empty sample is reported as null, never as zero"
+    "THE INTERVAL IS NOT AN ERROR BAR -- see interval_caveat, which must travel with it. Its FLOOR is the manager tie-breaking FAVOURABLY: it attains the oracle and the channel has nothing left to be worth. Floors are zero for BOTH candidates, so the intervals overlap completely at the bottom and cannot support a dominance claim.",
+    "no figure is quotable without its `segs`: the same lattice prices differently under different forced mixes",
+    "an empty sample is reported as null, never as zero",
+    "OPEN ITEM, carried unexplained rather than closed with a mechanism that does not hold: RR's six-class card-NAMES zero at nA=2. My `nA=2 < cap=3` account is REFUTED -- `partial` is also card-NAMES and prices 1.252% at nA=2 (segs=2), so the threshold alone cannot produce that zero.",
+    "if partial overlap is adopted it ships UNAMPLIFIED: forcing costs it TWICE, draining the lied class AND consuming the free slot the lie needs to be misdirected into"
   ],
   "declares": {
     "baseline": "stale card",
@@ -12,6 +15,7 @@
     "path": "single native generator path; lattice is a first-class parameter and the shipped template is one value of it (D85)",
     "tie_break": "expectation over the believed-optimal set (D19)"
   },
+  "interval_caveat": "READING THE INTERVAL \u2014 it is NOT an error bar. It is the range over an UNMODELLED\nDECISION: which believed-optimal allocation an indifferent manager happens to pick.\n\n  * THE FLOOR IS THE MANAGER TIE-BREAKING FAVOURABLY \u2014 it attains the oracle and\n    the channel has nothing left to be worth. The manager does not \"get nothing\"\n    at the floor; it gets EVERYTHING, and WE measure nothing.\n  * The floor is a LOGICAL possibility, not a probable one. Reaching it needs the\n    tie-break to correlate with the truth, and under the card there is nothing for\n    it to correlate with.\n  * THE FLOORS ARE ZERO FOR BOTH CANDIDATES, so the intervals overlap completely at\n    the bottom and CANNOT SUPPORT A DOMINANCE CLAIM. The comparison rests on the\n    EXPECTATIONS, not on the intervals.\n  * The expectation is principled for an INDIFFERENT manager. A real LLM manager is\n    not indifferent, so it is the right centre for a ceiling and not a prediction.\n\nAnd no figure here is quotable without its `segs`: the same lattice prices\ndifferently under different forced mixes, which is what made two correct\nmeasurements look like a discrepancy.",
   "lattices": {
     "current": [
       "ae",
@@ -341,5 +345,6 @@
     57,
     58,
     59
-  ]
+  ],
+  "two_claims": "TWO CLAIMS, AND THEY MUST NOT BE MERGED:\n\n  current vs partial   COMPLEMENTARY REGIONS \u2014 the DIAGNOSIS. The shipped design\n                       was not weak; it was measuring in a region of the portfolio\n                       space that realistic books are not in. `current` is alive\n                       only at nA >= cap, `partial` only below it.\n\n  partial vs disjoint  BOTH ALIVE AT nA=1 \u2014 the DECISION, and it IS ranked.\n                       2.26% against 5.27% at segs=1, with the realism argument\n                       running the other way: disjoint models a DIFFERENT\n                       SPECIALIST arriving, not an upgraded model.\n\nThe first strengthens the case for CHANGING the lattice. It does not bear on WHICH\ncandidate to change to. `disjoint` is flat in nA and occupies no complementary\nregion at all."
 }

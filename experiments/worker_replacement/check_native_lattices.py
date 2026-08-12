@@ -55,6 +55,54 @@ SEEDS = range(60)
 LATTICES = ("current", "disjoint", "partial")
 MIXES = (1, 2, 3, 4, 5)
 
+# TWO CLAIMS, KEPT APART. The complementary-regions result is a DIAGNOSIS of the
+# shipped design and NOT a description of the decision, and merging them would tell
+# a reader there is no choice to make when there is one.
+#
+# `disjoint` is FLAT in nA — it has no shared class for the amplifier to act on, so
+# it is alive across the WHOLE mix space rather than in a region complementary to
+# anything. Only `current` and `partial` are complementary.
+TWO_CLAIMS = """TWO CLAIMS, AND THEY MUST NOT BE MERGED:
+
+  current vs partial   COMPLEMENTARY REGIONS — the DIAGNOSIS. The shipped design
+                       was not weak; it was measuring in a region of the portfolio
+                       space that realistic books are not in. `current` is alive
+                       only at nA >= cap, `partial` only below it.
+
+  partial vs disjoint  BOTH ALIVE AT nA=1 — the DECISION, and it IS ranked.
+                       2.26% against 5.27% at segs=1, with the realism argument
+                       running the other way: disjoint models a DIFFERENT
+                       SPECIALIST arriving, not an upgraded model.
+
+The first strengthens the case for CHANGING the lattice. It does not bear on WHICH
+candidate to change to. `disjoint` is flat in nA and occupies no complementary
+region at all."""
+
+# THE INTERVAL CAVEAT, and it travels with the interval EVERYWHERE it appears.
+# The wording was inverted TWICE before it was caught, in both directions, so the
+# corrected form is stored once and quoted rather than re-phrased.
+#
+# GENERAL RULE THIS PRODUCED: every "best" and "worst" names WHOSE, because THE
+# MANAGER'S BEST IS THE EXPERIMENT'S WORST.
+INTERVAL_CAVEAT = """READING THE INTERVAL — it is NOT an error bar. It is the range over an UNMODELLED
+DECISION: which believed-optimal allocation an indifferent manager happens to pick.
+
+  * THE FLOOR IS THE MANAGER TIE-BREAKING FAVOURABLY — it attains the oracle and
+    the channel has nothing left to be worth. The manager does not "get nothing"
+    at the floor; it gets EVERYTHING, and WE measure nothing.
+  * The floor is a LOGICAL possibility, not a probable one. Reaching it needs the
+    tie-break to correlate with the truth, and under the card there is nothing for
+    it to correlate with.
+  * THE FLOORS ARE ZERO FOR BOTH CANDIDATES, so the intervals overlap completely at
+    the bottom and CANNOT SUPPORT A DOMINANCE CLAIM. The comparison rests on the
+    EXPECTATIONS, not on the intervals.
+  * The expectation is principled for an INDIFFERENT manager. A real LLM manager is
+    not indifferent, so it is the right centre for a ceiling and not a prediction.
+
+And no figure here is quotable without its `segs`: the same lattice prices
+differently under different forced mixes, which is what made two correct
+measurements look like a discrepancy."""
+
 
 def price(lattice: str, segments: int) -> dict[str, Any]:
     shares, intervals, achieved, failures = [], [], defaultdict(int), 0
@@ -83,9 +131,10 @@ def price(lattice: str, segments: int) -> dict[str, Any]:
         "median_share": st.median(shares),
         "nonzero": sum(1 for s in shares if s > 1e-9),
         "n_a_achieved": dict(sorted(achieved.items())),
-        # The interval is the OBJECT, not error bars on a point: believed
-        # indifference is intrinsic to the lattice, and the tie-break is a
-        # modelling choice about where in it a manager lands.
+        # THE INTERVAL IS NOT AN ERROR BAR. It is the range over an UNMODELLED
+        # DECISION -- which believed-optimal allocation an indifferent manager
+        # happens to pick -- and it must never be printed as if it were sampling
+        # error. See `INTERVAL_CAVEAT`, which travels with it everywhere.
         "interval": [st.mean(lo for lo, _ in intervals),
                      st.mean(hi for _, hi in intervals)],
     }
@@ -136,10 +185,9 @@ measurable manipulation and none.
 
 WHAT THIS DOES NOT ESTABLISH. A CEILING under exact optimal play — it bounds what a
 perfect user of the channel could gain and says nothing about what any manager
-realises. No sigma appears, so no figure here is an episodes/arm budget. And the
-interval is not error: it is the range the believed-indifference leaves open, with
-the tie-break deciding where in it a manager lands.
+realises. No sigma appears, so no figure here is an episodes/arm budget.
 """)
+    print(INTERVAL_CAVEAT)
 
     # --- WHY THE TWO LATTICES RESPOND OPPOSITELY: CAPACITY SATURATION ----------
     # Both turn at nA = cap, in opposite directions, and one mechanism explains
@@ -190,6 +238,7 @@ the tie-break deciding where in it a manager lands.
     print(f"   partial's first ZERO    at nA = {partial_turns} against cap [3, 4, 5]")
     print(f"   current's first NONZERO at nA = {current_turns} against cap [3, 4, 5]")
     print("   -> both track cap exactly, in opposite directions. ONE mechanism.\n")
+    print(TWO_CLAIMS)
 
     out = HERE / "records" / "L9"
     out.mkdir(parents=True, exist_ok=True)
@@ -214,12 +263,27 @@ the tie-break deciding where in it a manager lands.
                       "lies about a COVERED class, so misrouting costs immediately "
                       "but needs a FREE SLOT to be misrouted into (channel at "
                       "nA < cap)."),
+        "interval_caveat": INTERVAL_CAVEAT,
+        "two_claims": TWO_CLAIMS,
         "caveats": [
             "a CEILING under exact optimal play; not what any manager realises",
             "no sigma anywhere; nothing here is an episodes/arm budget",
-            "the interval is the range believed-indifference leaves open, NOT "
-            "error bars on a point estimate",
+            "THE INTERVAL IS NOT AN ERROR BAR -- see interval_caveat, which must "
+            "travel with it. Its FLOOR is the manager tie-breaking FAVOURABLY: it "
+            "attains the oracle and the channel has nothing left to be worth. "
+            "Floors are zero for BOTH candidates, so the intervals overlap "
+            "completely at the bottom and cannot support a dominance claim.",
+            "no figure is quotable without its `segs`: the same lattice prices "
+            "differently under different forced mixes",
             "an empty sample is reported as null, never as zero",
+            "OPEN ITEM, carried unexplained rather than closed with a mechanism "
+            "that does not hold: RR's six-class card-NAMES zero at nA=2. My "
+            "`nA=2 < cap=3` account is REFUTED -- `partial` is also card-NAMES and "
+            "prices 1.252% at nA=2 (segs=2), so the threshold alone cannot produce "
+            "that zero.",
+            "if partial overlap is adopted it ships UNAMPLIFIED: forcing costs it "
+            "TWICE, draining the lied class AND consuming the free slot the lie "
+            "needs to be misdirected into",
         ],
     }, indent=2, sort_keys=True) + "\n")
     print(f"written: {out / 'native_lattices.json'}")

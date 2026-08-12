@@ -1,5 +1,9 @@
 # L4 — review of `drift_check_LS.md` (RR)
 
+<!-- citation-check: superseded -->
+
+_`check_announcement.py` and `check_variance.py` were deleted in the 2026-08-08 cleanup; named below as the historical record of where the pre-revamp DV lived._
+
 **Verdict: the drift check is sound and its two new findings are real. D1's headline evidence was
 false; the corrected version is a WORSE finding, not a milder one. D1's causal story does not
 survive its own test and is retracted. D2 is premature rather than drift, and then collapses into

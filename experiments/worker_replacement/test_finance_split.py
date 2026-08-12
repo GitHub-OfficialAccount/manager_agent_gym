@@ -187,6 +187,69 @@ def main() -> int:
         if not fired:
             failures.append(f"CONTROL FAILED — {label}")
 
+    # ------------------------------------------------------------------ 7 ---
+    # EACH NAMED BLOCKER MAPPED TO THE CONTROL THAT FIRES FOR IT.
+    #
+    # Every rule this phase produced fires on a SUSPICIOUS result — an unexplained
+    # zero, a null that agrees, matching digits. NONE fires on a PASS. So an
+    # acceptance closing named blockers reports coverage per blocker, and a blocker
+    # with no firing control is UNCOVERED rather than passing.
+    #
+    # This exists because it happened twice. Four controls once stood in for four
+    # blockers while all four fired on a DIFFERENT, pre-existing guard. And B2's
+    # control was never wired at all: the only `parse_detail` this acceptance built
+    # was EMPTY, so the partial-gap branch was unreachable and would have passed
+    # indefinitely. A module-level PASS is not evidence about any particular
+    # blocker.
+    print("\n7. NAMED BLOCKERS, each mapped to the control that fires for it")
+
+    def _raises(build) -> tuple[bool, str]:
+        try:
+            build()
+        except ValueError as exc:
+            return True, type(exc).__name__ + ": " + str(exc)[:60]
+        except Exception as exc:                      # noqa: BLE001
+            return False, f"WRONG EXCEPTION {type(exc).__name__}"
+        return False, "did not raise"
+
+    def _executed(detail):
+        return _bundle([_assigned("t_x")], {"seg_x": "t_x"},
+                       completions=[{"task_id": "t_x", "timestep": 2}],
+                       detail=detail)
+
+    def _classifies(detail, expect_uninterpretable: bool):
+        result = fs.split(_executed(detail))
+        flagged = bool(result["uninterpretable_states"])
+        return flagged == expect_uninterpretable, (
+            f"uninterpretable_states={result['uninterpretable_states']}")
+
+    blockers: list[tuple[str, tuple[bool, str]]] = [
+        ("B1a  task_assigned missing `task_class`",
+         _raises(lambda: fs.split(_bundle(
+             [{"event_type": "task_assigned", "timestep": 0,
+               "payload": {"task_id": "t_a", "applied": True}}],
+             {"seg_a": "t_a"})))),
+        ("B1b  task_assigned missing `applied`",
+         _raises(lambda: fs.split(_bundle(
+             [{"event_type": "task_assigned", "timestep": 0,
+               "payload": {"task_id": "t_a", "task_class": "segment"}}],
+             {"seg_a": "t_a"})))),
+        ("B2a  executed segment absent from a PARTIAL parse_detail",
+         _raises(lambda: fs.split(_executed({"seg_other": {"rwa": 9.0}})))),
+        ("B2b  executed segment with NO parsing pass -> flagged uninterpretable",
+         _classifies({}, True)),
+        ("B2c  parsing ran -> NOT flagged uninterpretable (other direction)",
+         _classifies({"seg_x": {"rwa": 9.0}}, False)),
+        ("B3   assigned segment task absent from the index",
+         _raises(lambda: fs.split(_bundle([_assigned("t_a")], {"seg_b": "t_b"})))),
+    ]
+    for label, (covered, detail_msg) in blockers:
+        mark = "ok" if covered else "UNCOVERED"
+        print(f"   [{mark}] {label}")
+        print(f"          {detail_msg}")
+        if not covered:
+            failures.append(f"BLOCKER UNCOVERED — {label}: {detail_msg}")
+
     out = HERE / "records" / "L2a"
     out.mkdir(parents=True, exist_ok=True)
     (out / "split_acceptance.json").write_text(json.dumps({
@@ -195,6 +258,10 @@ def main() -> int:
                                     "residual": result["residual"]},
         "predicates": fs.STATE_PREDICATES,
         "controls": [{"control": lab, "fired": ok} for lab, ok in controls],
+        # Per-blocker coverage. A blocker with no firing control is UNCOVERED,
+        # which is a different report from "the acceptance passed".
+        "blocker_coverage": [{"blocker": lab, "covered": ok, "evidence": msg}
+                             for lab, (ok, msg) in blockers],
         "failures": failures,
     }, indent=2, sort_keys=True) + "\n")
 
