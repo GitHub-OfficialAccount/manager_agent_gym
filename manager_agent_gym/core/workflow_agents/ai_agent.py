@@ -222,7 +222,6 @@ from ..workflow_agents.interface import AgentInterface
 
 from ..common.llm_interface import build_litellm_model_id
 from ..common.logging import logger
-from ..common.run_trace import record_run_event
 
 if TYPE_CHECKING:
     pass
@@ -252,19 +251,6 @@ EMPTY_OUTPUT_RECOVERY_PROMPT = (
 
 # Key aliases models drift to when the schema is only prompt-specified.
 _RESOURCE_LIST_KEYS = ("resources", "generated_resources", "output_resources")
-
-
-def _run_trace_payload(result: RunResult) -> dict[str, object]:
-    """Retain the SDK-visible model/tool exchange before RunResult is discarded."""
-    to_input_list = getattr(result, "to_input_list", None)
-    last_agent = getattr(result, "last_agent", None)
-    return {
-        "history": to_input_list() if callable(to_input_list) else [],
-        "raw_responses": getattr(result, "raw_responses", []),
-        "final_output": result.final_output,
-        "last_response_id": getattr(result, "last_response_id", None),
-        "last_agent": getattr(last_agent, "name", None),
-    }
 
 
 def _parse_plain_text_output(text: str, task: Task) -> AITaskOutput:
@@ -442,18 +428,6 @@ class AIAgent(AgentInterface[AIAgentConfig]):
                 "task_id": str(task.id),
                 "task_name": task.name,
             }
-            record_run_event(
-                "worker_execution_started",
-                {
-                    "model": self.config.model_name,
-                    "system_prompt": self._effective_instructions,
-                    "task_prompt": task_prompt,
-                    "input_resources": resources or [],
-                    "tools": [tool.name for tool in self.tools],
-                    "max_turns": self.config.max_turns,
-                },
-                **trace_fields,
-            )
 
             # Execute using OpenAI Agent with DI context
             run_options = (
@@ -479,12 +453,6 @@ class AIAgent(AgentInterface[AIAgentConfig]):
                     f"did not contain it"
                 ) from exc
             run_results = [result]
-            record_run_event(
-                "worker_run_completed",
-                _run_trace_payload(result),
-                run_index=0,
-                **trace_fields,
-            )
 
             if (
                 self._plain_text_output
@@ -494,11 +462,6 @@ class AIAgent(AgentInterface[AIAgentConfig]):
                 logger.warning(
                     "Worker %s returned empty final output; requesting finalization once",
                     self.config.agent_id,
-                )
-                record_run_event(
-                    "worker_empty_output_recovery_started",
-                    {"prompt": EMPTY_OUTPUT_RECOVERY_PROMPT},
-                    **trace_fields,
                 )
                 recovery_input = result.to_input_list()
                 recovery_input.append({
@@ -519,13 +482,6 @@ class AIAgent(AgentInterface[AIAgentConfig]):
                     timeout=WORKER_RUN_BACKSTOP_S,
                 )
                 run_results.append(result)
-                record_run_event(
-                    "worker_run_completed",
-                    _run_trace_payload(result),
-                    run_index=1,
-                    recovery=True,
-                    **trace_fields,
-                )
                 if isinstance(result.final_output, str) and not result.final_output.strip():
                     raise ValueError("Model returned empty final output after recovery")
 
@@ -551,16 +507,6 @@ class AIAgent(AgentInterface[AIAgentConfig]):
                     )
                 )
 
-            record_run_event(
-                "worker_execution_completed",
-                {
-                    "reasoning": output.reasoning,
-                    "confidence": output.confidence,
-                    "execution_notes": output.execution_notes,
-                    "output_resources": output_resources,
-                },
-                **trace_fields,
-            )
 
             return create_task_result(
                 task_id=task.id,
@@ -577,18 +523,6 @@ class AIAgent(AgentInterface[AIAgentConfig]):
         except Exception as e:
             execution_time = time.time() - start_time
 
-            record_run_event(
-                "worker_execution_failed",
-                {
-                    "error_type": type(e).__name__,
-                    "error": str(e),
-                    "traceback": traceback.format_exc(),
-                },
-                actor_type="worker",
-                actor_id=self.config.agent_id,
-                task_id=str(task.id),
-                task_name=task.name,
-            )
 
             return create_task_result(
                 task_id=task.id,

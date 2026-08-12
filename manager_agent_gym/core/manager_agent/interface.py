@@ -237,32 +237,6 @@ class ManagerAgent(ABC):
                 else []
             )
 
-        # LOGGING RECORD 3: which messages actually entered the manager's RENDERED
-        # window. This is the only record that establishes the manager COULD have
-        # consumed a message. The window is `get_all_messages()[:message_window]`,
-        # so entry is a property of TRAFFIC VOLUME, not of the message: a
-        # correctly addressed, correctly delivered message can still never be
-        # rendered, and "addressed to the manager" is not the same claim.
-        try:
-            from ..common.run_trace import record_run_event
-
-            record_run_event(
-                "manager_message_window",
-                {
-                    "timestep": current_timestep,
-                    "message_window": policy.message_window,
-                    "n_messages_available": (
-                        len(communication_service.get_all_messages())
-                        if communication_service else len(workflow.messages)),
-                    "rendered_message_ids": [
-                        str(getattr(m, "message_id", "")) for m in recent_messages
-                    ],
-                },
-                actor_type="manager",
-            )
-        except Exception:
-            # Never let logging break an observation build.
-            pass
 
         # Compute timeline awareness fields if configured
         max_ts = self._max_timesteps
@@ -306,46 +280,6 @@ class ManagerAgent(ABC):
             agent_ids=list(workflow.agents.keys()),
             stakeholder_profile=stakeholder_profile,
         )
-        # LOGGING RECORD 5 (L1). Per-timestep evidence that the three load signals
-        # were in the observation the manager decided from. Recorded because the
-        # acceptance script proves the path CAN carry them and a bundle must prove
-        # that a PARTICULAR RUN did — the same distinction already drawn for the
-        # arrival announcement. What this records is the OBSERVATION's contents;
-        # that they are then rendered into the prompt is established separately by
-        # `experiments/worker_replacement/check_load_feedback.py`.
-        try:
-            from ..common.run_trace import record_run_event
-
-            record_run_event(
-                "manager_load_feedback",
-                {
-                    "timestep": current_timestep,
-                    "n_load_rows": len(agent_load),
-                    "load": [row.model_dump() for row in agent_load],
-                    "n_refusals": len(observation.assignment_refusals),
-                    "refusals": list(observation.assignment_refusals),
-                    # BOTH vocabularies. The raw one is what the scheduler
-                    # decides on; the board one is what the manager was shown, and
-                    # the difference between them — `refused` versus `ready` — is
-                    # the entire point of the repair. Recording only the raw states
-                    # would leave a bundle unable to show that the manager was told
-                    # about a refusal at all.
-                    "board_states": sorted(
-                        {task.board_state() for task in workflow.tasks.values()}
-                    ),
-                    "raw_task_states": sorted(
-                        {task.status.value for task in workflow.tasks.values()}
-                    ),
-                    "n_tasks_refused_on_board": sum(
-                        1 for task in workflow.tasks.values()
-                        if task.board_state().startswith("REFUSED")
-                    ),
-                },
-                actor_type="manager",
-            )
-        except Exception:
-            pass
-
         self.capture_decision_observation(observation)
         return observation
 

@@ -246,48 +246,6 @@ async def test_live_anthropic_returns_pydantic() -> None:
 
 
 @pytest.mark.asyncio
-async def test_serving_backend_recorded_in_run_event(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """Which backend answered is provenance and must reach the run trace."""
-    import importlib
-
-    llm_iface = importlib.import_module("manager_agent_gym.core.common.llm_interface")
-    run_trace = importlib.import_module("manager_agent_gym.core.common.run_trace")
-
-    mock_client = _MockAsyncOpenAI()
-
-    async def _create(**_: Any) -> _ToyModel:
-        # Stand in for the httpx response hook firing mid-request.
-        llm_iface._last_serving_backend.set(
-            {"provider": "CoreWeave", "served_model": "m", "generation_id": "gen-1"}
-        )
-        return _ToyModel(foo="bar")
-
-    mock_client.chat.completions.create = _create
-    monkeypatch.setattr(llm_iface, "_get_openai_client", lambda **kwargs: mock_client)
-
-    recorder = run_trace.RunTraceRecorder({})
-    with recorder.activate():
-        await llm_iface.generate_structured_response(
-            system_prompt="sys",
-            user_prompt="user",
-            response_type=_ToyModel,
-            seed=123,
-            model="openrouter/deepseek/deepseek-v4-flash",
-            temperature=0,
-        )
-
-    responses = [
-        event
-        for event in recorder.events
-        if event["event_type"] == "structured_llm_response"
-    ]
-    assert len(responses) == 1
-    assert responses[0]["payload"]["serving_backend"]["provider"] == "CoreWeave"
-
-
-@pytest.mark.asyncio
 async def test_serving_backend_capture_never_raises() -> None:
     """Attribution is best-effort: a malformed response must not fail a call."""
     import importlib

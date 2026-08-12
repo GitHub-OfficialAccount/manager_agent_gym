@@ -11,7 +11,6 @@ from .model_provider import (
     build_litellm_model_id,
     resolve_native_route,
 )
-from .run_trace import record_run_event
 
 __all__ = [
     "LLMInferenceTruncationError",
@@ -212,7 +211,6 @@ async def generate_structured_response(
         "max_completion_tokens": max_completion_tokens or None,
         "max_retries": max_retries,
     }
-    record_run_event("structured_llm_request", request_trace)
 
     _last_serving_backend.set(None)
     try:
@@ -235,28 +233,9 @@ async def generate_structured_response(
             max_retries=max_retries,
             **kwargs,
         )
-        record_run_event(
-            "structured_llm_response",
-            {
-                "model": model,
-                "response_type": response_type.__name__,
-                "parsed_response": result,
-                # Which backend actually answered. Provenance, not config:
-                # see CHANGED.md 2026-07-25.
-                "serving_backend": _last_serving_backend.get(),
-            },
-        )
         return result
 
     except Exception as e:
-        record_run_event(
-            "structured_llm_error",
-            {
-                **request_trace,
-                "error_type": type(e).__name__,
-                "error": str(e),
-            },
-        )
         error = LLMInferenceTruncationError(
             f"LLM request failed for {response_type.__name__}: {str(e)}",
             model=model,

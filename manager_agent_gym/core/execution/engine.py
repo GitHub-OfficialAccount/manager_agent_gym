@@ -18,7 +18,6 @@ from ...schemas.core.communication import Message, MessageType
 from .state_restorer import WorkflowStateRestorer
 
 from ..common.logging import logger
-from ..common.run_trace import record_run_event, trace_scope
 from asyncio import TaskGroup
 from ..workflow_agents.interface import StakeholderBase
 from ...schemas.config import OutputConfig
@@ -33,7 +32,6 @@ from ...schemas.execution.callbacks import TimestepEndContext
 from ...schemas.execution.observation_policy import ObservationPolicy
 from ...schemas.unified_results import ExecutionResult, create_timestep_result
 from ..workflow_agents.registry import AgentRegistry
-from ..common.run_trace import record_run_event
 from ..manager_agent.interface import ManagerAgent
 from ..workflow_agents.interface import AgentInterface
 from ..workflow_agents.tool_factory import ToolFactory
@@ -421,8 +419,7 @@ class WorkflowExecutionEngine:
         # the manager acted on". It corrupted the capacity view each move was
         # judged against, and with it the FORCED/DISCRETIONARY split that the
         # whole DV rests on.
-        with trace_scope(timestep=self.current_timestep):
-            return await self._execute_timestep_inner()
+        return await self._execute_timestep_inner()
 
     async def _execute_timestep_inner(self) -> ExecutionResult:
         if not self.manager_agent:
@@ -514,23 +511,6 @@ class WorkflowExecutionEngine:
             # and broke two engine-coordination tests.)
             if roster_lines:
                 announced = bool(observation is not None and observation.roster_changes)
-                record_run_event(
-                    "roster_arrival_announced",
-                    {
-                        "timestep": self.current_timestep,
-                        "applied_changes": roster_lines,
-                        "rendered_into_observation": announced,
-                        # STRONG vs WEAK form of the arrival evidence. Without this,
-                        # `rendered_into_observation: true` means two different
-                        # things -- the manager SAW the announcement before deciding,
-                        # or the engine carried it into a post-hoc observation after
-                        # the action was already chosen -- and post hoc nobody can
-                        # tell which. Any arm whose runs carry "engine_fallback" has
-                        # arrival proven weak-form only (HARNESS_SPEC_v2 §5).
-                        "observation_source": observation_source,
-                    },
-                    actor_type="engine",
-                )
                 if not announced:
                     raise RuntimeError(
                         f"roster change applied at timestep {self.current_timestep} "
@@ -887,59 +867,6 @@ class WorkflowExecutionEngine:
                     # missing -- a segment absent from the completions could be a
                     # deferral, a crash, or a task never assigned at all, and those
                     # are three different findings.
-                    record_run_event(
-                        "assignment_deferred",
-                        {
-                            "task_id": str(task.id),
-                            "task_name": task.name,
-                            "agent_id": task.assigned_agent_id,
-                            "timestep": self.current_timestep,
-                            "agent_current_task_count": len(agent.current_task_ids),
-                            "agent_max_concurrent": agent.max_concurrent_tasks,
-                            # `agent_available` REMOVED (L13). It was
-                            # `agent.is_available`, which is DECLARED True in two
-                            # places and WRITTEN NOWHERE in the repo -- every other
-                            # occurrence is a read. Measured: True on 653 of 653
-                            # deferrals in the prior corpus and on 10 of 10 in the
-                            # first bundle to carry codes. It never took the other
-                            # value and never could.
-                            #
-                            # That is worse than useless. The elimination that
-                            # attributed 335 refusals to the segment allotment
-                            # rested on "available=True rules out unavailable" --
-                            # a step that ruled out nothing, over a field whose
-                            # constancy nobody checked for weeks. A field that
-                            # cannot discriminate does not sit inertly in a
-                            # payload; it lends its name to an inference.
-                            #
-                            # Nothing reads it but the analysis that proved it
-                            # decorative, and `refusal_codes` now carries cause
-                            # directly, so continuity buys nothing: no old bundle
-                            # can be classified by cause regardless.
-                            # THE REASON, COMPUTED AT THE SITE (L1 criterion (a)).
-                            # The three fields above are all CONCURRENCY
-                            # quantities, and the dominant refusal cause in the
-                            # scope run was a per-episode work ALLOTMENT that none
-                            # of them describes. Read through, they assert that a
-                            # permanently-barred worker is idle and below cap —
-                            # the exact reverse — on 58% of the 580 refusals and
-                            # on all the ones that mattered. The two COUNT fields
-                            # are kept: they vary, and a reader can see for
-                            # themselves that they do not explain the refusal. The
-                            # availability field was removed because it does not
-                            # vary at all.
-                            # BOTH FORMS. The prose is what the manager reads;
-                            # the CODES are what analysis classifies on, because
-                            # a substring test over a formatted sentence is
-                            # identity derived from display text — the same
-                            # predicate we removed from metering.
-                            "refusal_reasons": [r.detail for r in refusal_reasons],
-                            "refusal_codes": [r.code for r in refusal_reasons],
-                            "agent_load": agent.load_report(),
-                        },
-                        actor_type="engine",
-                        actor_id="workflow_engine",
-                    )
                     # REFUSAL IS SIGNALLED, NOT ONLY LOGGED (L1). The run event
                     # above makes the refusal reconstructible AFTER the episode;
                     # it does nothing for the manager DURING it, and in the scope

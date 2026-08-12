@@ -106,33 +106,6 @@ def record_assignment(
     that existed for one action type and not another would make the DV a function
     of which action the manager happened to choose.
     """
-    try:
-        from ...core.common.run_trace import record_run_event
-
-        record_run_event(
-            "task_assigned",
-            {
-                "task_id": str(getattr(task, "id", "")),
-                "task_name": getattr(task, "name", ""),
-                "task_class": getattr(task, "task_class", None),
-                "from_agent_id": from_agent,
-                "to_agent_id": to_agent,
-                "is_reassignment": bool(
-                    from_agent and to_agent and from_agent != to_agent),
-                "action_type": action_type,
-                "applied": applied,
-                "reason": reason,
-                "task_status_before": getattr(
-                    getattr(task, "status", None), "value", None),
-            },
-            actor_type="manager",
-        )
-    except Exception:
-        # Logging must never break an action, for the same reason it must never
-        # break an observation build.
-        pass
-
-
 class BaseManagerAction(BaseModel, ABC):
     """
     Base class for all manager actions.
@@ -874,32 +847,6 @@ class RefineTaskAction(BaseManagerAction):
         if self.new_name:
             task.name = self.new_name
             updates.append(f"name -> '{self.new_name}'")
-        if self.new_name and self.new_name != name_before:
-            # A RENAME EMITTED NO EVENT AT ALL unless a description also changed:
-            # `task.name` mutates HERE, while `record_run_event("task_refined")`
-            # sits inside the `if self.new_description:` block below. So a rename
-            # that changed no description left NO TRACE, and the analysis joined
-            # segments to tasks on that same mutable name — meaning the one thing
-            # that would reveal a silent join miss was the thing not logged.
-            #
-            # Analysis now joins on `task_id` (L8), so this is no longer
-            # load-bearing for the DV. It is emitted anyway because the record must
-            # be able to show that a rename HAPPENED: without it, "no rename
-            # occurred" and "a rename occurred and was not logged" are the same
-            # observation. Measured on the 18 existing bundles: 8 `task_refined`
-            # events, ZERO carrying name provenance.
-            from ...core.common.run_trace import record_run_event
-
-            record_run_event(
-                "task_renamed",
-                {
-                    "task_id": str(self.task_id),
-                    "name_before": name_before,
-                    "name_after": task.name,
-                    "with_description_change": bool(self.new_description),
-                },
-            )
-
         if self.new_description:
             previous_description = task.description
             task.description = self.new_description
@@ -912,23 +859,7 @@ class RefineTaskAction(BaseManagerAction):
             # worker saw. A counted refine cannot be attributed to an outcome; a
             # refine carrying its before/after text can. The summary string above
             # embeds both but is prose and not parseable; this event is the record.
-            from ...core.common.run_trace import record_run_event
 
-            record_run_event(
-                "task_refined",
-                {
-                    "task_id": str(self.task_id),
-                    # `task_name` is the name AFTER any rename in the same action,
-                    # which read as the name the description belonged to. Both are
-                    # carried so the reader does not have to assume.
-                    "task_name": task.name,
-                    "name_before": name_before,
-                    "name_after": task.name,
-                    "description_before": previous_description,
-                    "description_after": self.new_description,
-                },
-                actor_type="manager",
-            )
 
         if self.new_estimated_duration:
             previous_duration = task.estimated_duration_hours

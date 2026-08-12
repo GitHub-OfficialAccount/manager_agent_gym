@@ -9,7 +9,6 @@ from manager_agent_gym.core.workflow_agents.ai_agent import (
     AIAgent,
     _parse_plain_text_output,
 )
-from manager_agent_gym.core.common.run_trace import RunTraceRecorder
 from manager_agent_gym.schemas.core import Task
 from manager_agent_gym.schemas.workflow_agents import AIAgentConfig, AITaskOutput
 
@@ -89,50 +88,6 @@ async def test_execute_task_only_overrides_turn_limit_when_configured(
         assert "max_turns" not in run.await_args.kwargs
     else:
         assert run.await_args.kwargs["max_turns"] == max_turns
-
-
-@pytest.mark.asyncio
-async def test_execute_task_trace_preserves_prompts_and_sdk_history(monkeypatch) -> None:
-    agent = AIAgent(_config("openrouter/deepseek/deepseek-v4-flash"), tools=[])
-    history = [
-        {"role": "user", "content": "task prompt"},
-        {"type": "function_call", "name": "example_tool", "arguments": "{}"},
-        {"type": "function_call_output", "output": "metric: 1"},
-    ]
-    sdk_result = SimpleNamespace(
-        final_output=(
-            '{"reasoning":"done","resources":[{"name":"answer",'
-            '"description":"result","content":"metric: 1",'
-            '"content_type":"text/plain"}],"confidence":1,'
-            '"execution_notes":[]}'
-        ),
-        to_input_list=lambda: history,
-        raw_responses=[],
-        last_response_id="response-1",
-        last_agent=SimpleNamespace(name="worker"),
-    )
-    run = AsyncMock(return_value=sdk_result)
-    monkeypatch.setattr(
-        "manager_agent_gym.core.workflow_agents.ai_agent.Runner.run", run
-    )
-    monkeypatch.setattr(agent, "_calculate_accurate_cost", lambda _result: 0.0)
-    recorder = RunTraceRecorder()
-
-    with recorder.activate():
-        result = await agent.execute_task(
-            Task(name="Report metric", description="Report the requested metric."), []
-        )
-
-    assert result.success is True
-    started, sdk_completed, completed = recorder.events
-    assert started["event_type"] == "worker_execution_started"
-    assert "FINAL OUTPUT FORMAT" in started["payload"]["system_prompt"]
-    assert "TASK: Report metric" in started["payload"]["task_prompt"]
-    assert sdk_completed["event_type"] == "worker_run_completed"
-    assert sdk_completed["payload"]["history"] == history
-    assert sdk_completed["payload"]["last_response_id"] == "response-1"
-    assert completed["event_type"] == "worker_execution_completed"
-    assert completed["payload"]["output_resources"][0]["content"] == "metric: 1"
 
 
 @pytest.mark.asyncio
