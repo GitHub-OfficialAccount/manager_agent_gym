@@ -162,6 +162,20 @@ existing registry scheduling (verified end-to-end; applied before the manager ac
 carries a NEW agent id — identity is itself a second trace signature via
 `worker_run_completed.actor_id`. [§116, RE receipts]
 
+**★ AMENDED 2026-08-09 (researcher ruling). THE PERTURBATION IS A CAPABILITY DIFFERENCE, NOT A
+METHOD SUBSTITUTION.** The successor is **certified for different asset classes** — equally
+competent, differently *permitted*. Everything measured in the L9 phase is this, and §3's novelty
+argument was already written for it (its neighbours on property 3 are capability/profile routers:
+FlyRoute's registration description, DRAMA's "agent capabilities" input). **The paragraph below
+described a method substitution and is SUPERSEDED as the perturbation** — it is retained because
+its three requirements (allocation-visible, trace-distinguishable, successor-reachable) still bind
+and are satisfied by a capability difference: allocation-visible because coverage decides who can
+unlock IRB; trace-distinguishable because the SA fallback is visible in the reported metric;
+successor-reachable per the gate. **Ruling made on realism grounds: a certification difference is
+what a restaffing produces, and it is the only reading under which the manager's information has a
+job to do — when a capability leaves the team entirely, no channel can recover it.**
+_(Superseded text follows.)_
+
 **The perturbation (successor's difference):** prompt-level method substitution under three
 requirements — **allocation-visible** (the difference must give the manager an allocation reason;
 allocation is the only affordable DV), **trace-distinguishable** (distinct tool call and/or distinct
@@ -227,7 +241,11 @@ already in `_audit_total`), and **successor-reachable** (see gate). [§92, §98,
 ## 6. The gate (before any study cell)
 
 **2 SSRs, deepseek-v4-flash all roles, clean pair (control + successor), no instruments.** PASS =
-(i) ≥1 correct post-swap outcome demonstrably via the substituted method (metric-truth match);
+(i) **★ AMENDED 2026-08-09 — the original read "demonstrably via the SUBSTITUTED METHOD
+(metric-truth match)", which has no referent under a capability perturbation and made the gate
+unrunnable as written.** Now: **≥1 correct post-swap outcome on an asset class the successor IS
+certified for, with the reported metric matching the IRB truth** — the same
+demonstrably-did-the-right-thing test, keyed to certification rather than to method;
 (ii) ≥1 post-swap task successfully assigned to AND executed by the successor id (add/remove has
 never been exercised in a live run — zero roster dynamics in all 86 corpus bundles). FAIL = zero
 correct post-swap outcomes via method B. A 3/3 is recorded as "capability established,
@@ -278,3 +296,13 @@ their level (P14); prediction protocol before experiments and reads).
 3. Sign off the §3 novelty statement.
 4. Decision-1 (shared tools / absorb channel): accept deferral or override. [§90]
 5. The go: build delta §8, then the gate §6.
+
+**★ SETTLED 2026-08-09 (researcher):** the capability arrangement is **PARTIAL OVERLAP** — the
+successor shares one asset class with the predecessor, and the class the stale card lies about is
+one an incumbent still covers. Priced natively at **2.26% of oracle at a realistic mix, non-zero on
+60 of 60 instances**, against the shipped arrangement's **0.000% on 0 of 60**. Chosen on realism:
+it is strongest exactly where realistic books sit, needs no sixth asset class and no larger roster,
+and **ships unamplified** (forcing the mix costs it twice — draining the lied-about class and
+consuming the free slot the channel needs). Pool re-derived at
+`records/R2/instance_selection_partial_segs1.json`; study seeds **26, 39, 37**.
+**This decision resolves the §4 ambiguity above and unblocks L3 and L5.**

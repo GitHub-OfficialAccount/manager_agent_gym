@@ -340,7 +340,9 @@ def generate(
     force_irb_segment_ids: tuple[str, ...] = (),
     asset_classes: tuple[str, ...] | None = None,
     force_mix_class: str | None = None,
-    amplify_mix: bool = True,
+    amplify_count: bool = True,
+    amplify_divergence: bool = True,
+    amplify_irb_priority: bool = True,
     positional_roles: bool = True,
     lattice: str = DEFAULT_LATTICE,
     lattice_template: tuple[str, ...] | None = None,
@@ -554,7 +556,48 @@ def generate(
     # a disjoint lattice has no shared class, so the parameter has no referent and
     # the amplifiers correctly do not fire. `force_mix_class` remains as an
     # explicit override for pricing a mix OTHER than the shared class.
-    if not amplify_mix:
+    # THE NAME `amplify_*` IS INHERITED AND IT IS NOW MISLEADING (LS). These were
+    # named for the arrangement this study has ABANDONED. On the adopted one
+    # (`partial`) they are DAMPENERS: measured on 30 seeds at segs=4, all three off
+    # gives the HIGHEST ceiling (1.88%) and turning `count` on drives it to ~0%,
+    # because count forcing raises nA and the covered-lie channel dies at nA >= cap.
+    #
+    # The names are kept rather than churned -- they appear in committed records,
+    # manifests and RR's sweep script, and a rename would silently break the join
+    # between a bundle and the figures derived from it, which is the fault this
+    # phase has spent itself removing. So the correction is stated HERE, where a
+    # reader meets the parameter:
+    #
+    #   `amplify_count`      RAISES nA. On `partial` that DAMPENS the ceiling
+    #                        (channel needs nA < cap); on `current` it is the only
+    #                        thing that creates a channel at all (needs nA >= cap).
+    #   `amplify_divergence` picks ratings whose SA fallback does not clip. Small
+    #                        effect on the ceiling, but LOAD-BEARING FOR
+    #                        GENERATION at high `irb_applicable_fraction`: with it
+    #                        off at 0.89 and the default segment count, generation
+    #                        FAILS -- too few non-zero-SA-fallback ratings to meet
+    #                        the IRB request.
+    #   `amplify_irb_priority` approves the amplified class's segments first.
+    #
+    # The direction of every one of them is arrangement-dependent. None of them is
+    # an amplifier simpliciter.
+    #
+    # THREE AMPLIFIERS, THREE SWITCHES (LS). They all gated on `shared_class is
+    # not None`, so `amplify_mix=False` killed all three together and there was no
+    # way to reach one without the others.
+    #
+    # That mattered because they are not the same kind of thing. The COUNT one
+    # concentrates the book into a single class, which is the ANTI-REALISTIC part.
+    # DIVERGENCE SELECTION chooses ratings where the SA fallback is furthest from
+    # the IRB truth -- a portfolio property, not a concentration -- and it is a
+    # candidate lever for raising the gap WITHOUT moving along the
+    # card-informativeness confound. It was unreachable except by dragging
+    # concentration along with it.
+    #
+    # Named parameters recorded in the manifest, not a flag someone has to remember
+    # to set correctly -- the same fix as the lattice threading, for the same
+    # reason: a bundle must be able to say which amplifiers produced it.
+    if not (amplify_count or amplify_divergence or amplify_irb_priority):
         # EXPLICITLY UNAMPLIFIED, which is not the same as the old silent absence.
         # The amplifiers were previously OFF on the override path by accident, and
         # the arms were incomparable because one had them and the other did not.
@@ -578,9 +621,19 @@ def generate(
     else:
         shared_class = _template_shared_class(chosen)
     class_sequence: list[str] = []
-    if shared_class is not None:
+    if shared_class is not None and amplify_count:
         class_sequence += [shared_class] * min(shared_class_segments, n_segments)
-    others = [c for c in classes if c != shared_class]
+    # `others` excludes the amplified class ONLY when the count amplifier is on --
+    # it exists to fill the REMAINING slots after that class has taken its share.
+    # Gating just the `+=` above left this exclusion in force, so with
+    # `amplify_count=False` the shared class received ZERO segments rather than its
+    # round-robin share: a mix change nobody asked for, produced by turning an
+    # amplifier OFF. Measured: max class count 3.00 (round-robin over 4 classes)
+    # where a plain round-robin over 5 gives 2.00.
+    if shared_class is not None and amplify_count:
+        others = [c for c in classes if c != shared_class]
+    else:
+        others = list(classes)
     index = 0
     while len(class_sequence) < n_segments:
         class_sequence.append(others[index % len(others)])
@@ -600,7 +653,7 @@ def generate(
         # (assertion in the producer, not the product): the truth is now derivable
         # only through the class calibration, so nothing can silently read a public
         # default rate again.
-        if asset_class == shared_class:
+        if asset_class == shared_class and amplify_divergence:
             # DIVERGENCE SELECTION on the shared class only (RR F2). The maximum
             # measurable arrival effect is the sum over strictly-required segments
             # of (1 - the fallback's score), so a shared-class segment where SA
@@ -641,9 +694,23 @@ def generate(
             # faithful score already at the floor cannot be further penalised.
             # That protects a measurement rather than inflating one, and the two
             # must not be collapsed back together by a later reader.
+            # ITS OWN STREAM, so toggling this amplifier does not move every
+            # downstream draw. The search consumes a VARIABLE number of draws --
+            # it breaks early on the first non-clipping candidate -- so taking
+            # them from `rng` meant `amplify_divergence` silently changed the
+            # calibration, the EADs and the segment mix as well as the ratings.
+            # Measured before the fix: turning divergence off moved the mean
+            # maximum class count from 3.00 to 2.00, which divergence selection
+            # has no business touching.
+            #
+            # This is the rng-alignment fault one level down from the lattice
+            # path, and it would have confounded the very sweep this switch was
+            # separated out to enable: varying divergence would have varied the
+            # instance as well as the divergence.
+            drng = random.Random(f"divergence::{seed}::{index}")
             best = None
             for _ in range(48):
-                rating = rng.choice(_rating_pool(asset_class))
+                rating = drng.choice(_rating_pool(asset_class))
                 if sa_risk_weight(asset_class, rating) <= 0.0:
                     continue
                 candidate = {**base, "rating": rating}
@@ -653,7 +720,10 @@ def generate(
                 if best is None:
                     best = candidate      # fall back to whatever we have
             drafts.append(best if best is not None else {
-                **base, "rating": rng.choice(_rating_pool(asset_class))})
+                **base, "rating": drng.choice(_rating_pool(asset_class))})
+            # The main stream still advances by exactly one rating draw, matching
+            # the `else` branch below, so the two paths stay aligned.
+            rng.choice(_rating_pool(asset_class))
         else:
             rating = rng.choice(_rating_pool(asset_class))
             drafts.append({**base, "rating": rating})
@@ -748,7 +818,9 @@ def generate(
     # Shared-class segments are approved FIRST: they are the strictly-required set,
     # so leaving them SA-applicable would put the mix bias in place and still leave
     # the strict count at zero.
-    approvable.sort(key=lambda d: (d["asset_class"] != shared_class, d["segment_id"]))
+    approvable.sort(key=lambda d: (
+        (d["asset_class"] != shared_class) if amplify_irb_priority else False,
+        d["segment_id"]))
     approved = {d["segment_id"] for d in approvable[:n_irb]} | set(force_irb_segment_ids)
 
     # SAMPLING REQUIREMENT (§5): at least one IRB-applicable segment must lie in the
@@ -845,13 +917,15 @@ def generate(
             # instance of one defect -- with the `rule` string, `coverage_size`, and
             # the original §B family -- so it now derives from the same variable the
             # branch is gated on.
-            "shared_class_divergence_selection": shared_class is not None,
+            "shared_class_divergence_selection": (
+                shared_class is not None and amplify_divergence),
+            "amplify_count": amplify_count,
+            "amplify_divergence": amplify_divergence,
+            "amplify_irb_priority": amplify_irb_priority,
             "mix_amplified_class": shared_class,
             "mix_class_source": (
-                "UNAMPLIFIED (amplify_mix=False)" if not amplify_mix
-                else "force_mix_class" if force_mix_class is not None
+                "force_mix_class" if force_mix_class is not None
                 else "derived from w0 & w1"),
-            "mix_amplified": amplify_mix,
             # Where the rng stream stood after lattice selection. Identical across
             # the two paths iff their draws are aligned (D42).
             "rng_checkpoint_post_lattice": rng_checkpoint,

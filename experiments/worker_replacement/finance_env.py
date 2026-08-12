@@ -528,9 +528,27 @@ def instance_hash(instance: dict[str, Any]) -> str:
     return hashlib.sha256(gen.to_json(instance).encode()).hexdigest()
 
 
-def build_environment(seed: int) -> dict[str, Any]:
-    """Generate, then assemble. The single entry point for a runnable episode."""
-    instance = gen.generate(seed)
+def build_environment(seed: int, lattice: str = gen.DEFAULT_LATTICE,
+                      shared_class_segments: int = 4) -> dict[str, Any]:
+    """Generate, then assemble. The single entry point for a runnable episode.
+
+    THE ARRANGEMENT IS A PARAMETER HERE TOO, and it was not. This called
+    `gen.generate(seed)` bare, so every episode built the DEFAULT lattice
+    regardless of which arrangement the study had selected — and `lattice="current"`
+    is a legal value, so nothing raised.
+
+    Measured on the three seeds authorised for the partial-overlap run, before any
+    spend: the pool was derived under `partial`/`segs=1`, the runner would have
+    built `current`/`segs=4`, and **seed 26 would have been a ZERO-CEILING
+    instance** — the exact condition the selection rule exists to exclude. The
+    bundle would have recorded `instance_seed: 26` and looked correct.
+
+    The phase's signature fault once more: a parameter that exists on one path and
+    not another, defaulting to a legal value. `select_study_instances` grew the
+    parameter and this, the thing that consumes its output, did not.
+    """
+    instance = gen.generate(seed, lattice=lattice,
+                            shared_class_segments=shared_class_segments)
     workflow, index = build_workflow(instance)
     team = build_team(instance)
     registry = AgentRegistry()

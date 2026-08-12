@@ -9,10 +9,10 @@
     "seeds_with_costly_omission": 0
   },
   "divergence_disjoint_template": {
-    "missed_by_superseded_model": 0.0919484898505093,
+    "missed_by_superseded_model": 0.09518122966169154,
     "passes": true,
     "seeds_with_costly_omission": 30,
-    "shipped_whole_card_mean_share": 0.09567258449747654,
-    "superseded_lie_only_mean_share": 0.003724094646967237
+    "shipped_whole_card_mean_share": 0.09842467262083002,
+    "superseded_lie_only_mean_share": 0.003243442959138475
   }
 }

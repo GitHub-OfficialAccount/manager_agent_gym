@@ -78,6 +78,7 @@
     28,
     36
   ],
+  "lattice": "current",
   "n_admitted": 21,
   "recorded_before_any_episode": true,
   "rule": "three instances used across ALL six cells; one drawn at random from each rank-tercile of ceiling_vs_stale_card over the admitted suite; draw seed fixed and recorded before the draw",
@@ -90,6 +91,7 @@
     "effect_magnitudes_sit_below_the_suite": false,
     "low_pick_is_suite_minimum": true
   },
+  "shared_class_segments": 4,
   "strata_seeds": {
     "high": [
       3,

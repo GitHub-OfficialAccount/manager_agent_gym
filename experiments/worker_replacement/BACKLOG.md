@@ -50,7 +50,120 @@ output plus both reviews under `records/`.
 
 ---
 
-## L9 — THE TEMPLATE DECISION: price partial overlap, then choose `[!] BLOCKED ON THE RESEARCHER (team side CLOSED, standing rule 7 satisfied). At the realistic mix, natively: current 0.000%, partial overlap 2.258%, disjoint 5.272%. LS recommends partial overlap -- no sixth class, no roster change, ships unamplified. Nothing further the team can do without the choice.)`
+## L10 — TWO DESIGNED ENVIRONMENTS, replacing the random pool `[~] DESIGN SETTLED, BUILD PENDING. Setting: partial / count ON at the shared class / divergence OFF / irb_frac 0.89 / segs 1 -> ceiling 3.21%, two paths agreeing, 40/40 generation. The sensitivity ladder is SUPERSEDED (it ranked manager policies) and the card-informativeness contrast is DEFERRED (span ~0.05; it separates explanations for an effect not yet shown to exist). Standing checks: production test PASSES -- every benchmark is constructed, and sampling-then-filtering is what you do when you cannot construct; no drift -- it IS the instrument; ambiguity -- resolved by the spec and two measured sweeps.`
+**Depends:** L9 `[x]` · **Owner:** RE builds, RR attacks the design, LS specs · **Cost: no model
+spend to design; the step-2 run is separately authorised.**
+
+**RESEARCHER RULING 2026-08-09: the end product is TWO WELL-DESIGNED ENVIRONMENTS. Two is enough
+for quick initial testing.**
+
+> **THE ARGUMENT, and the project already accepted it for one dimension and abandoned it for the
+> rest.** `_lattice_from_template` **CONSTRUCTS** the certification table — all 210 possibilities
+> enumerated, construction chosen deliberately. **Then the segment mix, ratings and exposures are
+> DRAWN per seed.** We hand-designed the part we understood and rolled dice for the part that turned
+> out to decide everything.
+>
+> **An environment is a MEASURING INSTRUMENT, not a sample from a population of interest.** An
+> instance with no gap reads zero whatever the manager does — a broken instrument reading, not data.
+> **Randomising and then filtering is a wasteful way to get what can be built directly:** admission
+> currently discards **25 of 40** for structural reasons unrelated to the gap.
+>
+> **WHY THE OBVIOUS OBJECTION DOES NOT APPLY.** Designing so a particular MANAGER scores well would
+> be fitting the result. **Designing so the GAP EXISTS is calibrating the instrument** — the gap is
+> computed with **no manager in the loop** (best possible allocation minus best allocation under a
+> wrong belief, both solved exactly), so **there is nothing to fit to.** A thermometer built to have
+> range is not a rigged thermometer.
+>
+> **AND THE TARGET HAS MOVED: zero gaps were the OLD arrangement's problem.** Under partial overlap
+> all 60 draws are non-zero (0.03%–6%). **The problem now is that most draws are SMALL** — median
+> 2%, long tail toward nothing. **Randomising spends the design freedom on producing weak instances
+> and then averaging them.**
+
+**MUST HOLD BY CONSTRUCTION IN BOTH, asserted rather than hoped for:**
+1. **Non-zero gap by construction**, not by draw.
+2. **`nA < cap`** — the successor keeps a free slot, which is the condition the covered-lie regime
+   needs (L9 mechanism).
+3. **The card's lie lands on a class an incumbent still covers.** This is what makes the lie cost
+   anything at all.
+4. **Capacity binds exactly.**
+5. **Basel weights untouched.** Realism is the one thing that cannot be traded for sensitivity.
+6. **Admission passes — as a POST-CONDITION, not a filter.** It stops being a sieve over draws and
+   becomes an assertion that the built instance has the properties it was built to have.
+
+**★ THE SENSITIVITY LADDER BELOW IS SUPERSEDED 2026-08-09 on RR's MEASURED evidence. Retained as
+a record; DO NOT BUILD IT.** `card − ignorant` falls monotonically as the ceiling rises (+0.80 →
++0.58 → +0.33), **so ordering instances BY GAP ranks manager policies — maximising the gap makes
+IGNORING the card a better policy, and ENV-A would have been the most CONTAMINATED arm rather than
+the decisive one.** LS's premise (the gap computation contains no manager) was true; the inference
+(therefore ordering by gap is manager-neutral) was false.
+
+**★ AND THE REPLACEMENT AXIS — card-informativeness — IS NOT BEING BUILT AS A CONTRAST EITHER.**
+Contested share raises **both** arms together, so the matched-gap span collapses to ~0.05. **That
+contrast separates two explanations for an effect we have not established EXISTS, and separating
+explanations before establishing the phenomenon is the wrong order.** **Deferred as a STANDING
+LIMITATION, not solved.**
+
+**★ SETTLED BUILD SETTING, re-measured in the configuration that will actually ship:**
+
+    arrangement              partial
+    amplify_count            ON, targeting the SHARED class
+    amplify_divergence       OFF     <- realism is FREE here: both quantities RISE without it
+    amplify_irb_priority     OFF
+    irb_applicable_fraction  0.89    <- 1.00 rejected: partial use is real AND generation fails
+    shared_class_segments    1       <- outside the generability band (segs=3 is worst, 16/20)
+
+    ceiling 3.21%   card − ignorant +0.0810 as a share (~+0.68 absolute)   generation 40/40
+    TWO INDEPENDENT PATHS AGREE — RE 3.21% at 40 seeds, RR 3.17% at 20
+
+**THE TWO ARE TWO CONSEQUENTIAL INSTANCES, NOT A CONTRAST** — both realistic, both with a real gap,
+**differing enough that a finding on both is not instance-specific.** Which asset class sits in the
+sole-need position is the natural axis.
+
+**PRE-COMMITTED AND BINDING: if the effect is undetectable at these settings, that is a FINDING and
+NOT a reason to widen anything.**
+
+_(Superseded ladder follows.)_
+
+**THE TWO, AND WHAT THEY DIFFER ON — a sensitivity ladder, not two samples:**
+- **ENV-A — maximum gap.** The instrument at full sensitivity. **If a manager shows no effect here,
+  that is decisive and ENV-B need not run.**
+- **ENV-B — realistic gap.** What an honest study would actually use. **An effect on A but not on B
+  is a POWER statement, not a null.**
+
+**★ THE SIX PROPERTIES AS CHECKABLE PREDICATES (LS, 2026-08-09) — prose is not assertable, and
+RR's condition is that each must be shown to FAIL before it is trusted to pass. Each row names the
+predicate AND the fixture that violates it.**
+
+| # | predicate, computable from the instance | fixture that must make it FAIL |
+|---|---|---|
+| 1 | `ceiling_vs_stale_card(inst)["ceiling_share"] > 0` | the `current` arrangement at nA=1 — measured 0.000% on 60/60 |
+| 2 | `nA < cap`, where nA = IRB-approved segments in the successor-unique class | force `shared_class_segments = cap` |
+| 3 | the LIED class has ≥1 post-swap holder **other than the successor** | `current`, where the lied class is the departed worker's sole class |
+| 4 | `len(segments) == len(roster_post_swap) * cap` | 8 segments against 3 workers × cap 3 |
+| 5 | SA weights and PD floors byte-identical to the committed Basel tables, **and `amplify_divergence` is False** | a perturbed SA table, or the switch left on |
+| 6 | `admit(seed, **kwargs)["admitted"] is True` | an instance failing any one of admission's three conditions |
+
+**Property 3 is the one that carries the design and the easiest to satisfy accidentally** — it is
+what makes the lie cost anything at all, and `current` fails it while looking structurally similar.
+**Property 5 has two halves and the switch half is the one that would drift**, since it is a
+parameter rather than a table.
+
+**THE FIXTURES ARE THE ACCEPTANCE, not an addition to it.** Six passing assertions over a
+construction that guarantees its own premises is the structurally-zero residual in a new costume;
+**six assertions each demonstrated failing on a named fixture is a post-condition.**
+
+
+**Acceptance:** both built, both asserted against (1)–(6), gaps reported with their intervals, and
+**a stated reason for each design choice that is not "it came out that way."** Both peers' reviews
+under `records/L10/`.
+
+**Standing checks, answered.** **(1) PRODUCTION TEST — PASSES.** Every benchmark, fixture and
+integration test in production software is **constructed**. Sampling-and-filtering is what you do
+when you cannot construct; we can. **We are removing a practice production would not ship.**
+**(2) NO DRIFT — it IS the instrument that measures the question.** **(3) AMBIGUITY — the spec above
+is the resolution; team discussion is open on the two designs.**
+
+## L9 — THE TEMPLATE DECISION: price partial overlap, then choose `[x] SETTLED 2026-08-09 by the researcher: PARTIAL OVERLAP. Perturbation recorded as a CAPABILITY difference; gate criterion (i) rewritten and runnable again; pool re-derived at records/R2/instance_selection_partial_segs1.json, seeds 26/39/37. Ships UNAMPLIFIED. L3 and L5 unblock.`
 **Depends:** none · **Owner:** LS (RE prices, RR attacks the enumeration) · **Cost: no model spend,
 but NOT free — it needs a generator change (step 3) that the first version of this step assumed
 away.** · **Production test: n/a (design choice).** · **Serves the question: DIRECTLY** — it
@@ -412,7 +525,7 @@ The regret decomposition stays as the outcome measure; neither substitutes for t
 **Reading limit, standing:** 3 episodes per cell. No contrast verdict in either direction.
 Cell 3's zero moves across three seeds is not a result.
 
-## L2a — the split CODE against the repaired schema `[~] TWO OF THREE FIXED. B2 (executed segment absent from parse_detail -> classified executed_but_unparseable) is STILL SILENT while the acceptance reports PASS -- RR re-ran the named case rather than reading the report. Does the acceptance fixture even REACH the B2 branch? If its parse_detail is complete it cannot, and it would pass indefinitely.`
+## L2a — the split CODE against the repaired schema `[x] (all three blockers closed and RR's verdict LIFTED after re-running all six sub-cases. B2 resolved BETTER than the blocker asked: an EMPTY parse_detail is not raised on -- a machinery run has no deliverables -- but is marked uninterpretable in the record, and interpretable_counts() raises for any consumer that reports those counts. One recorded limitation in the review file.)`
 **Depends:** L1 · **Owner:** RE · **Production test: n/a (analysis).**
 
 > **★ CIRCULAR DEPENDENCY IN MY OWN BACKLOG, found 2026-08-08 and fixed here.** L2 says
@@ -2781,7 +2894,7 @@ Record: `records/L8/name_key_ambiguity_RR.md` (RR).
 **Stated rather than worked around, per the cron's own instruction.**
 
     L9   [!]  blocked on the RESEARCHER -- team side closed, standing rule 7 satisfied
-    L2a  [~]  B2 with RE
+    L2a  [x]  CLOSED 2026-08-09 -- this line read '[~] B2 with RE' and was STALE
     L8   [~]  awaiting RR's review under standing rule 7
     L3   [!]  blocked on L9
     L5   [!]  blocked on L9
@@ -2845,3 +2958,1066 @@ Records: `records/L8/L8_review_RR.md`, `records/L8/L8_review_LS.md`.
   measurement reads as settled in a way an argument does not.**
   **The differ-test rule covers AGREEMENT BETWEEN TWO RESULTS. It does not cover A SINGLE RESULT
   BEING CARRIED FORWARD BY SOMEONE WHO DID NOT PRODUCE IT.**
+
+### 2026-08-09 — ★ THE ONE-DIRECTIONAL FRAMING IS WRONG. Corrected, with the rule RR wrote instead
+
+**Supersedes the "pattern with a direction" note in the L8 entry above.** That entry stays as a
+record; **its DIRECTION claim is withdrawn and its MECHANISM is replaced.**
+
+- **★ INSTANCE 3 IS THE COUNTER-EXAMPLE and contains unchecked adoption IN EACH DIRECTION WITHIN
+  TWO STEPS:**
+  **(1)** RE measured *"ten rows for nine segments"* and **explicitly declined to state the
+  consequence**, naming the two possible shapes and saying they had not verified which.
+  **(2)** RR built on it **before verifying which shape it was**, and sent LS the stronger reading.
+  **(3)** RE then propagated RR's escalation into a docstring and a commit message.
+  **So at step 2 the unchecked adopter was RR and RE was the careful one — and the ORIGIN FIGURE
+  WAS RE's.** **Any pattern putting RR at the head of the chain has instance 3 pointing the other
+  way. That leaves two instances, which is an anecdote.**
+- **★ AND THE MECHANISM WAS WRONG IN A WAY THAT MATTERED.** LS wrote *"a measurement reads as
+  settled in a way an argument does not"* — **true, and it does not explain the failures.**
+  **What was adopted in all three cases was A NUMBER WITHOUT ITS CONSTRUCTION:**
+
+      "nA=0 identical"   a COMPARISON missing its COMPARATOR
+      0.683              a MEAN read as a DISTRIBUTION
+      ten-for-nine       a COUNT read as a SHAPE
+
+  **Each was TRUE, and each was used for a claim it did not license. That is not
+  measurement-vs-argument — it is the COMPARATOR-PATH RULE WITH THE ARROW REVERSED.**
+- **SO NO NEW PRINCIPLE IS NEEDED, ONLY THE MISSING HALF.** The existing rule binds the **PRODUCER**
+  (*a comparator names its construction path*). **Nothing binds the RECIPIENT** — and **a number
+  arrives looking complete, because a value, a unit and a decimal point do not reveal what is
+  absent.** RR's rule:
+
+  > **Before building on a number you did not produce, STATE ITS CONSTRUCTION. If you cannot, you
+  > may report it as someone else's and stop there — but you may NOT DRAW A CONSEQUENCE FROM IT.**
+
+- **LS's own observation goes in as the reason a CONDITIONAL is not enough:** *a specified
+  consequence makes the antecedent feel more established than it is.* **RR used "if" and it still
+  functioned as "then", which is why a retraction was needed rather than a result.**
+- **★ THE MITIGATION THAT WORKED TWICE WAS NEITHER CARE NOR VIGILANCE — IT WAS A QUESTION.**
+  *"Which row is the tenth?"* and *"is that a mean or a distribution?"* **A QUESTION TERMINATES;
+  VIGILANCE DOES NOT.** That is the rule's operative half, because *"be more careful about numbers
+  from peers"* is unenforceable and **asking one specific question is not.**
+- **AND THE REASON TO PREFER IT, in RR's terms, against their own flattery: the defect is IN THE
+  HANDOFF, NOT IN A PERSON.** **If the pattern were recorded with RR as the privileged source, the
+  next reader concludes their figures are the reliable ones — and instance 3 says they are not
+  reliable enough to skip the question.**
+
+### 2026-08-09 — L2a CLOSES `[x]`. Everything but L9 is done, and two stale markers are corrected
+
+- **L2a `[x]`.** RE fixed B2 and RR re-ran **all six sub-cases** before lifting:
+
+      B1a missing task_class                      RAISES
+      B1b missing applied                         RAISES
+      B2a absent from a NON-EMPTY parse_detail    RAISES
+      B2b EMPTY parse_detail                      classified + flagged uninterpretable
+      B2c parsing ran, entries present            not flagged (the other direction)
+      B3  assigned id absent from index           RAISES
+
+- **★ LS's PRIOR QUESTION WAS THE RIGHT ONE AND ITS ANSWER IS THE FINDING: the acceptance did NOT
+  REACH the B2 branch.** Its only `parse_detail` is `{}` and the helper defaults to `{}`, so **the
+  partial-gap branch was UNREACHABLE and would have passed indefinitely. A control never wired, not
+  a missed line.**
+- **B2 RESOLVED BETTER THAN THE BLOCKER ASKED.** RE was right not to raise on an EMPTY
+  `parse_detail` — **a machinery run has no deliverables, so raising rejects a legitimate bundle.**
+  The state is marked **uninterpretable in the record** instead, and they went past the
+  recommendation with **`interpretable_counts(result)` raising for any consumer that reports those
+  counts** — the §B refusal enforced at the point of use rather than announced beside it.
+- **★ LS's "MAP EACH BLOCKER TO ITS FIRING CONTROL" STANDARD IS IMPLEMENTED, and RE checked the map
+  itself first: they fed it a FABRICATED blocker with no guard and confirmed it reports UNCOVERED
+  before trusting it to report covered.** All six covered.
+- **THE RENAME GUARD IS FIXED** — `task_renamed` now guards on `self.new_name != name_before`.
+  **And the control was built to DISTINGUISH rather than merely to fire**, which is the property
+  three checks lacked this week: real rename → emits; no-op → emits nothing; no `new_name` → emits
+  nothing. **The `updates` summary deliberately keeps the old condition** — a re-sent name is still
+  a refinement the manager performed, **a different question from whether the name changed. Two
+  conditions, two consumers, stated rather than merged.**
+- **★ RE's ADDITION TO THE ADOPTED-NUMBER MECHANISM, which complements RR's rather than competing:
+  in all three cases THE ADOPTED NUMBER SUPPORTED A CONCLUSION THE ADOPTER ALREADY HELD.** RE took
+  *"nA=0 is identical"* while arguing the forcing had inflated everything, and *"a collision does
+  not even need a rename"* while arguing the name join was unsafe. **"The number was not scrutinised
+  because it was not load-bearing for what I believed — it was decoration on a case I had already
+  made. That is why vigilance does not catch it: nothing feels risky about a supporting detail."**
+  **So the two halves are: what made the number ADOPTABLE (it arrived without its construction) and
+  what made nobody LOOK (it supported what they already thought).**
+  **RE's rule form, the crispest of the three: A FIGURE YOU DID NOT PRODUCE GETS ONE QUESTION BEFORE
+  IT IS REPEATED — not verification, just one.**
+  **And RR's half, theirs: both times they stated a READING as a FINDING. ADOPTING TOO FAST AND
+  ASSERTING TOO HARD ARE THE SAME FAILURE MET IN THE MIDDLE**, which is why a rule aimed at one end
+  would not have caught any of the three.
+- **★ TWO STALE MARKERS CORRECTED, AND IT IS THE L6 SHAPE A SECOND TIME.** `L2a`'s step line still
+  read *"TWO OF THREE FIXED… B2 is STILL SILENT while the acceptance reports PASS"*, and the
+  no-step-is-actionable table still read `L2a [~] B2 with RE`. **Neither merely LAGGED — both
+  ASSERTED that a blocker was live when it was closed**, and unlike L6 **the stale claim was in the
+  INDEX rather than at the top of a file, so it is the version a reader hits first.**
+  **Twice now. Markers in this file have twice stated a false state rather than an out-of-date one.**
+- **FULL SWEEP (RE):** ten acceptances exit 0, tree clean, `pytest tests/` 124 passed with the one
+  live-API failure that predates this work and cannot pass without model spend.
+
+**STATE: L1, L2a, L4, L6, L7, L8 `[x]`. L3 and L5 blocked on L9. L9 with the researcher.
+Nothing is open to the team.**
+
+### 2026-08-09 — PHASE CLOSED TO THE TEAM. A fourth instance, and a rule deliberately NOT written
+
+- **★ RR DECLINED TO WRITE A SEVENTH RULE, and recorded the judgement rather than the absence.**
+  *"Six rules in a day is already at the edge of what a file gets read at."* **A rules file nobody
+  finishes enforces nothing**, and that is a real constraint on the intervention rather than a
+  concession.
+- **AND THE REASON THE MARKER PROBLEM HAS NO MECHANICAL ANSWER YET:** the citation check worked
+  because **a filename either resolves or it does not.** A step marker quotes a **TESTABLE CLAIM IN
+  PROSE** — *"B2 is STILL SILENT"* — and re-evaluating it **needs semantics, not a resolver.**
+  **The nearest mechanical form is the provenance rule again: a marker quoting a testable claim
+  CITES THE CHECK THAT ESTABLISHES IT, so it can be re-run.** **Held until a third instance rather
+  than guessed at now.**
+- **★ FOUR REPORTS OF SUCCESS THAT HAD NOT BEEN CHECKED, ALL CAUGHT BY RE-RUNNING RATHER THAN
+  READING** — the family the marker cases would join:
+
+      RE's module printed a COMPLETE TABLE after raising and writing no record
+      LS's citation tool ran a COMPONENT-LEVEL control on a pipeline-level claim
+      RR's fixture had controls firing on the WRONG GUARD, looking like four clean passes
+      LS's marker edit matched NOTHING for one line and reported success for the half that landed
+
+  **By a third marker case there will be enough instances to see whether the answer is ONE check or
+  FOUR.**
+- **★ RE's HALF OF THE ADOPTED-NUMBER MECHANISM PREDICTS WHERE THE NEXT ONE COMES FROM, which is
+  why it is the better half:** **not a headline anybody would check, but a SUPPORTING FIGURE nobody
+  thinks is load-bearing.** **Ten-for-nine was exactly that** — RE reported it as a supporting
+  argument and moved on; RR escalated it into a claim.
+- **★ THREE HALVES, ONE FAILURE, AND NONE OF THE THREE AGENTS WAS DOING THE RECKLESS THING.**
+  **RE adopted fast because the number supported them; RR asserted hard because they had measured
+  something adjacent; LS pre-specified a consequence because conditioning FELT LIKE CAUTION.**
+  **A rule aimed at any single end catches none of it — which is why the operative form is a
+  QUESTION: it is the only intervention that does not depend on the person noticing they are at
+  risk.**
+
+**STATE: L1, L2a, L4, L6, L7, L8 `[x]`. L3 and L5 blocked on L9. L9 with the researcher.
+NOTHING IS OPEN TO THE TEAM.**
+
+### 2026-08-09 — EVERYTHING IS `[x]` OR BLOCKED. Firing spent on L4's SECOND HALF, the §3 novelty check
+
+Record: `records/L4/novelty_check_LS_2026-08-09.md`.
+
+**Every step is `[x]` or blocked on the researcher — the cron's condition for the drift check.
+Re-running the design-vs-code comparison against an UNCHANGED brief would reproduce the same three
+findings, so this firing did the half the 2026-08-09 drift check explicitly named as not done:
+"it does not verify the brief's §3 novelty claims."**
+
+**The question asked: DOES §3 SURVIVE BOTH READINGS OF DRIFT 1?** If the brief cannot say whether
+the manipulation is method substitution or a coverage lattice, **the novelty claim must hold either
+way or it is contingent on an unsettled question.**
+
+- **N1 — PROPERTIES 1, 2 AND 4 ARE INVARIANT.** The manager allocates under either perturbation;
+  the newcomer inherits persistent workflow state either way (**the property §3 itself calls "the
+  uncontested vertex"**); exogeneity is unaffected and never leads alone. **Three of four do not
+  care.**
+- **★ N2 — PROPERTY 3'S NEIGHBOURS ARE CAPABILITY/PROFILE ROUTERS, WHICH FITS THE COVERAGE
+  READING.** It is the property carrying the wedge, and **every neighbour cited on it describes
+  WHAT AN AGENT IS APPROVED OR SUITED FOR**: FlyRoute's *"developer-provided registration
+  description that may be incomplete or inaccurate"* (§3 calls it *"the closest work on the card
+  channel"*), and DRAMA's *"affinity evaluations consider… agent capabilities"*, distinguished as
+  a single always-accurate attribute.
+  **So the brief carries THREE signals about its own manipulation and TWO point to coverage:**
+
+      §3 novelty       neighbours are capability/profile routers   -> COVERAGE
+      §4 scope cond.   "COVERAGE information cannot address..."    -> COVERAGE
+      §4 perturbation  "prompt-level METHOD SUBSTITUTION"          -> METHOD
+
+  **THIS NARROWS DRIFT 1 RATHER THAN LEAVING IT OPEN — more likely a STALE §4 SENTENCE than a live
+  question about what the study is.**
+  **STATED AS THE WEAKER CLAIM, because the stronger one is available and unsupported:** a method
+  substitution could be *described* in a capability profile, so the neighbours are not strictly
+  incompatible with it. **What is true is that §3's neighbour analysis WAS WRITTEN FOR A CAPABILITY
+  CHANNEL and would need re-doing under the method reading.** **Evidence for the researcher's
+  decision, not a substitute for it.**
+- **★ N3 — THE PHASE'S MAIN PRODUCT IS ABSENT FROM §3 AND §7.** §7 frames phase 1 as **DIAGNOSIS —
+  a failure taxonomy per cell**, and **all five listed failures are MANAGER failures observed in
+  runs.** **The `nA = cap` mechanism is structurally different: a CHARACTERISATION OF WHEN THE
+  SETTING CAN MEASURE ANYTHING AT ALL**, derived offline, holding across three capacities, and
+  explaining why the shipped lattice is exactly zero on a realistic portfolio.
+  **§7's dichotomy — "failures found → build a policy; no failures → a capability result with
+  boundary conditions" — has NO SLOT for it. It is, in the brief's own vocabulary, BOUNDARY
+  CONDITIONS ARRIVED AT WITHOUT THE CAPABILITY RESULT**, and the only thing this phase produced
+  that does not depend on a run. **Raised, not resolved — and it interacts with the L9 choice,
+  because a paper that REPORTS it makes a different claim from one that uses it to PICK A LATTICE.**
+- **N4 — A "MAY NOT MAKE" CLAUSE ALREADY COVERS THE L9 FIGURES AND SHOULD BE APPLIED.** §3 prohibits
+  *"any corpus figure as a portable result (setup-level priors)"*. **2.258%, 5.272% and 0.000% are
+  setup-level in exactly that sense — properties of a lattice, a cap and a segment mix — and nothing
+  in the record currently states that they inherit the clause, while the decision package quotes
+  them.** They are **a lattice comparison inside this environment, not a portable statement about
+  card channels.**
+- **WHAT IT DOES NOT ESTABLISH:** it does **not** verify §3 against the primary sources (done and
+  reviewer-verified 2026-08-06, not re-run) — **and that is exactly the work needed IF the
+  researcher settles Drift 1 toward METHOD.** And it does **not settle Drift 1**: two of three
+  signals is evidence about the brief's internal consistency, **not about what the researcher
+  intends.**
+
+### 2026-08-09 — THE BACKLOG IS EXHAUSTED. Saying so, per the cron's own instruction
+
+    L9   [!]  blocked on the RESEARCHER
+    L3   [!]  blocked on L9
+    L5   [!]  blocked on L9
+    L1, L2a, L4, L6, L7, L8   [x]
+
+**Nine steps: six done, three blocked, none actionable. No peer activity and no inbox since the
+last firing.**
+
+**BOTH HALVES OF THE L4 DRIFT CHECK — the cron's fallback — ARE NOW DONE AGAINST AN UNCHANGED
+BRIEF:** the design-vs-code comparison (`records/L4/drift_check_LS_2026-08-09.md`) and the §3
+novelty check (`records/L4/novelty_check_LS_2026-08-09.md`). **A third variant would be the
+invented work the instruction exists to prevent, so it is not run.**
+
+- **ONE ITEM CLOSED, carried over from the novelty check rather than invented: N4 APPLIED.**
+  `STUDY1_FOUNDATION.md` §3 forbids quoting *"any corpus figure as a portable result (setup-level
+  priors)"*, **and nothing in the record said the L9 figures inherit it while the decision package
+  quotes them.** Now stated in `RESEARCH-CRON-STATUS.md` beside the numbers: **0.000%, 2.258% and
+  5.272% are properties of a lattice, a cap and a segment mix — a LATTICE COMPARISON INSIDE THIS
+  ENVIRONMENT, not a portable statement about card channels.**
+- **NOTHING ELSE IS OPEN TO THE TEAM.** The next thing that happens is the researcher's L9 decision,
+  which unblocks L3 and L5.
+
+### 2026-08-09 — the "everything is green" claim was UNVERIFIED. Verified now, and it was not
+
+**Third consecutive firing with nothing actionable — state identical, inbox empty, tree clean.**
+Rather than a third variant of the drift check, the firing went to **checking the state this record
+has been asserting**, before a long idle period.
+
+- **★ AND THE VERIFICATION ATTEMPT WAS ITSELF A FIFTH INSTANCE OF THE WEEK'S FAMILY.** The first
+  sweep printed `exit=0` for all five checks **while four of them had not run at all** —
+  `ModuleNotFoundError: No module named 'pydantic'`, because they need the project venv and were
+  invoked with bare `python3`. **The `exit=0` was the exit code of the printf pipeline, not of the
+  module.** **A report of success that had not been checked, produced by the act of checking.**
+- **RE-RUN CORRECTLY under `.venv/bin/python`:**
+
+      check_path_alignment          exit 0
+      check_amplifier_dependence    exit 0
+      check_card_belief_model       exit 0
+      check_native_lattices         exit 0
+      check_record_citations        exit 0 (after the fix below)
+
+- **AND THE CITATION CHECK WAS FAILING.** `records/L4/drift_check_LS_2026-08-09.md` — **the record
+  that REPORTED the deleted-module finding** — names `check_announcement.py` in order to report it,
+  which is the **self-referential category** the tool's docstring already names as taking the marker
+  by standard form. **Third instance of that category** and the first outside `BACKLOG.md`.
+  Annotated in place; the check now passes.
+- **SO THE "ten acceptances exit 0, tree clean" STATE WAS REAL BUT UNRE-DERIVED AT THIS COMMIT**, and
+  one check had drifted red since it was last run. **The claim was carried forward, not re-checked
+  — which is precisely the recipient-side rule applied to one's own earlier report.**
+- **NOTHING ELSE IS OPEN.** Six steps `[x]`, three blocked on the researcher's L9 decision, both
+  halves of the L4 drift check done against an unchanged brief.
+
+### 2026-08-09 — THE CRON IS CANCELLED on the researcher's instruction
+
+Job `b8cb48a7` (`17,47 * * * *`) deleted. **Recreation procedure and the verbatim prompt are in
+`RESEARCH-CRON-STATUS.md` §7**, with the standing note that it should be recreated **only once the
+L9 decision has landed** — until then the loop has no reachable work.
+
+- **It had reached a fixed point: THIRTEEN consecutive firings with nothing actionable.** Every
+  step `[x]` or blocked on the researcher; both halves of the L4 drift check done against an
+  unchanged brief; the acceptance suite verified green at firing ten.
+- **The firings were NOT wasted, and the useful ones are worth naming** because they mark where a
+  no-work loop still had value: **firing 1** ran the design-vs-code drift check (three findings,
+  all the researcher's); **firing 2** ran the §3 novelty half, which narrowed Drift 1 from an open
+  question to a probably-stale sentence; **firing 3** applied the brief's non-portability clause to
+  the L9 figures; **firing 4** re-derived the "everything green" claim and **found one check had
+  drifted red** — while the verification attempt itself produced a fifth instance of the week's
+  report-of-success-that-was-not-checked family. **Firings 5–13 produced nothing and were reported
+  in one line each, without adding entries here.**
+- **The rule that fell out and is worth carrying: a scheduled loop against a blocked backlog stops
+  producing after the deferred work is exhausted.** The first four firings drained a real queue —
+  work that was genuinely outstanding but not urgent. **After that the loop was polling, and
+  polling a decision that only a human can make is not research.**
+
+### 2026-08-09 — RESEARCHER RULING. L9 CLOSES `[x]`; a run is authorised; a scoring proposal is open
+
+**Step 1 of three is DONE. Steps 2 and 3 are with the team.**
+
+- **★ L9 IS SETTLED: PARTIAL OVERLAP.** Recorded in `STUDY1_FOUNDATION.md` §10 with the priced
+  comparison (2.26% at a realistic mix, non-zero on 60/60, against the shipped arrangement's 0.000%
+  on 0/60), the realism argument, and the derivation that it **ships UNAMPLIFIED** — forcing costs
+  it twice, by draining the lied-about class and consuming the free slot the channel needs.
+  **L3 and L5 unblock.**
+- **★ THE PERTURBATION IS A CAPABILITY DIFFERENCE, NOT A METHOD SUBSTITUTION** (§4, amended in
+  place, superseded text retained). The successor is **certified for different asset classes —
+  equally competent, differently PERMITTED.** Settles the Drift 1 ambiguity, and §3's novelty
+  argument was already written for this reading (its neighbours on property 3 are capability/profile
+  routers). **The three requirements still bind and are satisfied:** allocation-visible because
+  coverage decides who can unlock IRB; trace-distinguishable because the SA fallback shows in the
+  reported metric; successor-reachable per the gate.
+  **Ruling ground: it is the only reading under which the manager's information has a job to do —
+  when a capability leaves the team entirely, no channel can recover it.**
+- **THE GATE IS RUNNABLE AGAIN.** §6's first PASS criterion asked for an outcome *"demonstrably via
+  the SUBSTITUTED METHOD"*, which has no referent under a capability perturbation. **Rewritten,
+  keyed to certification: ≥1 correct post-swap outcome on a class the successor IS certified for,
+  with the reported metric matching IRB truth.** Same test, different key.
+- **THE POOL IS RE-DERIVED THROUGH THE COMMITTED MACHINERY** —
+  `records/R2/instance_selection_partial_segs1.json`. **15 of 40 admitted; band 0.36–4.76%, median
+  2.12%; study seeds 26 / 39 / 37.** **The rule is UNCHANGED** (same rank-terciles, same
+  pre-committed draw seed, same zero-ceiling exclusion); **only the population moved, because the
+  design did.** Default reproduces the prior record on every number — verified, and it caught a bug
+  introduced while making the change. **A hardcoded seed in `caveat_1` naming an instance that was
+  not the one chosen is fixed and now interpolated.**
+- **STEP 2, AUTHORISED: same cell, 2–3 episodes, seeds 26/39/37 — 6–9 episodes, flash, parallel.**
+  Two purposes: **does it run at all** (nothing has ever executed on this arrangement; every finding
+  to date is offline arithmetic) and **the first post-repair σ**, which is the one quantity that has
+  blocked every detectability statement and cannot be computed offline.
+  **Prediction protocol running; LS's is committed, peers' requested privately, none relayed.**
+  **LS: it runs but not cleanly; σ_total lands between 0.05 and 0.08, not dramatically below the old
+  0.0768, because 75% of that variance was manager-level; so at the median seed the required n stays
+  above 100/arm.**
+- **★ OPEN — THE RESEARCHER PROPOSES AMPLIFYING THE SCORE so a single misplacement produces a bigger
+  signal.** The instinct is sound: 2% is about **0.6 of one misplaced job**.
+  **LS's objection, flagged as load-bearing and UNMEASURED: σ is in the same units as the effect.**
+  Widening the IRB−SA penalty widens the run-to-run variation in the score as well, so `effect/σ`
+  may not move — **a units change dressed as a sensitivity gain**, which is the shape this project
+  has been fooled by repeatedly.
+  **Partly computable now:** σ_alloc was measured at 0.0384 against σ_total 0.0768, so how σ_alloc
+  scales with the penalty is derivable offline. **What is not derivable is whether σ_manager scales
+  — and that is 75% of the variance.** If σ_manager is dominated by refusals and non-completion,
+  amplification may genuinely help; if by allocation choice, it cannot. **Step 2 supplies the
+  decomposition. NOTHING IS IMPLEMENTED BEFORE IT.**
+  **AND A BETTER-TARGETED VERSION OF THE SAME INSTINCT, to be priced against it: on seed 41 only
+  5 of 9 segments are CONTESTABLE AT ALL** — four score identically whoever gets them and carry no
+  information about the manager's decision. **Raising the contested share enriches the decision
+  surface WITHOUT touching the risk weights, which are grounded in real Basel tables. Widening the
+  penalty moves the environment away from Basel; contesting more segments does not.**
+
+### 2026-08-09 — STEP 2 HELD: the runner cannot build the chosen arrangement, and would fail SILENTLY
+
+- **★ FOUND BEFORE SPENDING, NOT AFTER.** `finance_env.build_environment(seed)` calls
+  `gen.generate(seed)` with **no lattice and no `shared_class_segments`** — the parameter added to
+  the generator **stops there; `run_finance_episode` never learned about it.** So the run would have
+  built `current` at `segs=4` while the pool was derived under `partial` at `segs=1`:
+
+      seed      pool (partial, segs=1)      runner (default: current, segs=4)
+       26     nA=1    0.355%                nA=4    0.000%   <-- DEAD
+       37     nA=1    3.239%                nA=4    1.845%
+       39     nA=1    2.122%                nA=4    4.201%
+
+  **SEED 26 WOULD HAVE BEEN A ZERO-CEILING INSTANCE — precisely what the selection rule exists to
+  exclude.** The old selection *"picked two dead instances out of three"*; **this would have done it
+  again, silently, by a different mechanism**, and the bundle would have recorded
+  `instance_seed: 26` and looked entirely correct.
+  **The phase's signature fault once more: a parameter that exists on one path and not another,
+  DEFAULTING TO A LEGAL VALUE.** `lattice="current"` is a valid lattice; nothing raises.
+- **AUTHORISED:** thread `lattice` and `shared_class_segments` through
+  `build_environment` → `run_finance_episode`, **and record both in the bundle**, so a bundle can
+  never again be silent about which arrangement produced it.
+- **★ AND THE GUARD IS THE MORE IMPORTANT HALF: the runner REFUSES a seed whose arrangement does not
+  match the selection record it claims to be running.** Passing the right flags is something a
+  person must remember; a guard is something that fires. **This is the first place the two-artefacts-
+  disagreeing failure can be made IMPOSSIBLE rather than merely fixed.**
+- **RUN AUTHORISATION IS HELD** until the guard exists and has been **round-tripped**: build through
+  the runner, read the arrangement back out of the bundle, confirm it matches the selection record,
+  **and confirm the guard FIRES on a deliberate mismatch.** *A control that has not been shown to
+  fail is not a control.*
+- **★ WHAT STEP 2 CAN AND CANNOT CLAIM (RR, sharpened by LS).** Three seeds × three episodes pools
+  to **df = 6**; the exact 95% interval on σ is **[0.64s, 2.20s] — a 3.4× span in σ and a 12× span
+  in required n.** *(RR framed it as n=3 → factor 3 and 9; pooling within-seed is what makes it 3.4
+  and 12. Pooling helps and does not save it.)*
+  **So step 2 reports a FEASIBILITY VERDICT and a σ ORDER OF MAGNITUDE. It does not report a σ, and
+  it sizes nothing.** **A σ good to ±25% needs ~50 episodes — a separate authorisation, to be asked
+  for explicitly rather than discovered when step 3 needs a number step 2 cannot give.**
+  **RR predicted the strongest temptation of the coming days will be to size on it anyway**, because
+  it will be the first post-repair σ we have ever had. **It goes in the record with its interval
+  attached or it does not go in.**
+- **PREDICTIONS, all three committed before any run.** **LS:** runs but not cleanly; σ 0.05–0.08;
+  n > 100/arm at the median seed. **RR:** runs 3/3; σ 0.045–0.070; and *three episodes cannot
+  estimate σ*. **RE:** runs, first failure in the ASSEMBLY path rather than the model path; σ
+  0.03–0.06; n 40–120/arm — **declared as formed AFTER finding the defect above and therefore to be
+  discounted**, which is the right disclosure.
+  **LS's review of RE's MECHANISM: the number is plausible and the stated reason conflates variance
+  with effect.** *"Manager behaviour with nothing to respond to"* does not shrink σ — a manager whose
+  channel is worth zero still allocates differently run to run and those allocations still score
+  differently. **A flat channel removes the systematic ARM DIFFERENCE, not the SPREAD.** What moves
+  σ_alloc between arrangements is how widely the score varies across the allocation space — a
+  property of the certification table and the mix. **Their direction may be right for that reason
+  instead; a prediction landing on the right number for the wrong mechanism teaches nothing.**
+- **THE SCORING PROPOSAL, sharpened by RE and now stated as a proof rather than a doubt:** widening
+  the IRB−SA penalty is a **UNITS change** — the ceiling is a share of oracle and oracle scales with
+  the same penalty, so **`effect/σ` is invariant to first order, and for the allocation component it
+  PROVABLY buys nothing if the penalty enters linearly.** Step 2's σ_alloc measurement confirms it
+  directly.
+  **AND THE ALTERNATIVE IS THE CORRECT TARGET, not a compromise: the four uncontested segments are
+  DENOMINATOR WITH NO NUMERATOR.** Raising the contested share changes **how many segments CAN
+  differ** rather than **how much each differs by** — **a real sensitivity gain rather than a
+  rescaling, and it leaves the Basel weights untouched.** **Being priced offline while step 2 is
+  blocked.**
+
+### 2026-08-09 — ★ 69% OF THE VARIANCE IS NON-COMPLETION. Run authorised with the split attached
+
+Records: `records/L9/penalty_scaling_RR.md` (RR); RE's blocker fixes and dry runs.
+
+- **★ THE LARGEST FINDING, AND NEITHER PROPOSAL ADDRESSES IT.** Recomputing per-segment scores from
+  `parse_detail` against truth across the 18 bundles:
+
+      lost to ZERO-scoring segments   mean 1.611  SD 0.916   <- penalty-INVARIANT
+      lost to GRADED (misroute) error mean 1.101  SD 0.616   <- scales with the penalty
+      share of shortfall VARIANCE that is penalty-invariant : 69%
+
+  **18% of oracle is lost to segments that produced NOTHING, with an SD half again the graded
+  component's. Both levers operate on the 31%.** Zero-counts run 0–3 **at a fixed seed**, so it is
+  execution variation, not instance variation. **The highest-value target for detectability is not
+  the scoring at all.**
+- **★ RULING BEFORE ANYONE ACTS ON IT — "reduce non-completion" is the obvious move and is NOT
+  obviously legitimate. L2a's split decides it:**
+  **never assigned** → the manager failed to allocate: **that is the DV, not noise**, and removing
+  it removes what we measure. **assigned and never executed** → harness or worker failure:
+  **noise, and may be removed.** **NOBODY TOUCHES NON-COMPLETION UNTIL THE SPLIT SAYS WHICH.**
+  The split is emitted on the step-2 bundles at no extra spend.
+- **LS's OBJECTION TO THE SCORING PROPOSAL WAS WRONG IN THE HALF THAT DECIDES IT.** LS said it "may
+  buy nothing"; RE upgraded that to "provably buys nothing"; **both overstated it.**
+  **`effect/σ` moves ×1.44 at k=2 and ×1.61 at k=3 — required n to 0.39 — with most of the gain in
+  by k≈3.** Directionally right that it is bounded, **wrong that it is null.**
+  **The cap is optimistic and fails conservatively:** `1 − min(1, rel_err)` pushes widened losses
+  onto the **1.0 floor, where they become penalty-invariant too**, so ×1.79 is unreachable and the
+  average clips near k≈6.7.
+- **CONTESTED SHARE IS STRICTLY BETTER AND IS BEING PRICED.** Same structural shape — raises the
+  effect and the graded variance, leaves the zero-loss alone — **but it does not move the
+  environment off the Basel tables, and it does not saturate**, because it adds informative segments
+  rather than enlarging losses on existing ones.
+- **RR's THREE LIMITATIONS, all carried:** the decomposition mixes instance with execution variation
+  (the fixed-seed 0–3 spread argues most is not instance-driven; it is not a clean within-cell
+  split and no corpus gives one); **the k-table is a MODEL, not a measurement**; and **this σ is a
+  shortfall SD across bundles, NOT the DV's per-episode σ — the decomposition transfers, the
+  absolute numbers do not.**
+- **★ AND IT STRENGTHENS THE STEP-2 CAVEAT BEYOND df=6: if non-completion is 69% of the variance,
+  the first post-repair σ is mostly measuring COMPLETION RATE — which is precisely the quantity most
+  likely to have MOVED under L1, L7 and L8.** Not merely imprecise; **measuring the least stable
+  thing in the system.** Carried beside the interval wherever the number appears.
+- **BOTH RUN BLOCKERS FIXED; RUN AUTHORISED (LS).** 2–3 episodes × seeds 26/37/39, one cell, flash,
+  parallel, `selection_record` pinned.
+  **Blocker 1 was WORSE than first reported: `build_cell_environment` carried the same bare
+  `gen.generate(seed)` — and that is the path STUDY CELLS actually use.** Threaded through both
+  builders; arrangement recorded in the bundle manifest. **The guard refuses a mismatched
+  arrangement and a seed the record did not choose, with both negatives verified firing — and the
+  first negative IS the real bug**, which is the strongest form of that check.
+  **Blocker 2, findable only by the dry run: `task.name.startswith(prefix)` with `prefix`
+  UNDEFINED** — a `NameError` on every dry run reaching a ready unassigned task, **so that branch
+  had never once executed.** It sits **two lines below a comment saying to use `is_metered`, NOT the
+  name** — **third instance this phase of a comment naming a failure directly above code repeating
+  it.**
+- **LS's PREDICTION, FIRST HALF CONFIRMED: "at least one assertion or acceptance fires on the first
+  attempt" — TWO did, before a single model call.** RE's specified *assembly rather than model path*
+  and was right on both. **Neither has anything on σ yet.**
+- **AND THE DRY RUN CANNOT SPEAK TO THE THING THAT MATTERS: 16/16 completions on STUBS says nothing
+  about completion under a model**, because the stubs always succeed. Given the 69%, **live
+  completion rate is the quantity to watch.**
+- **★ RE's NEAR-MISS, recorded because it is the week's lesson a fourth time and on a fourth person:
+  they read the WRONG KEY, got `None`, BELIEVED A NULL, and edited two further sites on the strength
+  of it** — in the same session as advocating positive controls for nulls. The fields were correct
+  throughout, nested under `manifest`. **Four of four agents caught by their own rule, each on their
+  own work, minutes after stating it.**
+
+### 2026-08-09 — RESEARCHER RULING: two DESIGNED environments. L10 opened; cron live again
+
+- **★ THE END PRODUCT IS TWO WELL-DESIGNED ENVIRONMENTS, not a filtered draw from sixty random
+  ones.** *"An environment needs to be designed to show the gap. There is no point randomising it to
+  zero, because then there is nothing for any manager — AI or human — to solve."* **Two is enough
+  for initial testing.** Full spec at L10.
+- **THE PROJECT ALREADY ACCEPTED THE PRINCIPLE FOR ONE DIMENSION AND ABANDONED IT FOR THE REST.**
+  `_lattice_from_template` **CONSTRUCTS** the certification table — 210 possibilities enumerated,
+  construction chosen deliberately — **while the segment mix, ratings and exposures are DRAWN per
+  seed.** We hand-designed the part we understood and rolled dice for the part that decided
+  everything.
+- **★ WHY THE OBVIOUS OBJECTION DOES NOT APPLY, and this distinction is doing all the work:**
+  **designing so a particular MANAGER scores well would be FITTING THE RESULT; designing so the GAP
+  EXISTS is CALIBRATING THE INSTRUMENT** — the gap is computed with **no manager in the loop**
+  (oracle minus card-believing-optimal, both solved exactly), **so there is nothing to fit to.**
+  **RR is asked to attack precisely this line before anything is built:** is there a way to design
+  an instance that is manager-neutral in the gap computation and still favours a particular manager
+  behaviour in a live episode? **If that leaks, the step is unsound.**
+- **THE TARGET HAS MOVED SINCE L9: zero gaps were the OLD arrangement's problem.** Under partial
+  overlap **all 60 draws are non-zero** (0.03%–6%). **The problem now is that most draws are SMALL**
+  — median 2%, long tail toward nothing. **Randomising spends the design freedom on producing weak
+  instances and then averaging them.** And **admission still discards 25 of 40 for structural
+  reasons unrelated to the gap.**
+- **SIX PROPERTIES BY CONSTRUCTION, ASSERTED NOT HOPED FOR:** non-zero gap by construction;
+  **`nA < cap`** (the free-slot condition the covered-lie regime needs); the card's lie lands on a
+  class an incumbent still covers; capacity binds exactly; **Basel weights untouched** (the one
+  thing that cannot be traded for sensitivity); and **admission passes as a POST-CONDITION rather
+  than a filter — it stops being a sieve over draws and becomes an assertion that the built instance
+  has the properties it was built to have.**
+- **THE TWO ARE A SENSITIVITY LADDER, NOT TWO SAMPLES. ENV-A: maximum gap** — the instrument at full
+  sensitivity; **a manager showing no effect there is decisive and ENV-B need not run. ENV-B:
+  realistic gap** — what an honest study would use; **an effect on A but not B is a POWER STATEMENT,
+  not a null.**
+- **★ THE STEP-2 RUN STILL GOES FIRST — reason changed, decision unchanged. Its purpose is now a
+  HARNESS measurement, not an instance one.** The 69%-of-variance non-completion finding is a
+  property of the **model path**, not of any instance, **so it TRANSFERS to the designed
+  environments** — measuring completion rate now is what informs the design, and running afterwards
+  would learn the same thing later. **The dry run's 16/16 says nothing about it: stubs always
+  succeed.**
+- **CONTESTED SHARE AND THE k-TABLE FOLD INTO L10 rather than standing alone.** In a designed
+  instance the contested share is **a parameter, not an outcome** — on seed 41 only 5 of 9 segments
+  were contested and the other four were **denominator with no numerator.**
+- **THE SELECTION MACHINERY MOSTLY RETIRES.** Rank-terciles over a random pool exist *because* the
+  pool is random; if the family is designed to span the range, **the spread is the design.**
+  **Nothing built today is wasted** — deriving the pool is what showed the arrangement produces a
+  live signal at all, which had to be known before designing on top of it.
+- **CRON LIVE AGAIN: job `9187b13e`, `17,47 * * * *`**, pointed at L10, carrying the five rules this
+  phase paid for and an explicit instruction **not to re-run the L4 drift check.**
+
+### 2026-08-09 — ★ BOTH OF LS's RULINGS OVERTURNED: the bucket boundary and the design axis
+
+Record: `records/L10/design_neutrality_RR.md` (RR).
+
+**1 — LS's NON-COMPLETION RULING RE-POOLED EXACTLY WHAT L2a UN-POOLED.**
+
+LS ruled: *never assigned → DV; assigned and never executed → harness noise, removable.*
+**"Assigned and never executed" is FOUR states, and L2a split it into them precisely to stop this
+collapse** — its own docstring: *"one bucket and is now THREE, because the scope run showed it was
+two populations with opposite meanings… **pooling them produced a rate that could not carry a
+sign.**"*
+
+**Two of the four are not harness failure at all:**
+- **`refused_allotment`** — permanently barred, the allotment never releases within an episode.
+  **The allotment IS the deliberate scarcity that creates the coverage channel**, so a manager
+  assigning into a spent one is **manager error — the DV.** Removing it removes what
+  capacity-displacement measures.
+- **`refused_unavailable`** — the predicate says outright *"which a roster change can cause, so this
+  is the state a swap run must be able to see separately."* **A roster change IS the manipulation.**
+  **Under LS's ruling this would have been classified as removable noise, while the module says it
+  is the signature the swap run exists to observe.**
+
+**THE CORRECTED MAPPING (RR), adopted:**
+
+    DV             never_assigned, refused_allotment, executed_and_declined
+    MANIPULATION   refused_unavailable        <- must remain visible, never removed
+    BUDGET/HORIZON refused_concurrency, unexecuted_no_refusal
+    DEFECT         executed_but_unparseable   <- carries the uninterpretable flag
+    MEASUREMENT    executed_and_parsed
+
+**Two of eight are removable, not four** — and *budget/horizon* is a **third category**, not LS's
+second. **`executed_and_declined` is a legitimate outcome**: a worker declining is a behaviour, and
+in a study about handling a newcomer it is DV-adjacent, not noise.
+
+**Why it mattered to catch before the split returns rather than after: the ruling PRE-COMMITTED the
+bucket boundaries, and drawn at "assigned vs not" the split would have answered with the wrong
+partition and the answer would have looked clean.**
+
+**RR's concession, unprompted: the 69% figure does NOT distinguish these states** — it counts every
+zero-scoring segment together, **which is the same pooling they were objecting to.** So it says the
+variance is dominated by segments producing nothing; **it does not say how much is removable.**
+Corrected form: *the highest-value target is the REMOVABLE SHARE of non-completion, currently
+unknown, and the split is what gives it.*
+
+**2 — ★ THE DESIGN-NEUTRALITY LEAK, MEASURED. LS's premise is true and the inference does not
+follow.**
+
+Natively, `shared_class_segments=1`, 30 seeds:
+
+    lattice     card − ignorant    ceiling
+    current             +0.8032      0.00%
+    partial             +0.5804      2.18%
+    disjoint            +0.3277      5.43%
+
+**Monotone: the larger the ceiling, the LESS the card is worth against knowing nothing. So
+MAXIMISING THE GAP MAKES IGNORING THE CARD A BETTER POLICY.**
+
+**LS argued the gap computation contains no manager, therefore ordering by gap is manager-neutral.
+The premise is correct; the inference is wrong — ORDERING INSTANCES BY GAP RANKS MANAGER POLICIES**,
+because gap size and card-informativeness are inversely coupled. **ENV-A at maximum gap is precisely
+where that confound is LARGEST, which is the opposite of what a decisive arm should be.**
+
+**Three further leaks, argued rather than measured:** **tie-break skew** (the gap uses the D18
+expectation; a live manager has a *systematic* rule, and the tie set has been measured spanning as
+wide as the effect); **segment order** (the gap is a max over allocations and so order-INVARIANT,
+while a manager reading a task list is order-SENSITIVE — **the enumeration-order hazard was
+controlled one level down and the identical hazard sits one level up with nothing on it**); and
+**exact capacity binding** (one feasible load shape means the manager chooses WHICH work and never
+HOW MUCH — it deletes a dimension rather than favouring a policy, but **a manager whose competence
+is load management can display none of it, and that should be declared rather than inherited**).
+
+**3 — THE BETTER AXIS, ADOPTED: vary CARD-INFORMATIVENESS, not gap size.**
+
+- **ENV-A: the card is substantially RIGHT.** Blanket distrust **loses**, so an effect can only come
+  from **newcomer-specific information.**
+- **ENV-B: the card is substantially WRONG.** Blanket distrust **wins**.
+
+**A manager improving on BOTH used information about the newcomer. A manager improving only on B
+distrusted a bad card.** That separates the confound directly, where a gap-size ladder separates
+power from effect — **and the power question's answer is already "we cannot tell", because both
+floors are zero.**
+
+**RR's decisive line, adopted: if only one axis is affordable, spend it here — a POWER statement can
+be recovered later by running more episodes; a CONFOUND cannot be recovered at all.**
+
+**4 — ADMISSION AS POST-CONDITION: ENDORSED by RR as a strict improvement, with one condition.**
+**It must be able to FAIL.** An assertion over a construction that guarantees its own premises is
+**the structurally-zero residual again.** **Six properties, six demonstrated failing fixtures** —
+cheap, because we control the construction.
+
+**LS's OPEN QUESTION back to the team: can the card-informativeness axis be spanned WITHIN partial
+overlap by varying the mix, rather than by switching ENV-B to the disjoint arrangement we retired on
+realism grounds?** If yes, both environments keep their realism. **If no, ENV-B is a DECLARED
+DIAGNOSTIC rather than a setting**, and its results speak about manager policy rather than about a
+realistic succession — which must be stated wherever they appear.
+
+### 2026-08-09 — ★ THE CONSTRAINT IS SATISFIABLE. Realistic AND consequential, with Basel untouched
+
+Records: `records/L10/` (RR, two sweeps; RE, contested-share pricing).
+
+**1 — THE ANSWER. Contested share, arrangement held at `partial`, 20 seeds per cell:**
+
+    force on   irb_frac   card − ignorant   ceiling
+    lied           0.44           +0.4725     1.84%
+    lied           1.00           +1.0259     1.51%
+    shared         0.44           +0.4050     1.20%
+    shared         0.67           +0.5569     2.32%
+    shared         0.89           +0.6603     3.50%
+    shared         1.00           +0.6998     4.22%
+
+**★ THE SHARED-FORCED ROW IS EXACTLY WHAT THE CONSTRAINT NEEDS: GAP AND CARD VALUE RISE TOGETHER.**
+Ceiling **1.20% → 4.22% (3.5×)** while card−ignorant goes **+0.41 → +0.70 (1.7×)**. **That breaks
+the arrangement-level coupling**, and for the reason LS gave: **the coupling is an ARRANGEMENT
+property and contested share is a MIX lever.** LS's decomposition — `gap = structure × per-segment
+cost` — is vindicated; **only the prediction hung on it missed. LS predicted card−ignorant roughly
+FLAT; it RISES steeply, in both forcing directions. Wrong in the direction that helps.**
+
+**ADOPTED CELL: shared-forced at `irb_applicable_fraction ≈ 0.89` — ceiling 3.50%, card−ignorant
++0.66. Basel untouched, no rating selection, arrangement unchanged.** **1.00 is rejected on two
+counts:** every exposure being IRB-approved is at the edge of plausible (**real banks run partial
+use, with portfolios permanently on SA**), and **generation starts failing there — 17–18 of 20 seeds
+against 20/20 below.** **0.89 is the last defensible cell.**
+
+**AND IT MOVES AFFORDABILITY:** 3.50% against the only σ we have (0.0768) is d ≈ 0.46 → ~75/arm,
+against ~185/arm at the median random draw. **Still not a sizing claim — that σ is pre-repair.**
+
+**2 — THE RATING-DIVERGENCE LEVER IS NOT NEEDED, which sidesteps LS's own worry rather than
+adjudicating it.** RR's answer for the record: **a scoring-rule change applies to everything and
+leaves Basel; rating composition selects a portfolio and does not** — **but they converge at the
+extreme**, and the separating criterion is **whether the resulting rating distribution resembles a
+book someone could hold.** Also **nearly exhausted**: divergence selection as implemented buys
+1.13×, and going further means selecting a tail running 0.002–0.754 per segment, **which is where
+"designed book" stops being a figure of speech.** Small headroom, high cost, not required.
+**Divergence selection stays OFF; only the count forcing, targeted at the shared class, is needed.**
+
+**3 — ★ TWO PROBLEMS, AND THEY MUST NOT BE COLLAPSED.** The researcher's constraint
+(*realistic AND consequential*) and the ENV-A/ENV-B contrast (*used newcomer-specific information vs
+distrusted a bad card*) **are different problems, and contested share solves only the first.**
+**It raises BOTH arms together — it does not separate them.** A matched-gap pair differing in
+card-informativeness is **narrower than before**: `shared@0.89` (3.50%, +0.66) against `lied@2`
+(3.63%, +0.61) is a span of **0.05**, against 0.14 previously.
+**So: the environments CAN be realistic and consequential — settled. What they still CANNOT do is
+cleanly separate the two manager policies at matched gap. The first is a design decision; the second
+is a STANDING LIMITATION, and the good news about the first must not read as progress on it.**
+
+**4 — LS RULING: THE ENV-A/ENV-B CONTRAST IS DEFERRED, NOT SOLVED, AND THE TWO ENVIRONMENTS BECOME
+TWO CONSEQUENTIAL INSTANCES RATHER THAN A CONTRAST.**
+**The contrast exists to separate two explanations for an effect. We have not established there IS
+an effect.** Separating explanations before establishing the phenomenon is the wrong order — and the
+separation is measured at a span of 0.05, which would not carry a verdict even if the phenomenon
+were established. **Two realistic, consequential instances, differing enough that a finding on both
+is not instance-specific. If something moves, the confound question becomes live and needs a design
+that can separate — which RR has shown is hard and is not this one.**
+
+**5 — PRE-COMMITMENT, requested by RR and ADOPTED: if the effect turns out undetectable at these
+settings, that is a FINDING and NOT a reason to widen anything.** Widening reintroduces the
+confound and the resulting number would answer a question we already know we cannot answer.
+**Deciding it now costs nothing; deciding it after seeing a null costs the result.**
+
+**6 — CONTESTED SHARE: RE AND RR MEASURED ADJACENT QUANTITIES AND ONLY ONE IS THE LEVER.**
+**RE priced the OUTCOME across arrangements** — contested count lands at 52–62% everywhere and does
+**not** track the ceiling (`disjoint` has the LOWEST share and the HIGHEST ceiling; `partial`@segs=4
+the HIGHEST share and a ceiling of ZERO), concluding it *"may not be freely settable"*.
+**RR priced the KNOB within one arrangement** — `irb_applicable_fraction` — and it moves the
+ceiling 3.5×. **Both correct, different questions: the share is arrangement-invariant and
+mix-settable.** RE's within-partial figure (4→5 contested, +58% mean ceiling, r = 0.25) is the same
+lever seen through the outcome, which is why it looked second-order.
+**RE's own flag, and it was the right one: they priced the lever proposed, not the mechanism behind
+it.**
+
+**7 — A NEAR-ESCALATION AVOIDED (RE): repeated 401s during the run are `[non-fatal]` TRACING uploads**
+— the SDK posting telemetry to OpenAI with an OpenRouter key, because `.env` sets `OPENAI_API_KEY`
+to the same `sk-or-v1` value. **Not the inference path; nothing billed.** Tracing disabled for the
+run. **An alarming signal that said "non-fatal" on its face, nearly escalated.**
+
+### 2026-08-09 — the three amplifiers are separated; two bugs found in the separating; one open question
+
+- **`amplify_count`, `amplify_divergence`, `amplify_irb_priority` are now independent switches**, each
+  recorded in the manifest, **verified separable on a paired population across all eight settings —
+  30/30 survive every one**, so comparisons are on one population.
+- **★ BUG 1 WAS IN THE FIX ITSELF: a mix change produced by turning an amplifier OFF.** Gating only
+  the `+=` left `others = [c for c in classes if c != shared_class]` in force, so with
+  `amplify_count=False` **the shared class received ZERO segments instead of its round-robin share**
+  (max class count 3.00 over four classes, where plain round-robin over five gives 2.00).
+  **The kind of half-fix that looks complete because the flag is honoured somewhere.**
+- **★ BUG 2 WOULD HAVE WRECKED THE SWEEP: the divergence search draws from the MAIN rng and consumes
+  a VARIABLE number of draws** (it breaks early on the first non-clipping candidate). **So toggling
+  `amplify_divergence` silently moved the calibration, the EADs and the segment mix as well as the
+  ratings — varying divergence varied the INSTANCE.** Precisely the confound the switch was
+  separated out to remove. Fixed with its own stream; the main stream now advances by exactly one
+  rating draw either way. **The rng-alignment fault a THIRD time this phase, same shape, one level
+  down from the lattice path.**
+- **RE's TWO WRONG DIAGNOSES BEFORE THE RIGHT ONE, and checking before saying so:** the 3.00-vs-2.00
+  gap first read as **survivorship** (different seeds failing under different settings) — **checked,
+  population identical 30/30 everywhere, so it was bug 1.** **Both killed by measuring rather than
+  reasoning.**
+- **★ OPEN AND BLOCKING: WAS RR's `irb_applicable_fraction` SWEEP RUN BEFORE THE STREAM FIX?**
+  **Their sweep forced the mix, so `shared_class` was set, so ALL THREE amplifiers were on including
+  divergence.** If it predates the fix, **varying `irb_frac` changed how many candidates the
+  divergence search examined, moving calibration and EADs downstream — so the measured ceilings are
+  correct for the instances generated, but the TREND across `irb_frac` may be partly incidental
+  instance variation rather than the lever.**
+  **The adopted cell (shared-forced at 0.89, ceiling 3.50%, card−ignorant +0.66) is what the two
+  environments would be built on, so CONSTRUCTION IS BLOCKED ON RE-VERIFICATION rather than on the
+  sweep itself.** Cheap to redo; **redo beats build-on.**
+  **Put to RR in differ-test form: what would have had to be true for the pre-fix and post-fix
+  sweeps to differ?** If the divergence search's early break is insensitive to how many segments are
+  IRB-applicable, it is clean — **and that should be STATED rather than assumed, because from
+  outside it looks like it might be sensitive.**
+- **★ A NAMING PROBLEM THE VERIFICATION EXPOSED: EVERY "AMPLIFIER" REDUCES THE PARTIAL CEILING**, and
+  all-off is the best configuration at `segs=4` (1.88% off, down to 0.00–0.13% with count on).
+  Consistent with the saturation mechanism. **A switch called `amplify_count` that lowers what it
+  names is an identifier asserting the opposite of what it does** — the provenance rule applied to a
+  variable name, and **the second inherited-vocabulary problem this week after "lattice".** They are
+  amplifiers for the arrangement we abandoned and **dampeners for the one we adopted.**
+- **LS's COMMITTED PREDICTION ON DIVERGENCE — neither claimed nor dismissed.** Predicted: divergence
+  raises both the gap and card−ignorant. **One datapoint against it (1.88% → 1.75%), at `segs=4`, the
+  SATURATED regime where the covered-lie channel is dead — not at the `segs=1` operating point.**
+  **Untested where it matters, contradicted where it doesn't, and about a lever the adopted setting
+  turns OFF. Marked unresolved rather than dropped.** RE's instruction to the sweep is adopted:
+  **treat divergence as a SIGNED lever rather than assuming a sign.**
+
+### 2026-08-09 — ★ CORRECTION: the adopted cell's figures were 7–14% high. Decision survives; numbers don't
+
+Record: `records/L10/` with **`contested_share_sweep.py` committed alongside** — every number below
+re-runs.
+
+    irb_frac    ceiling    card − ignorant       previously published
+        0.44    1.1779%            +0.3930       1.20%  /  +0.4050
+        0.67    2.1265%            +0.5189       2.32%  /  +0.5569
+        0.89    3.0574%            +0.6169       3.50%  /  +0.6603
+
+**THE ADOPTED CELL IS 3.06%, NOT 3.50%.** **The conclusion is unchanged**: ceiling rises **2.60×**
+across the sweep while `card − ignorant` rises **1.57×** with it, **so shared-forcing still satisfies
+"realistic AND consequential" and 0.89 is still the cell.** Affordability moves from ~75/arm to
+**~100/arm** against the pre-repair σ — **still well below the ~185/arm of a median random draw, and
+still not a sizing claim.**
+
+**RULED OUT by RR:** hash-seed dependence (identical across four `PYTHONHASHSEED` values); the
+Monte-Carlo interleave (in-process, with and without, bit-identical); explicit
+`irb_applicable_fraction=0.67` vs the default (identical 20/20); differing surviving-seed sets
+(n=20 in both runs at the affected cells).
+**NOT IDENTIFIED: what differed between the earlier scripts and the later ones.** Each is
+individually deterministic and reproducible; **they disagree with each other.** One suggestive
+detail, **flagged by RR as a coincidence and not a diagnosis:** 2.32% is very close to seed 0's
+individual value, 2.3124%, which would fit an aggregation error — **not asserted, and nothing left
+to check.**
+
+- **★ AND THE REASON NOTHING IS LEFT TO CHECK IS THE DEFECT RR THEMSELVES FOUND AND ANNOTATED HOURS
+  EARLIER: the earlier scripts were UNCOMMITTED INLINE ONE-OFFS.** Same shape as
+  `step4_audit_RR.md` citing a script that was never committed. **They wrote the rule, annotated
+  their own violation of it, then produced three more uncommitted one-offs and published a
+  recommendation from them the same day.**
+- **★ LS's SHARE, AND IT IS THE RECIPIENT-SIDE RULE FAILING ON THE PERSON WHO ADOPTED IT: I took
+  3.50% into a decision record within minutes because it arrived as a MEASUREMENT.** That is exactly
+  the mechanism identified this morning — *a number without its construction, adopted because it
+  supported a conclusion already held* — **with RR as the source this time and me as the adopter.
+  I did not ask the one question.**
+- **NEW STANDING RULE, on RR's request and adopted: A FIGURE ENTERS A DECISION RECORD ONLY WITH A
+  COMMITTED SCRIPT BEHIND IT.** Partly mechanical already — **`check_record_citations.py` resolves
+  `.py` references, so a decision record citing its script is checkable; a decision record citing no
+  script is the gap.**
+- **★ WHAT THIS DOES AND DOES NOT TOUCH IN THE PRIOR RULINGS.** The **0.05 matched-gap span** and the
+  **3.5× ratio** came from the same uncommitted runs. **The 2.60× is now verified; the 0.05 span is
+  NOT, and RR is re-deriving it.**
+  **The deferral of the ENV-A/ENV-B contrast STANDS, because it rested on two legs and only one was
+  numeric:** *(a)* the span is too narrow to carry a verdict — **now unverified**; *(b)* the contrast
+  separates two explanations for an effect **we have not established exists**, and separating
+  explanations before establishing the phenomenon is the wrong order — **independent of any number.**
+  **Leg (b) carries it. Leg (a) is marked unverified rather than quietly retained.**
+
+### 2026-08-09 — the units disagreement dissolves; the naming rename is REFUSED and rightly; one re-measurement blocks the build
+
+- **★ THE `card − ignorant` "DISAGREEMENT" WAS PURE UNITS, and the CEILING agreement is what proves
+  it.** Same instances: **+0.0727 as a share of oracle** (RE) against **+0.6131 absolute** (RR's
+  +0.6169), mean oracle 8.4386, share × oracle = **+0.6138.** **RR's corrected ceiling 3.0574% and
+  RE's independent 3.06% on the fixed stream agree to three significant figures — so the INSTANCES
+  match, and the 9× could only ever have been the formula.**
+  **★ THIS SETTLES LS's CONTAMINATION QUESTION INDEPENDENTLY OF RR's ACCOUNT: two paths, same
+  number.** Construction unblocks on that rather than on trust.
+- **THE UNEXPLAINED EARLIER-VS-LATER DIFFERENCE STAYS UNEXPLAINED, deliberately.** Hash seeding, the
+  Monte-Carlo interleave, explicit-vs-default parameters and differing seed sets all ruled out; the
+  earlier scripts were uncommitted with nothing left to re-run. **An unreproducible difference
+  between a committed script and a deleted one is not a finding, and the standing rule is the right
+  response rather than more archaeology.**
+- **★ RE REFUSED THE RENAME LS ASKED FOR, AND THE REFUSAL IS THE STRONGER ARGUMENT.**
+  `amplify_*` appears in **committed records, manifests and RR's sweep script**, so renaming would
+  **silently break the join between a bundle and the figures derived from it.** *Churning identifiers
+  to fix a docstring problem trades a READING error for a PROVENANCE error* — **the exact fault this
+  phase has spent itself removing, which LS proposed re-introducing.**
+  **The correction is stated where a reader meets the parameter instead, and it is more useful than
+  a rename:** `amplify_count` **dampens on `partial`** (the channel needs nA < cap) and is **the only
+  thing that creates a channel at all on `current`** (needs nA ≥ cap); `amplify_divergence` has a
+  small ceiling effect but is **LOAD-BEARING FOR GENERATION** at high `irb_applicable_fraction`;
+  `amplify_irb_priority` approves the amplified class's segments first.
+  **The direction of every one is ARRANGEMENT-DEPENDENT. None is an amplifier simpliciter.**
+- **★ BLOCKING THE BUILD: RR's 0.89 FIGURES WERE MEASURED WITH `amplify_divergence` ON, AND LS
+  SPECIFIED THE BUILD WITH IT OFF.** **The figure that justified the cell was not measured in the
+  configuration we would build** — the construction-path rule at the level of a switch, **third time
+  this phase a number and its intended use differed in a setting.**
+  **RULING: RE-MEASURE, DO NOT ASSUME.** Re-run the adopted cell with `amplify_divergence=False` at
+  `segs=1`, where it generates 20/20. **If the ceiling holds near 3.06%, build divergence-off as
+  specified and the realism argument costs nothing. If it drops materially, the choice is between
+  leaving ratings unselected and the size of the gap — a RESEARCHER-level trade, brought with both
+  numbers rather than decided by the team.**
+- **AND INTO THE L10 SPEC VERBATIM, because it would otherwise be lost: "divergence off at 0.89" is
+  TRUE OF THE CELL and FALSE OF THE PARAMETER COMBINATION IN GENERAL.** At the default segment count
+  it does not generate at all — *"only 6 of 9 segments have a non-zero SA fallback, but 8
+  IRB-approved segments were requested."* **A setting that reads as independent of the segment count
+  and is not.**
+- **RUN: in flight, 13 minutes, I/O-bound, no bundles yet. Nothing on σ.**
+
+### 2026-08-09 — divergence-off is FREE; the "unexplainable" discrepancy WAS the stream bug
+
+- **★ RE-MEASURED IN THE BUILD CONFIGURATION, and the branch LS was preparing for does not arise:**
+
+      partial, segs=1, irb_frac=0.89     gen     ceiling   card−ignorant (share)
+        amplify_divergence = True       40/40     3.15%          +0.0785
+        amplify_divergence = False      40/40     3.21%          +0.0810
+
+  **Both quantities move UP with divergence OFF** (+1.8% ceiling, +3.2% card−ignorant), and RR
+  reached 3.17% independently at 20 seeds. **Two paths again. BUILD DIVERGENCE-OFF; the realism
+  argument is FREE, and there is no researcher-level trade to bring.**
+  **The constraint is now met in the configuration that will ACTUALLY BE BUILT** — which was not
+  true an hour ago, when the figure justifying the cell had been measured with the switch in the
+  other position.
+- **★ AND THE DISCREPANCY BOTH RE AND LS SAID SHOULD STAY UNEXPLAINED WAS A LIVE GENERATOR DEFECT.**
+  RR's earlier contested-share figures failed to reproduce; they had ruled out hash seeds, the MC
+  interleave, explicit-vs-default kwargs and the seed set. **Cause: the divergence search consumes a
+  VARIABLE number of MAIN-stream draws. Their sweep varied `irb_frac` with `shared_class` set, so all
+  three amplifiers were on, so changing `irb_frac` changed how many candidates the search examined,
+  which moved the calibration and the EADs. Same seed, different instance, before and after the
+  fix.**
+  **BOTH RE AND LS WITHDRAW THE ADVICE TO CLOSE IT.** LS wrote *"an unreproducible difference between
+  a committed script and a deleted one is not a finding"* and agreed archaeology was the wrong
+  response. **We would both have closed a live defect as unresolvable. The rule is still right; the
+  application was premature.**
+- **★ THE GENERALISATION, AND IT IS THE MOST REUSABLE THING HERE. RR DID NOT RE-RUN ANYTHING — they
+  asked WHAT WOULD HAVE HAD TO BE TRUE FOR THE TWO TO DIFFER** (the draw count would have to depend
+  on `irb_frac`) **and it does.**
+  **The differ-test was written to interrogate AGREEMENT: before treating two matching results as
+  evidence, name what would have made them differ. This applies it to DISAGREEMENT: before treating
+  two conflicting results as unresolvable, name what would have made them differ.** Same question,
+  opposite starting point — **and "nothing left to re-run" does not mean "nothing left to reason
+  about."** **Goes into the rule as its second face.**
+- **GENERABILITY IS NOT MONOTONE IN SEGMENT COUNT, correcting RE's own summary:**
+
+      segs=1  div=True 20/20   div=False 20/20
+      segs=2  div=True 20/20   div=False 20/20
+      segs=3  div=True 18/20   div=False 16/20   <- WORST
+      segs=4  div=True 20/20   div=False 19/20
+
+  **It fails in a BAND, not at the top.** *"Generation fails at high segment count"* reads as
+  monotone and is wrong. **The L10 line is strengthened rather than weakened: the setting is not
+  independent of the segment count, AND THE DEPENDENCE IS NOT EVEN ORDERED.** The adopted cell sits
+  outside the band at 20/20 either way.
+- **NAMING — LS RULES FOR RE. RR argued to rename "while nothing depends on the names yet"; that
+  premise is FALSE.** `check_amplifier_dependence`, **every manifest written since `6ac6ba7`**, and
+  **RR's own committed sweep script** all depend on them. **Renaming now breaks a join that already
+  exists.**
+  **Addition: if we ever rename, L10's BUILD is the moment** — the parameters are being rebuilt
+  there anyway, so **the join can be broken DELIBERATELY, with everything migrated in the same
+  commit, rather than incidentally.** Until then the per-parameter statement carries it.
+- **RUN: 17 minutes, I/O-bound, 24 sockets, no episode finished. THRESHOLD SET rather than left to
+  drift: if nothing has landed by ~45 minutes, STOP AND DIAGNOSE.** 22 timesteps at 6 parallel on
+  flash should not take that long, and *"still going"* is the state that quietly becomes an hour.
+  **First question if it stalls: model path or assembly path — the split that has decided every
+  other failure this week.**
+
+### 2026-08-09 — the CRON PROMPT had gone stale and was directing firings at a superseded design
+
+- **★ A CRON PROMPT IS A STEP MARKER NOBODY RE-READS — and worse than the two stale `[~]` markers
+  this phase, because it INSTRUCTS rather than merely describes.** `9187b13e` still directed each
+  firing at the **ENV-A maximum-gap / ENV-B realistic-gap ladder**, which was **superseded on RR's
+  measured evidence within hours of the cron being written.** A future firing would have worked
+  toward a design retired for ranking manager policies.
+- **Cancelled and replaced by `589bad18`**, carrying: the **settled build setting** (partial /
+  count ON at the shared class / divergence OFF / `irb_frac` 0.89 / `segs` 1 → ceiling 3.21%, two
+  paths agreeing, 40/40); an explicit **DO NOT BUILD THE LADDER** with the reason; the **two
+  environments as consequential instances rather than a contrast**; the **five-bucket split
+  mapping**; the **45-minute run threshold**; and **both faces of the differ-test** plus the
+  **committed-script rule.**
+- **RULE THAT FOLLOWS, into `RESEARCH-CRON-STATUS.md` §7: when a ruling changes what the topmost
+  step IS, the cron prompt is part of what has to change. It is not a set-and-forget artefact.**
+- **AND A METHOD NOTE ON THE EDIT ITSELF, because it is the same failure a third time:** the first
+  attempt at amending L10 used **exact-string matching for the header, matched NOTHING, and the
+  script reported success for the half that landed.** Redone by **line index** and **verified by
+  printing the lines back.** *Third partial-edit-reporting-success this week; the fix each time was
+  re-reading the file rather than trusting the script's own report.*
+- **STATE: no peer commits and no bundles since the previous firing. The run is in flight.**
+
+### 2026-08-09 — ★ THE RUN WAS HUNG, NOT SLOW. The harness has no timeout anywhere
+
+**Stopped at 20:47 with ZERO episodes. Diagnosed to the MODEL path. Zero model spend — nothing
+reached completion, and the earlier 401s were the non-fatal tracing path.**
+
+    elapsed 20:47   CPU 00:00:25   sockets 14, all ESTABLISHED
+    main thread     ep_poll (asyncio loop idle)
+    worker threads  futex_do_wait
+    rchar delta over 60s   899 bytes   <- ~15 B/s, not a working LLM stream
+    bundles                0
+
+- **ASSEMBLY SUCCEEDED — episodes started, 14 connections established. The hang is in the MODEL
+  PATH:** requests sent, connections open, nothing coming back, event loop idle indefinitely.
+- **★ THE HARNESS DEFECT: THERE IS NO TIMEOUT ANYWHERE IN THE CHAIN.** `Runner.run(...)` at
+  `ai_agent.py:281` has **no `wait_for`**, no client timeout, and `model_provider` sets **none** on
+  the client. **A single unanswered upstream request blocks its episode indefinitely, and with
+  `asyncio.gather` ONE HUNG EPISODE HOLDS THE WHOLE BATCH.**
+  **A harness that cannot time out is not a harness anyone would ship** — which is the production
+  test answering itself.
+- **RE STOPPED AT 18 MINUTES RATHER THAN WAITING FOR LS's 45-MINUTE THRESHOLD, AND WAS RIGHT.**
+  The state was diagnosable at 18; waiting would have bought a longer identical hang.
+- **★ AND RE's GENERALISATION REPLACES LS's RULE: THE FIX IS NOT THE THRESHOLD BUT THE FIRST
+  SAMPLE.** A threshold tells you when to give up **after** the time is spent; **one I/O-counter
+  delta at three minutes tells you whether the thing is working at all, and costs nothing.**
+  **ADOPTED: for any long-running operation, take an EARLY PROGRESS SAMPLE rather than set a
+  deadline.**
+- **AUTHORISED, in this order:** **(2) client-level HTTP timeout FIRST** — narrowest fix at the
+  layer where the failure is — **and check the retry policy, because a timeout that triggers
+  unbounded retry is not a timeout**; **(1) run-level `wait_for` as a generously-bounded backstop**,
+  not because we have seen the failure it catches but because **one hung episode holding the batch
+  is a fragility independent of cause**; **(3) the timeout RECORDED IN THE MANIFEST**, same
+  reasoning as the arrangement — **a bundle should say what it was willing to wait for**;
+  **(4) re-run ONE EPISODE, ONE SEED, SERIAL.**
+  **CORE PATH ⇒ `CHANGED.md` entry in the same commit.**
+- **RE's SEQUENCING SELF-CRITICISM, accepted: six in parallel as the first live thing on a brand-new
+  arrangement is the same shape as trusting a control before showing it can fail.** A serial single
+  **is** the positive control for the model path, and it would have cost three minutes.
+- **★ SCOPE CLARIFICATION ON RR's 69% THAT THIS FORCES, and it is NARROWER than a contamination:
+  the 69% is measured on bundles that COMPLETED, so it describes segments that did not complete
+  WITHIN A COMPLETED EPISODE. A hang produces NO BUNDLE AT ALL, so hangs are INVISIBLE to that
+  measurement rather than contaminating it.** **Two distinct failure modes; only one is in the
+  corpus.** *"Non-completion" now names two things and must say which.*
+- **WHAT IS NOT ESTABLISHED AND IS NOT ASSERTED: whether the upstream was rate-limiting, queueing or
+  silently dropping.** 14 ESTABLISHED sockets with no bytes is consistent with all three and there
+  is no server-side visibility. **The claim that survives is about US: the harness cannot
+  distinguish them, and that is our defect whichever was happening.**
+- **STEP 2 PRODUCED A FINDING, JUST NOT THE ONE IT WAS FOR. Every result this phase until now was
+  offline arithmetic; this is the first thing only a live run could have found**, and it is a real
+  defect in shipped code. **Nothing on σ and nothing on the five-bucket split — both need bundles.
+  Step 2's purpose is unchanged and unmet.**
+
+### 2026-08-09 — the timeout is built, the model path is ALIVE, and the root cause is a 100-minute default
+
+- **★ THE EARLY-PROGRESS-SAMPLE RULE VALIDATED ITSELF 45 SECONDS INTO ITS FIRST USE:**
+
+      serial episode, ~2 min in   rchar delta over 45s = 435,937 bytes
+      the hung run                rchar delta over 60s =         899 bytes
+
+  **~500× on the first counter you look at.** So the sample is not merely cheaper than a deadline —
+  **it is UNAMBIGUOUS where a deadline is a judgement call.** *Measured, not reasoned.*
+- **★ ROOT CAUSE: litellm's global `request_timeout` defaults to 6000 SECONDS — 100 MINUTES.** The
+  run would have waited another eighty. **`Runner.run` drives `LitellmModel`, whose constructor
+  takes only `(model, base_url, api_key)`, so the global is the only knob.**
+- **★ AND THE PARALLEL PATH IS THE PATTERN, NAMED RATHER THAN COUNTED: `llm_interface` builds its own
+  `AsyncOpenAI` at `timeout=300.0`, so the bound existed on ONE PATH AND NOT THE PARALLEL ONE. THE
+  MANAGER/JUDGE PATH WAS NEVER AFFECTED.**
+  **THIS CODEBASE HAS MULTIPLE PATHS THAT DO THE SAME JOB, AND CONFIGURATION APPLIED TO ONE IS NOT
+  APPLIED TO THE OTHER** — the lattice parameter, the rng stream, and now the timeout.
+  *(The amplifier bundling and the totality-repair gate are ADJACENT BUT DIFFERENT — over-coupling
+  and provenance-gating. Kept distinct so the pattern stays diagnostic rather than becoming a
+  catch-all.)*
+  **MECHANICAL FORM WORTH BUILDING AFTER THE SERIAL EPISODE REPORTS: assert that every site
+  constructing a model client sets an explicit timeout.** `check_path_alignment` does this for the
+  generator's two paths; **the model layer has no equivalent, and a lint-shaped check would have
+  caught this BEFORE a run rather than during one.**
+- **BUILT IN THE AUTHORISED ORDER (committed):** client bound **`request_timeout=180`** with
+  **`num_retries=2`** — *deferring to a provider SDK's unstated retry policy is not a policy*;
+  **`asyncio.wait_for` at both `Runner.run` sites** raising `WorkerRunTimeout` at
+  **630s = (180+30)×(2+1)**, sized so **a call that legitimately exhausts its retries finishes
+  INSIDE the backstop, or the backstop would mask the retries it exists to outlive**; **both bounds
+  in the manifest**; serial single running.
+- **★ TWO SELF-INFLICTED BREAKAGES ON THE WAY, and the second carries the sharper lesson.** The first
+  edit's search string matched the **function definition line** rather than the standalone call,
+  truncating the body into a `SyntaxError`. The repair then left a **DUPLICATE DEFINITION** of the
+  backstop constant and the exception. **Neither was caught by the code importing — the duplicate
+  imported FINE.** **A `SyntaxError` announces itself; a duplicated definition is a GREEN SIGNAL.**
+  Both were caught by **counting symbol definitions** — the artefact-not-the-log discipline arriving
+  in a text edit. **Third partial-edit failure today (LS two, RE one).**
+- **RE WITHDRAWS THE "SIBLING CONTAMINATION" SUGGESTION in favour of the narrower statement: hangs are
+  INVISIBLE to the 69% rather than mixed into it**, because a hang produces no bundle. **Two failure
+  modes; only the inner one is in the corpus.**
+- **STILL NOTHING ON σ, AND A SINGLE EPISODE WILL NOT PROVIDE ONE — df = 0.** A single datapoint is a
+  **feasibility verdict and nothing else**, and will be reported as that, with the five-bucket split
+  on whatever bundle lands.
+
+### 2026-08-09 — the SERIAL episode hung too, mid-stream. Step 2's verdict is "NOT YET"
+
+    ~2 min in   435,937 bytes / 45s   <- working
+    ~4 min in           0 bytes / 30s   <- stalled, MID-EPISODE
+    elapsed 4:13, CPU 2s, no bundle
+
+- **★ NOT LOAD-INDUCED, and that is worth more than the hang.** A **serial single** gets minutes of
+  real traffic and then stops dead. **Six-parallel alone would have supported "too much for the
+  provider"; the serial re-run rules it out.** **The re-run DISCRIMINATED A HYPOTHESIS rather than
+  merely costing less** — the second reason serial-first was right sequencing, and LS only had the
+  first.
+- **AN UNPLANNED POSITIVE CONTROL FOR THE FIX JUST BUILT, and RE is waiting rather than killing it
+  because killing it destroys the only test.** Bounded at 15 minutes. Three outcomes, each saying
+  something different: **client bound fires → works, diagnosable failure; survives to 630s and
+  `WorkerRunTimeout` fires → the client bound did not reach it and the backstop earned its place;
+  passes 630s still hung → both bounds are ineffective and the fix is not a fix.**
+- **★ THE DISTINCTION RECORDED BEFORE THE BOUND FIRES, because all three outcomes share it: THE FIX
+  CONVERTS A HANG INTO A DIAGNOSABLE ERROR. IT DOES NOT MAKE THE PROVIDER ANSWER.** Outcomes 1 and 2
+  both mean **the harness is sound and the run still produces no bundle.** **If the stall is
+  reproducible there is a PROVIDER-PATH problem sitting behind the HARNESS problem just fixed** —
+  a different question with a different fix (model choice, routing, or retry-and-continue rather
+  than fail-the-episode). **Named now so a clean timeout does not read as a solved run.**
+- **DISCRIMINATING OBSERVATION REQUESTED, nearly free: does the stall happen at a CONSISTENT POINT?**
+  Same timestep / request index / payload shape across the two hangs → **request-specific and
+  reproducible.** Scattered → **the provider.** Two datapoints is thin and it is what we have.
+- **AND A CONSEQUENCE TO PRE-DECIDE: if the client bound fires and the EPISODE errors out, one
+  stalled call costs the whole episode.** Correct for diagnosis, **wrong for a study** — a
+  timed-out worker call should probably surface as a **refusal-shaped outcome the manager can see**,
+  not an episode death. **Deferred to the five-bucket work, because it is exactly a SIXTH thing
+  "non-completion" could mean.**
+- **★ STEP 2's OUTPUT IS "NOT YET", CONFIRMED AS THE FORM.** A harness that stalls mid-episode on a
+  serial single **cannot produce episodes to measure σ from.** **The feasibility verdict is the
+  whole of step 2, and "not yet" is the honest version — not a number with a wide interval, and not
+  a hedge.** **Consequence: the environments are NOT blocked on σ**, because there is no σ to wait
+  for; they are blocked on the build, which is unblocked.
+- **RE's TIGHTENING OF THE PARALLEL-PATH PATTERN, ADOPTED over LS's version. The distinguishing test:
+  does the second path EXIST because someone needed different behaviour, or because it GREW?**
+  Lattice, rng and timeout are all the second — **nobody decided workers should have no timeout** —
+  **and that is exactly what makes them findable by an alignment check**, where over-coupling and
+  provenance-gating are not.
+- **AND THE CONDITION ON THE PROPOSED CHECK, already paid for: point it at a client with NO timeout
+  and confirm it REPORTS, before trusting it to report none.** *Two of the three checks that passed
+  while broken this week failed exactly that.*
+
+### 2026-08-09 — the discriminating question was UNANSWERABLE BY CONSTRUCTION; instrument fixed, one merge refused
+
+- **★ THE RUNNER PRINTED ONLY ON COMPLETION, so a stalled run and a slow run produced the IDENTICAL
+  ARTEFACT: nothing.** No timestep, no request index, no payload shape — **for either hang.** LS's
+  discriminating question (*does the stall land at a consistent point?*) **was unanswerable by
+  construction, which is a defect in the INSTRUMENT rather than a gap in the DATA.**
+  **Fixed rather than inferred: a per-timestep heartbeat in the timestep-end callback with
+  `flush=True` — because A BUFFERED HEARTBEAT IS NOT A HEARTBEAT; the buffer is exactly what a hang
+  fails to flush.** *"I would rather say I cannot answer that yet, and here is why, and it is fixed,
+  than offer two datapoints of inference."*
+- **INTERIM, and reported as consistent-with rather than proof:** elapsed 7:32, CPU 3s, 32 bytes/25s,
+  **sockets 14 → 3.** Connections being torn down is what a firing client timeout looks like from
+  outside. **RE explicitly refused to assert the mechanism from a socket count** — their own
+  evidence, pointing the way they wanted, late in a long day. **The discipline holding under the
+  conditions that erode it.**
+- **★ ONE MERGE REFUSED (LS). RE proposed that a timed-out worker call may belong in
+  `refused_unavailable` rather than needing a sixth state — "a worker that never answers is a worker
+  that is unavailable."**
+  **They share an OBSERVABLE and not a CAUSE.** `refused_unavailable` is produced by **a roster
+  change — the MANIPULATION.** A timeout is produced by **a worker that IS on the roster and does
+  not answer — INFRASTRUCTURE.** **Merging them puts infrastructure failures into the one state the
+  corrected mapping protects as the manipulation's own signature** — *precisely the pooling error RR
+  corrected in LS this morning, one bucket over.* **Fewer states is usually better; here it destroys
+  the state we were most careful about.**
+  **A timeout belongs on the DEFECT or budget/horizon side — not the DV, and emphatically not the
+  MANIPULATION — and it wants its own marker for a reason beyond taxonomy: a bundle in which a
+  worker timed out has the manipulation and an infrastructure failure CONFOUNDED for that segment,
+  and we must be able to find and exclude those bundles.** If timeouts are frequent that is a
+  **usability question about the corpus**, not a labelling one.
+  **Settled with the five-bucket work, but BEFORE any bundle carrying a timeout is analysed — the
+  pre-commitment argument, which is what saved the split this morning.**
+- **CONFIRMED: *"the harness now fails correctly"* is the right sentence for outcomes 1 and 2 — NOT
+  progress toward σ. Step 2's verdict stays "NOT YET", unsoftened. The environments are unblocked on
+  the build.**

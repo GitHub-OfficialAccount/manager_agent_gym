@@ -66,6 +66,7 @@ none of them the template choice.** Its item 5 assumes a build order that Drift 
 
 ## ★ DRIFT 5 — found by this check, in the CHECKER I wrote yesterday
 
+<!-- citation-check: superseded -->
 **§5 cites `check_announcement.py:168–191` as the evidence for the superseded-DV amendment. That
 module was deleted in the 2026-08-08 cleanup — so the evidence for a standing amendment in the
 authoritative brief is no longer inspectable at source.** The finding survives in

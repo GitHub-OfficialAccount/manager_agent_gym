@@ -12,7 +12,7 @@
     },
     "amplified, segs=1": {
       "cells": 60,
-      "mean_share": 5.578338431343068e-18,
+      "mean_share": 1.852151755107395e-18,
       "median_share": 0.0,
       "n_a_achieved": {
         "1": 60
@@ -21,12 +21,12 @@
     },
     "amplified, segs=4 (as shipped)": {
       "cells": 60,
-      "mean_share": 0.012362353145829112,
-      "median_share": 0.010707679523724414,
+      "mean_share": 0.012550158680149364,
+      "median_share": 0.0009123556412363877,
       "n_a_achieved": {
         "4": 60
       },
-      "nonzero": 34
+      "nonzero": 30
     }
   },
   "capacity_threshold": {
@@ -40,7 +40,7 @@
   "caveats": [
     "measures the SHIPPED template only; prices no candidate",
     "a CEILING under exact optimal play",
-    "amplify_mix=False disables all THREE amplifiers, measured not read"
+    "all three amplifiers off, set independently (amplify_count, amplify_divergence, amplify_irb_priority) and measured not read"
   ],
   "declares": {
     "baseline": "stale card",
@@ -55,8 +55,8 @@
   "positive_control_dose_response": {
     "1": {
       "cells": 60,
-      "max": 1.1198743758301466e-16,
-      "mean": 5.578338431343068e-18,
+      "max": 1.111291053064437e-16,
+      "mean": 1.852151755107395e-18,
       "n_a": [
         1
       ],
@@ -73,8 +73,8 @@
     },
     "3": {
       "cells": 60,
-      "max": 0.04814024225049971,
-      "mean": 0.00980172417413364,
+      "max": 0.03354385662783527,
+      "mean": 0.008288205629263133,
       "n_a": [
         3
       ],
@@ -82,21 +82,21 @@
     },
     "4": {
       "cells": 60,
-      "max": 0.06820680643607539,
-      "mean": 0.012362353145829112,
+      "max": 0.05499327074259273,
+      "mean": 0.012550158680149364,
       "n_a": [
         4
       ],
-      "nonzero": 34
+      "nonzero": 30
     },
     "5": {
       "cells": 60,
       "max": 0.05845554148384635,
-      "mean": 0.014131541565016286,
+      "mean": 0.017789075655215595,
       "n_a": [
         5
       ],
-      "nonzero": 28
+      "nonzero": 34
     }
   },
   "verdict": "the current template's card channel is ZERO at nA=1 under both amplifier settings; its shipped figure lives entirely at nA=4"

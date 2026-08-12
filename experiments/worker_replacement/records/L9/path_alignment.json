@@ -11,8 +11,8 @@
   ],
   "divergent_fields": {},
   "failed_to_generate": [],
-  "mean_ceiling_natural": 0.012362353145829112,
-  "mean_ceiling_override": 0.012362353145829112,
+  "mean_ceiling_natural": 0.012550158680149364,
+  "mean_ceiling_override": 0.012550158680149364,
   "passes": true,
   "round_tripped": 60,
   "seeds": [

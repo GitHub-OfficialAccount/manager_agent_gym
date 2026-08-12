@@ -11,7 +11,7 @@ WHY IT SURVIVES THE REBUILD. This runs on the five-class NATURAL path — the on
 override faults never touched, and the one held bit-identical through every fix in
 this phase. Its answer does not depend on the instrument being rebuilt.
 
-WHY `amplify_mix=False` IS THE RIGHT SWITCH. Measured rather than read: it takes
+WHY TURNING ALL THREE OFF IS THE RIGHT SWITCH. Measured rather than read: it takes
 segment count from 4-of-9 to round-robin, the divergence flag from True to False,
 and IRB approval from 4-of-6 on the amplified class to one per class. All three gate
 on `shared_class is not None`, which it sets to None.
@@ -66,7 +66,9 @@ def _safe_generate(seed: int, segs: int):
 def arm(amplified: bool, segments: int | None) -> dict[str, Any]:
     shares, achieved = [], defaultdict(int)
     for seed in SEEDS:
-        kwargs: dict[str, Any] = {"amplify_mix": amplified}
+        kwargs: dict[str, Any] = {"amplify_count": amplified,
+                                  "amplify_divergence": amplified,
+                                  "amplify_irb_priority": amplified}
         if segments is not None:
             kwargs["shared_class_segments"] = segments
         try:
@@ -218,7 +220,8 @@ SHIPPED template, natively, and that measurement survives the rebuild.
         "caveats": [
             "measures the SHIPPED template only; prices no candidate",
             "a CEILING under exact optimal play",
-            "amplify_mix=False disables all THREE amplifiers, measured not read",
+            "all three amplifiers off, set independently (amplify_count, "
+            "amplify_divergence, amplify_irb_priority) and measured not read",
         ],
     }, indent=2, sort_keys=True) + "\n")
     print(f"written: {out / 'amplifier_dependence.json'}")

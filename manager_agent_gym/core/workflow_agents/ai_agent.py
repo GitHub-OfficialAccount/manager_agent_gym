@@ -5,6 +5,7 @@ Provides real LLM-powered agents that can execute tasks using
 system prompts and tools via the OpenAI Agents framework.
 """
 
+import asyncio
 import json
 import math
 import os
@@ -23,6 +24,67 @@ except Exception:
     RunResult = None  # type: ignore
     LitellmModel = None  # type: ignore
 from ...config import settings
+
+# ---------------------------------------------------------------------------
+# WORKER REQUEST TIMEOUT AND RETRY BOUND.
+#
+# THE WORKER PATH HAD NO EFFECTIVE TIMEOUT. `Runner.run` drives `LitellmModel`,
+# whose constructor takes only (model, base_url, api_key) -- so the only knob is
+# litellm's GLOBAL `request_timeout`, and its default is **6000 seconds**: 100
+# minutes, which is not a timeout, it is a workday.
+#
+# The MANAGER/JUDGE path is unaffected and always was: `llm_interface` builds its
+# own `AsyncOpenAI` with `timeout=300.0`. So the setting existed on one path and
+# not the parallel one -- the same shape as the lattice parameter, the mix
+# amplifiers, the totality repair and the rng stream. Fifth instance this phase.
+#
+# OBSERVED: a six-episode run sat for 20:47 with fourteen ESTABLISHED sockets,
+# 899 bytes read in 60 seconds, the event loop idle in `ep_poll`, and ZERO
+# episodes completed. It would have kept waiting for another eighty minutes.
+#
+# A TIMEOUT THAT TRIGGERS UNBOUNDED RETRY IS NOT A TIMEOUT (LS), so the retry
+# bound is set here too rather than left at litellm's default of `None`, which
+# resolves to the provider SDK's own policy and is not ours to reason about.
+WORKER_REQUEST_TIMEOUT_S = float(os.getenv("MAG_WORKER_REQUEST_TIMEOUT_S", "180"))
+WORKER_MAX_RETRIES = int(os.getenv("MAG_WORKER_MAX_RETRIES", "2"))
+def _apply_worker_request_limits() -> dict[str, float | int]:
+    """Bound the worker path's request time. Returns what was applied, for the record."""
+    try:
+        import litellm  # type: ignore
+
+        litellm.request_timeout = WORKER_REQUEST_TIMEOUT_S
+        litellm.num_retries = WORKER_MAX_RETRIES
+    except Exception:  # pragma: no cover - litellm ships with the agents extra
+        pass
+    return {"worker_request_timeout_s": WORKER_REQUEST_TIMEOUT_S,
+            "worker_max_retries": WORKER_MAX_RETRIES}
+
+
+_apply_worker_request_limits()
+
+# THE BACKSTOP, deliberately GENEROUS so it never fires on a working call. The
+# client timeout above is the correct fix and sits where the observed failure was;
+# this catches the case that neither of us has seen -- a call that hangs somewhere
+# the client timeout does not reach. With `asyncio.gather`, ONE hung episode holds
+# the WHOLE batch, so the fragility is worth covering independently of its cause.
+#
+# Sized as (timeout + margin) x (retries + 1): a call that legitimately exhausts
+# its retries must finish INSIDE this, or the backstop would mask the very retries
+# it is meant to outlive.
+WORKER_RUN_BACKSTOP_S = float(os.getenv(
+    "MAG_WORKER_RUN_BACKSTOP_S",
+    str((WORKER_REQUEST_TIMEOUT_S + 30.0) * (WORKER_MAX_RETRIES + 1)),
+))
+
+
+class WorkerRunTimeout(TimeoutError):
+    """A worker run exceeded the backstop.
+
+    Distinct from a provider timeout: this one means the request-level bound did
+    not contain it, which is a harness fault worth telling apart from a slow
+    provider -- the distinction the hung run could not make.
+    """
+
 try:
     from litellm.cost_calculator import cost_per_token  # type: ignore
 except Exception:  # pragma: no cover - optional dependency guard
@@ -278,12 +340,23 @@ class AIAgent(AgentInterface[AIAgentConfig]):
                 if self.config.max_turns is not None
                 else {}
             )
-            result: RunResult = await Runner.run(
-                self.openai_agent,
-                task_prompt,
-                context=context,  # 🎯 DI magic happens here!
-                **run_options,
-            )
+            try:
+                result: RunResult = await asyncio.wait_for(
+                    Runner.run(
+                        self.openai_agent,
+                        task_prompt,
+                        context=context,  # 🎯 DI magic happens here!
+                        **run_options,
+                    ),
+                    timeout=WORKER_RUN_BACKSTOP_S,
+                )
+            except asyncio.TimeoutError as exc:
+                raise WorkerRunTimeout(
+                    f"worker run exceeded the {WORKER_RUN_BACKSTOP_S:.0f}s backstop "
+                    f"for task {getattr(task, 'id', '?')}; the request-level bound "
+                    f"({WORKER_REQUEST_TIMEOUT_S:.0f}s x {WORKER_MAX_RETRIES + 1}) "
+                    f"did not contain it"
+                ) from exc
             run_results = [result]
             record_run_event(
                 "worker_run_completed",
@@ -315,11 +388,14 @@ class AIAgent(AgentInterface[AIAgentConfig]):
                 # to serialize its gathered evidence, so exposing tools here
                 # can restart the task and create another tool loop.
                 recovery_agent = self.openai_agent.clone(tools=[])
-                result = await Runner.run(
-                    recovery_agent,
-                    recovery_input,
-                    context=context,
-                    **run_options,
+                result = await asyncio.wait_for(
+                    Runner.run(
+                        recovery_agent,
+                        recovery_input,
+                        context=context,
+                        **run_options,
+                    ),
+                    timeout=WORKER_RUN_BACKSTOP_S,
                 )
                 run_results.append(result)
                 record_run_event(

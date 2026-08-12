@@ -20,7 +20,9 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import faulthandler
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -43,9 +45,29 @@ from manager_agent_gym.schemas.preferences.preference import (
 
 from examples.common_stakeholders import create_stakeholder_agent
 
+from manager_agent_gym.core.workflow_agents.ai_agent import (
+    WORKER_RUN_BACKSTOP_S as _WORKER_BACKSTOP,
+    _apply_worker_request_limits as _worker_request_limits,
+)
+
+from . import finance_generator as gen
 from . import finance_env as env
 from . import finance_report_parser as rp
 from . import finance_scorer as sc
+
+# SELF-DUMPING STACKS ON A HANG. Two runs stalled and NEITHER could be inspected:
+# `ptrace_scope=1` blocks py-spy without elevated privileges, and escalating
+# privileges to read a stack is not a trade worth making. So the process dumps its
+# own.
+#
+# `faulthandler.dump_traceback_later(repeat=True)` prints EVERY thread's stack to
+# stderr on a timer and rearms, so a hang produces a stack every interval instead
+# of silence. Same defect as the heartbeat one level down: "where is it stuck" was
+# unanswerable BY CONSTRUCTION, and the fix is instrumentation rather than
+# inference.
+#
+# Cancelled on a clean finish, so a normal run prints nothing.
+HANG_DUMP_INTERVAL_S = float(os.getenv("MAG_HANG_DUMP_INTERVAL_S", "120"))
 
 HERE = Path(__file__).resolve().parent
 MANAGER_MODEL = env.WORKER_MODEL  # flash for every role (run-spend authorisation)
@@ -78,6 +100,17 @@ class _Recorder:
         self.completions: list[dict] = []
 
     async def callback(self, ctx: TimestepEndContext) -> None:
+        # PER-TIMESTEP HEARTBEAT. Two runs have now stalled mid-episode and
+        # neither could say WHERE, because this runner printed only on completion
+        # -- so a stalled run and a slow run produced the identical artefact:
+        # nothing. The discriminating question is whether the stall lands at a
+        # CONSISTENT point (request-specific and reproducible) or a scattered one
+        # (the provider), and it cannot be asked without this line.
+        #
+        # Flushed, because a buffered heartbeat is not a heartbeat: the buffer is
+        # exactly what a hang fails to flush.
+        print(f"[t{ctx.timestep:02d}] completed={len(self.completions)} "
+              f"+{len(ctx.tasks_completed)} this step", flush=True)
         for task_id in ctx.tasks_completed:
             task = ctx.workflow.tasks.get(task_id)
             if task is None:
@@ -162,7 +195,17 @@ def _install_dry_run_stubs() -> None:
             for task in workflow.get_ready_tasks():
                 if task.assigned_agent_id is not None or task.status == TaskStatus.RUNNING:
                     continue
-                if task.name.startswith(prefix):
+                # `is_metered`, NOT the name — the same predicate the counting
+                # loop above already uses, and for the same reason (L1 criterion
+                # (e)). This line still read `task.name.startswith(prefix)` with
+                # `prefix` UNDEFINED, two lines below a comment saying not to use
+                # the name: a NameError on every dry run that reached a ready
+                # unassigned task, so this branch had never once executed.
+                #
+                # It is the third instance this phase of a comment naming a failure
+                # directly above code repeating it. The comment was written while
+                # the OTHER line was being fixed, and this one was not revisited.
+                if env.CapacityBoundedAIAgent.is_metered(task):
                     eligible = [a for a in seg_counts
                                 if seg_counts[a] < env.CapacityBoundedAIAgent.segment_capacity]
                     if not eligible:
@@ -183,15 +226,67 @@ _DRY_RUN_ENGINE: dict = {}
 
 
 async def run_episode(seed: int, out_dir: Path, dry_run: bool = False,
-                      cell: str | None = None, concurrency: int = 1) -> dict:
+                      cell: str | None = None, concurrency: int = 1,
+                      lattice: str = gen.DEFAULT_LATTICE,
+                      shared_class_segments: int = 4,
+                      selection_record: Path | None = None) -> dict:
+    # THE ARRANGEMENT TRAVELS WITH THE RUN, and it did not. Both builders called
+    # `gen.generate(seed)` bare, so an episode built the DEFAULT lattice whatever
+    # arrangement the study had selected, and `lattice="current"` is legal so
+    # nothing raised.
+    # Arm the hang dump for the duration of the episode.
+    faulthandler.dump_traceback_later(HANG_DUMP_INTERVAL_S, repeat=True, exit=False)
+    try:
+        return await _run_episode_inner(
+            seed=seed, out_dir=out_dir, dry_run=dry_run, cell=cell,
+            concurrency=concurrency, lattice=lattice,
+            shared_class_segments=shared_class_segments,
+            selection_record=selection_record)
+    finally:
+        faulthandler.cancel_dump_traceback_later()
+
+
+async def _run_episode_inner(
+    seed: int, out_dir: Path, dry_run: bool = False,
+    cell: str | None = None, concurrency: int = 1,
+    lattice: str = gen.DEFAULT_LATTICE,
+    shared_class_segments: int = 4,
+    selection_record: Path | None = None,
+) -> dict:
+    if selection_record is not None:
+        # AND IT IS CHECKED AGAINST THE RECORD IT CLAIMS TO BE RUNNING, rather than
+        # trusting that the right flags were passed. Two artefacts asserting
+        # different arrangements is what this whole phase has been spent removing;
+        # passing flags correctly is a habit, and this is a guard.
+        chosen = json.loads(Path(selection_record).read_text())
+        mismatch = {k: (chosen.get(k), v) for k, v in
+                    (("lattice", lattice),
+                     ("shared_class_segments", shared_class_segments))
+                    if chosen.get(k) != v}
+        if mismatch:
+            raise ValueError(
+                f"arrangement mismatch against {selection_record}: {mismatch}. The "
+                f"selection record and the run disagree about which arrangement "
+                f"this is, and the bundle would record the seed and look correct"
+            )
+        if seed not in (chosen.get("chosen_seeds") or []):
+            raise ValueError(
+                f"seed {seed} is not in {selection_record}'s chosen_seeds "
+                f"{chosen.get('chosen_seeds')}; running an unselected seed under a "
+                f"selection record misattributes it to a rule that did not pick it"
+            )
+
     # CELL is the study configuration (R2). Absent means the S8 accurate-card
     # default, which is what the machinery episodes ran on.
     if cell is None:
-        built = env.build_environment(seed)
+        built = env.build_environment(
+            seed, lattice=lattice, shared_class_segments=shared_class_segments)
     else:
         from . import finance_cells as fc
 
-        built = fc.build_cell_environment(seed, cell)
+        built = fc.build_cell_environment(
+            seed, cell, lattice=lattice,
+            shared_class_segments=shared_class_segments)
     instance = built["instance"]
     workflow = built["workflow"]
     index = built["index"]
@@ -255,6 +350,10 @@ async def run_episode(seed: int, out_dir: Path, dry_run: bool = False,
     tracer = RunTraceRecorder(metadata={
         "study_step": "S8",
         "instance_seed": seed,
+        # The ARRANGEMENT, in the bundle, so a bundle can never again be silent
+        # about which one produced it.
+        "lattice": instance["parameters"]["lattice"],
+        "shared_class_segments": instance["parameters"]["shared_class_segments"],
         "instance_sha256": built["instance_sha256"],
         "manager_model": MANAGER_MODEL,
         "worker_model": env.WORKER_MODEL,
@@ -373,6 +472,18 @@ async def run_episode(seed: int, out_dir: Path, dry_run: bool = False,
             "concurrency": concurrency,
             "dry_run": dry_run,
             "instance_seed": seed,
+            # THE ARRANGEMENT, IN THE BUNDLE THAT IS ACTUALLY WRITTEN. The first
+            # version of this fix added the fields to the other payload in this
+            # file and I read the log line rather than the artefact -- the run
+            # reported OK while every written bundle carried `lattice: None`. The
+            # fields are on both now, and the acceptance reads the FILE.
+            "lattice": instance["parameters"]["lattice"],
+            "shared_class_segments": instance["parameters"]["shared_class_segments"],
+            # WHAT THIS RUN WAS WILLING TO WAIT FOR. Same reason as the
+            # arrangement: a bundle that cannot say its own timeout cannot be told
+            # apart from one that had none -- and until now none of them had one.
+            **_worker_request_limits(),
+            "worker_run_backstop_s": _WORKER_BACKSTOP,
             "instance_sha256": built["instance_sha256"],
             "manager_model": MANAGER_MODEL,
             "worker_model": env.WORKER_MODEL,

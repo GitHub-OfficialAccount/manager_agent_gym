@@ -191,10 +191,21 @@ def active_roster(instance: dict[str, Any], cell: Cell) -> list[str]:
                 else event["roster_post_swap"])
 
 
-def build_cell_environment(seed: int, cell_name: str) -> dict[str, Any]:
-    """A runnable environment for (instance seed, cell). The single entry point."""
+def build_cell_environment(seed: int, cell_name: str,
+                           lattice: str = gen.DEFAULT_LATTICE,
+                           shared_class_segments: int = 4) -> dict[str, Any]:
+    """A runnable environment for (instance seed, cell). The single entry point.
+
+    THE ARRANGEMENT IS A PARAMETER, and it was not. This called `gen.generate(seed)`
+    bare, so a study run built the DEFAULT lattice no matter which arrangement had
+    been selected -- and it is the path the study actually uses, since study cells
+    go through here rather than through `build_environment`. See that function for
+    the measurement: under the default, one of the three seeds authorised for the
+    partial-overlap run is a ZERO-CEILING instance.
+    """
     cell = CELLS[cell_name]
-    instance = gen.generate(seed)
+    instance = gen.generate(seed, lattice=lattice,
+                            shared_class_segments=shared_class_segments)
     workflow, index = env.build_workflow(instance)
 
     if not cell.declaration_present:

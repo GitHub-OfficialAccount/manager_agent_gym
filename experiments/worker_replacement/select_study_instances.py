@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import json
 import random
+import sys
 import statistics as st
 from pathlib import Path
 
@@ -44,9 +45,32 @@ RECORDS = HERE / "records" / "R2"
 DRAW_SEED = 20260807
 SUITE_SEEDS = range(40)
 
+# THE LATTICE IS NOW A PARAMETER, and re-deriving the pool when it changes is
+# MANDATORY rather than optional: the admitted set and every ceiling in it are
+# properties of the lattice, so a pool derived under one lattice describes a
+# different study under another. The RULE is deliberately UNCHANGED -- same
+# rank-terciles, same pre-committed draw seed, same exclusion of zero-ceiling
+# instances. Only the POPULATION moves, because the design did.
+#
+# `current` is retained as the default so this file keeps reproducing the record
+# it already wrote. It is NOT the recommended design: at a realistic mix its
+# stale-card ceiling is 0.000% on 60 of 60 instances, so every instance it admits
+# is dead by the criterion below and the raise at the bottom is the correct
+# outcome. See records/L9/native_lattices.json.
+# Defaults REPRODUCE the already-committed record: `current` with the generator's
+# own `shared_class_segments` default of 4. Overriding them on the command line is
+# how a new pool is derived, so both the old record and the new one are
+# reproducible from this one file:
+#
+#     python -m experiments.worker_replacement.select_study_instances
+#     python -m experiments.worker_replacement.select_study_instances partial 1
+LATTICE = sys.argv[1] if len(sys.argv) > 1 else "current"
+SHARED_CLASS_SEGMENTS = int(sys.argv[2]) if len(sys.argv) > 2 else 4
+
 
 def main() -> int:
-    suite = adm.admit_suite(SUITE_SEEDS)
+    suite = adm.admit_suite(SUITE_SEEDS, lattice=LATTICE,
+                            shared_class_segments=SHARED_CLASS_SEGMENTS)
     admitted = [row["seed"] for row in suite["rows"] if row["admitted"]]
 
     # STRATIFY ON THE STUDY'S OWN COUNTERFACTUAL, not on the ignorant baseline.
@@ -60,7 +84,8 @@ def main() -> int:
     # the HIGHEST ignorant ceiling of the set. See records/L4/DIRECTIONS_LS.md.
     ceilings = {}
     for seed in admitted:
-        instance = gen.generate(seed)
+        instance = gen.generate(seed, lattice=LATTICE,
+                                shared_class_segments=SHARED_CLASS_SEGMENTS)
         ceilings[seed] = sc.ceiling_vs_stale_card(
             instance, cap=gate.CAP)["ceiling_share"]
 
@@ -110,6 +135,8 @@ def main() -> int:
             "predecessor's card describes it, so the card's OMISSION costs as "
             "well as its LIE. Selections recorded before D1 ranked on the "
             "lie-only model and are NOT comparable seed-for-seed"),
+        "lattice": LATTICE,
+        "shared_class_segments": SHARED_CLASS_SEGMENTS,
         "recorded_before_any_episode": True,
         "draw_seed": DRAW_SEED,
         "suite_seeds": list(SUITE_SEEDS),
@@ -146,7 +173,10 @@ def main() -> int:
         "low_pick_is_suite_minimum": min(chosen_shares) == min(values),
         "effect_magnitudes_sit_below_the_suite": (
             st.fmean(chosen_shares) < st.fmean(values)),
-        "caveat_1": ("THE LOW PICK IS THE SUITE MINIMUM. Seed 23 at "
+        # The seed was HARDCODED here as 23 and the low pick is now seed
+        # {chosen["low"]} -- a record field naming an instance that is not the one
+        # chosen. Interpolated, so it cannot go stale again.
+        "caveat_1": (f"THE LOW PICK IS THE SUITE MINIMUM. Seed {chosen['low']} at "
                      f"{min(chosen_shares):.4f} is the minimum of the whole "
                      "admitted suite — a legitimate 1-in-11 draw, not a "
                      "take-first artefact (draw indices 0/5/5 within strata). "
@@ -166,10 +196,13 @@ def main() -> int:
     # seeds; overwriting it would leave those runs pointing at a selection record
     # that no longer describes how their seeds were chosen.
     RECORDS.mkdir(parents=True, exist_ok=True)
-    (RECORDS / "instance_selection_v2_wholecard.json").write_text(
+    name = ("instance_selection_v2_wholecard.json" if LATTICE == "current"
+            else f"instance_selection_{LATTICE}_segs{SHARED_CLASS_SEGMENTS}.json")
+    (RECORDS / name).write_text(
         json.dumps(payload, indent=2, sort_keys=True) + "\n")
 
-    print("R2 — instance selection (recorded BEFORE any episode)\n")
+    print(f"R2 — instance selection (recorded BEFORE any episode)")
+    print(f"lattice: {LATTICE}  shared_class_segments: {SHARED_CLASS_SEGMENTS}  ->  {name}\n")
     print(f"admitted suite: {n} of {len(list(SUITE_SEEDS))} seeds")
     print(f"ceiling band: min {min(values):.4f}  median {st.median(values):.4f}  "
           f"max {max(values):.4f}  sd {st.stdev(values):.4f}")
