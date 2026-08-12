@@ -331,6 +331,39 @@ at all* — it guards against a measurement that cannot produce a signal. The di
 *could these two have disagreed* — it guards against a measurement that cannot produce a conflict.
 Same defect, opposite faces, and this project has now been caught by each of them twice.
 
+### The differ-test's INPUT-SIDE TWIN: before deriving from a record, print one instance of it.
+
+_Origin, 2026-08-09, and it is the first entry here that no rule above could have caught. Three
+agents independently concluded the event stream carried no correlation id and each fell back to
+positional pairing — LS and RR both writing the claim into prose in so many words. The events carry
+`actor_id`, `operation`, `timestep` and `task_id`; they pair all 18 bundles with zero unmatched. The
+corpus was read three times and inspected zero times._
+
+The differ-test above guards a **claim**: two results agreeing may be one computation reached twice.
+This guards the **input**: three derivations can be genuinely independent in method and still share
+an unexamined premise about the data, and **method-level independence is structurally blind to it —
+three people can derive the same wrong thing correctly.** The differ-test cannot fire here either,
+because there were never two results to compare; there was one assumption, held three times.
+
+Everything else catalogued in this file is about a claim — a control that cannot fire, a comparator
+whose construction is unnamed, a number carried past what justifies it. **This one is about the
+data, and the defence is not another derivation.** It is: **open the file and look at one record
+before you write code that assumes what is in it.**
+
+_It sounds too obvious to write down. That is exactly why it wasn't — RR's observation, and the
+reason it earns a line rather than a footnote._
+
+**Corollary, RR's, and the shape is already indexed four times in this project against other
+people's code: absence of a FIELD is not absence of the QUANTITY.** RR searched worker events for an
+`execution_time_seconds` field, found none, and reported workers as unmeasured — while every worker
+duration sat derivable in the `started -> completed` timestamps, by the exact method RR had just run
+on the manager stream. **The technique was in hand and applied to one stream only.**
+
+**Second corollary: when two corrections BRACKET the truth, neither is the fix.** Positional pairing
+over the whole corpus overstated the tail (p99 717 s); dropping the contaminated bundles understated
+it (438 s); the exact key needed neither (636 s). Two fixes landing on opposite sides is the
+signature of a shared assumption underneath both.
+
 ### A comparator names its CONSTRUCTION PATH, or the comparison is not reportable.
 
 _Origin: five instances, and every withdrawn version of the L9 ratio was one of them. Substitution
@@ -711,6 +744,66 @@ an unchecked adoption in each direction within two steps — RR built on RE's co
 its shape, and RE then built on RR's escalation before verifying it had survived. Whoever happens
 to run the measurements will appear to be the source; the defect is in the handoff, not in a person.
 
+### The same rule binds THRESHOLDS IN CODE, and a detector needs a baseline before it needs a threshold.
+
+_Origin, 2026-08-09: a request timeout of 180 s and a backstop of 630 s were installed to catch a
+suspected hang. Neither was derived from anything. Measured afterwards against the 18 committed
+bundles — 394 model calls that SUCCEEDED, median 40 s, p99 636 s, **max 876 s** — the 180 s bound
+kills 7.1% of them and lands in 13 of 18 episodes. **The instrument built to detect the failure
+would have produced it.** Meanwhile the failure was not there: a healthy episode takes 42.8 minutes
+and the three runs called "hung" were killed at 10–20._
+
+The construction rule above was written for figures in records, and thresholds escaped it because
+they do not look like results. **A constant in code is a claim about the workload** — `180`
+asserts "no healthy call exceeds three minutes" — and it is a claim nobody stated, so nobody
+checked it.
+
+**Every observation that was read as evidence of the stall was inside the normal range of an
+episode that succeeded**: `completed=0` at timestep 0 (18/18 healthy episodes), a 20-second window
+carrying 48 bytes (p99 silence 197 s, max 715 s), no bundle after twenty minutes (a quarter of the
+way through). **Without a baseline, _slow_ and _stopped_ are the same observation**, and every
+instrument built to tell them apart inherits the confusion instead of resolving it.
+
+So: **before building a detector, measure what normal looks like, and set the bound above the
+observed maximum with stated margin.** Where the corpus can supply the baseline — as it could
+here, from bundles committed before the first run was launched — it is corpus-first work and costs
+nothing.
+
+**And prefer a progress signal to a wall clock.** Elapsed time cannot distinguish slow from
+stopped; a heartbeat reporting `+3 this step` reverses the diagnosis in one line. **The
+generalisation is RE's and belongs to them: every claim made during the episode reasoned from an
+ABSENCE — no bundle, no bytes, no bound firing — and an absence is consistent with many worlds
+while a `+3` is consistent with one.**
+
+**Corollary: "a bound that never fires costs nothing" is false whenever the bound sits inside the
+workload rather than above it.** Whether it does is a measurement, not an intuition.
+
+**RR's form supersedes the one above and is the one to quote, because it is checkable in review:**
+
+> **A threshold names the distribution it was derived from — and the POPULATION that distribution
+> is over — or it is a guess with a number on it.**
+
+_The population clause is paid for by the same day. `180` was priced against a measured distribution
+TWICE, by two agents working independently, and it was the wrong population both times: every
+`structured_llm_*` event in the corpus is the MANAGER's, while the bound wraps the WORKER's
+`Runner.run`. Over worker runs the exposure was 29.8% in 18/18 episodes, not ~7% in 13/18. **Two
+independent derivations agreeing is not corroboration when both inherit the same population.** The
+differ-test compares constructions; nothing in it compares populations._
+
+**Independence in the METHOD is not independence in the INPUT** — filed with the differ-test in §D
+as its input-side twin, because it is a defect in a shared premise about the DATA rather than in a
+claim, and nothing in this section would have caught it.
+
+**A pairing is only meaningful if the unmatched count is zero and PRINTED.** A key that silently
+drops events thins the population by exactly the cases most likely to be pathological.
+
+**A right decision can come from a wrong number, and the record should say so when it does.** The
+raised bounds (1200 s / 2460 s) kill 0/235 on the correct population and were already protecting a
+live run while the figure that justified them — 7.1%, then 6.9%, both over the wrong population —
+was wrong by four-fold. **Nothing would have surfaced it if the construction had not been asked
+for after the decision was already made.** Asking for a construction is not only a gate before
+acting; it is worth running on decisions that already went well.
+
 ## H. Failure classes, indexed by signature
 
 Recognise these by shape, before you know what is wrong.
@@ -740,6 +833,12 @@ Recognise these by shape, before you know what is wrong.
 | a verdict printed without the quantity it reduces over | empty collector rendered as a result | G-print-the-intermediate, B-positive-control |
 | an `all(...)`/`any(...)` over a collection nobody sized | `all([])` is True | G-print-the-intermediate |
 | two measurements agreeing to the last digit | one computation reached twice | B-differ-test |
+| several agents reaching one answer from an unexamined premise about the DATA | independence in the method, not the input | D-print-one-record |
+| "the records carry no X" asserted without printing a record | absence of a FIELD read as absence of the QUANTITY | D-print-one-record, B-defaults |
+| two corrections landing on opposite sides of the truth | shared assumption underneath both | D-print-one-record |
+| a threshold constant in shipped code | a claim about a distribution nobody measured | G-threshold-names-its-distribution |
+| a bound priced against a distribution from the WRONG actor | right distribution, wrong population | G-threshold-names-its-distribution, §B population |
+| a pairing whose unmatched count is unreported | population silently thinned by the pathological cases | G-threshold-names-its-distribution |
 | "same templates, same seeds" as a specification | the instrument went unnamed | E-comparator-path |
 | a comparison whose two sides came from different builders | comparator construction unnamed | E-comparator-path |
 | a count consistent with two defects of different consequence | shape unnamed, not just path | E-comparator-path |

@@ -217,6 +217,14 @@ class AssignTaskAction(BaseManagerAction):
         )
         # Validation
         if task_uuid not in workflow.tasks:
+            # The FIFTH branch, for the same reason. `record_assignment` reads the
+            # task through `getattr` throughout, so a missing task records as a
+            # requested-but-unapplied row with empty task fields rather than
+            # raising -- an attempt that names no known task is still an attempt.
+            record_assignment(
+                task=None, to_agent=self.agent_id, from_agent=None,
+                action_type=self.action_type, applied=False,
+                reason="task_not_in_workflow")
             return ActionResult(
                 summary=f"Failed: Task {self.task_id} not found in workflow from set of all tasks: {workflow.tasks.keys()}",
                 kind="failed_action",
@@ -225,6 +233,35 @@ class AssignTaskAction(BaseManagerAction):
                 success=False,
             )
         if self.agent_id not in workflow.agents:
+            # THE MANIPULATION'S OWN FOOTPRINT, AND IT LEFT NO TRACE.
+            #
+            # The swap REMOVES the predecessor from the registry rather than
+            # marking it unavailable -- `is_available` is declared True in two
+            # places and never written anywhere -- so an assignment aimed at the
+            # departed worker lands HERE, on an early return that fires BEFORE
+            # `record_assignment`. No `task_assigned`, no deferral (it never
+            # reaches `can_handle_task`), no mutation of `assigned_agent_id`.
+            # The segment ends `never_assigned`, INDISTINGUISHABLE FROM ONE THE
+            # MANAGER NEVER TOUCHED -- which is the exact false claim the L2a
+            # split exists to stop making.
+            #
+            # This is the FOURTH skip branch, and the docstring of
+            # `record_assignment` above already names the rule it breaks:
+            # "a record of only what landed would make a skipped assignment
+            # indistinguishable from one never attempted". I applied that to the
+            # BULK action's three branches and not to this one. Same behaviour on
+            # one path and not the parallel one, in the fix written against
+            # exactly that shape.
+            #
+            # RECORDING, NOT DESIGN. The alternative -- keeping a departed worker
+            # assignable so the refusal bucket fills -- fails the production test:
+            # a real orchestrator deregisters a leaver and rejects assignment to
+            # an unknown id. Recording the rejected attempt is what it does anyway.
+            record_assignment(
+                task=workflow.tasks[task_uuid], to_agent=self.agent_id,
+                from_agent=workflow.tasks[task_uuid].assigned_agent_id,
+                action_type=self.action_type, applied=False,
+                reason="agent_not_in_workflow")
             return ActionResult(
                 summary=f"Failed: Agent {self.agent_id} not found in workflow from set of all agents: {workflow.agents.keys()}",
                 kind="failed_action",

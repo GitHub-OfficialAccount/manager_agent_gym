@@ -45,8 +45,28 @@ from ...config import settings
 # A TIMEOUT THAT TRIGGERS UNBOUNDED RETRY IS NOT A TIMEOUT (LS), so the retry
 # bound is set here too rather than left at litellm's default of `None`, which
 # resolves to the provider SDK's own policy and is not ours to reason about.
-WORKER_REQUEST_TIMEOUT_S = float(os.getenv("MAG_WORKER_REQUEST_TIMEOUT_S", "180"))
-WORKER_MAX_RETRIES = int(os.getenv("MAG_WORKER_MAX_RETRIES", "2"))
+# THE FIRST VALUES -- 180s and 2 retries -- CAME FROM NOWHERE AND WOULD HAVE
+# SABOTAGED THE RUN. I asserted twice that "a bound that never fires costs
+# nothing"; it was false, because the bound did not sit above the workload, it sat
+# INSIDE it. Measured over the committed corpus (464 paired request/response
+# events, re-derived independently of LS's script):
+#
+#   SUCCEEDED calls:  median 39s   p90 149s   p99 554s   max 876s
+#
+#   bound  180s kills 32/464 (6.9%) of calls that SUCCEEDED  <- the original
+#   bound  630s kills  4/464 (0.9%)                          <- the original backstop
+#   bound  900s kills  0/464
+#   bound 1200s kills  0/464 (+324s of headroom over the observed max)
+#
+# The longest healthy silence in the corpus is a single request/response pair of
+# ~876s -- an episode that RETURNED and is in our committed results. A 180s bound
+# with two retries behind it would have burned 3x180s and then failed, and the
+# failure would have looked exactly like the stall we spent three runs misreading.
+#
+# 1200 with ONE retry: no observed successful call is killed, and a genuine stall
+# still terminates in ~41 minutes rather than never.
+WORKER_REQUEST_TIMEOUT_S = float(os.getenv("MAG_WORKER_REQUEST_TIMEOUT_S", "1200"))
+WORKER_MAX_RETRIES = int(os.getenv("MAG_WORKER_MAX_RETRIES", "1"))
 def _apply_worker_request_limits() -> dict[str, float | int]:
     """Bound the worker path's request time. Returns what was applied, for the record."""
     try:

@@ -71,7 +71,7 @@
     "never_assigned": "no APPLIED assignment event names this segment \u2014 the manager never staffed it. NOT 'it did not run': that was the v1 defect.",
     "refused_allotment": "assigned, never executed, and at least one refusal on it names the segment allotment \u2014 permanently barred, since the allotment never releases within an episode",
     "refused_concurrency": "assigned, never executed, and every refusal on it names only concurrency \u2014 transient, and it would have run given more timesteps",
-    "refused_unavailable": "assigned, never executed, and a refusal named the assignee as UNAVAILABLE \u2014 which a roster change can cause, so this is the state a swap run must be able to see separately",
+    "refused_unavailable": "assigned, never executed, and a refusal named the assignee as UNAVAILABLE. RETRACTED: 'which a roster change can cause, so this is the state a swap run must be able to see separately' \u2014 UNREACHABLE as implemented; a count of 0 here is structural, not behavioural",
     "unexecuted_no_refusal": "assigned, never executed, and NO refusal fired on it \u2014 the horizon ended first, or it never became ready"
   }
 }

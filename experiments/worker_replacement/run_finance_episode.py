@@ -96,8 +96,19 @@ def _preferences() -> PreferenceWeights:
 class _Recorder:
     """Per-task completion facts needed to reconstruct the allocation."""
 
-    def __init__(self) -> None:
+    def __init__(self, progress_path: Path | None = None) -> None:
         self.completions: list[dict] = []
+        # THE ARTEFACT EXISTED ONLY AT THE END, SO 77% OF THE WORK REPORTED
+        # NOTHING. The bundle is written after the episode loop, so a run stopped
+        # at t17 of 22 -- three hours of wall clock -- yields no bundle, no split,
+        # no per-task record. Partial progress was indistinguishable from no
+        # progress, which is the missing-heartbeat defect one level up: the
+        # heartbeat says a step HAPPENED, this says WHAT happened in it.
+        #
+        # Rewritten in full each timestep rather than appended: the file is small,
+        # and a truncated append is a corrupt record where a rewritten snapshot is
+        # merely stale by at most one step.
+        self.progress_path = progress_path
 
     async def callback(self, ctx: TimestepEndContext) -> None:
         # PER-TIMESTEP HEARTBEAT. Two runs have now stalled mid-episode and
@@ -111,6 +122,20 @@ class _Recorder:
         # exactly what a hang fails to flush.
         print(f"[t{ctx.timestep:02d}] completed={len(self.completions)} "
               f"+{len(ctx.tasks_completed)} this step", flush=True)
+        if self.progress_path is not None:
+            try:
+                self.progress_path.write_text(json.dumps({
+                    "record": "partial_progress",
+                    "note": "written EVERY timestep so a killed run is not a total "
+                            "loss; the bundle is only written on completion",
+                    "last_timestep": ctx.timestep,
+                    "n_completed": len(self.completions),
+                    "completions": self.completions,
+                }, indent=2) + "\n")
+            except Exception:
+                # Progress recording must never break the episode, for the same
+                # reason logging must never break an action.
+                pass
         for task_id in ctx.tasks_completed:
             task = ctx.workflow.tasks.get(task_id)
             if task is None:
@@ -346,7 +371,11 @@ async def _run_episode_inner(
             f"{ {r: role_models[r] for r in off_policy} }"
         )
     print(f"all {len(role_models)} roles on {MANAGER_MODEL}")
-    recorder = _Recorder()
+    # The partial-progress path is derived from the bundle path, so a killed run
+    # leaves its trace beside where the bundle would have gone.
+    out_dir.mkdir(parents=True, exist_ok=True)
+    recorder = _Recorder(progress_path=out_dir / (
+        f"partial_{'dry_' if dry_run else ''}seed{seed}.json"))
     tracer = RunTraceRecorder(metadata={
         "study_step": "S8",
         "instance_seed": seed,

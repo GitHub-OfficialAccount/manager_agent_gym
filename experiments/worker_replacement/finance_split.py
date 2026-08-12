@@ -59,10 +59,27 @@ STATE_PREDICATES: dict[str, str] = {
         "assigned, never executed, and at least one refusal on it names the "
         "segment allotment — permanently barred, since the allotment never "
         "releases within an episode",
+    # ★ THE SECOND CLAUSE IS RETRACTED (2026-08-09, RR found it, LS verified at
+    # source). It asserted a capability the harness does not have, and it was
+    # quoted twice as the authority for a ruling.
+    #
+    # A ROSTER CHANGE CANNOT CAUSE THIS STATE. Nothing in the repo ever sets
+    # `is_available = False` — it is declared True at interface.py:82 and
+    # telemetry.py:58 and every other occurrence is a read — and the swap calls
+    # `remove_agent`, which REMOVES the worker rather than marking it unavailable.
+    # The branch at interface.py:105 is dead code, so a swap run CANNOT see this
+    # state separately; it cannot see it at all.
+    #
+    # The predicate's FIRST clause still describes what the state would mean if it
+    # could fire, so it is kept and the state stays in the partition. The claim
+    # about what a swap run can observe is withdrawn. See
+    # `five_bucket_split.MANIPULATION_UNREACHABLE` for the trace and for where an
+    # assignment to a departed worker actually goes, which is nowhere.
     "refused_unavailable":
         "assigned, never executed, and a refusal named the assignee as "
-        "UNAVAILABLE — which a roster change can cause, so this is the state a "
-        "swap run must be able to see separately",
+        "UNAVAILABLE. RETRACTED: 'which a roster change can cause, so this is the "
+        "state a swap run must be able to see separately' — UNREACHABLE as "
+        "implemented; a count of 0 here is structural, not behavioural",
     "refused_concurrency":
         "assigned, never executed, and every refusal on it names only "
         "concurrency — transient, and it would have run given more timesteps",
