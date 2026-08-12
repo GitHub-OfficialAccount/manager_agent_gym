@@ -1,0 +1,22 @@
+{
+  "caveats": [
+    "PRODUCERS is a DECLARED table, not a scan. A record produced by a module not listed here is NOT checked, and its absence is silent.",
+    "each normalisation is a hole: a value that differs only inside a UUID or timestamp cannot be detected",
+    "this checks that a record MATCHES its producer, not that either is correct",
+    "`superseded_*` blocks are excluded from the comparison: they are provenance ABOUT the record that the producer does not emit. A value inside one is therefore NOT checked."
+  ],
+  "checked": 13,
+  "normalised": [
+    "UUID",
+    "ISO timestamp",
+    "superseded_* annotation blocks"
+  ],
+  "stale": [
+    {
+      "module": "test_finance_scorer",
+      "producer_exit": 0,
+      "record": "experiments/worker_replacement/records/S4/instance_seed101_8seg.json"
+    }
+  ],
+  "untracked": 0
+}

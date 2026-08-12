@@ -29,7 +29,14 @@ from .five_bucket_split import BUCKETS, MANIPULATION_UNREACHABLE, five_bucket
 # The observed healthy ceiling on worker runs, from measure_episode_baseline.py over the
 # 20 committed bundles: max 966s, exact pairing on (actor_id, task_id), 0 unmatched.
 HEALTHY_WORKER_CEILING_S = 966.0
-RAISED_TIMEOUT_S = 1200.0
+# THE BOUND THAT GOVERNS A WORKER RUN IS THE BACKSTOP, NOT THE REQUEST TIMEOUT.
+# A first version compared run durations against litellm.request_timeout (1200s) and
+# reported "4 over the raised timeout" -- but 1200s bounds ONE REQUEST and a worker run
+# contains several, so that is a run-length measured against a per-request bound. Wrong
+# units, and the third instance today of a bound priced against the wrong population.
+# Worker REQUEST durations are not observable: every structured_llm_* event is the
+# manager's.
+WORKER_RUN_BACKSTOP_S = 2460.0
 
 # THE THREE PREDICTIONS, committed before the bundle existed. Recorded here verbatim so
 # scoring cannot drift toward whatever happened.
@@ -140,10 +147,15 @@ def main(argv: list[str]) -> int:
         print(f"  n={len(durs)}  median {durs[len(durs)//2]:.0f}s  max {max(durs):.0f}s")
         print(f"  over the 966s healthy ceiling: {len(over)}")
         if over:
-            print(f"  ** {len(over)} run(s) exceed every worker run observed in the corpus. "
-                  f"1200s is no longer\n     clear of the workload and the bound moves before "
-                  f"anyone builds on these numbers. **")
-        print(f"  over the raised 1200s timeout: {len([d for d in durs if d > RAISED_TIMEOUT_S])}")
+            print(f"  ** {len(over)} run(s) exceed EVERY worker run observed in the corpus. "
+                  f"This arrangement\n     produces longer runs than the baseline was built "
+                  f"from, so the baseline no longer\n     describes it. **")
+        over_backstop = [d for d in durs if d > WORKER_RUN_BACKSTOP_S]
+        margin = 100.0 * (WORKER_RUN_BACKSTOP_S - max(durs)) / WORKER_RUN_BACKSTOP_S
+        print(f"  over the 2460s WORKER_RUN_BACKSTOP (the bound that governs a run): "
+              f"{len(over_backstop)}")
+        print(f"  backstop margin over the longest run here: {margin:+.0f}% "
+              f"(it was +155% against the corpus max of 966s)")
 
     # ---- 4. THE DECORATIVE FIELD -------------------------------------------------
     print("\n## 4. agent_available")

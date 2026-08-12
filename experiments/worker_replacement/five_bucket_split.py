@@ -101,9 +101,14 @@ KNOWN_POOLING = ("executed_and_declined",)
 MANIPULATION_UNREACHABLE = True
 
 BUCKET_MEANS: dict[str, str] = {
-    "DV": "an allocation outcome. This is the thing the study measures. NOTE: "
-          "`executed_and_declined` pools a manager mis-assignment with a worker's "
-          "own in-coverage judgement -- see KNOWN_POOLING.",
+    "DV": "an allocation outcome. This is the thing the study measures. TWO "
+          "CAVEATS TRAVEL WITH IT. (1) `executed_and_declined` pools a manager "
+          "mis-assignment with a worker's own in-coverage judgement -- see "
+          "KNOWN_POOLING. (2) `refused_allotment` IS STRUCTURALLY UNREACHABLE as "
+          "the harness stands (L14) -- its zero is UNINFORMATIVE, see "
+          "finance_split.ALLOTMENT_UNREACHABLE. It was the only DV state ever "
+          "observed to fire, so this bucket now rests entirely on "
+          "`never_assigned` and `executed_and_declined`.",
     "MANIPULATION": "STRUCTURALLY EMPTY AS THE HARNESS STANDS -- a count of 0 here "
                     "is UNINFORMATIVE, not a finding. See MANIPULATION_UNREACHABLE. "
                     "The bucket is kept because the state exists and the partition "

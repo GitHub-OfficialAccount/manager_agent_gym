@@ -27,6 +27,7 @@ import sys
 from pathlib import Path
 
 from . import finance_env as env
+from . import finance_gate as gate
 from . import finance_generator as gen
 from . import finance_report_parser as rp
 
@@ -254,16 +255,39 @@ def main(path: Path) -> int:
             failures.append(f"cell {cell_name} scored against {phase}, want {want}")
 
     # --- 6. capacity ---------------------------------------------------------
+    # THIS WAS AN ASSERTION AND IS NOW A MEASUREMENT (L14). It read
+    # `cap = env.CapacityBoundedAIAgent.segment_capacity` and FAILED the bundle if
+    # any worker exceeded it, on the stated ground that "the runtime MIRRORS the
+    # cap the scorer's oracle is computed under". THE RUNTIME NO LONGER MIRRORS
+    # IT: the per-worker segment cap is removed, while `finance_gate.CAP = 3` and
+    # every oracle, baseline and ceiling in `finance_scorer` are still computed
+    # under it.
+    #
+    # So the old assertion cannot be kept (it fails by design) and cannot simply be
+    # deleted (the quantity it watched is now a CONFOUND rather than a bug). It
+    # becomes the instrument that measures the confound: over-cap assignment is
+    # counted and reported on every bundle, because a bundle where it is zero and a
+    # bundle where it is four are not comparable against a cap-3 ceiling.
     seg_counts = collections.Counter(
         c["agent_id"] for c in completions if c["task_id"] in seg_task_ids)
-    cap = env.CapacityBoundedAIAgent.segment_capacity
+    cap = gate.CAP
     over = {a: n for a, n in seg_counts.items() if n > cap}
+    excess = sum(n - cap for n in over.values())
     print(f"\n5. capacity: realised per-worker segment counts {dict(seg_counts)} "
-          f"vs C = {cap}")
-    print(f"   [{'ok' if not over else 'FAIL'}] no worker exceeded C — the runtime "
-          f"MIRRORS the cap the\n        scorer's oracle is computed under")
+          f"vs the ORACLE's C = {cap}")
+    print(f"   MEASURED, not asserted: {len(over)} worker(s) over the oracle's cap, "
+          f"{excess} segment(s) in excess")
     if over:
-        failures.append(f"workers over capacity: {over}")
+        print(f"   ★ THIS BUNDLE IS NOT DIRECTLY COMPARABLE TO A CAP-{cap} CEILING. "
+              f"The runtime\n        enforces no segment cap; the ceiling assumes "
+              f"one. Over-cap work buys score the\n        oracle rules infeasible, "
+              f"so the DV share can exceed 1 without the manager\n        having "
+              f"used the information the ceiling prices. Carry {over} with any "
+              f"number\n        derived from this bundle.")
+    else:
+        print(f"   [ok] no worker exceeded the oracle's C this run — comparability "
+              f"to the cap-{cap}\n        ceiling holds HERE, by luck of the "
+              f"manager's choices rather than by enforcement")
 
     # --- 5. the parser seam --------------------------------------------------
     reports = bundle["reports"]

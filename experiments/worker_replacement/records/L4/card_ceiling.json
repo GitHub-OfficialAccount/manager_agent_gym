@@ -8,10 +8,10 @@
   "establishes": "the card channel is not inert by construction; it moves allocation via capacity displacement under an exactly-binding cap",
   "study_instances": [
     {
-      "allocation_differs": true,
-      "card_believing_play_realises": 8.362849729372385,
-      "ceiling": 0.18335400897712972,
-      "ceiling_share_of_oracle": 0.0214544392563873,
+      "allocation_differs": false,
+      "card_believing_play_realises": 8.546203738349515,
+      "ceiling": 0.0,
+      "ceiling_share_of_oracle": 0.0,
       "lied_about_class": [
         "mdb"
       ],
@@ -37,7 +37,7 @@
     },
     {
       "allocation_differs": false,
-      "card_believing_play_realises": 8.973701054564353,
+      "card_believing_play_realises": 8.780410754910147,
       "ceiling": 0.0,
       "ceiling_share_of_oracle": 0.0,
       "lied_about_class": [
@@ -47,9 +47,487 @@
       "silent_about_class": [
         "corporate"
       ],
-      "true_optimum": 8.973701054564353
+      "true_optimum": 8.780410754910147
     }
   ],
+  "superseded_2026_08_09": {
+    "note": "SUPERSEDED VALUES, kept rather than overwritten. Regenerated 2026-08-09 after generator fixes that change which instance a seed produces: the amplifier separation into amplify_count/amplify_divergence/amplify_irb_priority, the `others`-exclusion bug that gave the shared class ZERO segments when count forcing was off, the divergence search taking its own rng stream, and positional_roles. The values below are what this file asserted before that. They are NOT reproducible on the current tree and must not be quoted as current -- they are here so a reader who meets the old figure elsewhere can see it was superseded rather than mistyped.",
+    "previous": {
+      "coverage_structure_holds": {
+        "lied_sole": 60,
+        "n": 60,
+        "silent_shared": 60
+      },
+      "does_not_establish": "that any manager realises this \u2014 the ceiling is optimal-play-under-truth minus optimal-play-under-card, an upper bound",
+      "establishes": "the card channel is not inert by construction; it moves allocation via capacity displacement under an exactly-binding cap",
+      "study_instances": [
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.362849729372385,
+          "ceiling": 0.18335400897712972,
+          "ceiling_share_of_oracle": 0.0214544392563873,
+          "lied_about_class": [
+            "mdb"
+          ],
+          "seed": 3,
+          "silent_about_class": [
+            "retail"
+          ],
+          "true_optimum": 8.546203738349515
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.756963980230182,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "sovereign"
+          ],
+          "seed": 23,
+          "silent_about_class": [
+            "corporate"
+          ],
+          "true_optimum": 8.756963980230182
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.973701054564353,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "mdb"
+          ],
+          "seed": 36,
+          "silent_about_class": [
+            "corporate"
+          ],
+          "true_optimum": 8.973701054564353
+        }
+      ],
+      "sweep_30_seeds": [
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.40984371043795,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "sovereign"
+          ],
+          "seed": 0,
+          "silent_about_class": [
+            "corporate"
+          ],
+          "true_optimum": 8.40984371043795
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.650564564113433,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "sovereign"
+          ],
+          "seed": 1,
+          "silent_about_class": [
+            "mdb"
+          ],
+          "true_optimum": 8.650564564113433
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.305820872110607,
+          "ceiling": 0.1265649001738769,
+          "ceiling_share_of_oracle": 0.015009382112221392,
+          "lied_about_class": [
+            "mdb"
+          ],
+          "seed": 2,
+          "silent_about_class": [
+            "corporate"
+          ],
+          "true_optimum": 8.432385772284483
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.362849729372385,
+          "ceiling": 0.18335400897712972,
+          "ceiling_share_of_oracle": 0.0214544392563873,
+          "lied_about_class": [
+            "mdb"
+          ],
+          "seed": 3,
+          "silent_about_class": [
+            "retail"
+          ],
+          "true_optimum": 8.546203738349515
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.38326990484639,
+          "ceiling": 0.1446888757388276,
+          "ceiling_share_of_oracle": 0.01696641358870388,
+          "lied_about_class": [
+            "sovereign"
+          ],
+          "seed": 4,
+          "silent_about_class": [
+            "bank"
+          ],
+          "true_optimum": 8.527958780585218
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.58052612169436,
+          "ceiling": 0.1516188489530883,
+          "ceiling_share_of_oracle": 0.01736329956302208,
+          "lied_about_class": [
+            "mdb"
+          ],
+          "seed": 5,
+          "silent_about_class": [
+            "bank"
+          ],
+          "true_optimum": 8.732144970647449
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.274653424445404,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "corporate"
+          ],
+          "seed": 6,
+          "silent_about_class": [
+            "retail"
+          ],
+          "true_optimum": 8.274653424445404
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.562629267542341,
+          "ceiling": 0.14910387927930024,
+          "ceiling_share_of_oracle": 0.017115294599410313,
+          "lied_about_class": [
+            "sovereign"
+          ],
+          "seed": 7,
+          "silent_about_class": [
+            "retail"
+          ],
+          "true_optimum": 8.711733146821642
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.731380454035808,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "mdb"
+          ],
+          "seed": 8,
+          "silent_about_class": [
+            "bank"
+          ],
+          "true_optimum": 8.731380454035808
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.511375644722367,
+          "ceiling": 0.17753574816694062,
+          "ceiling_share_of_oracle": 0.020432450066440944,
+          "lied_about_class": [
+            "bank"
+          ],
+          "seed": 9,
+          "silent_about_class": [
+            "mdb"
+          ],
+          "true_optimum": 8.688911392889308
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.513897873961936,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "sovereign"
+          ],
+          "seed": 10,
+          "silent_about_class": [
+            "corporate"
+          ],
+          "true_optimum": 8.513897873961936
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.352261019634815,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "corporate"
+          ],
+          "seed": 11,
+          "silent_about_class": [
+            "bank"
+          ],
+          "true_optimum": 8.352261019634815
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.610205053530798,
+          "ceiling": 0.08586651980200877,
+          "ceiling_share_of_oracle": 0.009874173536626039,
+          "lied_about_class": [
+            "bank"
+          ],
+          "seed": 12,
+          "silent_about_class": [
+            "sovereign"
+          ],
+          "true_optimum": 8.696071573332807
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.447563092915393,
+          "ceiling": 0.17038443092718225,
+          "ceiling_share_of_oracle": 0.019770882852998755,
+          "lied_about_class": [
+            "corporate"
+          ],
+          "seed": 13,
+          "silent_about_class": [
+            "mdb"
+          ],
+          "true_optimum": 8.617947523842576
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.401397195065515,
+          "ceiling": 0.09113340418410232,
+          "ceiling_share_of_oracle": 0.010731006867629617,
+          "lied_about_class": [
+            "retail"
+          ],
+          "seed": 14,
+          "silent_about_class": [
+            "sovereign"
+          ],
+          "true_optimum": 8.492530599249617
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.458784627159915,
+          "ceiling": 0.11646401722161848,
+          "ceiling_share_of_oracle": 0.013581415775964141,
+          "lied_about_class": [
+            "retail"
+          ],
+          "seed": 15,
+          "silent_about_class": [
+            "mdb"
+          ],
+          "true_optimum": 8.575248644381533
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.566894033566914,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "corporate"
+          ],
+          "seed": 16,
+          "silent_about_class": [
+            "retail"
+          ],
+          "true_optimum": 8.566894033566914
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.248621385168676,
+          "ceiling": 0.12856540281783602,
+          "ceiling_share_of_oracle": 0.015347085611390216,
+          "lied_about_class": [
+            "bank"
+          ],
+          "seed": 17,
+          "silent_about_class": [
+            "retail"
+          ],
+          "true_optimum": 8.377186787986512
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.087247820115536,
+          "ceiling": 0.29994803350802357,
+          "ceiling_share_of_oracle": 0.0357626122893548,
+          "lied_about_class": [
+            "mdb"
+          ],
+          "seed": 18,
+          "silent_about_class": [
+            "corporate"
+          ],
+          "true_optimum": 8.38719585362356
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.681809031798583,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "mdb"
+          ],
+          "seed": 19,
+          "silent_about_class": [
+            "bank"
+          ],
+          "true_optimum": 8.681809031798583
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.59887373305211,
+          "ceiling": 0.043691737253400476,
+          "ceiling_share_of_oracle": 0.005055412933060025,
+          "lied_about_class": [
+            "mdb"
+          ],
+          "seed": 20,
+          "silent_about_class": [
+            "sovereign"
+          ],
+          "true_optimum": 8.642565470305511
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.11938822382205,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "bank"
+          ],
+          "seed": 21,
+          "silent_about_class": [
+            "corporate"
+          ],
+          "true_optimum": 8.11938822382205
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.380896582308816,
+          "ceiling": 0.19896529332190305,
+          "ceiling_share_of_oracle": 0.023189801445058437,
+          "lied_about_class": [
+            "bank"
+          ],
+          "seed": 22,
+          "silent_about_class": [
+            "retail"
+          ],
+          "true_optimum": 8.57986187563072
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.756963980230182,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "sovereign"
+          ],
+          "seed": 23,
+          "silent_about_class": [
+            "corporate"
+          ],
+          "true_optimum": 8.756963980230182
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.353861997696919,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "corporate"
+          ],
+          "seed": 24,
+          "silent_about_class": [
+            "bank"
+          ],
+          "true_optimum": 8.353861997696919
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.908622360586191,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "corporate"
+          ],
+          "seed": 25,
+          "silent_about_class": [
+            "sovereign"
+          ],
+          "true_optimum": 8.908622360586191
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.790753762051411,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "mdb"
+          ],
+          "seed": 26,
+          "silent_about_class": [
+            "bank"
+          ],
+          "true_optimum": 8.790753762051411
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.66874655482271,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "bank"
+          ],
+          "seed": 27,
+          "silent_about_class": [
+            "corporate"
+          ],
+          "true_optimum": 8.66874655482271
+        },
+        {
+          "allocation_differs": false,
+          "card_believing_play_realises": 8.750778746795879,
+          "ceiling": 0.0,
+          "ceiling_share_of_oracle": 0.0,
+          "lied_about_class": [
+            "corporate"
+          ],
+          "seed": 28,
+          "silent_about_class": [
+            "mdb"
+          ],
+          "true_optimum": 8.750778746795879
+        },
+        {
+          "allocation_differs": true,
+          "card_believing_play_realises": 8.462569192669115,
+          "ceiling": 0.10303470684450744,
+          "ceiling_share_of_oracle": 0.012028889971243946,
+          "lied_about_class": [
+            "mdb"
+          ],
+          "seed": 29,
+          "silent_about_class": [
+            "sovereign"
+          ],
+          "true_optimum": 8.565603899513622
+        }
+      ]
+    }
+  },
   "sweep_30_seeds": [
     {
       "allocation_differs": false,
@@ -67,7 +545,7 @@
     },
     {
       "allocation_differs": false,
-      "card_believing_play_realises": 8.650564564113433,
+      "card_believing_play_realises": 8.822959446241839,
       "ceiling": 0.0,
       "ceiling_share_of_oracle": 0.0,
       "lied_about_class": [
@@ -77,13 +555,13 @@
       "silent_about_class": [
         "mdb"
       ],
-      "true_optimum": 8.650564564113433
+      "true_optimum": 8.822959446241839
     },
     {
       "allocation_differs": true,
-      "card_believing_play_realises": 8.305820872110607,
-      "ceiling": 0.1265649001738769,
-      "ceiling_share_of_oracle": 0.015009382112221392,
+      "card_believing_play_realises": 8.3343533917114,
+      "ceiling": 0.09803238057308405,
+      "ceiling_share_of_oracle": 0.011625699205472349,
       "lied_about_class": [
         "mdb"
       ],
@@ -94,10 +572,10 @@
       "true_optimum": 8.432385772284483
     },
     {
-      "allocation_differs": true,
-      "card_believing_play_realises": 8.362849729372385,
-      "ceiling": 0.18335400897712972,
-      "ceiling_share_of_oracle": 0.0214544392563873,
+      "allocation_differs": false,
+      "card_believing_play_realises": 8.546203738349515,
+      "ceiling": 0.0,
+      "ceiling_share_of_oracle": 0.0,
       "lied_about_class": [
         "mdb"
       ],
@@ -123,9 +601,9 @@
     },
     {
       "allocation_differs": true,
-      "card_believing_play_realises": 8.58052612169436,
-      "ceiling": 0.1516188489530883,
-      "ceiling_share_of_oracle": 0.01736329956302208,
+      "card_believing_play_realises": 8.119292185261553,
+      "ceiling": 0.2057954410021221,
+      "ceiling_share_of_oracle": 0.024719912899521482,
       "lied_about_class": [
         "mdb"
       ],
@@ -133,11 +611,11 @@
       "silent_about_class": [
         "bank"
       ],
-      "true_optimum": 8.732144970647449
+      "true_optimum": 8.325087626263675
     },
     {
       "allocation_differs": false,
-      "card_believing_play_realises": 8.274653424445404,
+      "card_believing_play_realises": 8.617503154976168,
       "ceiling": 0.0,
       "ceiling_share_of_oracle": 0.0,
       "lied_about_class": [
@@ -147,13 +625,13 @@
       "silent_about_class": [
         "retail"
       ],
-      "true_optimum": 8.274653424445404
+      "true_optimum": 8.617503154976168
     },
     {
       "allocation_differs": true,
-      "card_believing_play_realises": 8.562629267542341,
-      "ceiling": 0.14910387927930024,
-      "ceiling_share_of_oracle": 0.017115294599410313,
+      "card_believing_play_realises": 8.780669238049006,
+      "ceiling": 0.053761561147110726,
+      "ceiling_share_of_oracle": 0.006085458403500396,
       "lied_about_class": [
         "sovereign"
       ],
@@ -161,7 +639,7 @@
       "silent_about_class": [
         "retail"
       ],
-      "true_optimum": 8.711733146821642
+      "true_optimum": 8.834430799196117
     },
     {
       "allocation_differs": false,
@@ -179,9 +657,9 @@
     },
     {
       "allocation_differs": true,
-      "card_believing_play_realises": 8.511375644722367,
-      "ceiling": 0.17753574816694062,
-      "ceiling_share_of_oracle": 0.020432450066440944,
+      "card_believing_play_realises": 8.32036696695534,
+      "ceiling": 0.3115607497677466,
+      "ceiling_share_of_oracle": 0.036093994295636145,
       "lied_about_class": [
         "bank"
       ],
@@ -189,7 +667,7 @@
       "silent_about_class": [
         "mdb"
       ],
-      "true_optimum": 8.688911392889308
+      "true_optimum": 8.631927716723087
     },
     {
       "allocation_differs": false,
@@ -207,7 +685,7 @@
     },
     {
       "allocation_differs": false,
-      "card_believing_play_realises": 8.352261019634815,
+      "card_believing_play_realises": 8.255969375841659,
       "ceiling": 0.0,
       "ceiling_share_of_oracle": 0.0,
       "lied_about_class": [
@@ -217,13 +695,13 @@
       "silent_about_class": [
         "bank"
       ],
-      "true_optimum": 8.352261019634815
+      "true_optimum": 8.255969375841659
     },
     {
       "allocation_differs": true,
-      "card_believing_play_realises": 8.610205053530798,
-      "ceiling": 0.08586651980200877,
-      "ceiling_share_of_oracle": 0.009874173536626039,
+      "card_believing_play_realises": 8.378450702740018,
+      "ceiling": 0.23986295381896738,
+      "ceiling_share_of_oracle": 0.027831773520614347,
       "lied_about_class": [
         "bank"
       ],
@@ -231,13 +709,13 @@
       "silent_about_class": [
         "sovereign"
       ],
-      "true_optimum": 8.696071573332807
+      "true_optimum": 8.618313656558986
     },
     {
       "allocation_differs": true,
-      "card_believing_play_realises": 8.447563092915393,
-      "ceiling": 0.17038443092718225,
-      "ceiling_share_of_oracle": 0.019770882852998755,
+      "card_believing_play_realises": 8.450857407863337,
+      "ceiling": 0.17038443092718047,
+      "ceiling_share_of_oracle": 0.01976332808117628,
       "lied_about_class": [
         "corporate"
       ],
@@ -245,13 +723,13 @@
       "silent_about_class": [
         "mdb"
       ],
-      "true_optimum": 8.617947523842576
+      "true_optimum": 8.621241838790517
     },
     {
       "allocation_differs": true,
-      "card_believing_play_realises": 8.401397195065515,
-      "ceiling": 0.09113340418410232,
-      "ceiling_share_of_oracle": 0.010731006867629617,
+      "card_believing_play_realises": 8.323789463815386,
+      "ceiling": 0.08909493561145965,
+      "ceiling_share_of_oracle": 0.010590295953374745,
       "lied_about_class": [
         "retail"
       ],
@@ -259,13 +737,13 @@
       "silent_about_class": [
         "sovereign"
       ],
-      "true_optimum": 8.492530599249617
+      "true_optimum": 8.412884399426845
     },
     {
       "allocation_differs": true,
-      "card_believing_play_realises": 8.458784627159915,
-      "ceiling": 0.11646401722161848,
-      "ceiling_share_of_oracle": 0.013581415775964141,
+      "card_believing_play_realises": 8.009108762542242,
+      "ceiling": 0.2920086120958256,
+      "ceiling_share_of_oracle": 0.035177024841015134,
       "lied_about_class": [
         "retail"
       ],
@@ -273,11 +751,11 @@
       "silent_about_class": [
         "mdb"
       ],
-      "true_optimum": 8.575248644381533
+      "true_optimum": 8.301117374638068
     },
     {
       "allocation_differs": false,
-      "card_believing_play_realises": 8.566894033566914,
+      "card_believing_play_realises": 8.900500349372027,
       "ceiling": 0.0,
       "ceiling_share_of_oracle": 0.0,
       "lied_about_class": [
@@ -287,13 +765,13 @@
       "silent_about_class": [
         "retail"
       ],
-      "true_optimum": 8.566894033566914
+      "true_optimum": 8.900500349372027
     },
     {
-      "allocation_differs": true,
-      "card_believing_play_realises": 8.248621385168676,
-      "ceiling": 0.12856540281783602,
-      "ceiling_share_of_oracle": 0.015347085611390216,
+      "allocation_differs": false,
+      "card_believing_play_realises": 8.777673017887484,
+      "ceiling": 0.0,
+      "ceiling_share_of_oracle": 0.0,
       "lied_about_class": [
         "bank"
       ],
@@ -301,13 +779,13 @@
       "silent_about_class": [
         "retail"
       ],
-      "true_optimum": 8.377186787986512
+      "true_optimum": 8.777673017887484
     },
     {
       "allocation_differs": true,
-      "card_believing_play_realises": 8.087247820115536,
-      "ceiling": 0.29994803350802357,
-      "ceiling_share_of_oracle": 0.0357626122893548,
+      "card_believing_play_realises": 8.043964821128027,
+      "ceiling": 0.2965034516223728,
+      "ceiling_share_of_oracle": 0.03554997656319795,
       "lied_about_class": [
         "mdb"
       ],
@@ -315,7 +793,7 @@
       "silent_about_class": [
         "corporate"
       ],
-      "true_optimum": 8.38719585362356
+      "true_optimum": 8.3404682727504
     },
     {
       "allocation_differs": false,
@@ -332,10 +810,10 @@
       "true_optimum": 8.681809031798583
     },
     {
-      "allocation_differs": true,
-      "card_believing_play_realises": 8.59887373305211,
-      "ceiling": 0.043691737253400476,
-      "ceiling_share_of_oracle": 0.005055412933060025,
+      "allocation_differs": false,
+      "card_believing_play_realises": 8.493914696309876,
+      "ceiling": 0.0,
+      "ceiling_share_of_oracle": 0.0,
       "lied_about_class": [
         "mdb"
       ],
@@ -343,7 +821,7 @@
       "silent_about_class": [
         "sovereign"
       ],
-      "true_optimum": 8.642565470305511
+      "true_optimum": 8.493914696309876
     },
     {
       "allocation_differs": false,
@@ -361,9 +839,9 @@
     },
     {
       "allocation_differs": true,
-      "card_believing_play_realises": 8.380896582308816,
-      "ceiling": 0.19896529332190305,
-      "ceiling_share_of_oracle": 0.023189801445058437,
+      "card_believing_play_realises": 8.374251318921186,
+      "ceiling": 0.20561055670953365,
+      "ceiling_share_of_oracle": 0.023964320135913483,
       "lied_about_class": [
         "bank"
       ],
@@ -389,7 +867,7 @@
     },
     {
       "allocation_differs": false,
-      "card_believing_play_realises": 8.353861997696919,
+      "card_believing_play_realises": 8.588359769687344,
       "ceiling": 0.0,
       "ceiling_share_of_oracle": 0.0,
       "lied_about_class": [
@@ -399,11 +877,11 @@
       "silent_about_class": [
         "bank"
       ],
-      "true_optimum": 8.353861997696919
+      "true_optimum": 8.588359769687344
     },
     {
       "allocation_differs": false,
-      "card_believing_play_realises": 8.908622360586191,
+      "card_believing_play_realises": 8.829480605662365,
       "ceiling": 0.0,
       "ceiling_share_of_oracle": 0.0,
       "lied_about_class": [
@@ -413,13 +891,13 @@
       "silent_about_class": [
         "sovereign"
       ],
-      "true_optimum": 8.908622360586191
+      "true_optimum": 8.829480605662365
     },
     {
-      "allocation_differs": false,
-      "card_believing_play_realises": 8.790753762051411,
-      "ceiling": 0.0,
-      "ceiling_share_of_oracle": 0.0,
+      "allocation_differs": true,
+      "card_believing_play_realises": 7.962755142476429,
+      "ceiling": 0.40651100526196426,
+      "ceiling_share_of_oracle": 0.048571881702174656,
       "lied_about_class": [
         "mdb"
       ],
@@ -427,13 +905,13 @@
       "silent_about_class": [
         "bank"
       ],
-      "true_optimum": 8.790753762051411
+      "true_optimum": 8.369266147738394
     },
     {
-      "allocation_differs": false,
-      "card_believing_play_realises": 8.66874655482271,
-      "ceiling": 0.0,
-      "ceiling_share_of_oracle": 0.0,
+      "allocation_differs": true,
+      "card_believing_play_realises": 8.392956163362717,
+      "ceiling": 0.07629549812238423,
+      "ceiling_share_of_oracle": 0.009008528872668503,
       "lied_about_class": [
         "bank"
       ],
@@ -441,7 +919,7 @@
       "silent_about_class": [
         "corporate"
       ],
-      "true_optimum": 8.66874655482271
+      "true_optimum": 8.469251661485101
     },
     {
       "allocation_differs": false,
@@ -459,9 +937,9 @@
     },
     {
       "allocation_differs": true,
-      "card_believing_play_realises": 8.462569192669115,
-      "ceiling": 0.10303470684450744,
-      "ceiling_share_of_oracle": 0.012028889971243946,
+      "card_believing_play_realises": 8.318034228895225,
+      "ceiling": 0.1417426685078631,
+      "ceiling_share_of_oracle": 0.01675489439341764,
       "lied_about_class": [
         "mdb"
       ],
@@ -469,7 +947,7 @@
       "silent_about_class": [
         "sovereign"
       ],
-      "true_optimum": 8.565603899513622
+      "true_optimum": 8.459776897403088
     }
   ]
 }

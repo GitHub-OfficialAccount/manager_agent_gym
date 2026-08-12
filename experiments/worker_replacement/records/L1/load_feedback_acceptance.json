@@ -5,10 +5,10 @@
     "REFUSED \u2014 assigned but not started, awaiting re-routing (refused 2\u00d7, most recently at t4: concurrency limit reached (1/1 concurrent tasks; frees when a running task finishes))",
     "REFUSED \u2014 assigned but not started, awaiting re-routing (refused 3\u00d7, most recently at t6: concurrency limit reached (1/1 concurrent tasks; frees when a running task finishes))",
     "REFUSED \u2014 assigned but not started, awaiting re-routing (refused 4\u00d7, most recently at t8: concurrency limit reached (1/1 concurrent tasks; frees when a running task finishes))",
-    "REFUSED \u2014 assigned but not started, awaiting re-routing (refused 5\u00d7, most recently at t10: segment allotment spent (3/3 for the episode; finishing one does NOT free another))",
-    "REFUSED \u2014 assigned but not started, awaiting re-routing (refused 6\u00d7, most recently at t12: segment allotment spent (3/3 for the episode; finishing one does NOT free another))",
-    "REFUSED \u2014 assigned but not started, awaiting re-routing (refused 7\u00d7, most recently at t14: segment allotment spent (3/3 for the episode; finishing one does NOT free another))",
-    "REFUSED \u2014 assigned but not started, awaiting re-routing (refused 8\u00d7, most recently at t16: segment allotment spent (3/3 for the episode; finishing one does NOT free another))",
+    "REFUSED \u2014 assigned but not started, awaiting re-routing (refused 5\u00d7, most recently at t10: concurrency limit reached (1/1 concurrent tasks; frees when a running task finishes))",
+    "REFUSED \u2014 assigned but not started, awaiting re-routing (refused 6\u00d7, most recently at t12: concurrency limit reached (1/1 concurrent tasks; frees when a running task finishes))",
+    "REFUSED \u2014 assigned but not started, awaiting re-routing (refused 7\u00d7, most recently at t14: concurrency limit reached (1/1 concurrent tasks; frees when a running task finishes))",
+    "REFUSED \u2014 assigned but not started, awaiting re-routing (refused 8\u00d7, most recently at t16: concurrency limit reached (1/1 concurrent tasks; frees when a running task finishes))",
     "done",
     "not started (dependencies met, not yet running)",
     "not started (waiting on dependencies)",
@@ -34,7 +34,7 @@
         "max_load_seen": 0,
         "n_decisions": 10,
         "n_decisions_with_refusals": 9,
-        "n_refusal_lines": 56,
+        "n_refusal_lines": 46,
         "raw_task_states_seen": []
       },
       "1": {
@@ -44,7 +44,7 @@
         "max_load_seen": 0,
         "n_decisions": 10,
         "n_decisions_with_refusals": 9,
-        "n_refusal_lines": 56,
+        "n_refusal_lines": 46,
         "raw_task_states_seen": []
       },
       "2": {
@@ -54,7 +54,7 @@
         "max_load_seen": 0,
         "n_decisions": 10,
         "n_decisions_with_refusals": 9,
-        "n_refusal_lines": 56,
+        "n_refusal_lines": 46,
         "raw_task_states_seen": []
       },
       "3": {
@@ -64,7 +64,7 @@
         "max_load_seen": 0,
         "n_decisions": 10,
         "n_decisions_with_refusals": 9,
-        "n_refusal_lines": 56,
+        "n_refusal_lines": 46,
         "raw_task_states_seen": []
       },
       "4": {
@@ -74,7 +74,7 @@
         "max_load_seen": 0,
         "n_decisions": 10,
         "n_decisions_with_refusals": 9,
-        "n_refusal_lines": 56,
+        "n_refusal_lines": 46,
         "raw_task_states_seen": []
       },
       "U": {
@@ -84,7 +84,7 @@
         "max_load_seen": 0,
         "n_decisions": 10,
         "n_decisions_with_refusals": 9,
-        "n_refusal_lines": 56,
+        "n_refusal_lines": 46,
         "raw_task_states_seen": []
       }
     },
@@ -99,98 +99,86 @@
     "unknown": "unknown"
   },
   "failures": [],
-  "fixed_state_load_block": "- w_aaaaaa: concurrent tasks 0/1 (frees when a task finishes) \u00b7 segment allotment 3/3 (used this episode; does NOT reset when a task finishes) [EXHAUSTED]\n- w_bbbbbb: concurrent tasks 0/1 (frees when a task finishes) \u00b7 segment allotment 1/3 (used this episode; does NOT reset when a task finishes)",
+  "fixed_state_load_block": "- w_aaaaaa: concurrent tasks 3/1 (frees when a task finishes) [EXHAUSTED]\n- w_bbbbbb: concurrent tasks 1/1 (frees when a task finishes) [EXHAUSTED]",
   "fixed_state_refusal_block": "- task 'fixture_task' was not started: w_aaaaaa refused it \u2014 concurrency limit reached (1/1 concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it.",
   "metered_set_equals_scored_set": true,
   "per_cell": {
     "0": {
       "load_grammar": [
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED] \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes) [EXHAUSTED]"
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes)",
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED]"
       ],
-      "max_load_seen": 3,
+      "max_load_seen": 1,
       "n_decisions": 10,
-      "n_refusal_lines": 56,
+      "n_refusal_lines": 46,
       "refusal_grammar": [
         "- (none since your last action)",
-        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it.",
-        "- task '<task>' was not started: <worker> refused it \u2014 segment allotment spent (<n>/<n> for the episode; finishing one does NOT free another). It remains assigned and will not run unless you re-assign it."
+        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it."
       ]
     },
     "1": {
       "load_grammar": [
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED] \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes) [EXHAUSTED]"
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes)",
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED]"
       ],
-      "max_load_seen": 3,
+      "max_load_seen": 1,
       "n_decisions": 10,
-      "n_refusal_lines": 56,
+      "n_refusal_lines": 46,
       "refusal_grammar": [
         "- (none since your last action)",
-        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it.",
-        "- task '<task>' was not started: <worker> refused it \u2014 segment allotment spent (<n>/<n> for the episode; finishing one does NOT free another). It remains assigned and will not run unless you re-assign it."
+        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it."
       ]
     },
     "2": {
       "load_grammar": [
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED] \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes) [EXHAUSTED]"
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes)",
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED]"
       ],
-      "max_load_seen": 3,
+      "max_load_seen": 1,
       "n_decisions": 10,
-      "n_refusal_lines": 56,
+      "n_refusal_lines": 46,
       "refusal_grammar": [
         "- (none since your last action)",
-        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it.",
-        "- task '<task>' was not started: <worker> refused it \u2014 segment allotment spent (<n>/<n> for the episode; finishing one does NOT free another). It remains assigned and will not run unless you re-assign it."
+        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it."
       ]
     },
     "3": {
       "load_grammar": [
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED] \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes) [EXHAUSTED]"
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes)",
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED]"
       ],
-      "max_load_seen": 3,
+      "max_load_seen": 1,
       "n_decisions": 10,
-      "n_refusal_lines": 56,
+      "n_refusal_lines": 46,
       "refusal_grammar": [
         "- (none since your last action)",
-        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it.",
-        "- task '<task>' was not started: <worker> refused it \u2014 segment allotment spent (<n>/<n> for the episode; finishing one does NOT free another). It remains assigned and will not run unless you re-assign it."
+        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it."
       ]
     },
     "4": {
       "load_grammar": [
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED] \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes) [EXHAUSTED]"
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes)",
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED]"
       ],
-      "max_load_seen": 3,
+      "max_load_seen": 1,
       "n_decisions": 10,
-      "n_refusal_lines": 56,
+      "n_refusal_lines": 46,
       "refusal_grammar": [
         "- (none since your last action)",
-        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it.",
-        "- task '<task>' was not started: <worker> refused it \u2014 segment allotment spent (<n>/<n> for the episode; finishing one does NOT free another). It remains assigned and will not run unless you re-assign it."
+        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it."
       ]
     },
     "U": {
       "load_grammar": [
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED] \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes)",
-        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) \u00b7 segment allotment <n>/<n> (used this episode; does NOT reset when a task finishes) [EXHAUSTED]"
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes)",
+        "- <worker>: concurrent tasks <n>/<n> (frees when a task finishes) [EXHAUSTED]"
       ],
-      "max_load_seen": 3,
+      "max_load_seen": 1,
       "n_decisions": 10,
-      "n_refusal_lines": 56,
+      "n_refusal_lines": 46,
       "refusal_grammar": [
         "- (none since your last action)",
-        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it.",
-        "- task '<task>' was not started: <worker> refused it \u2014 segment allotment spent (<n>/<n> for the episode; finishing one does NOT free another). It remains assigned and will not run unless you re-assign it."
+        "- task '<task>' was not started: <worker> refused it \u2014 concurrency limit reached (<n>/<n> concurrent tasks; frees when a running task finishes). It remains assigned and will not run unless you re-assign it."
       ]
     }
   },
@@ -216,7 +204,7 @@
       "fired": true
     },
     {
-      "control": "release-semantics check fires on a bare `3/3`",
+      "control": "release-semantics PREDICATE fires on a bare `3/3` (predicate only \u2014 its live check is UNEXERCISED)",
       "fired": true
     },
     {

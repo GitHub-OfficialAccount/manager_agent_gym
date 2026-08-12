@@ -1,5 +1,5 @@
 {
-  "both_falsified": true,
+  "both_falsified": false,
   "caps": [
     3,
     4,
@@ -13,82 +13,165 @@
   ],
   "results": {
     "h1": {
-      "falsified": true,
+      "falsified": false,
       "sweep": {
         "cap3|corporate": {
-          "gap": 0.0031428485022128617,
+          "gap": 0.003380561701897133,
           "inverted": true,
-          "one_carrier": 0.018916193264247712,
-          "two_carriers": 0.01577334476203485
+          "one_carrier": 0.017187983938123298,
+          "two_carriers": 0.013807422236226165
         },
         "cap3|mdb": {
-          "gap": 0.004918379434995087,
+          "gap": 0.0044942075437365645,
           "inverted": true,
-          "one_carrier": 0.01837401926635524,
-          "two_carriers": 0.013455639831360151
+          "one_carrier": 0.018366271516692362,
+          "two_carriers": 0.013872063972955798
         },
         "cap4|corporate": {
-          "gap": 0.005250854986528226,
-          "inverted": true,
-          "one_carrier": 0.021030101342991873,
-          "two_carriers": 0.015779246356463647
+          "gap": -0.0057405054061634726,
+          "inverted": false,
+          "one_carrier": 0.008943388813004717,
+          "two_carriers": 0.01468389421916819
         },
         "cap4|mdb": {
-          "gap": 0.006847029242741578,
-          "inverted": true,
-          "one_carrier": 0.020337778931460077,
-          "two_carriers": 0.013490749688718499
+          "gap": -0.005213963573474676,
+          "inverted": false,
+          "one_carrier": 0.00953480732041574,
+          "two_carriers": 0.014748770893890416
         },
         "cap5|corporate": {
-          "gap": 0.006258733162453491,
-          "inverted": true,
-          "one_carrier": 0.022064551105232658,
-          "two_carriers": 0.015805817942779167
+          "gap": -0.015279574533339089,
+          "inverted": false,
+          "one_carrier": 0.0,
+          "two_carriers": 0.015279574533339089
         },
         "cap5|mdb": {
-          "gap": 0.007796577389282779,
-          "inverted": true,
-          "one_carrier": 0.021325624223756872,
-          "two_carriers": 0.013529046834474093
+          "gap": -0.015344648185584274,
+          "inverted": false,
+          "one_carrier": 0.0,
+          "two_carriers": 0.015344648185584274
         },
         "cap9|corporate": {
-          "gap": 0.006419979775511987,
-          "inverted": true,
-          "one_carrier": 0.02223459011367024,
-          "two_carriers": 0.01581461033815825
+          "gap": -0.004189958346416915,
+          "inverted": false,
+          "one_carrier": 0.011410012625276784,
+          "two_carriers": 0.015599970971693699
         },
         "cap9|mdb": {
-          "gap": 0.007945961897190167,
-          "inverted": true,
-          "one_carrier": 0.021485984264236396,
-          "two_carriers": 0.013540022367046229
+          "gap": -0.004225061291929547,
+          "inverted": false,
+          "one_carrier": 0.011440060849453886,
+          "two_carriers": 0.015665122141383433
         }
       }
     },
     "h2": {
       "by_group": {
         "corporate|1": {
-          "absolute": 0.16777164417089271,
-          "oracle": 8.779004875482785,
-          "share": 0.018916193264247712
+          "absolute": 0.14558412768716777,
+          "oracle": 8.570155021008599,
+          "share": 0.017187983938123298
         },
         "corporate|2": {
-          "absolute": 0.1419441462278291,
-          "oracle": 8.85180906368506,
-          "share": 0.01577334476203485
+          "absolute": 0.11955112784184711,
+          "oracle": 8.672441734734727,
+          "share": 0.013807422236226165
         },
         "mdb|1": {
-          "absolute": 0.16336686863619873,
-          "oracle": 8.827207524429726,
-          "share": 0.01837401926635524
+          "absolute": 0.15506395576316317,
+          "oracle": 8.52711075041896,
+          "share": 0.018366271516692362
         },
         "mdb|2": {
-          "absolute": 0.12108480185175684,
-          "oracle": 8.860914256047277,
-          "share": 0.013455639831360151
+          "absolute": 0.11955112784184699,
+          "oracle": 8.635922964791959,
+          "share": 0.013872063972955798
         }
       },
       "falsified": true
+    }
+  },
+  "superseded_2026_08_09": {
+    "note": "SUPERSEDED VALUES, kept rather than overwritten. Regenerated 2026-08-09 after generator fixes that change which instance a seed produces: the amplifier separation into amplify_count/amplify_divergence/amplify_irb_priority, the `others`-exclusion bug that gave the shared class ZERO segments when count forcing was off, the divergence search taking its own rng stream, and positional_roles. The values below are what this file asserted before that. They are NOT reproducible on the current tree and must not be quoted as current -- they are here so a reader who meets the old figure elsewhere can see it was superseded rather than mistyped.",
+    "previous": {
+      "h1": {
+        "falsified": true,
+        "sweep": {
+          "cap3|corporate": {
+            "gap": 0.0031428485022128617,
+            "inverted": true,
+            "one_carrier": 0.018916193264247712,
+            "two_carriers": 0.01577334476203485
+          },
+          "cap3|mdb": {
+            "gap": 0.004918379434995087,
+            "inverted": true,
+            "one_carrier": 0.01837401926635524,
+            "two_carriers": 0.013455639831360151
+          },
+          "cap4|corporate": {
+            "gap": 0.005250854986528226,
+            "inverted": true,
+            "one_carrier": 0.021030101342991873,
+            "two_carriers": 0.015779246356463647
+          },
+          "cap4|mdb": {
+            "gap": 0.006847029242741578,
+            "inverted": true,
+            "one_carrier": 0.020337778931460077,
+            "two_carriers": 0.013490749688718499
+          },
+          "cap5|corporate": {
+            "gap": 0.006258733162453491,
+            "inverted": true,
+            "one_carrier": 0.022064551105232658,
+            "two_carriers": 0.015805817942779167
+          },
+          "cap5|mdb": {
+            "gap": 0.007796577389282779,
+            "inverted": true,
+            "one_carrier": 0.021325624223756872,
+            "two_carriers": 0.013529046834474093
+          },
+          "cap9|corporate": {
+            "gap": 0.006419979775511987,
+            "inverted": true,
+            "one_carrier": 0.02223459011367024,
+            "two_carriers": 0.01581461033815825
+          },
+          "cap9|mdb": {
+            "gap": 0.007945961897190167,
+            "inverted": true,
+            "one_carrier": 0.021485984264236396,
+            "two_carriers": 0.013540022367046229
+          }
+        }
+      },
+      "h2": {
+        "by_group": {
+          "corporate|1": {
+            "absolute": 0.16777164417089271,
+            "oracle": 8.779004875482785,
+            "share": 0.018916193264247712
+          },
+          "corporate|2": {
+            "absolute": 0.1419441462278291,
+            "oracle": 8.85180906368506,
+            "share": 0.01577334476203485
+          },
+          "mdb|1": {
+            "absolute": 0.16336686863619873,
+            "oracle": 8.827207524429726,
+            "share": 0.01837401926635524
+          },
+          "mdb|2": {
+            "absolute": 0.12108480185175684,
+            "oracle": 8.860914256047277,
+            "share": 0.013455639831360151
+          }
+        },
+        "falsified": true
+      }
     }
   }
 }

@@ -231,11 +231,13 @@ def _install_dry_run_stubs() -> None:
                 # directly above code repeating it. The comment was written while
                 # the OTHER line was being fixed, and this one was not revisited.
                 if env.CapacityBoundedAIAgent.is_metered(task):
-                    eligible = [a for a in seg_counts
-                                if seg_counts[a] < env.CapacityBoundedAIAgent.segment_capacity]
-                    if not eligible:
-                        continue
-                    chosen = min(eligible, key=lambda a: (seg_counts[a], a))
+                    # NO CAP TO RESPECT (L14): the stub spreads segments evenly
+                    # because an even spread is what a sane manager does, not
+                    # because a fourth would be refused. Nothing is skipped now,
+                    # so the stub can no longer strand a task by exhausting a
+                    # quota -- which is what the removed `if not eligible:
+                    # continue` did.
+                    chosen = min(seg_counts, key=lambda a: (seg_counts[a], a))
                     seg_counts[chosen] += 1
                 else:
                     chosen = min(all_counts, key=lambda a: (all_counts[a], a))

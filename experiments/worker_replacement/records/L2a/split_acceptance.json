@@ -54,10 +54,10 @@
     "counts": {
       "executed_and_declined": 0,
       "executed_and_parsed": 0,
-      "executed_but_unparseable": 3,
+      "executed_but_unparseable": 6,
       "never_assigned": 0,
-      "refused_allotment": 6,
-      "refused_concurrency": 0,
+      "refused_allotment": 0,
+      "refused_concurrency": 3,
       "refused_unavailable": 0,
       "unexecuted_no_refusal": 0
     },
@@ -69,7 +69,7 @@
     "executed_and_parsed": "executed and yielded an rwa value, correct or not \u2014 correctness is the scorer's business, not this split's",
     "executed_but_unparseable": "executed, but the deliverable yielded no rwa value and was not a permitted decline",
     "never_assigned": "no APPLIED assignment event names this segment \u2014 the manager never staffed it. NOT 'it did not run': that was the v1 defect.",
-    "refused_allotment": "assigned, never executed, and at least one refusal on it names the segment allotment \u2014 permanently barred, since the allotment never releases within an episode",
+    "refused_allotment": "assigned, never executed, and at least one refusal on it names the segment allotment. STRUCTURALLY UNREACHABLE AS THE HARNESS STANDS \u2014 a count of 0 here is UNINFORMATIVE, not a finding. See ALLOTMENT_UNREACHABLE.",
     "refused_concurrency": "assigned, never executed, and every refusal on it names only concurrency \u2014 transient, and it would have run given more timesteps",
     "refused_unavailable": "assigned, never executed, and a refusal named the assignee as UNAVAILABLE. RETRACTED: 'which a roster change can cause, so this is the state a swap run must be able to see separately' \u2014 UNREACHABLE as implemented; a count of 0 here is structural, not behavioural",
     "unexecuted_no_refusal": "assigned, never executed, and NO refusal fired on it \u2014 the horizon ended first, or it never became ready"

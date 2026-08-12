@@ -55,13 +55,43 @@ from manager_agent_gym.core.common.run_trace import record_run_event
 # The fix is to give REFUSAL A PARSEABLE FORM rather than to forbid it. Declining
 # is now available AND machine-readable, which is better than either forbidding it
 # or accepting unparseable prose.
+# ★ TIGHTENED 2026-08-09 (researcher-approved) AFTER A MEASURED FAILURE. One worker
+# wrote its answer inside a numbered sentence — `4. RWA = 242,806,729.46 x 0.75 =
+# 182,105,047.10` — and scored zero although the figure was correct to the cent.
+#
+# THE FIX IS IN THE CONTRACT, NOT IN THE READER, and that is measured rather than
+# preferred: `check_value_extraction_rules.py` scores both proposed lenient readers
+# against the 157 deliverables the strict parser already reads correctly.
+#   take the LAST number       -> 7.0% wrong
+#   anchor on `rwa`, next number -> 1.9% wrong
+# Both return PARAMETERS the worker mentioned after answering — the 12.5 Basel
+# multiplier, the 75% retail weight, a maturity in years — which are plausible and
+# would enter the DV unflagged. The strict reader costs ONE correct answer in the
+# whole corpus; every lenient reader tested costs more, silently.
+#
+# So reasoning goes BEFORE the two lines, and the old permission that invited the
+# failure — "explanatory prose around them is fine" — is withdrawn.
+#
+# ★ TWO PROHIBITIONS WERE DROPPED ON RE's REVIEW, and the reason is worth keeping so
+# nobody re-adds them as an obvious tightening. The first draft also forbade thousands
+# separators and forbade anything following the rwa line. THE PARSER ACCEPTS BOTH — so
+# the contract asserted two rules that nothing checked, which is the same shape as a
+# field asserting more than its condition establishes, in prose. Neither protected
+# anything the parser cannot already handle, and every extra rule is more surface for a
+# worker to violate while trying to comply. The operative remedy is the worked-line
+# warning below, which RE verified parses when followed.
 REPORT_CONVENTION_TEXT = (
-    "REPORT FORMAT — so your answer can be read automatically, put your "
-    "conclusion in these two lines, each on its own line:\n"
+    "REPORT FORMAT — so your answer can be read automatically, END your reply with "
+    "exactly these two lines, in this order, each alone on its own line with nothing "
+    "else on it:\n"
     "  method: IRB        (or SA, if you used the standardised approach)\n"
     "  rwa: <the risk-weighted assets figure, in currency units>\n"
-    "Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not "
-    "more than one rwa line. Explanatory prose around them is fine.\n"
+    "Put ALL your reasoning and arithmetic BEFORE these lines.\n"
+    "Write the number plainly and alone, e.g. 'rwa: 12345678.90' — no '=' or '≈' "
+    "on that line, not a range, and not more than one rwa line.\n"
+    "A worked line such as 'RWA = 242,806,729.46 x 0.75 = 182,105,047.10' is NOT "
+    "the rwa line and will not be read — it is reasoning. Show it above, then give "
+    "the bare figure on its own rwa line.\n"
     "If you judge that you cannot price this segment, say so in the same form:\n"
     "  method: none\n"
     "  rwa: unavailable\n"
@@ -144,6 +174,63 @@ def _to_float(raw: str) -> float | None:
         return None
 
 
+# A LOOSE READING, RECORDED AND NEVER SCORED (L13).
+#
+# WHY IT EXISTS. seg_03 of the first `partial` bundle computed the retail SA
+# fallback correctly to the cent -- 242,806,729.46 x 0.75 = 182,105,047.095 --
+# and scored ZERO because it wrote `RWA = ... = 182,105,047.10` instead of a line
+# beginning `rwa:`. That is the successor recognising it holds no IRB approval and
+# falling back under its mandate: the phenomenon the study exists to observe,
+# discarded on punctuation. Scoring correct work as zero measures
+# INSTRUCTION-FOLLOWING and reports it as ALLOCATION.
+#
+# WHY IT DOES NOT FEED THE SCORE. Across every bundle we hold, exactly ONE unparsed
+# non-declined segment has a non-empty deliverable containing a number; the other
+# 24-35 are empty. So a permissive rule gets ONE chance to fire correctly and NO
+# chance to demonstrate it does not misfire on reasoning prose that happens to
+# contain a figure. It cannot be control-tested on this corpus, and a rule that
+# cannot be shown not to misfire must not be in the DV.
+#
+# So both facts are kept instead of trading one for the other: the strict parse is
+# unchanged and remains the ONLY thing scored, while `rwa_loose` and `report_form`
+# accumulate the evidence that would let the change be made safely later. If the
+# two ever diverge on prose, we see it before it is scoring anything.
+_NUMERIC_RE = re.compile(
+    r"(\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+\.\d{1,2}|\d{4,})")
+
+
+def loose_rwa(text: str | None) -> tuple[float | None, str]:
+    """A value the strict convention missed. NEVER scored -- recorded only.
+
+    IT REFUSES TO GUESS, AND ON THE ONE CASE WE HAVE IT REFUSES. seg_03 wrote
+    `RWA = 242,806,729.46 x 0.75 = 182,105,047.10`: the EAD, the weight and the
+    answer, all on one line. My first version anchored on the token `rwa` and took
+    the next number -- and returned **242,806,729.46, the EAD**, on the single
+    segment the rule was written to recover. A permissive rule tested against its
+    one instance MISFIRED on it.
+
+    So this returns a value only when the deliverable contains EXACTLY ONE
+    candidate number, which is the same refusal-to-guess the strict parser makes.
+    On seg_03 that is `loose_ambiguous` and no value -- correct, because picking
+    the last number is fitting a rule to one example, and n=1 is what I argued we
+    could not tune on.
+
+    THE FIELD THAT ACTUALLY CARRIES THE SIGNAL IS `report_form`, not this one: it
+    needs no value extraction, so it cannot misfire. This is retained because it
+    costs nothing and accumulates evidence for a decision on more data.
+    """
+    if not text or not text.strip():
+        return None, "empty"
+    values = {round(v, 6) for v in
+              (_to_float(m.group(1)) for m in _NUMERIC_RE.finditer(text))
+              if v is not None}
+    if len(values) == 1:
+        return values.pop(), "loose_single_number"
+    if len(values) > 1:
+        return None, "loose_ambiguous"
+    return None, "loose_no_number"
+
+
 def parse_report(text: str | None) -> ParsedReport:
     """Parse one deliverable. Never guesses; every failure names its cause."""
     if text is None or not text.strip():
@@ -211,12 +298,23 @@ def parse_segment_reports(
     for segment_id in segment_ids:
         text = deliverables.get(segment_id)
         parsed = parse_report(text)
+        loose_value, loose_form = loose_rwa(text)
         detail[segment_id] = {
             "rwa": parsed.rwa,
             "method": parsed.method,
             "reason": parsed.reason,
             "declined": parsed.declined,
             "had_deliverable": segment_id in deliverables and bool(text),
+            # OBSERVATIONAL ONLY. Nothing reads these to score; they exist so the
+            # compliance signal survives as its own quantity instead of being
+            # destroyed by folding it into the score. `report_form` is
+            # "conventional" whenever the strict parse succeeded, so a reader can
+            # count non-compliance directly rather than inferring it.
+            "rwa_loose": loose_value,
+            "report_form": ("conventional" if parsed.rwa is not None
+                            else "declined" if parsed.declined else loose_form),
+            "loose_recovers": parsed.rwa is None and not parsed.declined
+                              and loose_value is not None,
         }
         if parsed.rwa is None:
             reason = (

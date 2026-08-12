@@ -896,17 +896,38 @@ class WorkflowExecutionEngine:
                             "timestep": self.current_timestep,
                             "agent_current_task_count": len(agent.current_task_ids),
                             "agent_max_concurrent": agent.max_concurrent_tasks,
-                            "agent_available": agent.is_available,
+                            # `agent_available` REMOVED (L13). It was
+                            # `agent.is_available`, which is DECLARED True in two
+                            # places and WRITTEN NOWHERE in the repo -- every other
+                            # occurrence is a read. Measured: True on 653 of 653
+                            # deferrals in the prior corpus and on 10 of 10 in the
+                            # first bundle to carry codes. It never took the other
+                            # value and never could.
+                            #
+                            # That is worse than useless. The elimination that
+                            # attributed 335 refusals to the segment allotment
+                            # rested on "available=True rules out unavailable" --
+                            # a step that ruled out nothing, over a field whose
+                            # constancy nobody checked for weeks. A field that
+                            # cannot discriminate does not sit inertly in a
+                            # payload; it lends its name to an inference.
+                            #
+                            # Nothing reads it but the analysis that proved it
+                            # decorative, and `refusal_codes` now carries cause
+                            # directly, so continuity buys nothing: no old bundle
+                            # can be classified by cause regardless.
                             # THE REASON, COMPUTED AT THE SITE (L1 criterion (a)).
                             # The three fields above are all CONCURRENCY
                             # quantities, and the dominant refusal cause in the
                             # scope run was a per-episode work ALLOTMENT that none
                             # of them describes. Read through, they assert that a
-                            # permanently-barred worker is idle, available and
-                            # below cap — the exact reverse — on 58% of the 580
-                            # refusals and on all the ones that mattered. They are
-                            # kept for continuity with existing bundles and are no
-                            # longer the reason.
+                            # permanently-barred worker is idle and below cap —
+                            # the exact reverse — on 58% of the 580 refusals and
+                            # on all the ones that mattered. The two COUNT fields
+                            # are kept: they vary, and a reader can see for
+                            # themselves that they do not explain the refusal. The
+                            # availability field was removed because it does not
+                            # vary at all.
                             # BOTH FORMS. The prose is what the manager reads;
                             # the CODES are what analysis classifies on, because
                             # a substring test over a formatted sentence is

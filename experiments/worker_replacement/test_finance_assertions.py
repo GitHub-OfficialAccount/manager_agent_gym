@@ -90,9 +90,23 @@ def main() -> int:
         (
             "1 nested lattice",
             "ASSERTION 1",
+            # ★ FIXTURE CORRECTED 2026-08-09. It used UNEQUAL-size sets —
+            # ("bank",) against pairs — and a guard added since then rejects those
+            # FIRST: "coverage_override sets must be EQUAL SIZE; unequal ones can
+            # nest, and non-nestedness is what makes the lattice measure anything."
+            # So the case never reached ASSERTION 1 and this acceptance had been
+            # failing, unreported, on a marker that could no longer be produced.
+            #
+            # Same family as the four stale records: the generator gained a guard
+            # and a committed artefact still describes the old ordering.
+            #
+            # Equal-size sets nest only when IDENTICAL, so that is the case now
+            # used. Verified reachable: it raises ASSERTION 1 (non-nestedness),
+            # while equal-size pairwise-distinct coverage generates cleanly — so
+            # the fixture still discriminates rather than merely raising.
             dict(n_workers=4, coverage_override=[
-                ("bank",), ("bank", "corporate"), ("corporate", "retail"),
-                ("sovereign", "retail"),
+                ("bank", "corporate"), ("bank", "corporate"),
+                ("corporate", "retail"), ("sovereign", "retail"),
             ]),
         ),
         (

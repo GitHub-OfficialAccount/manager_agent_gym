@@ -72,8 +72,7 @@ from typing import Any
 from uuid import uuid4
 
 from manager_agent_gym.core.workflow_agents.ai_agent import AIAgent
-from manager_agent_gym.core.workflow_agents.interface import (
-    REFUSAL_SEGMENT_ALLOTMENT, RefusalReason)
+from manager_agent_gym.core.workflow_agents.interface import RefusalReason
 from manager_agent_gym.core.workflow_agents.registry import AgentRegistry
 from manager_agent_gym.schemas.core.tasks import Task
 from manager_agent_gym.schemas.core.workflow import Workflow
@@ -114,13 +113,23 @@ DOWNSTREAM_STAGES = 3
 # t+2. Measured in the dry run, where a one-timestep-per-stage horizon left the
 # last two downstream tasks unrun and the workflow incomplete.
 TIMESTEPS_PER_DOWNSTREAM_STAGE = 2
-# Slack for a manager that spends a timestep without assigning anything. This is
-# SAFE ONLY BECAUSE the per-worker segment cap is enforced by the agent
-# (CapacityBoundedAIAgent) rather than by the horizon. While the horizon was the
-# only bound, slack silently loosened C and let a worker take a fourth segment.
+# Slack for a manager that spends a timestep without assigning anything.
 #
-# Slack is cheap now that the engine stops at the terminal state: an unused
-# timestep is only spent when the manager is actually still working.
+# ITS JUSTIFICATION WAS REMOVED WITH THE ALLOWANCE (L14) AND IS RESTATED HERE
+# RATHER THAN LEFT ASSERTING SOMETHING FALSE. It read: "SAFE ONLY BECAUSE the
+# per-worker segment cap is enforced by the agent rather than by the horizon.
+# While the horizon was the only bound, slack silently loosened C and let a worker
+# take a fourth segment."
+#
+# The horizon IS now the only bound again, so slack does loosen the realised
+# per-worker count -- and under the ruling that is not an error: if a worker can
+# complete four segments, completing four is fine, and a bad routing decision shows
+# up as segments scored by the rough method, which is the DV. What slack must not
+# do is hide a manager that never finished, and it does not: unfinished segments
+# score 0 and are named in `missing_segments`.
+#
+# Slack is cheap because the engine stops at the terminal state: an unused timestep
+# is only spent when the manager is actually still working.
 HORIZON_SLACK = 2
 
 
@@ -148,24 +157,56 @@ class CapacityBoundedAIAgent(AIAgent):
     so a runtime where a worker can take 4 scores agents against an optimum for a
     problem they were not solving, and every regret number inherits the mismatch.
 
-    The bound is the agent's OWN `can_handle_task`, which the engine consults —
-    the same mechanism that enforces `max_concurrent_tasks`, not a rule bolted
-    onto the manager. A worker at its segment capacity is skipped for that task
-    and the task stays READY for someone else. THE WORKER IS NEVER SWITCHED OFF:
-    it still takes upstream and downstream tasks, and it still answers every
-    segment it does hold. Only the fourth SEGMENT is refused, which is what a
-    capacity constraint is.
+    THIS DESCRIBED A BOUND THAT NO LONGER EXISTS (L14). It read: "A worker at its
+    segment capacity is skipped for that task and the task stays READY for someone
+    else ... Only the fourth SEGMENT is refused."
+
+    There is now no segment capacity and nothing refuses a fourth. The class is
+    kept because `is_metered` is still the SEGMENT-IDENTITY predicate that several
+    modules classify on -- explicit `task_class`, never the display name -- and
+    because the concurrency bound it inherits is unchanged.
+
+    WHAT STILL HOLDS FROM THE PARAGRAPH ABOVE: C = 3 remains the capacity the
+    SCORER's oracle is computed under, and the runtime still mirrors it through
+    EPISODE TIME -- one task per worker per timestep across a 3-timestep segment
+    window. What changed is that exceeding it is no longer refused; it shows up as
+    work that does not finish inside the horizon, scored 0 and named in
+    `missing_segments`.
     """
 
-    segment_capacity: int = 3
-
-    def __init__(self, config: Any, **kwargs: Any) -> None:
-        super().__init__(config, **kwargs)
-        self.segment_task_ids: set[Any] = set()
+    # THE SEGMENT ALLOWANCE IS REMOVED (researcher ruling, L14).
+    #
+    # It charged a slot in `execute_task` BEFORE the work ran and released nothing
+    # on failure, so a failed execution permanently burned capacity and the refusal
+    # that followed scored as an ALLOCATION outcome. On the one classifiable bundle
+    # that contamination WAS the entire DV: seg_04 failed twice, and its four
+    # `segment_allotment` deferrals were the whole of DV=1.
+    #
+    # I ARGUED FOR KEEPING IT AND LOST ON THE CONSEQUENCES. My objection was that
+    # removal makes `REFUSAL_SEGMENT_ALLOTMENT` unreachable -- true, it had exactly
+    # one emission site -- and retires the only DV state we had ever observed. What
+    # settled it is that OVER-ASSIGNMENT IS COUNTABLE AND NEVER NEEDED THE CODE:
+    #
+    #     intended_allocation   w_cd45fc: 4   w_316827: 3   w_29592b: 2
+    #     allocation            w_cd45fc: 3   w_316827: 3   w_29592b: 2
+    #
+    # The manager over-assigned and it is visible by counting. And without a cap it
+    # stops being an error at all: if a worker can do four, doing four is fine. A
+    # genuinely bad graph shows up where it should -- segments routed outside a
+    # worker's approvals score the rough method, a worse number, WHICH IS THE DV.
+    # We do not manufacture a constraint so a bad decision emits an error code.
 
     @staticmethod
     def is_metered(task: Any) -> bool:
-        """Does this task consume segment allotment? EXPLICIT CLASS, NOT THE NAME.
+        """Is this task one of the nine SCORED segments? EXPLICIT CLASS, NOT NAME.
+
+        THE QUESTION CHANGED WHEN THE ALLOTMENT WENT (L14). This asked "does this
+        consume segment allotment"; there is no allotment to consume. It survives
+        because the same predicate answers the question that OUTLIVED the cap --
+        which tasks are the study's units -- and that is what every caller of it
+        actually wanted. The name `is_metered` is kept rather than churned through
+        six call sites; what it meters is now the SCORE, not a capacity.
+
 
         THE DEFECT THIS REPLACES (L1 criterion (e)). The predicate used to be
         `task.name.startswith(SEGMENT_TASK_PREFIX)` — a string match on DISPLAY
@@ -201,29 +242,26 @@ class CapacityBoundedAIAgent(AIAgent):
         permanent one. The old code returned on the first failing branch, which is
         why no combination of the logged fields could recover the real reason.
         """
-        reasons = list(super().refusal_reasons(task))
-        if (self.is_metered(task) and task.id not in self.segment_task_ids
-                and len(self.segment_task_ids) >= self.segment_capacity):
-            reasons.append(RefusalReason(
-                REFUSAL_SEGMENT_ALLOTMENT,
-                f"segment allotment spent ({len(self.segment_task_ids)}/"
-                f"{self.segment_capacity} for the episode; finishing one does NOT "
-                f"free another)"))
-        return reasons
-
-    async def execute_task(self, task: Any, resources: Any):
-        if self.is_metered(task):
-            self.segment_task_ids.add(task.id)
-        return await super().execute_task(task, resources)
+        # The allotment branch is GONE (L14). The base reasons stand unchanged:
+        # concurrency still refuses, and it releases on completion, which is the
+        # only refusal cause this environment now creates.
+        return list(super().refusal_reasons(task))
 
     def load_report(self) -> dict:
-        """BOTH capacities, with their opposite release semantics (L1 (b)).
+        """The capacities that exist, with their release semantics (L1 (b)).
 
-        Concurrency alone would be useless here — it is 0/1 at the moment a worker
-        refuses everything, so a manager reading it would be told the worker is
-        idle and free. The allotment alone would hide the transient constraint.
-        Both are reported, each carrying whether finishing work frees anything,
-        because `3/3` and `1/1` look the same and mean opposite things.
+        THE L1 ARGUMENT FOR THIS FIELD WAS THAT THERE WERE TWO, AND NOW THERE IS
+        ONE. It read: "concurrency alone would be useless here — it is 0/1 at the
+        moment a worker refuses everything, so a manager reading it would be told
+        the worker is idle and free." That was TRUE OF THE ALLOTMENT REGIME, where
+        a worker could be permanently barred while showing 0/1. With the allotment
+        removed there is no such state: concurrency is the only thing that refuses,
+        it releases on completion, and 0/1 now means what it says.
+        
+        So the field is not degraded by losing a dimension -- the condition that
+        made one dimension misleading is the condition that was removed. It is
+        still a LIST rather than a scalar, because the shape must survive a second
+        capacity being added without changing the contract again.
         """
         return {
             "agent_id": self.agent_id,
@@ -233,10 +271,6 @@ class CapacityBoundedAIAgent(AIAgent):
                  "held": len(self.current_task_ids),
                  "capacity": self.max_concurrent_tasks,
                  "releases_on_completion": True},
-                {"name": "segment allotment",
-                 "held": len(self.segment_task_ids),
-                 "capacity": self.segment_capacity,
-                 "releases_on_completion": False},
             ],
         }
 

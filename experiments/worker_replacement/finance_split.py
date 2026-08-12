@@ -44,6 +44,32 @@ from manager_agent_gym.core.workflow_agents.interface import (
 
 SEGMENT_TASK_CLASS = "segment"
 
+# ---------------------------------------------------------------------------
+# ALLOTMENT_UNREACHABLE (researcher ruling L14, implemented 2026-08-09)
+#
+# `refused_allotment` CANNOT FIRE. `REFUSAL_SEGMENT_ALLOTMENT` had exactly one
+# emission site — the allotment branch in `CapacityBoundedAIAgent.refusal_reasons`
+# — and that branch, `segment_capacity`, `segment_task_ids` and the `execute_task`
+# consumption are all removed. The code constant survives in `interface.py` and is
+# still classified here so an old bundle replays into the same bucket it was
+# scored into; nothing NEW can produce it.
+#
+# THIS IS THE THIRD MEMBER OF THE SAME FAMILY, and the family is worth naming:
+# `MANIPULATION_UNREACHABLE` (refused_unavailable), `KNOWN_POOLING`
+# (executed_and_declined), and now this. In every case the STATE IS KEPT so the
+# partition stays total, and the ZERO IS MARKED so it is never read as evidence.
+#
+# WHY IT WAS REMOVED, since a bare "unreachable" invites re-adding it: the
+# allotment charged a slot BEFORE the work ran and released nothing on failure, so
+# a failed execution permanently burned capacity and the refusals that followed
+# scored as ALLOCATION outcomes. On the one classifiable bundle that contamination
+# WAS the entire DV. I argued for keeping it and lost on exactly this consequence.
+#
+# THE COST, STATED: this retires the only DV state we had ever observed fire. The
+# DV now rests on `never_assigned` and `executed_and_declined`, and if a future
+# bundle shows both at zero that is a MEASUREMENT problem to raise, not a null.
+ALLOTMENT_UNREACHABLE = True
+
 # The codes this split knows how to classify. An unknown code RAISES: a new
 # refusal branch must be given a meaning here rather than silently inheriting one.
 KNOWN_REFUSAL_CODES: frozenset[str] = frozenset({
@@ -57,8 +83,9 @@ STATE_PREDICATES: dict[str, str] = {
         "staffed it. NOT 'it did not run': that was the v1 defect.",
     "refused_allotment":
         "assigned, never executed, and at least one refusal on it names the "
-        "segment allotment — permanently barred, since the allotment never "
-        "releases within an episode",
+        "segment allotment. STRUCTURALLY UNREACHABLE AS THE HARNESS STANDS — a "
+        "count of 0 here is UNINFORMATIVE, not a finding. See "
+        "ALLOTMENT_UNREACHABLE.",
     # ★ THE SECOND CLAUSE IS RETRACTED (2026-08-09, RR found it, LS verified at
     # source). It asserted a capability the harness does not have, and it was
     # quoted twice as the authority for a ruling.

@@ -22,35 +22,35 @@
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.650564564113433,
+        "realised": 8.822959446241839,
         "seed": 1,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.650564564113433
+        "true_optimum": 8.822959446241839
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.1265649001738769,
-        "realised": 8.305820872110607,
+        "ceiling": 0.09803238057308405,
+        "realised": 8.3343533917114,
         "seed": 2,
-        "share": 0.015009382112221392,
-        "share_max": 0.015009382112221392,
-        "share_min": 0.015009382112221392,
+        "share": 0.011625699205472349,
+        "share_max": 0.011625699205472349,
+        "share_min": 0.011625699205472349,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
         "true_optimum": 8.432385772284483
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.18335400897712972,
-        "realised": 8.362849729372385,
+        "ceiling": 0.0,
+        "realised": 8.546203738349515,
         "seed": 3,
-        "share": 0.0214544392563873,
-        "share_max": 0.0214544392563873,
-        "share_min": 0.0214544392563873,
+        "share": 0.0,
+        "share_max": 0.0,
+        "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
         "true_optimum": 8.546203738349515
       },
@@ -69,38 +69,38 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.1516188489530883,
-        "realised": 8.58052612169436,
+        "ceiling": 0.2057954410021221,
+        "realised": 8.119292185261553,
         "seed": 5,
-        "share": 0.01736329956302208,
-        "share_max": 0.01736329956302208,
-        "share_min": 0.01736329956302208,
+        "share": 0.024719912899521482,
+        "share_max": 0.024719912899521482,
+        "share_min": 0.024719912899521482,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.732144970647449
+        "true_optimum": 8.325087626263675
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.274653424445404,
+        "realised": 8.617503154976168,
         "seed": 6,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.274653424445404
+        "true_optimum": 8.617503154976168
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.14910387927930024,
-        "realised": 8.562629267542341,
+        "ceiling": 0.053761561147110726,
+        "realised": 8.780669238049006,
         "seed": 7,
-        "share": 0.017115294599410313,
-        "share_max": 0.017115294599410313,
-        "share_min": 0.017115294599410313,
+        "share": 0.006085458403500396,
+        "share_max": 0.006085458403500396,
+        "share_min": 0.006085458403500396,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.711733146821642
+        "true_optimum": 8.834430799196117
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -117,14 +117,14 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.17753574816694062,
-        "realised": 8.511375644722367,
+        "ceiling": 0.3115607497677466,
+        "realised": 8.32036696695534,
         "seed": 9,
-        "share": 0.020432450066440944,
-        "share_max": 0.020432450066440944,
-        "share_min": 0.020432450066440944,
+        "share": 0.036093994295636145,
+        "share_max": 0.036093994295636145,
+        "share_min": 0.036093994295636145,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.688911392889308
+        "true_optimum": 8.631927716723087
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -142,97 +142,97 @@
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.352261019634815,
+        "realised": 8.255969375841659,
         "seed": 11,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.352261019634815
+        "true_optimum": 8.255969375841659
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.08586651980200877,
-        "realised": 8.610205053530798,
+        "ceiling": 0.23986295381896738,
+        "realised": 8.378450702740018,
         "seed": 12,
-        "share": 0.009874173536626039,
-        "share_max": 0.009874173536626039,
-        "share_min": 0.009874173536626039,
+        "share": 0.027831773520614347,
+        "share_max": 0.027831773520614347,
+        "share_min": 0.027831773520614347,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.696071573332807
+        "true_optimum": 8.618313656558986
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.17038443092718225,
-        "realised": 8.447563092915393,
+        "ceiling": 0.17038443092718047,
+        "realised": 8.450857407863337,
         "seed": 13,
-        "share": 0.019770882852998755,
-        "share_max": 0.019770882852998755,
-        "share_min": 0.019770882852998755,
+        "share": 0.01976332808117628,
+        "share_max": 0.01976332808117628,
+        "share_min": 0.01976332808117628,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.617947523842576
+        "true_optimum": 8.621241838790517
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.09113340418410232,
-        "realised": 8.401397195065515,
+        "ceiling": 0.08909493561145965,
+        "realised": 8.323789463815386,
         "seed": 14,
-        "share": 0.010731006867629617,
-        "share_max": 0.010731006867629617,
-        "share_min": 0.010731006867629617,
+        "share": 0.010590295953374745,
+        "share_max": 0.010590295953374745,
+        "share_min": 0.010590295953374745,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.492530599249617
+        "true_optimum": 8.412884399426845
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.11646401722161848,
-        "realised": 8.458784627159915,
+        "ceiling": 0.2920086120958256,
+        "realised": 8.009108762542242,
         "seed": 15,
-        "share": 0.013581415775964141,
-        "share_max": 0.013581415775964141,
-        "share_min": 0.013581415775964141,
+        "share": 0.035177024841015134,
+        "share_max": 0.035177024841015134,
+        "share_min": 0.035177024841015134,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.575248644381533
+        "true_optimum": 8.301117374638068
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.566894033566914,
+        "realised": 8.900500349372027,
         "seed": 16,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.566894033566914
+        "true_optimum": 8.900500349372027
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.12856540281783602,
-        "realised": 8.248621385168676,
+        "ceiling": 0.0,
+        "realised": 8.777673017887484,
         "seed": 17,
-        "share": 0.015347085611390216,
-        "share_max": 0.015347085611390216,
-        "share_min": 0.015347085611390216,
+        "share": 0.0,
+        "share_max": 0.0,
+        "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.377186787986512
+        "true_optimum": 8.777673017887484
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.29994803350802357,
-        "realised": 8.087247820115536,
+        "ceiling": 0.2965034516223728,
+        "realised": 8.043964821128027,
         "seed": 18,
-        "share": 0.0357626122893548,
-        "share_max": 0.0357626122893548,
-        "share_min": 0.0357626122893548,
+        "share": 0.03554997656319795,
+        "share_max": 0.03554997656319795,
+        "share_min": 0.03554997656319795,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.38719585362356
+        "true_optimum": 8.3404682727504
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -249,14 +249,14 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.043691737253400476,
-        "realised": 8.59887373305211,
+        "ceiling": 0.0,
+        "realised": 8.493914696309876,
         "seed": 20,
-        "share": 0.005055412933060025,
-        "share_max": 0.005055412933060025,
-        "share_min": 0.005055412933060025,
+        "share": 0.0,
+        "share_max": 0.0,
+        "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.642565470305511
+        "true_optimum": 8.493914696309876
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -273,12 +273,12 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.19896529332190305,
-        "realised": 8.380896582308816,
+        "ceiling": 0.20561055670953365,
+        "realised": 8.374251318921186,
         "seed": 22,
-        "share": 0.023189801445058437,
-        "share_max": 0.023189801445058437,
-        "share_min": 0.023189801445058437,
+        "share": 0.023964320135913483,
+        "share_max": 0.023964320135913483,
+        "share_min": 0.023964320135913483,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
         "true_optimum": 8.57986187563072
       },
@@ -298,49 +298,49 @@
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.353861997696919,
+        "realised": 8.588359769687344,
         "seed": 24,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.353861997696919
+        "true_optimum": 8.588359769687344
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.908622360586191,
+        "realised": 8.829480605662365,
         "seed": 25,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.908622360586191
+        "true_optimum": 8.829480605662365
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.0,
-        "realised": 8.790753762051411,
+        "ceiling": 0.40651100526196426,
+        "realised": 7.962755142476429,
         "seed": 26,
-        "share": 0.0,
-        "share_max": 0.0,
-        "share_min": 0.0,
+        "share": 0.048571881702174656,
+        "share_max": 0.048571881702174656,
+        "share_min": 0.048571881702174656,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.790753762051411
+        "true_optimum": 8.369266147738394
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.0,
-        "realised": 8.66874655482271,
+        "ceiling": 0.07629549812238423,
+        "realised": 8.392956163362717,
         "seed": 27,
-        "share": 0.0,
-        "share_max": 0.0,
-        "share_min": 0.0,
+        "share": 0.009008528872668503,
+        "share_max": 0.009008528872668503,
+        "share_min": 0.009008528872668503,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.66874655482271
+        "true_optimum": 8.469251661485101
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -357,14 +357,14 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.10303470684450744,
-        "realised": 8.462569192669115,
+        "ceiling": 0.1417426685078631,
+        "realised": 8.318034228895225,
         "seed": 29,
-        "share": 0.012028889971243946,
-        "share_max": 0.012028889971243946,
-        "share_min": 0.012028889971243946,
+        "share": 0.01675489439341764,
+        "share_max": 0.01675489439341764,
+        "share_min": 0.01675489439341764,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.565603899513622
+        "true_optimum": 8.459776897403088
       }
     ],
     "partial_overlap": [
@@ -384,13 +384,13 @@
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.763495618696888,
+        "realised": 8.935890500825293,
         "seed": 1,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.763495618696888
+        "true_optimum": 8.935890500825293
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -432,37 +432,37 @@
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.23896720251028,
+        "realised": 8.73838741543272,
         "seed": 5,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.23896720251028
+        "true_optimum": 8.73838741543272
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.632974711799452,
+        "realised": 8.975824442330216,
         "seed": 6,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.632974711799452
+        "true_optimum": 8.975824442330216
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.866772300716452,
+        "realised": 8.989469953090925,
         "seed": 7,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.866772300716452
+        "true_optimum": 8.989469953090925
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -480,13 +480,13 @@
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.893799694504164,
+        "realised": 8.854837274286902,
         "seed": 9,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.893799694504164
+        "true_optimum": 8.854837274286902
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -504,97 +504,97 @@
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.617250227502055,
+        "realised": 8.520958583708898,
         "seed": 11,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.617250227502055
+        "true_optimum": 8.520958583708898
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.991891396971813,
+        "realised": 8.914133480197991,
         "seed": 12,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.991891396971813
+        "true_optimum": 8.914133480197991
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.927416928617303,
+        "realised": 8.930711243565245,
         "seed": 13,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.927416928617303
+        "true_optimum": 8.930711243565245
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.91090506438854,
+        "realised": 8.935809665870877,
         "seed": 14,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.91090506438854
+        "true_optimum": 8.935809665870877
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.448536571391648,
+        "realised": 8.805984816355167,
         "seed": 15,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.448536571391648
+        "true_optimum": 8.805984816355167
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.562753305054564,
+        "realised": 8.675789878715051,
         "seed": 16,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.562753305054564
+        "true_optimum": 8.675789878715051
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.91346724681358,
+        "realised": 8.905414102688992,
         "seed": 17,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.91346724681358
+        "true_optimum": 8.905414102688992
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.290593596593869,
+        "realised": 8.309290765004645,
         "seed": 18,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.290593596593869
+        "true_optimum": 8.309290765004645
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -612,13 +612,13 @@
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.951264175139764,
+        "realised": 8.478546951215902,
         "seed": 20,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.951264175139764
+        "true_optimum": 8.478546951215902
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -636,13 +636,13 @@
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.258727720405737,
+        "realised": 8.501414412909698,
         "seed": 22,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.258727720405737
+        "true_optimum": 8.501414412909698
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -672,37 +672,37 @@
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.91975502041482,
+        "realised": 8.840613265490994,
         "seed": 25,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.91975502041482
+        "true_optimum": 8.840613265490994
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.85703797387948,
+        "realised": 8.785523704025112,
         "seed": 26,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.85703797387948
+        "true_optimum": 8.785523704025112
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.730678234848947,
+        "realised": 8.9835639501389,
         "seed": 27,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.730678234848947
+        "true_optimum": 8.9835639501389
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -720,13 +720,13 @@
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
         "ceiling": 0.0,
-        "realised": 8.992249907712,
+        "realised": 8.886422905601467,
         "seed": 29,
         "share": 0.0,
         "share_max": 0.0,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.992249907712
+        "true_optimum": 8.886422905601467
       }
     ],
     "proposed_disjoint": [
@@ -745,36 +745,36 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.8120982753912109,
-        "realised": 7.951397343305677,
+        "ceiling": 0.9027551863358312,
+        "realised": 8.033135314489462,
         "seed": 1,
-        "share": 0.09266830391956858,
-        "share_max": 0.13530543943889345,
-        "share_min": 0.02910646175975909,
+        "share": 0.10102576640262717,
+        "share_max": 0.14013006072635342,
+        "share_min": 0.02854492790437163,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.763495618696888
+        "true_optimum": 8.935890500825293
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.9992484583255603,
-        "realised": 7.800265903413841,
+        "ceiling": 0.7088767364850987,
+        "realised": 8.090637625254303,
         "seed": 2,
-        "share": 0.1135572279613893,
-        "share_max": 0.183769784967295,
-        "share_min": 0.014383168771697648,
+        "share": 0.08055862032197138,
+        "share_max": 0.1387716836408159,
+        "share_min": 0.011140658057146006,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
         "true_optimum": 8.799514361739401
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.9627920961343399,
-        "realised": 7.855002908379415,
+        "ceiling": 1.133921096278649,
+        "realised": 7.683873908235106,
         "seed": 3,
-        "share": 0.1091873983962538,
-        "share_max": 0.16751838797145188,
-        "share_min": 0.0207936347900209,
+        "share": 0.12859463116325617,
+        "share_max": 0.19371815220690505,
+        "share_min": 0.04530558214592056,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
         "true_optimum": 8.817795004513755
       },
@@ -793,38 +793,38 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.5947176509111989,
-        "realised": 7.6442495515990805,
+        "ceiling": 1.0483833585777171,
+        "realised": 7.690004056855003,
         "seed": 5,
-        "share": 0.07218351964430664,
-        "share_max": 0.1120609945501702,
-        "share_min": 0.018402652325996725,
+        "share": 0.1199744653946316,
+        "share_max": 0.19762547690063653,
+        "share_min": 0.023550734388208767,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.23896720251028
+        "true_optimum": 8.73838741543272
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.9947208455020506,
-        "realised": 7.6382538662974016,
+        "ceiling": 1.0275650005001342,
+        "realised": 7.948259441830082,
         "seed": 6,
-        "share": 0.11522341703868047,
-        "share_max": 0.20704278922943084,
+        "share": 0.11448140581427947,
+        "share_max": 0.18414311894222443,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.632974711799452
+        "true_optimum": 8.975824442330216
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.5358264418771963,
-        "realised": 8.330945858839256,
+        "ceiling": 0.36390975828984473,
+        "realised": 8.62556019480108,
         "seed": 7,
-        "share": 0.06043083364550825,
-        "share_max": 0.10397492023706027,
+        "share": 0.040481781483091624,
+        "share_max": 0.06573396660803717,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.866772300716452
+        "true_optimum": 8.989469953090925
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -841,14 +841,14 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.8864797984335322,
-        "realised": 8.007319896070632,
+        "ceiling": 0.9290863185572977,
+        "realised": 7.925750955729605,
         "seed": 9,
-        "share": 0.09967391091361363,
-        "share_max": 0.14513531353201448,
-        "share_min": 0.01996174349155236,
+        "share": 0.10492415498760466,
+        "share_max": 0.15510975793947468,
+        "share_min": 0.03518537270836962,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.893799694504164
+        "true_optimum": 8.854837274286902
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -865,98 +865,98 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.9816975412246327,
-        "realised": 7.635552686277422,
+        "ceiling": 1.054173191433983,
+        "realised": 7.4667853922749154,
         "seed": 11,
-        "share": 0.11392236679997217,
-        "share_max": 0.20872207140079838,
+        "share": 0.1237153286309174,
+        "share_max": 0.23058973423580648,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.617250227502055
+        "true_optimum": 8.520958583708898
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.6696327688009571,
-        "realised": 8.322258628170855,
+        "ceiling": 0.7180335233980824,
+        "realised": 8.196099956799909,
         "seed": 12,
-        "share": 0.07447073582610979,
-        "share_max": 0.1236551291212636,
+        "share": 0.0805500080286137,
+        "share_max": 0.13802602348606105,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.991891396971813
+        "true_optimum": 8.914133480197991
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 1.015050954978019,
-        "realised": 7.912365973639284,
+        "ceiling": 0.5928520575661107,
+        "realised": 8.337859185999134,
         "seed": 13,
-        "share": 0.11370040887462306,
-        "share_max": 0.18503543042574228,
+        "share": 0.06638352102059872,
+        "share_max": 0.11196456526472073,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.927416928617303
+        "true_optimum": 8.930711243565245
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.6006882691856372,
-        "realised": 8.310216795202903,
+        "ceiling": 0.648019453040634,
+        "realised": 8.287790212830243,
         "seed": 14,
-        "share": 0.0674104667085078,
-        "share_max": 0.12356350096861649,
+        "share": 0.07251938853573137,
+        "share_max": 0.1309726319868446,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.91090506438854
+        "true_optimum": 8.935809665870877
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.704482581902691,
-        "realised": 7.744053989488957,
+        "ceiling": 1.1075204422586946,
+        "realised": 7.698464374096472,
         "seed": 15,
-        "share": 0.08338516096245627,
-        "share_max": 0.13213173621276667,
-        "share_min": 0.01378511133111358,
+        "share": 0.12576906108238123,
+        "share_max": 0.20085432775763698,
+        "share_min": 0.03316024478641892,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.448536571391648
+        "true_optimum": 8.805984816355167
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 1.0964128488796288,
-        "realised": 7.466340456174935,
+        "ceiling": 1.233297481775633,
+        "realised": 7.442492396939418,
         "seed": 16,
-        "share": 0.1280444279800073,
-        "share_max": 0.1909830864234192,
-        "share_min": 0.04543539804494486,
+        "share": 0.14215391324787288,
+        "share_max": 0.1963363707710904,
+        "share_min": 0.02629381339076826,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.562753305054564
+        "true_optimum": 8.675789878715051
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.6142900619590073,
-        "realised": 8.299177184854573,
+        "ceiling": 0.5484327767604871,
+        "realised": 8.356981325928505,
         "seed": 17,
-        "share": 0.06891707176896913,
-        "share_max": 0.12100109033725687,
+        "share": 0.06158419703300352,
+        "share_max": 0.10287016681803937,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.91346724681358
+        "true_optimum": 8.905414102688992
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 1.0511036083939373,
-        "realised": 7.2394899881999315,
+        "ceiling": 0.8314225392726984,
+        "realised": 7.477868225731947,
         "seed": 18,
-        "share": 0.12678267197004756,
-        "share_max": 0.20428608082947536,
-        "share_min": 0.0361793193712031,
+        "share": 0.10005938687021426,
+        "share_max": 0.16981950287201458,
+        "share_min": 0.03568336456236732,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.290593596593869
+        "true_optimum": 8.309290765004645
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -973,14 +973,14 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.6169185429518667,
-        "realised": 8.334345632187897,
+        "ceiling": 1.064221214815463,
+        "realised": 7.414325736400439,
         "seed": 20,
-        "share": 0.06891971132582891,
-        "share_max": 0.1120916682482073,
-        "share_min": 0.004881068908092892,
+        "share": 0.12551929250835178,
+        "share_max": 0.19238555910986632,
+        "share_min": 0.04779272318448878,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.951264175139764
+        "true_optimum": 8.478546951215902
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -997,14 +997,14 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.8729833271667422,
-        "realised": 7.385744393238995,
+        "ceiling": 0.9655259807677421,
+        "realised": 7.535888432141956,
         "seed": 22,
-        "share": 0.10570433567022282,
-        "share_max": 0.16127237637239406,
-        "share_min": 0.02409151870091317,
+        "share": 0.11357239323630157,
+        "share_max": 0.1707795049009838,
+        "share_min": 0.024185452763872652,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.258727720405737
+        "true_optimum": 8.501414412909698
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
@@ -1021,11 +1021,11 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 1.1779643158456015,
-        "realised": 7.586893997332961,
+        "ceiling": 0.7712200201049804,
+        "realised": 7.993638293073582,
         "seed": 24,
-        "share": 0.13439627587298836,
-        "share_max": 0.23438550257895105,
+        "share": 0.0879900156452499,
+        "share_max": 0.15625258354498936,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
         "true_optimum": 8.764858313178562
@@ -1033,47 +1033,47 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.5426334239154684,
-        "realised": 8.377121596499352,
+        "ceiling": 0.6537131474208895,
+        "realised": 8.186900118070104,
         "seed": 25,
-        "share": 0.06083501426592239,
-        "share_max": 0.09990755393871194,
+        "share": 0.07394432125796459,
+        "share_max": 0.12532040427327076,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.91975502041482
+        "true_optimum": 8.840613265490994
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.6079692993755188,
-        "realised": 8.249068674503961,
+        "ceiling": 0.9106304337327886,
+        "realised": 7.874893270292323,
         "seed": 26,
-        "share": 0.06864250793194032,
-        "share_max": 0.12739895123189357,
+        "share": 0.10365124088340696,
+        "share_max": 0.19465628519005918,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.85703797387948
+        "true_optimum": 8.785523704025112
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.8042655738792677,
-        "realised": 7.926412660969679,
+        "ceiling": 0.6701112615326199,
+        "realised": 8.31345268860628,
         "seed": 27,
-        "share": 0.09211948399025871,
-        "share_max": 0.1596567607080019,
+        "share": 0.07459303070050044,
+        "share_max": 0.1250212924518081,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.730678234848947
+        "true_optimum": 8.9835639501389
       },
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.6656307499049099,
-        "realised": 8.13723920174893,
+        "ceiling": 0.9978184137326398,
+        "realised": 7.8050515379212,
         "seed": 28,
-        "share": 0.0756151974936145,
-        "share_max": 0.12948688098290134,
+        "share": 0.11335148868638853,
+        "share_max": 0.1876007694197736,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
         "true_optimum": 8.80286995165384
@@ -1081,24 +1081,24 @@
       {
         "baseline": "stale card \u2014 oracle minus optimal play under the predecessor's card. NOT the ignorant baseline",
         "belief_model": "the card as a REPLACEMENT description of the successor: its OMISSION costs as well as its LIE (D1)",
-        "ceiling": 0.8908094952515562,
-        "realised": 8.101440412460445,
+        "ceiling": 0.6399985672535511,
+        "realised": 8.246424338347916,
         "seed": 29,
-        "share": 0.09906413905240483,
-        "share_max": 0.1707286388783235,
+        "share": 0.07201981877884008,
+        "share_max": 0.13332104748300508,
         "share_min": 0.0,
         "tie_break": "EXPECTATION over the believed-optimal set, which is not an upper bound \u2014 read ceiling_min/ceiling_max with it (D19)",
-        "true_optimum": 8.992249907712
+        "true_optimum": 8.886422905601467
       }
     ]
   },
   "results": {
     "current": {
-      "max": 0.0357626122893548,
-      "mean_share": 0.00845608534898373,
-      "n_nonzero": 15,
-      "nonzero_mean": 0.01691217069796746,
-      "sigma_units": 0.11010527798155899
+      "max": 0.048571881702174656,
+      "mean_share": 0.0107567834152129,
+      "n_nonzero": 14,
+      "nonzero_mean": 0.023050250175456213,
+      "sigma_units": 0.1400622840522513
     },
     "partial_overlap": {
       "max": 0.0,
@@ -1109,13 +1109,39 @@
     },
     "proposed_disjoint": {
       "max": 0.15726867163021985,
-      "mean_share": 0.09567258449747654,
+      "mean_share": 0.09842467262083002,
       "n_nonzero": 30,
-      "nonzero_mean": 0.09567258449747654,
-      "sigma_units": 1.2457367773108925
+      "nonzero_mean": 0.09842467262083002,
+      "sigma_units": 1.2815712580837242
     }
   },
   "sigma_used": 0.0768,
+  "superseded_2026_08_09": {
+    "note": "SUPERSEDED VALUES, kept rather than overwritten. Regenerated 2026-08-09 after generator fixes that change which instance a seed produces: the amplifier separation into amplify_count/amplify_divergence/amplify_irb_priority, the `others`-exclusion bug that gave the shared class ZERO segments when count forcing was off, the divergence search taking its own rng stream, and positional_roles. The values below are what this file asserted before that. They are NOT reproducible on the current tree and must not be quoted as current -- they are here so a reader who meets the old figure elsewhere can see it was superseded rather than mistyped.",
+    "previous": {
+      "current": {
+        "max": 0.0357626122893548,
+        "mean_share": 0.00845608534898373,
+        "n_nonzero": 15,
+        "nonzero_mean": 0.01691217069796746,
+        "sigma_units": 0.11010527798155899
+      },
+      "partial_overlap": {
+        "max": 0.0,
+        "mean_share": 0.0,
+        "n_nonzero": 0,
+        "nonzero_mean": 0.0,
+        "sigma_units": 0.0
+      },
+      "proposed_disjoint": {
+        "max": 0.15726867163021985,
+        "mean_share": 0.09567258449747654,
+        "n_nonzero": 30,
+        "nonzero_mean": 0.09567258449747654,
+        "sigma_units": 1.2457367773108925
+      }
+    }
+  },
   "templates": {
     "current": [
       "ae",

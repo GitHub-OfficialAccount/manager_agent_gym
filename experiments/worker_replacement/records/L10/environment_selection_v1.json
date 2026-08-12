@@ -1,0 +1,227 @@
+{
+ "rule": "structure decides WHICH TWO (sole-need asset class); magnitude decides WHICH INSTANCE of each. Classes fixed before magnitude is consulted.",
+ "approved_by": "researcher, 2026-08-09",
+ "supersedes": "records/R2/instance_selection_partial_segs1.json \u2014 drawn at a cell the study does not ship; its low/mid/high became low/LOW/high when re-measured at the settled cell",
+ "setting": {
+  "lattice": "partial",
+  "shared_class_segments": 1,
+  "irb_applicable_fraction": 0.89,
+  "amplify_count": true,
+  "amplify_divergence": false,
+  "amplify_irb_priority": false
+ },
+ "cap": 3,
+ "suite_seeds": [
+  0,
+  59
+ ],
+ "n_admitted": 34,
+ "floor_rule": "pool median of ceiling_share",
+ "floor_value": 0.03301013021163912,
+ "n_above_floor": 17,
+ "candidates_per_class_above_floor": {
+  "bank": 3,
+  "corporate": 8,
+  "mdb": 1,
+  "retail": 3,
+  "sovereign": 2
+ },
+ "usable_classes": [
+  "bank",
+  "corporate",
+  "retail",
+  "sovereign"
+ ],
+ "draw_seed": 20260809,
+ "draw_seed_fixed_before_draw": true,
+ "drawn_classes": [
+  "bank",
+  "corporate"
+ ],
+ "chosen": [
+  {
+   "seed": 56,
+   "ceiling_share": 0.05290692176278294,
+   "sole_need_class": "bank"
+  },
+  {
+   "seed": 37,
+   "ceiling_share": 0.06606090772119795,
+   "sole_need_class": "corporate"
+  }
+ ],
+ "recorded_before_any_episode": true,
+ "does_not_establish": "anything about effect size. The floor is a threshold, never a ranking, and two instances differing on ONE structural axis is a weak generalisation claim however they are chosen \u2014 a limitation of the two-environment design (RE), carried to the researcher when the rule was approved.",
+ "pool": [
+  {
+   "seed": 6,
+   "ceiling_share": 0.02555633533477917,
+   "sole_need_class": "sovereign"
+  },
+  {
+   "seed": 9,
+   "ceiling_share": 0.01759559737443075,
+   "sole_need_class": "sovereign"
+  },
+  {
+   "seed": 10,
+   "ceiling_share": 0.0590630484731115,
+   "sole_need_class": "retail"
+  },
+  {
+   "seed": 12,
+   "ceiling_share": 0.047792506649882494,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 13,
+   "ceiling_share": 0.02781659160484916,
+   "sole_need_class": "sovereign"
+  },
+  {
+   "seed": 14,
+   "ceiling_share": 0.04983174339471437,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 15,
+   "ceiling_share": 0.058926113729211055,
+   "sole_need_class": "sovereign"
+  },
+  {
+   "seed": 16,
+   "ceiling_share": 0.031918554732556836,
+   "sole_need_class": "mdb"
+  },
+  {
+   "seed": 17,
+   "ceiling_share": 0.05273250406320161,
+   "sole_need_class": "sovereign"
+  },
+  {
+   "seed": 19,
+   "ceiling_share": 0.034101705690721414,
+   "sole_need_class": "retail"
+  },
+  {
+   "seed": 21,
+   "ceiling_share": 0.04205082715520805,
+   "sole_need_class": "retail"
+  },
+  {
+   "seed": 22,
+   "ceiling_share": 0.030804864385687036,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 25,
+   "ceiling_share": 0.036262689984594455,
+   "sole_need_class": "bank"
+  },
+  {
+   "seed": 26,
+   "ceiling_share": 0.004619441503124135,
+   "sole_need_class": "sovereign"
+  },
+  {
+   "seed": 28,
+   "ceiling_share": 0.031263845678381814,
+   "sole_need_class": "sovereign"
+  },
+  {
+   "seed": 29,
+   "ceiling_share": 0.044165402683845875,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 33,
+   "ceiling_share": 0.0317775578512511,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 34,
+   "ceiling_share": 0.04891487752335412,
+   "sole_need_class": "bank"
+  },
+  {
+   "seed": 36,
+   "ceiling_share": 0.021971370549695838,
+   "sole_need_class": "bank"
+  },
+  {
+   "seed": 37,
+   "ceiling_share": 0.06606090772119795,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 38,
+   "ceiling_share": 0.018290511864632895,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 39,
+   "ceiling_share": 0.014780072597841271,
+   "sole_need_class": "mdb"
+  },
+  {
+   "seed": 40,
+   "ceiling_share": 0.0247303718256789,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 43,
+   "ceiling_share": 0.06563693970047271,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 44,
+   "ceiling_share": 0.014761805597037271,
+   "sole_need_class": "bank"
+  },
+  {
+   "seed": 45,
+   "ceiling_share": 0.04295640323858163,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 47,
+   "ceiling_share": 0.02682097387821327,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 48,
+   "ceiling_share": 0.012916165357627277,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 49,
+   "ceiling_share": 0.03015053079637862,
+   "sole_need_class": "sovereign"
+  },
+  {
+   "seed": 51,
+   "ceiling_share": 0.05543356851935309,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 52,
+   "ceiling_share": 0.013589447502581602,
+   "sole_need_class": "mdb"
+  },
+  {
+   "seed": 53,
+   "ceiling_share": 0.03698284037467793,
+   "sole_need_class": "mdb"
+  },
+  {
+   "seed": 54,
+   "ceiling_share": 0.0448615523892849,
+   "sole_need_class": "corporate"
+  },
+  {
+   "seed": 56,
+   "ceiling_share": 0.05290692176278294,
+   "sole_need_class": "bank"
+  }
+ ]
+}

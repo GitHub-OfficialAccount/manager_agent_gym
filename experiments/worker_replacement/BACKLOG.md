@@ -50,7 +50,7 @@ output plus both reviews under `records/`.
 
 ---
 
-## L10 — TWO DESIGNED ENVIRONMENTS, replacing the random pool `[~] ACCEPTANCE IS CODE (`check_l10_properties.py`, 8 controls firing, 7/8 verified seed-independent). BUILD BLOCKED on TWO researcher decisions: (a) re-draw the instances at the settled cell, and (b) the SELECTION AXIS — terciles vs sole-need asset class — plus the floor for "a real gap", which the acceptance cannot settle. Standing checks answered on the step. Runner NOT re-pointed. Setting: partial / count ON at the shared class / divergence OFF / irb_frac 0.89 / segs 1 -> ceiling 3.21%, two paths agreeing, 40/40 generation. The sensitivity ladder is SUPERSEDED (it ranked manager policies) and the card-informativeness contrast is DEFERRED (span ~0.05; it separates explanations for an effect not yet shown to exist). Standing checks: production test PASSES -- every benchmark is constructed, and sampling-then-filtering is what you do when you cannot construct; no drift -- it IS the instrument; ambiguity -- resolved by the spec and two measured sweeps.`
+## L10 — TWO DESIGNED ENVIRONMENTS, replacing the random pool `[~] BOTH RESEARCHER DECISIONS MADE 2026-08-09. ENVIRONMENTS DRAWN: seed 56 (bank, 5.29%) and seed 37 (corporate, 6.61%) — approved rule, draw seed 20260809 recorded before drawing, both PASS all six properties, all eight controls fire (`records/L10/environment_selection_v1.json`, `select_l10_environments.py`, `check_l10_properties.py`). REMAINING, with RE: remove the segment allowance (ruled — it is ours, not upstream; the gap survives its removal, measured 4.76%/7.11% at cap 9 against 5.29%/6.61% at cap 3), and RESTATE PROPERTIES 2 AND 4, which the removal makes vacuous. Standing checks answered below.`
 **Depends:** L9 `[x]` · **Owner:** RE builds, RR attacks the design, LS specs · **Cost: no model
 spend to design; the step-2 run is separately authorised.**
 
@@ -627,10 +627,20 @@ tasks** (8 of 9 `refine_task` requests set `new_name`), and one observed rename 
 
 ---
 
-## L3 — Re-measure at scope: does an effect appear once the instrument is honest? `[!]`
-> **BLOCKED (RR, accepted by LS).** As scoped this re-measures the same regret aggregate that
-> produced four retractions, without the behavioural DV. Unblocks when the manager action
-> stream and the assignment-defined DV land with L1.
+## L3 — Re-measure at scope: does an effect appear once the instrument is honest? `[!] BLOCKER MOVED, NOT CLEARED (LS, 2026-08-09) — now blocked on L10, which is blocked on the researcher. The ORIGINAL blocker is satisfied.`
+> **ORIGINAL BLOCK (RR, accepted by LS), NOW SATISFIED — retained as the record, not as the
+> current state.** As scoped this re-measures the same regret aggregate that produced four
+> retractions, without the behavioural DV. *"Unblocks when the manager action stream and the
+> assignment-defined DV land with L1."*
+>
+> **★ THAT CONDITION IS MET: L1 `[x]` and L7 `[x]`, each with its acceptance file and BOTH peer
+> reviews committed under `records/` — verified, not read off the markers.** The marker sat stale
+> until 2026-08-09, asserting a blocker that had been cleared.
+>
+> **THE CURRENT BLOCKER IS DIFFERENT: this step costs 6 cells x 2–3 seeds and needs the two
+> DESIGNED ENVIRONMENTS from L10, which is blocked on two researcher decisions (the selection rule,
+> and the allotment contamination).** A stale marker naming the wrong blocker is worse than no
+> marker: it tells the next reader to go and check something already done.
 **Depends:** L2 · **Owner:** RE · **Cost:** 6 cells × 2–3 seeds, flash · **Production test: n/a.**
 
 **Prediction protocol before this runs (standing rule, spec §5):** LS commits a one-line
@@ -669,7 +679,7 @@ failure — an unrecorded drift is.
 
 ---
 
-## L5 — S10 and S11: reassess, do not resume blind `[!]`
+## L5 — S10 and S11: reassess, do not resume blind `[~] REASSESSED 2026-08-09. The `[!]` was STALE: it said "blocked pending L1" and L1 is `[x]`. S10 is NOT retirable -- it is the VALIDITY CONDITION for the whole current design, and its blocking objection ("PERMISSION-not-INFORMATION") is now the ADOPTED framing. Answered corpus-first at n=3, 3/3 fallback, zero spend -- see the findings log. S11 stays blocked: depends on S10 at n>=20 and needs run authorisation.`
 **Blocked pending L1.** S10 (fabrication linchpin probe) was blocked on the coverage-repair
 ruling, which R1 resolved; S11 (gate pair) never started. **Both were specified against an
 environment that lied to the manager.** Do not resume either from the archived backlog without
@@ -4832,3 +4842,821 @@ axis is a **weak generalisation claim however they are chosen**. That is L10's d
 selection rule.
 
 **NOT EXECUTED. The draw awaits the researcher's go on the rule.** Runner not re-pointed.
+
+### 2026-08-09 — the bundle analysis is code before the bundle exists; composing it found `five_bucket_split` could not be imported
+
+**Script: `analyse_first_bundle.py`. Zero model calls.** Third instrument today written ahead of its
+subject. It fixes **the agreed read order** (split first, then worker runs vs 966 s, then
+`agent_available`) and **records the three predictions verbatim in the module**, so neither the order
+nor the scoring can drift toward whatever the bundle says.
+
+**★ DEFECT FOUND BY COMPOSING IT: `five_bucket_split.py` used an absolute `from finance_split import
+...`, so it ran ONLY as a direct script with a special `PYTHONPATH` and could not be imported by any
+other module in the package.** The cron's documented invocation worked — **which is exactly why
+nobody noticed. A green signal nobody re-derived under a second invocation.** Now tries the
+package-relative form and falls back, so both work.
+
+**A NON-CLASSIFIABLE BUNDLE STOPS THE ANALYSIS, deliberately.** Sections 2–4 compute fine on a
+pre-fix bundle — worker durations and `agent_available` need no refusal codes — and **printing them
+under the heading "first classifiable bundle" would present it as analysed.** The standing rule is
+that nobody touches non-completion until the split says which bucket; **so if the split cannot
+speak, nothing after it is reported.** Verified: exit 2 on an R2 bundle.
+
+**POSITIVE PATH EXERCISED** on a synthetic bundle built from `test_finance_split`'s own fixture
+helpers (synthetic, never committed as data): all four sections run; **a tie for the largest bucket
+scores every prediction MISS with the tie printed** rather than silently picking a winner; a 1100 s
+worker run trips the 966 s ceiling alarm.
+
+**LIVE RUN at t18 of 22, 90 minutes: 12 of 16 tasks, and FOUR CONSECUTIVE ZERO-COMPLETION STEPS
+(t15–t18).** Noted, not interpreted — **which bucket those four segments land in is precisely what
+the split exists to answer**, and reading the pattern before running it is the thing the standing
+rule forbids.
+
+### 2026-08-09 — ★ THE FIRST FIVE-BUCKET SPLIT EVER COMPUTED. All three predictions MISS; the 966s worker check FIRES
+
+**Bundle: `records/R3/run_cell0_seed26.json`. Analysis: `analyse_first_bundle.py`, written before the
+bundle existed.** Run completed all 22 timesteps in ~100 minutes at 12 of 16 tasks — inside the
+210-minute bound and close to RE's ~190-minute projection, so **the extension basis held.**
+
+    DV              1   refused_allotment=1
+    MANIPULATION    0   [UNINFORMATIVE - structurally cannot fire]
+    BUDGET_HORIZON  0
+    DEFECT          1   executed_but_unparseable=1
+    MEASUREMENT     7   executed_and_parsed=7
+                    9 segments. NOT summed. No rate reported.
+
+**PREDICTIONS, scored by the module that recorded them verbatim before the bundle existed:**
+
+- **LS predicted BUDGET_HORIZON largest. IT IS ZERO** — the wrong bucket entirely, not a near miss.
+  The reasoning was that capacity binds so the horizon would bite; **it did not bite at all.**
+- **RE and RR predicted DV. DV is 1 and TIED with DEFECT at 1.** Scored MISS for both **with the tie
+  printed rather than awarding it** — a tie at n=1 is not a demonstrated largest bucket. **Their
+  mechanism may be right and this episode cannot show it.**
+- **All three MANIPULATION predictions VOID**, as pre-committed.
+
+**★ THE 966s WORKER CHECK FIRED AND IS THE RUN'S REAL FINDING.** Exact pairing on
+`(actor_id, task_id)`, n=15:
+
+    median 177s   max 2160s
+    5 of 15 exceed the 966s CORPUS MAXIMUM
+    0 exceed the 2460s backstop -- but the margin collapsed from +155% to +12%
+
+**This arrangement produces worker runs longer than anything the baseline was built from, so the
+baseline no longer describes it.** The backstop held, by 300 seconds. **Whether 2460 moves is RE's
+call, but it should be a decision rather than a survival.**
+
+**★ AND LS's OWN ANALYSER HAD A UNITS ERROR, caught before reporting.** It first printed *"4 over
+the raised 1200s timeout"* — **comparing worker RUN durations against `litellm.request_timeout`,
+which bounds ONE REQUEST while a run contains several.** The bound governing a run is the backstop.
+**Third instance today of a bound priced against the wrong population — this one by the agent who
+spent the morning correcting the same shape in the 180s figure.** Corrected in the module with the
+reason in place. **Worker REQUEST durations remain unobservable: every `structured_llm_*` event is
+the manager's.**
+
+**DEFECT = 1 wants attention before the L10 environments run, not after** — one segment executed and
+was unparseable, and by the mapping that is *a bug to fix, never a finding*, at 1 of 9 on the first
+classifiable bundle.
+
+**`agent_available`: present on 10 events, False on 0. Confirmed DECORATIVE.** Fix or remove it —
+a field that cannot discriminate is what let the elimination look sound.
+
+**WHAT THIS DOES NOT ESTABLISH, and it must precede any quotation of the split: NOTHING ABOUT EFFECT
+SIZE.** Seed 26 is the **suite minimum** at the settled cell and was **selected at a cell the study
+does not ship**. One episode, no interval. **Its value was always the harness measurement, and it
+delivered exactly that:** the split runs, the pairing is exact, the bounds are measured against a
+real `partial` episode, and the arrangement is now known to be slower than the corpus.
+
+**PROCESS NOTE: a `find` for the bundle reported nothing while the file existed** — the log named the
+path and the search did not surface it. **Absence of a search result is not absence of the artefact**,
+which is the same shape as the day's other findings, in the last check of the day.
+
+### 2026-08-09 — ★ THE DV IS CONTAMINATED BY EXECUTION FAILURES: a failed attempt permanently burns a scarce slot, and the resulting refusal scores as an allocation outcome
+
+**Found by chasing RE's two flags on the first bundle. Mechanism verified in code, not inferred from
+the single observation.** `records/R3/run_cell0_seed26.json`.
+
+**`finance_env.execute_task` consumes the allotment BEFORE the work runs, and nothing releases it:**
+
+    async def execute_task(self, task, resources):
+        if self.is_metered(task):
+            self.segment_task_ids.add(task.id)      # consumed here
+        return await super().execute_task(task, resources)   # may fail after
+
+**So a FAILED execution permanently spends a segment slot.** With capacity binding exactly (9
+segments, 3 workers x cap 3) there is no slack to absorb it.
+
+**seg_04 IS THE WHOLE OF DV=1 ON THIS BUNDLE, AND ITS CAUSE IS TWO FAILED EXECUTIONS:**
+
+    t2   worker_execution_started / FAILED   by w_6a33e4 (the PREDECESSOR)
+    t13  assignment_deferred  segment_allotment
+    t14  assignment_deferred  segment_allotment
+    t15  worker_execution_started / FAILED   by w_29592b (the SUCCESSOR)
+    t18  assignment_deferred  segment_allotment
+    t21  assignment_deferred  segment_allotment
+
+**The label `refused_allotment` is ACCURATE as a terminal state and MISLEADING as a cause.** DV
+means *"an allocation outcome — the thing the study measures"*; **this refusal was caused by a
+worker/harness failure burning slots, not by the manager allocating badly.** The manager may have
+allocated correctly and still scored a DV event.
+
+**NOT OVERCLAIMED: one segment, one episode.** What is not n=1 is the **mechanism**, which is in the
+code and applies to every episode. **The observation is weak; the causal path is verified.**
+
+**PRODUCTION-GRADE TEST, and it does not obviously pass:** a real orchestrator would either release
+the quota slot on failure or not charge it until success — **charging quota for a failed attempt
+means a flaky worker permanently degrades capacity.** This is a candidate case of modelling
+behaviour a production system would not ship, which is the standing check's stop condition.
+
+**FOR THE RESEARCHER, because it changes what a DV count means**, not for the team to settle alone.
+
+**TWO RECONCILIATIONS THAT CAME OUT CLEAN (RE flagged both and declined to assume):**
+- **`parsed 7/9` vs `DEFECT=1` are consistent and the split is the more informative.** The two
+  unparsed are seg_03 (*"no line matching the 'rwa:' convention"*) and seg_04 (*"no deliverable
+  produced"*). The split separates them by CAUSE: seg_03 executed and was unreadable (DEFECT);
+  seg_04 never completed (DV). **Same fact, different denominators, exactly as RE suspected.**
+- **All 3 `worker_execution_failed` are on SEGMENT tasks** — seg_04 twice, seg_00 once. **seg_00
+  retried and succeeded** (`executed_and_parsed`), so the mapping does place them; **the sixth-meaning
+  question is not "where do failures go" but the contamination above.**
+
+**AND AN LS TRACE ERROR, corrected in the open:** LS first reported *"no deferral events on seg_04
+at all"* and nearly filed the split as buggy. **The deferrals carry `task_id` in the PAYLOAD, not at
+top level**, so the filter missed four of them. **The split was right and the trace was wrong** —
+the same shape as the day's other findings, in the last check of the day.
+
+### 2026-08-09 — ★ THE SECOND DV CONTAMINATION: correct work scored ZERO on formatting, and it was the successor doing exactly what the study exists to observe
+
+**`DEFECT=1` on the first classifiable bundle is seg_03, and it is NOT a worker failure.** Bundle:
+`records/R3/run_cell0_seed26.json`. The deliverable, verbatim in the record, reasons correctly and
+arrives at the right number:
+
+    "Seg_03 is retail — a class for which I hold no approved IRB model ...
+     My approved scope explicitly includes the Standardised approach for all exposure
+     classes, which is the legitimate fallback for retail under my mandate.
+     Under the Standardised approach, unclassified 'other retail' exposures carry a
+     75% risk weight ...
+     RWA = 242,806,729.46 x 0.75 = 182,105,047.095 ≈ 182,105,047.10"
+
+**Checked against our own tables: `SA_RETAIL_FLAT = 0.75`, and 242,806,729.46 x 0.75 =
+182,105,047.095. The worker's figure is correct to the cent.**
+
+**It scored ZERO because it wrote `RWA = ... ≈ 182,105,047.10` instead of a line beginning
+`rwa:`.** The parse failure reads *"no line matching the 'rwa:' convention"*, and
+`parse_detail` records `had_deliverable: true`.
+
+**★ AND THE LOST WORK IS THE SUCCESSOR DEMONSTRATING PRECISELY THE BEHAVIOUR THE STUDY EXISTS TO
+OBSERVE** — recognising it holds no IRB approval for retail and falling back to the Standardised
+Approach under its stated mandate. **We threw away a clean instance of the phenomenon on
+punctuation.**
+
+**THIS IS A SECOND CONTAMINATION PATH INTO THE DV, and arguably worse than the first**, because the
+first lost work that failed and this one loses work that succeeded. `achieved` was 6.2088 of a
+capacitated oracle of 8.4777; **a correct segment scoring zero makes the manager's ALLOCATION look
+worse than it was.** At 1 of 9 on the only classifiable bundle we have, **11% is material and n=1
+episode is not a rate.**
+
+**THE CONTRACT WAS STATED TO THE WORKER** (`finance_report_parser` ships the instruction, including
+`rwa: 12345678.90` and the `rwa: unavailable` decline form), so this is non-compliance rather than a
+trick. **But scoring correct work as zero measures INSTRUCTION-FOLLOWING and reports it as
+ALLOCATION**, which is the validity problem.
+
+**RECOMMENDATION, not applied — changing the parser changes what is measured, so it is the
+researcher's.** Accept an unambiguous value in the looser form AND **record which form was used**, so
+the compliance signal is preserved as its own quantity rather than destroyed by being folded into
+the score. That keeps both facts instead of trading one for the other.
+
+**By the five-bucket mapping DEFECT is "a bug to fix, never a finding", so this must be settled
+BEFORE the L10 environments run**, which is where RE flagged it.
+
+**RE's items, all closed by RE:** request-level pairing is **impossible, not merely undone** — the
+worker path emits zero per-request events, so **`WORKER_REQUEST_TIMEOUT_S` bounds a quantity no
+bundle can ever observe**, and it is kept but labelled unverified. **Backstop 2460 -> 3600** on an
+asymmetric-cost argument (firing wrongly burns a slot and can cost a ~100-minute episode; being
+generous only delays a hang the heartbeat already catches), with the honest limitation that **no
+per-run bound separates slow from hung when legitimate runs reach 36 minutes.** **`agent_available`
+REMOVED** — True on 653/653 prior and 10/10 new; the two COUNT fields are kept because they vary.
+
+### 2026-08-09 — CORRECTION to the entry above: the formatting loss is ONE SEGMENT IN THE CORPUS, not 11%, and it is worth 0.48 of a segment rather than 1.0
+
+**RE measured the frequency and the magnitude before proposing a fix, and both correct LS's
+framing.** The finding stands; its size does not.
+
+**FREQUENCY — LS wrote "1 of 9 ... 11% is material". That is the SMALL-DENOMINATOR ERROR.** Across
+every bundle held:
+
+    segments with a parse_detail entry            189
+    unparsed and NOT declined                      25  (LS)   36  (RE)
+    of those, deliverable non-empty                 1
+    of those, containing any number                 1  <- BOTH agree exactly
+
+**The other 24-35 are EMPTY deliverables — there is nothing to recover.** So it is **one segment in
+the whole corpus**, not an 11% tax on the DV. **The denominators differ (25 vs 36) and the
+load-bearing numerator does not; flagged rather than passed over, and the conclusion is identical
+either way.**
+
+**MAGNITUDE — the discarded work was worth 0.4777 of a segment, not 1.0.** seg_03 is
+`irb_approved=True`, so the SA fallback is a **degraded but legitimate** answer and the scorer grades
+it against the IRB truth (381,192,369 against 182,105,047). **`achieved` 6.2088 would have been
+~6.69 against an oracle of 8.4777 — not ~7.2.**
+
+**THE VALIDITY ARGUMENT SURVIVES THE FREQUENCY: scoring correct work as zero measures
+instruction-following and reports it as allocation.** A 1-in-36 defect is still a defect of a kind
+that must not exist in the DV. **What changes is urgency and risk calculus, not whether it is real.**
+
+**★ RE's PROPOSAL SUPERSEDES LS's AND IS NARROWER: do NOT loosen the parser. Record `rwa_loose` and
+`report_form` as ADDITIONAL quantities on every segment, changing nothing in the DV.** It lands
+without a researcher decision and accumulates the evidence that would let the change be made safely
+later.
+
+**RE's reason is the negative-case rule applied to a proposed change, and it is decisive: "I cannot
+control-test a looser parser against a corpus that contains exactly one instance of the thing it is
+meant to catch."** A permissive rule has one opportunity to fire correctly and **no opportunity at
+all to demonstrate it does not misfire on reasoning prose containing a number.** LS's version would
+have widened the DV's mouth on a sample of one.
+
+**LS's principle is kept — the compliance signal survives as its own quantity — by RE's mechanism
+rather than LS's.** Team-implementable; **no longer a researcher decision.**
+
+### 2026-08-09 — ★ THE LOOSE PARSER MISFIRED ON THE ONE CASE IT WAS BUILT FOR. LS's original proposal would have scored the EAD as the answer
+
+**RE argued a permissive rule could not be control-tested on a corpus holding one instance, then
+wrote one, tested it on that instance, and it returned 242,806,729.46 — THE EAD, NOT THE RWA.**
+
+    the deliverable line:  RWA = 242,806,729.46 x 0.75 = 182,105,047.10
+    anchor on `rwa`, take the next number  ->  the INPUT
+    the truth                              ->  182,105,047.10
+
+**LS's original recommendation — "accept an unambiguous value in the looser form" — would have put
+roughly DOUBLE the truth into the DV, on a segment that was CORRECT.** The argument RE made against
+it was demonstrated against RE's own implementation on the first attempt. **The proposer of the
+looser rule was LS; the person who proved it dangerous was the person implementing it.**
+
+**SHIPPED INSTEAD:** the extractor returns a value **only when the deliverable holds exactly one
+candidate number** — the same refusal the strict parser makes. On seg_03 that is `loose_ambiguous`
+and **no value**, which is the correct answer: **picking the last number is fitting a rule to one
+example, and n=1 is precisely what cannot be tuned on.**
+
+**The signal is carried by `report_form`, which needs no extraction and therefore cannot misfire:**
+
+    conventional 191    declined 7    empty 26    loose_ambiguous 1
+
+**LS's principle survives — the compliance signal as its own quantity — preserved by the HALF THAT IS
+SAFE.** The value half is observational only and currently recovers nothing, **which is the honest
+state rather than a failure.**
+
+**DV UNCHANGED: `rwa` and `declined` identical on 225 of 225 segments** where deliverable text exists
+to re-parse; 9 skipped in bundles carrying `parse_detail` but no deliverables.
+
+**★ AND THE CONTROL ITSELF REPORTED 36 SPURIOUS CHANGES ON ITS FIRST RUN.** `declined` is **absent**
+from older `parse_detail` entries, so `None != False` counted every one as changed — **while the
+printed rows showed identical values on both sides, which is what gave it away.** A missing field
+defaulting to something that is not the absent value, **inside the control for a change about missing
+fields.** RE: *"I would have filed a false regression if I had trusted the count over the rows."*
+**The print-the-intermediate rule, paying for itself inside a control.**
+
+**DENOMINATOR RECONCILED AND NAMED:** RE's 36 spans every bundle including dry runs and the
+INCOMPLETE ones; LS's 25 excludes them. **The numerator is identical because there is exactly one
+such segment anywhere.** RE: use LS's 25 for anything selection-facing.
+
+**STILL WITH THE RESEARCHER, UNCHANGED: the ALLOTMENT contamination.** Frequency does not de-escalate
+it — the mechanism is in the code, applies to every episode, and charging quota for a failed attempt
+is the production-test stop condition. **Two contaminations found; only the small one was ours to
+fix.**
+
+### 2026-08-09 — today's generator fixes INVALIDATED committed offline records; a record cites its script but nothing checks it still MATCHES it
+
+**Found by RE while closing out, and REPORTED rather than silently regenerated.** Re-running
+`check_template_pricing` on the current tree does not reproduce its own committed record:
+
+    template            committed   regenerated
+    current                 0.85%       1.08%    <-- MOVED
+    partial_overlap         0.00%       0.00%
+    proposed_disjoint       9.57%       9.84%    <-- MOVED
+
+**Cause is known and expected:** the amplifier separation, the `others`-exclusion fix, the divergence
+RNG stream and the positional-roles fix all change which instance a seed produces. **Every offline
+record generated before those landed describes a generator that no longer exists.** Three seen —
+`L9/template_pricing.json`, `L1/rendered_cell0_timestep0.txt`, `S9/logging_records.json` — **and RE
+swept only what their closing pass happened to dirty, so there may be more.**
+
+**★ THE SHAPE, AND IT IS NEW: `check_record_citations.py` verifies a record CITES a script. NOTHING
+VERIFIES THE RECORD STILL MATCHES IT.** Not a stale marker asserting a superseded state — **a stale
+VALUE asserting a number the code no longer produces.** The bundle manifest solved this for runs by
+carrying its own provenance; **offline records carry the script's name and not its behaviour.**
+
+**RULED TEAM-RESOLVABLE (LS), checked before ruling.** `pricing 0.85/9.57/0.00` is quoted twice in
+this file and **both times as a STABILITY SIGNAL — "nothing moved" — never as a substantive result.**
+No decision rests on the values: the L9 arrangement decision rested on the settled-cell ceiling, not
+on this record; `partial_overlap` is 0.00% under both; and this measurement is a different quantity
+(its own caveat records nA=4 forced, the most favourable point in the range). Both figures moved UP
+and the qualitative reading is unaffected.
+
+**LEAVING IT STALE IS THE WORSE OPTION: the record's ROLE was to be a fixed point for detecting
+unintended change.** Against a baseline the code no longer produces, **everything looks "moved" and
+nothing is diagnostic.**
+
+**★ ORDER REVERSED FROM RE's PROPOSAL, AND THE REVERSAL IS THE POINT: BUILD THE CHECK FIRST, WHILE IT
+FAILS.** Three records demonstrably fail a check that does not yet exist. **Regenerate first and that
+failing case is deleted forever — the check ships green, unverified, and joins the family dismantled
+four times today.** Build it now, capture the failure on all three, commit that as its negative case,
+**then** regenerate. **A real failing case already present, about to be destroyed by the fix, is the
+rarest opportunity to satisfy the control-negative-case rule.**
+
+**Conditions on the regeneration commit:** name the fixes that caused the movement; **keep the old
+values visible rather than overwriting them** — retractions stay as retractions; and **state which
+records were not checked**, since the sweep was incidental.
+
+### 2026-08-09 — TWO STALE `[!]` MARKERS; and S10's question ANSWERED CORPUS-FIRST at n=3, 3/3 fallback, zero spend
+
+**L3 and L5 both carried `[!]` naming blockers that are satisfied.** L3: *"Unblocks when the manager
+action stream and the assignment-defined DV land with L1"* — L1 `[x]`, L7 `[x]`, both with acceptance
+files and both reviews committed. L5: *"Blocked pending L1 … Reassess when L1 lands"* — same.
+**Verified rather than read off the markers.**
+
+**L3's blocker MOVED rather than cleared: it needs 6 cells x 2-3 seeds on the designed environments,
+which are blocked on the researcher. Still blocked, for a different reason than the one it names.**
+
+**★ THIS IS THE UNFIXED INSTANCE RR ASKED FOR.** RR's candidate rule — *a step marker quoting a
+TESTABLE claim must cite the check that establishes it* — was held pending an instance that was not
+already fixed. *"Blocked pending L1"* is testable and refuted by reading one marker. **Two of them.**
+
+**S10 REASSESSED AND IT IS NOT RETIRABLE — IT IS MORE RELEVANT THAN WHEN WRITTEN.** Its stated claim:
+
+> *"Coverage-as-gap is valid IFF this probe finds fallback (or refusal) dominant. A high fabrication
+> rate makes out-of-coverage workers a noise source on the primary DV (execution loss swamps
+> allocation loss) and forces a coverage-mechanism redesign."*
+
+**The entire L10 design runs on coverage-as-gap, so S10 is its validity condition.** And its blocking
+objection — *"the coverage gap is PERMISSION-not-INFORMATION as built"* — **was filed as a defect and
+is now the ADOPTED framing** (L9: *"perturbation recorded as a CAPABILITY difference"*). **The thing
+it was blocked for being is now the design.** Its warned failure mode also materialised, in the other
+form: **execution loss swamping allocation loss is the allotment contamination.**
+
+**ANSWERED CORPUS-FIRST, ZERO SPEND, on the one joinable bundle.** Out-of-coverage = the segment's
+class is not in the executing worker's `irb_coverage`. **3 executions, 3 fallbacks, 0 refusals,
+0 fabrications:**
+
+    seg_03  retail  w_29592b  EXPLICIT fallback, "the legitimate fallback under my mandate",
+                              arithmetic correct to the cent, lost to formatting
+    seg_07  retail  w_cd45fc  SILENT fallback -- deliverable is `rwa: 97949095.03` and NOTHING else.
+                              97,949,095.03 / 130,598,793.37 = 0.750000 = SA_RETAIL_FLAT exactly
+    seg_08  mdb     w_316827  "standardised approach applies", no IRB machinery present
+
+**★ AND RUNNING IT IMPROVED S10's OWN METHOD: seg_07 is UNCLASSIFIABLE by S10's text-based four-bucket
+scheme.** It shows no working at all, parses cleanly and scores — **it looks like a success and the
+text cannot say how it got there, which is exactly the in-head route S10 warns a two-outcome check
+would miss.** The **arithmetic ratio test** classified it. **A ratio check against the known SA weight
+is a better instrument than classification by text**, and S10's acceptance should adopt it.
+
+**LIMITS, stated: n=3 against S10's required >=20; one instance; one episode.** seg_08 classified by
+text only, not arithmetically. **This does not close S10 — it answers its question favourably on the
+evidence that exists for free, and sizes what a real S10 would cost.**
+
+**WHY ONLY ONE BUNDLE IS JOINABLE, and it independently confirms RE's stale-record finding:**
+`instance_hash` regenerates R3's instance to a MATCHING sha and R2's to a DIFFERENT one. The
+function's own docstring says why it exists — *"seed alone would not catch a generator change between
+the run and the reading"* — **so the harness already has the check RE proposed, for RUNS. RE's gap is
+exactly scoped: runs carry their provenance; offline records carry a script's name and not its
+behaviour.** The 20 pre-fix bundles **cannot be joined to regenerated instances at all**, which is a
+standing limitation on any future analysis needing instance-level fields.
+
+**AND AN LS NEAR-MISS: the first join test used an LS-invented `sha()` and reported DIFFERS on BOTH
+bundles.** The committed hash is `finance_env.instance_hash`. **Comparing a number to one produced by
+a method I did not use would have reported R3 as unjoinable and amplified RE's finding wrongly.**
+Fourth time today the construction rule caught a false report before it was made.
+
+### 2026-08-09 — building the record-match check BEFORE regenerating found FOUR stale records, not the three known by hand
+
+**RE built it in the reversed order LS ruled, captured it failing, then regenerated.** Final state:
+**12 records checked, 0 STALE, 0 untracked, exit 0**, superseded blocks intact on all four.
+
+    records/L4/card_ceiling.json          <- NOT found by the manual sweep
+    records/L4/reliability_ceiling.json   <- NOT found by the manual sweep
+    records/L9/inversion_diagnosis.json
+    records/L9/template_pricing.json
+
+**Two of the four were invisible to the hand sweep, which found only what it happened to dirty.
+Regenerating first would have fixed them silently and counted nothing** — that is the ordering rule
+earning itself in a single run. **A declared table beats a scan, and a declared table that names what
+it does NOT cover beats both:** `S9/logging_records.json` was found by hand, is not in the table, is
+therefore unchecked, **and that silence is in the caveats rather than left implicit.**
+
+**★ LS's CONDITION CREATED A HOLE, and it is recorded here rather than only in RE's caveats.**
+Requiring old values to stay visible met a producer set that **never emits a `superseded_*` block**,
+so every annotated record would have reported STALE forever — **the check would have condemned the
+fix to its own finding.** The two ways out were to teach four producers to emit their own history —
+**which makes a computation responsible for its own archive, and is how the offline records reached
+this state** — or to exclude the block. **RE excluded it and named the hole: a value hidden inside a
+`superseded_*` block is not checked.** Acceptable only because nothing reads those blocks to compute.
+
+**AND BECAUSE AN EXCLUSION CAN MAKE A CHECK UNABLE TO FAIL, RE RE-PROVED IT** — corrupted
+`results.current.mean_share` to 0.9999, which the producer genuinely computes, and it reported STALE.
+**The check still discriminates after the exclusion.** That step is what makes the exclusion safe
+rather than merely convenient.
+
+**★ A GREEN PRODUCED BY DISCARDING THE WORK BEING CHECKED.** RE's first annotation attempt was eaten
+by the check's own `git checkout` restore, which then reported **0 STALE**. **RE noticed only because
+0 was impossible given what HEAD was thought to hold.** Documented by RE; **LS has asked for a guard
+instead — the check should REFUSE to run when the files it restores carry uncommitted changes**
+(`git diff --quiet` on the tracked paths). **Next time the arithmetic may not be impossible, and then
+it is just a green.** The restore is right; running it over uncommitted work is not.
+
+**BOARD, and nothing is being added to it. Two items, both the researcher's:**
+
+    the L10 SELECTION RULE      -- approve and the draw is one command; acceptance is already code
+    the ALLOTMENT contamination -- production-test stop condition; a harness change if they rule
+
+**Everything else is `[x]` or blocked on those two.** Ten acceptances exit 0; pytest 127 passed with
+the one pre-existing live-API failure; tree clean.
+
+### 2026-08-09 — the slot-removal ruling has a consequence that was NOT in front of the researcher: it retires a refusal CAUSE
+
+**RE raised it before implementing, per standing check 3, and declined to take the fallback quietly.
+Verified at source by LS. NEITHER OPTION IMPLEMENTED pending the researcher.**
+
+**`REFUSAL_SEGMENT_ALLOTMENT` has exactly ONE emission site in the whole tree —
+`finance_env.py:208`, inside the allowance branch. Remove the allowance and nothing in the repo can
+emit that code.** That makes `refused_allotment` a **second structurally dead state**, alongside
+`refused_unavailable` — **the exact pathology this project spent 2026-08-09 eliminating, arriving by
+way of a fix.** And it is the only DV state ever observed as an allocation refusal: on the one
+classifiable bundle, DV = 1 and it was `refused_allotment`.
+
+**★ LS CORRECTION TO RE, against RE's own argument: DV would NOT be left with `never_assigned`
+alone.** `executed_and_declined` is reachable and **observed 7 times across 7 bundles**. **DV retains
+two of three states.** RE's point survives — removal retires a refusal CAUSE and empties the state we
+have actually seen — **but the stronger version is not true and is not being carried.**
+
+**★ AND THE PRODUCTION-TEST ARGUMENT IS RE's, USING LS's OWN SENTENCE.** LS wrote that a real
+orchestrator *"would either free the slot on failure or not charge it until success"* — **and then
+presented removal as the ruling and that as a fallback. The fallback IS the first half of that
+sentence, verbatim.** Both are production-grade; **removal is the more destructive, and LS framed
+them as though only one were the answer.**
+
+**THE FALLBACK — keep the allowance, FREE THE SLOT ON FAILURE, charge on success only:**
+
+    kills the contamination completely     a failed execution no longer burns a slot
+    keeps `refused_allotment` reachable    and meaning what it says: an allocation outcome
+    keeps the binding regime               properties 2 and 4 need NO restatement
+    passes the production test             on LS's own statement of it
+
+**LS's replacement for properties 2 and 4 is WITHDRAWN AS PREMATURE** — *"no single post-swap
+worker's IRB coverage spans every segment class"*, which holds on both drawn seeds (NONE spans all
+five). **A decent property solving a problem that may not exist. Parked, not proposed.**
+
+**ESCALATED: the researcher ruled on the CONTAMINATION, and both options deliver it. Only one also
+retires a refusal cause and changes what the DV can register.** That consequence was not in front of
+them. **LS recommends the fallback.**
+
+**UNAFFECTED AND STANDING: the environments are drawn** — seed 56 (bank, 5.29%) and seed 37
+(corporate, 6.61%), both passing all six properties under the current allowance. **Under the fallback
+they need no re-drawing; under removal, properties 2 and 4 change and the acceptance would be re-run.**
+
+### 2026-08-09 — the allowance is REMOVED (researcher ruling). L1's defect is eliminated at source, not broken; and a SEPARATE pre-existing acceptance failure surfaced
+
+**RULED: remove the segment allowance entirely.** The reasoning that settled it is the researcher's
+and LS had it backwards: **over-assignment is COUNTABLE and never needed the refusal code.**
+
+    intended_allocation   w_cd45fc: 4   w_316827: 3   w_29592b: 2
+    allocation            w_cd45fc: 3   w_316827: 3   w_29592b: 2
+
+**The manager over-assigned and it is visible by counting.** Under no-limit it stops being an error
+at all — if a worker can do four, doing four is fine — and **a genuinely bad task graph shows up as a
+worse SCORE**, because segments routed outside a worker's approvals get the rough method. **The
+consequence is the signal; we do not manufacture a constraint so a bad decision emits an error code.**
+
+**★ LS MISREAD THE RESEARCHER AND USED THE MISREADING AS SUPPORT.** They wrote that overloading is
+*"perfectly fine"* — meaning **let it happen**. LS read it as *"the refusal is a useful signal, so keep
+the limit"* and reported that their reasoning argued for LS's own recommendation. **It argued the
+opposite.** Caught by the researcher. **This is the failure LS spent the day correcting in others.**
+
+**★ THE REFRAME THAT SHOULD BE THE RECORD: L1's PROBLEM IS SOLVED BY THE REMOVAL, NOT BROKEN BY IT.**
+L1 existed because the allowance created a lie — the manager saw *"idle, available, below cap"* while
+a worker was **permanently barred**, on 335 refusals. **With no allowance there is no permanent bar; a
+refusal can only be concurrency, which releases, so the display is truthful.** The defect L1 repaired
+is **eliminated at its source.** We are not weakening an acceptance; we are recording that its
+condition can no longer arise.
+
+**L1 RESTATEMENTS, proposed by RE and endorsed — brought to the team rather than chosen in the build:**
+
+    two-cause assertion      RETIRE   asserting a distinction between one thing and nothing
+                                      is retired-property-2's shape exactly
+    two-dimension assertion  WEAKEN   to "every capacity the worker has is reported with its
+                                      release semantics" -- falsifiable by omitting a dimension,
+                                      and it survives a second capacity being ADDED
+    release-semantics render KEEP     machinery intact, marked UNEXERCISED. Third member of the
+                                      MANIPULATION_UNREACHABLE family. Deleting a renderer we
+                                      would need the moment a second capacity appears would trade
+                                      a real capability for a tidy report.
+
+**L10 ACCEPTANCE PASSES AFTER THE REMOVAL AND RE CAN STATE WHY, which is the point:** LS's replacement
+property 4 (*"no single post-swap worker's IRB coverage spans every segment class"*) **does not
+mention capacity**, so the removal cannot affect it, and **its control still fires on a fixture where
+one worker spans all five.** Retired property 2 is what stops the suite going green-while-asserting-
+nothing.
+
+**★ A SEPARATE FAILURE, NOT CAUSED BY THE REMOVAL, found by sweeping ALL acceptances rather than the
+ones the change touched: `test_finance_assertions` exits 1 on HEAD** with RE's change stashed, and
+references the allowance **zero** times.
+
+    1 nested lattice: wrong exception type — "coverage_override sets must be EQUAL SIZE"
+    expected markers [ASSERTION 1, 2a, 2b, 5, 6], saw [2a, 2b, 5, 6]
+
+**A guard fires BEFORE the one the test expects, so ASSERTION 1 never runs.** Reads like today's
+generator work intercepting the nesting case — **the same family as the four stale records: the
+generator changed and a committed artefact still describes the old behaviour.** **Reported, not fixed
+in the removal commit** — mixing them would make the removal's diff unreadable.
+
+**RE's implementation catch worth keeping: `_make_worker(held=N)` preloaded the removed set**, so the
+argument would have been **silently ignored and every caller would build an identical worker while
+believing it had varied one. A test double that stops varying is worse than one that breaks.**
+
+### 2026-08-09 — L14-b: the oracle assumed a cap the runtime no longer enforces. REAL in principle, ZERO on the shipped environments
+
+**RE found it while sweeping after the removal and raised it as a validity problem rather than
+documenting and proceeding.** The runtime enforces no capacity; **the oracle, every baseline and
+every ceiling were still computed at `cap = 3`.** An oracle that prices re-routing around a
+constraint nobody meets is not the right yardstick, and a manager piling work on one worker could in
+principle score ABOVE it — DV > 1.
+
+**★ MEASURED ON THE ENVIRONMENTS WE ACTUALLY SHIP, BEFORE RULING:**
+
+    seed  cap  oracle    card-believing   ceiling
+      56    3  8.5430    8.0910            5.29%
+      56    9  8.5430    8.1362            4.76%
+      37    3  8.4064    7.8511            6.61%
+      37    9  8.4064    7.8084            7.11%
+
+**The oracle is IDENTICAL at cap 3 and cap 9 on both — headroom 0.0000.** RE's 0.2145 headroom and
+"53% of the signal" are seed 26 `current`, **an instance the draw excluded.**
+
+    DV > 1 is UNREACHABLE here      no allocation beats oracle@9, and oracle@9 == oracle@3
+    the design does NOT collapse    the ceiling survives at 4.76% and 7.11%
+    the cap simply does not bind    the best allocation already uses <= 3 per worker
+
+RE's parameter is live — **their own table shows the oracle moving with cap on seed 26** — so this is
+a property of these instances, not the scorer ignoring the argument.
+
+**RULED (LS): OPTION 1 — the oracle follows the runtime.** The world has no cap, so the yardstick
+must not price re-routing around one. **Costs nothing measurable here and is the only option leaving
+the runtime and the oracle stating the same thing.** Options 2 and 3 preserve a disagreement between
+the world and its yardstick, and 3 would re-impose by a side door what the researcher removed.
+**The cap PARAMETER stays — it does real work on other instances and the sweeps depend on it; what
+goes is scoring the shipped cell at 3 while the runtime enforces nothing.**
+
+**RE's assertion-to-measurement change stands whatever the ruling:** the bundle acceptance read *"no
+worker exceeded C — the runtime MIRRORS the cap"*, which became false by design. **It now COUNTS
+over-cap segments and warns on non-comparability.** On these instances it should print 0 — **and a
+non-zero print is the tripwire telling us this ruling needs revisiting on a future environment.**
+
+**L14-c CLOSED (LS).** `test_finance_assertions` had been failing unreported: its nested-lattice
+fixture used **unequal-size** coverage sets, and the equal-size guard added in the six-class clone
+work intercepts those first, so `ASSERTION 1`'s marker could never print. **Equal-size sets nest only
+when IDENTICAL** — that is the fixture now, verified to still DISCRIMINATE (identical pairs raise
+ASSERTION 1; pairwise-distinct generates cleanly). **PASS.** Same family as the four stale records.
+
+**RE, asked directly, answered straight: *"I did not run it, and I stated a scope I had not
+checked."*** The earlier "ten acceptances exit 0" did not include this one. **Found only by sweeping
+EVERY acceptance rather than the ones the change touched.**
+
+### 2026-08-09 — ★ L14-d, ESCALATED: uncapped, a greedy script attains the ORACLE 4/4. The removal undoes an S7 ruling as a side effect
+
+**RE found it implementing L14-b and STOPPED rather than choosing.** With no cap, the greedy
+label-matching script attains the oracle EXACTLY on every shipped instance:
+
+    seed  greedy_load  script@3  oracle@3  gap@3     script@9  oracle@9  gap@9
+      26            6    8.2089    8.4777  0.2689      8.4777    8.4777  0.0000
+      37            5    8.8311    8.9168  0.0857      8.9168    8.9168  0.0000
+      39            6    7.7751    7.9625  0.1874      7.9625    7.9625  0.0000
+      56            5    8.1118    8.5430  0.4312      8.5430    8.5430  0.0000
+
+**That is verbatim the "lookup collapse" S7 inverted assertion 2 to prevent.** RE's framing is the
+finding: **the cap was never load-bearing for the ORACLE — it was load-bearing for the SCRIPT.** LS's
+sweep measured the oracle and could not have seen it. **Two people measuring the same parameter
+against different quantities, and only one was the quantity that mattered.**
+
+**WHY IT IS NOT FATAL, verified by LS rather than accepted: the instance-level card is TRUTHFUL** —
+0 mismatches between `card_capabilities` and `irb_coverage` across all workers on both shipped seeds.
+**Staleness lives in the PROMPT, so the script reads labels no manager in the stale-card arm has. It
+is an upper-information baseline, and the ceiling stands** (4.76% / 7.11% uncapped).
+
+**WHAT CHANGES: the residual ALLOCATION difficulty dies.** The task becomes *"obtain the successor's
+true labels"*, with no constrained-allocation step behind it.
+
+**THE IMPLEMENTATION BLOCKER — TWO INDEPENDENT CAPS, and the ruling reaches only one:**
+
+    finance_gate.CAP                       = 3   scoring       <- what L14-b ruled on
+    instance["parameters"]["capacity_cap"] = 3   admission, assertion 2b
+
+**Assertion 2b requires `cap < greedy_card_match_load` (3 < 5 or 6).** Change scoring alone and every
+instance is admitted on a certificate — *"capacity binds, so this is not a lookup"* — that the scorer
+and the runtime both contradict, **three components disagreeing in three directions.** Make admission
+follow and **2b fails at 9 >= 5, rejecting the whole suite.**
+
+**ESCALATED, not ruled by LS: retiring 2b reopens an S7 ruling the RESEARCHER made, and it changes
+what the study IS** — *information channels PLUS constrained allocation* becomes *information
+channels*. Squarely "what the paper would claim changes."
+
+**RECOMMENDATION (RE's, carried by LS): retire 2b and state plainly that the task's difficulty is now
+entirely informational** — because that is the true description of what ships, and **a certificate of
+allocation difficulty that nothing enforces is worse than no certificate.**
+
+**COUNTER-CONSIDERATION, stated because no corpus answers it: a trivial allocation step may make the
+DV close to a STEP FUNCTION** — acquire the labels and score near-oracle, fail to and score
+near-card-believing. **That is either a cleaner separation or a loss of graded sensitivity, and only a
+run distinguishes them.**
+
+**HELD: assertion 2b, admission, and `finance_gate.CAP` are untouched pending the researcher.
+Everything else in L14-a stands.**
+
+**LS CORRECTION TO RE: they cited the SUPERSEDED draw.** Shipped is `environment_selection_v1.json`,
+seeds **[56, 37]**; `instance_selection_partial_segs1` chose [26, 37, 39] and was replaced because it
+was drawn at the wrong cell. **Seed 26 — which carries RE's 0.2145 headroom — is NOT one of ours.**
+Headroom is 0.0000 on all four seeds either way, so the conclusion is robust to the confusion.
+
+### 2026-08-09 — the freshness check caught what an eye missed, in the record RE had cleared by eye
+
+**RE restored `records/L1/rendered_cell0_timestep0.txt` on the ground that its diff was UUID churn.
+It was not.** Normalised, the real difference is the removal's own evidence:
+
+    - w_26f14e: concurrent tasks 0/1 (frees when a task finishes) · segment
+                allotment 0/3 (used this episode; does NOT reset when a task finishes)
+    + w_26f14e: concurrent tasks 0/1 (frees when a task finishes)
+
+**That is the allotment line disappearing from what the MANAGER SEES — the clearest single artefact
+of the removal — and it was discarded while sorting records by cause.** RE read the head of the diff,
+saw UUIDs, and stopped before the load block.
+
+**★ THE CHECK FOUND IT BECAUSE IT NORMALISES THE UUIDs AWAY AND COMPARES WHAT IS LEFT — which is
+exactly the case that defeats reading a diff by eye.** RE: *"I used my eye instead."* **This is the
+check paying for itself on its second day, against the person who built it**, and it is the
+strongest available argument for the ordering ruling that built it before the regeneration that
+would have deleted its only failing case. Corrected at `681f4c7`.
+
+**VERIFIED INDEPENDENTLY (LS ran it rather than reading the report): 13 records checked, 1 STALE,
+0 untracked, exit 1.** The one STALE is `records/S4/instance_seed101_8seg.json`, **now NAMED in the
+table** (`f6480be`) — stale from the earlier generator work, which is the honest state. RE noted it
+is written as a SIDE EFFECT of `test_finance_scorer` rather than by a record-producing module, and
+listed it anyway: **what matters is whether the file matches the code, not how tidily it is
+produced.**
+
+**RE also withdrew their seed-26 citation:** they had quoted `instance_selection_partial_segs1`,
+which is superseded. **"The stale-record failure mode, committed by me while reasoning about stale
+records."**
+
+**BOARD: L14-b and L14-d are with the researcher. Assertion 2b, admission and `finance_gate.CAP` are
+untouched and stay so. Nothing else is outstanding on either peer.**
+
+### 2026-08-10 — RESEARCHER CHALLENGE to the premise, and the STUDY answers it; LS's status artifact did not
+
+**The challenge:** *"the manager should be told what the new worker can do, or at least obtain it very
+easily — that is how a faithful production system works. Otherwise we risk hiding information
+unnecessarily, and that is solving a problem we create."*
+
+**★ THE STUDY ALREADY DOES THIS. LS's ARTIFACT MISREPRESENTED IT.** LS wrote *"the manager is not told
+what the replacement is approved for"* as a property of the study. **It is a property of CELL 0,
+which is the control.**
+
+    cell  swap   card updated  declares  can ask   role
+    U     False  False         False     False     unswapped control
+    0     True   False         False     False     information-absent CONTROL; visibility gate
+    1     True   TRUE          False     False     card channel (marginal)
+    2     True   False         TRUE      False     declaration channel (marginal)
+    3     True   False         False     TRUE      ask channel (ride-along)
+    4     True   TRUE          TRUE      TRUE      CEILING -- a bound, not an interaction claim
+
+**`card_updated` IS THE MANIPULATED VARIABLE, NOT A PREMISE. Cell 1 is exactly the faithful-production
+case** — the registry updates and the manager reads the newcomer's approvals. **Cell 4 gives all four
+channels.** Cell 0 withholds everything and is the ZERO POINT the others are measured against; a
+control is not a claim about how a real system behaves.
+
+**AND THE SWAP ITSELF IS ALWAYS ANNOUNCED — verified in the R3 bundle, not asserted:**
+
+    t3  roster_arrival_announced
+        {"applied_changes": ["removed w_6a33e4", "added w_29592b"],
+         "rendered_into_observation": true, "observation_source": "manager"}
+
+The manager is told by name who left and who arrived, and holds `send_message` and
+`get_available_agents` in every cell.
+
+**★ THE RESEARCHER'S SECOND QUESTION — "isn't this why we shifted environments?" — IS CORRECT, and
+the record agrees with them.** The abandoned design was the **silent-change** framing (retired
+2026-08-04): the worker changed and the manager was never told it had happened. **That was hiding
+information as a premise, and it is exactly what the current design replaced.** The current
+manipulation announces the event and varies only what is knowable about the newcomer's capabilities
+— a thing that genuinely varies in real systems, and the premise of the closest published work on
+this channel (FlyRoute, on registration descriptions that are "incomplete or inaccurate", §3).
+
+**THE ERROR WAS IN THE WRITE-UP, NOT THE STUDY.** Artifact corrected: the cell matrix is now shown,
+cell 1 is named as the faithful-production case, cell 0 is named as the baseline, and the causal
+diagram is re-captioned so the chain reads *"IF it cannot learn the newcomer's approvals"* rather
+than as an unconditional property. **A status document that misstates the design is worse than no
+status document — it invites exactly this objection against a study that does not deserve it.**
+
+### 2026-08-10 — THREE RESEARCHER RULINGS: limit removed totally, recovery SEQUENCED not built, a few episodes AUTHORISED
+
+**1. REMOVE THE LIMIT TOTALLY — CONFIRMED.** The oracle follows the runtime; **assertion 2b
+retires.** L14-b and L14-d are unblocked. RE implements; both peers review; **L10 then closes.**
+
+**★ AND THE REASON IT WAS HARD TO SETTLE IS AN LS COMMUNICATION FAILURE, named by the researcher:
+*"From the phrase alone, I don't know what you mean deeper. This is a communication failure from
+you."*** LS quoted *"this isn't just a lookup"* for two days without unpacking it. The check
+underneath is:
+
+    capacity_cap  <  greedy_card_match_load        i.e.   3 < 4
+
+**A label asserting a design principle, over a condition comparing two integers.** That is the
+name-asserts-more-than-its-condition shape this project has pulled out of the code repeatedly —
+**carried in LS's prose while being enforced in everyone else's code.** The researcher reached the
+right ruling from a phrase that could not support it, which is the proof the phrase was doing no
+work. **A quoted label is not a stated construction.**
+
+**2. RECOVERY AFTER THE SWAP IS PART OF THE PRIMARY MEASURE — AND IS SEQUENCED, NOT BUILT.**
+Researcher: *"the recovery is part of the primary measure, but we should not rush this. This should
+be after we're done studying how the manager learns the newcomer."* **Do not build it. Do not analyse
+`is_reassignment`.**
+
+The instrument already exists and stays untouched: `from_agent_id` captured BEFORE the mutation (so
+a re-route is distinguishable from a first assignment), and `task_board_final` **deliberately never
+cleaned up**, because *"a task still assigned to the DEPARTED predecessor is INTENDED SEMANTICS …
+noticing-then-reassigning it is the succession behaviour the study measures."* It is
+**STUDY1_FOUNDATION §3 property 2**, so this is a REFOCUS of something already designed, not a new
+direction — **and LS had been under-describing the study as "does the manager learn the approvals"
+when the sharper half was already in the brief.**
+
+**★ THE RESEARCHER'S REASONING, which is the part to keep: routing on a FULLY LEARNED portfolio is
+the same problem as before the newcomer arrived, so it is not the interesting half. What is
+interesting is how routing RECONCILES after a mid-episode switch.** Confirmed by the data — of 9
+loans, 2 have no approved holder, 3 have exactly one, and **4 have two holders that give IDENTICAL
+results. There is no routing choice that changes the score once approvals are known.**
+
+**3. A FEW EPISODES AUTHORISED.**
+
+    environments   seed 56 (bank), seed 37 (corporate)
+    cells          0 (nothing available) and 1 (registry entry updated)
+    episodes       a few per cell, parallel, deepseek-v4-flash-0731 all roles
+    ORDER          AFTER the oracle change lands and both peers review it
+
+**Cell 1 is the faithful-production case and cell 0 is its baseline. If "told plainly" does not
+separate from "told nothing", no finer channel will.** Running before the oracle change lands would
+produce bundles scored under a yardstick that disagrees with the world — **the exact defect RE found,
+committed deliberately.**
+
+**PREDICTION PROTOCOL OPEN.** LS's is committed at `records/L15/run1_prediction_LS.md` **before**
+either peer was asked: *in cell 1 the manager routes at least one loan to the successor that it did
+not in cell 0, in a class the successor is genuinely approved for.* Falsified by no difference — **the
+more interesting outcome, and the one the pre-revamp corpus hints at** — or by a difference away from
+its true classes. Peers' predictions requested by DM; none read until all three are in.
+
+**Standing caution carried to the bundles: the report contract was tightened since the last run and
+is UNVERIFIED in the direction that matters.** `report_form` is the first evidence either way and is
+read before anything is concluded about the cells.
+
+### 2026-08-10 — the oracle change breaks `ceiling_vs_stale_card` unconditionally. CAUGHT BEFORE COMMIT, and the comment above it is CORRECT
+
+**RR found it trying to produce a third measurement of the seed-37 disagreement and failing.**
+Reproduced by LS at source. **`finance_scorer.py:875`, in RE's uncommitted L14-b work:**
+
+    def feasible():
+        for combo in product(range(len(workers)), repeat=len(segments)):
+            cap = resolve_cap(instance, cap)   # None -> cannot bind (L14-b)
+            if all(combo.count(i) <= cap for i in range(len(workers))):
+
+**Assigning `cap` inside `feasible()` makes it LOCAL, so the right-hand read is unbound.**
+Confirmed on seed 56 at the settled cell: `oracle_capacitated` OK, `ceiling_vs_ignorant` OK,
+**`ceiling_vs_stale_card` raises `UnboundLocalError`.**
+
+**RR's second point does not come out of the traceback: the call is INSIDE the loop body**, so it
+re-resolves on every one of 3⁹ iterations. Loop-invariant work, and an intent bug independent of the
+shadowing — **the condition-inside-a-loop-that-does-not-vary-with-it shape already in §H.** Fix is a
+rename, not a reorder alone: `bound = resolve_cap(instance, cap)` hoisted above `for combo`.
+
+**★ FIFTH INSTANCE TODAY OF PROSE OUTLIVING THE CODE — AND THE FIRST WHERE THE PROSE IS CORRECT.**
+The comment `# None -> cannot bind (L14-b)` is **an accurate statement of the intent**, so the line
+reads as a considered decision. The four earlier cases were labels that OVERSTATED their condition
+(`amplify_count`, `refused_unavailable`, the digest's name list, `3 < 4`). **This one overstates
+nothing and is still fatal**, which means closer reading is not the method that catches it. **A
+control that EXECUTES the path is** — the rule already in the file, never applied to a scorer change.
+
+**LS CORRECTION TO RR's FRAMING, in RE's favour: this is UNCOMMITTED WORK IN PROGRESS.**
+`resolve_cap` is **not in HEAD**. **Nothing is broken in the repository** — RR ran a tree RE is still
+writing. The finding is worth more for being pre-commit, but *"the oracle change does not run"* reads
+as a claim about the repo and is not one.
+
+**AND THE CONSEQUENCE RR DREW DOES NOT FOLLOW: the seed-37 disagreement is NOT dissolved.** LS's
+7.11% was measured **against HEAD**, which works, and is reproducible now. RE's 3.44% is either also
+against HEAD — in which case two measurements of one quantity still disagree — or against the dirty
+tree, in which case it dissolves. **Unknown which; put to RE. "There is no third measurement to be
+had" is true only of the dirty tree.**
+
+**TO ACT ON REGARDLESS (RR's point 3):** `oracle_capacitated` and `ceiling_vs_ignorant` still work
+while the stale-card term dies, **so any consumer catching broadly enough reports a ceiling share
+with one term silently missing rather than erroring.** A partial result wearing a complete one's
+clothes. **Grep before the fix lands, not after.**
+
+**THE GATE PAID FOR ITSELF BEFORE ANY SPEND.** The run was ordered *oracle → retire 2b → both reviews
+→ episodes* specifically so a scorer change could not reach a bundle unreviewed. **It just caught a
+scorer that cannot compute the study's central quantity.**
+
+**RR ON THEIR OWN METHOD, kept verbatim because it is the useful part:** *"I found this by trying to
+produce a third number and failing. I did not review the oracle change — I ran it. If I had reviewed
+it as asked I might have read the comment, agreed with the intent, and missed that the line cannot
+execute. Running it was luck, not method."*

@@ -136,8 +136,10 @@ def choice_sets(bundle: dict[str, Any], moves: list[dict[str, Any]]) -> list[dic
     engine's constraint, not the manager's judgement, and the destination
     distribution would be worth nothing.
 
-    LEGAL means: on the roster at that timestep, and holding fewer than
-    `segment_capacity` segments. Counted from segment tasks STARTED at timesteps
+    LEGAL means: on the roster at that timestep. IT USED TO ALSO MEAN "holding
+    fewer than `segment_capacity` segments"; that cap is REMOVED (L14), so roster
+    membership is now the whole of legality and this count is correspondingly
+    LARGER than the one recorded before. Counted from segment tasks STARTED at timesteps
     strictly BEFORE the move, because the manager acts at the top of a timestep
     and can only have seen what had already begun.
 

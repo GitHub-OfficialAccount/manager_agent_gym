@@ -91,10 +91,35 @@ _apply_worker_request_limits()
 # Sized as (timeout + margin) x (retries + 1): a call that legitimately exhausts
 # its retries must finish INSIDE this, or the backstop would mask the very retries
 # it is meant to outlive.
-WORKER_RUN_BACKSTOP_S = float(os.getenv(
-    "MAG_WORKER_RUN_BACKSTOP_S",
-    str((WORKER_REQUEST_TIMEOUT_S + 30.0) * (WORKER_MAX_RETRIES + 1)),
-))
+# RAISED TO 3600 AS A DECISION, NOT A SURVIVAL (L13).
+#
+# The derived value (1200+30)x2 = 2460 held on the first `partial` episode -- 0 of
+# 15 worker runs exceeded it -- but the margin over the longest legitimate run
+# collapsed from +155% (against the corpus max of 966s) to +14% (against 2160s).
+# A margin that survives by 300 seconds on n=15 is not a bound anyone chose.
+#
+#   corpus, current arrangement   n=266   median  81s   max  966s
+#   partial, new arrangement      n= 15   median 177s   max 2160s
+#
+# THE COST IS ASYMMETRIC AND THAT DECIDES IT. A backstop that fires WRONGLY kills a
+# task and, with capacity binding exactly, can burn the segment's allotment and
+# cost the episode -- ~100 minutes of wall clock. A backstop that is too GENEROUS
+# only delays detection of a hang the heartbeat already catches. So it should sit
+# well clear of legitimate work, not close to it.
+#
+# 3600s: +67% over the longest legitimate run ever observed, kills 0 of 281 runs
+# across both arrangements, and still bounds a hung task to one hour.
+#
+# STATED LIMITATION: with legitimate runs reaching 36 minutes, NO per-run bound
+# separates "slow" from "hung" cleanly. The heartbeat does that and this does not
+# pretend to. This is a last-resort ceiling.
+#
+# AND `WORKER_REQUEST_TIMEOUT_S` BOUNDS A QUANTITY WE CANNOT OBSERVE: the worker
+# path emits ZERO per-request events (0 worker-attributed `structured_llm_*` in
+# the new bundle; all 22 are the manager's), so no bundle can price it. It is
+# retained because litellm's 6000s default is indefensible, but it is unverified
+# and should be labelled as such wherever it is quoted.
+WORKER_RUN_BACKSTOP_S = float(os.getenv("MAG_WORKER_RUN_BACKSTOP_S", "3600"))
 
 
 class WorkerRunTimeout(TimeoutError):

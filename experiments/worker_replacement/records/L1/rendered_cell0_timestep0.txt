@@ -1,37 +1,37 @@
 
 ### Execution Snapshot (timestep 0)
-- workflow_id: 2b7d9d92-f19f-4c60-86be-d7ac34b31d77
+- workflow_id: b5d06a9f-267c-4746-8343-88c4fcac1198
 
 - current_workflow_summary: ----------------------------------------------------------------------
-Workflow: basel_capital_calculation (ID: 2b7d9d92-f19f-4c60-86be-d7ac34b31d77)
+Workflow: basel_capital_calculation (ID: b5d06a9f-267c-4746-8343-88c4fcac1198)
 Goal: Produce the portfolio's Basel capital calculation: risk-weighted assets for every exposure segment, aggregated, floor-checked, and reported.
 Budget (est): $0.00 | Expected hours: 0.00
 Cost (actual): $0.00
 Agents: 4 | Resources: 0 | Tasks: 16
 ----------------------------------------------------------------------
 Tasks:
-  • Task: Scope and approval inventory (ID: fd132cff-51a2-424d-84e4-7f9dab64f273)
+  • Task: Scope and approval inventory (ID: 0c4e6262-98f9-436b-9958-2b372021b9ca)
     Status: not started (dependencies met, not yet running)
     Assigned to: (unassigned)
     Description: List, for each exposure segment in the portfolio, whether it falls under an internal-ratings-based (IRB) model approval or must use the standardised approach. Produce the inventory as a table.
-  • Task: Exposure data preparation (ID: 78dffb61-b3ac-499a-9a1d-7488f9d6444f)
+  • Task: Exposure data preparation (ID: f5f417fb-f6df-4fb3-9014-17d53b7f989e)
     Status: not started (dependencies met, not yet running)
     Assigned to: (unassigned)
     Description: Check the portfolio's exposure records for completeness: exposure at default, rating bucket, maturity and loss-given-default must be present for every segment. Report any gaps.
-  • Task: Approval scope note (ID: 3e9ea931-89e8-4edd-85ca-2b985a53f10c)
+  • Task: Approval scope note (ID: 5a0db4d4-86fc-4dda-a92e-3480dce298f1)
     Status: not started (dependencies met, not yet running)
     Assigned to: (unassigned)
     Description: Write a short note stating, in general terms, what an internal-ratings-based model approval permits a bank to do that the standardised approach does not. Two or three sentences. No portfolio data is required.
-  • Task: Data quality checklist (ID: 499a080f-23e0-4f07-9386-79dd1e139ea3)
+  • Task: Data quality checklist (ID: 56841a56-3fe0-47b7-8d49-71aaa83d9eb4)
     Status: not started (dependencies met, not yet running)
     Assigned to: (unassigned)
     Description: List the data fields a risk-weighted asset calculation requires for a single exposure segment, and state briefly why each one matters. No portfolio data is required.
-  • Task: Risk-weighted assets — seg_00 (ID: 745fe659-7934-44c4-856e-de3dc018de4e)
+  • Task: Risk-weighted assets — seg_00 (ID: 05dfd22d-56cf-4f49-ab2e-be4ba9a64793)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Compute the risk-weighted assets for exposure segment seg_00.
   asset class: corporate
-  rating bucket: Below BB-
+  rating bucket: Unrated
   exposure at default: 96177574.61
   loss given default: 0.3761
   effective maturity (years): 2.25
@@ -43,8 +43,8 @@ Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more 
 If you judge that you cannot price this segment, say so in the same form:
   rwa: unavailable
 That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
-    Depends on: 78dffb61-b3ac-499a-9a1d-7488f9d6444f, fd132cff-51a2-424d-84e4-7f9dab64f273
-  • Task: Risk-weighted assets — seg_06 (ID: 7f36e388-d4f0-4676-b0cd-8dcf3652429e)
+    Depends on: 0c4e6262-98f9-436b-9958-2b372021b9ca, f5f417fb-f6df-4fb3-9014-17d53b7f989e
+  • Task: Risk-weighted assets — seg_06 (ID: 97d5c59c-57fd-4736-b773-11ba427f3d66)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Compute the risk-weighted assets for exposure segment seg_06.
@@ -61,8 +61,8 @@ Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more 
 If you judge that you cannot price this segment, say so in the same form:
   rwa: unavailable
 That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
-    Depends on: 78dffb61-b3ac-499a-9a1d-7488f9d6444f, fd132cff-51a2-424d-84e4-7f9dab64f273
-  • Task: Risk-weighted assets — seg_04 (ID: 7911400a-ecc9-4fac-93db-062412e91ba9)
+    Depends on: 0c4e6262-98f9-436b-9958-2b372021b9ca, f5f417fb-f6df-4fb3-9014-17d53b7f989e
+  • Task: Risk-weighted assets — seg_04 (ID: 2c1ab002-cb51-45ea-af5b-54774f4b4e36)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Compute the risk-weighted assets for exposure segment seg_04.
@@ -79,8 +79,8 @@ Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more 
 If you judge that you cannot price this segment, say so in the same form:
   rwa: unavailable
 That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
-    Depends on: 78dffb61-b3ac-499a-9a1d-7488f9d6444f, fd132cff-51a2-424d-84e4-7f9dab64f273
-  • Task: Risk-weighted assets — seg_07 (ID: e6de5f08-89f5-4049-a931-9c21a9091cdc)
+    Depends on: 0c4e6262-98f9-436b-9958-2b372021b9ca, f5f417fb-f6df-4fb3-9014-17d53b7f989e
+  • Task: Risk-weighted assets — seg_07 (ID: 1c62d963-8da0-4035-b387-7a5338a3f1f9)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Compute the risk-weighted assets for exposure segment seg_07.
@@ -97,8 +97,8 @@ Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more 
 If you judge that you cannot price this segment, say so in the same form:
   rwa: unavailable
 That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
-    Depends on: 78dffb61-b3ac-499a-9a1d-7488f9d6444f, fd132cff-51a2-424d-84e4-7f9dab64f273
-  • Task: Risk-weighted assets — seg_03 (ID: 65bc0258-8e00-41a1-a80e-9d8d61a5f57c)
+    Depends on: 0c4e6262-98f9-436b-9958-2b372021b9ca, f5f417fb-f6df-4fb3-9014-17d53b7f989e
+  • Task: Risk-weighted assets — seg_03 (ID: 459ae078-08ee-4882-9fc7-a3192ab65926)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Compute the risk-weighted assets for exposure segment seg_03.
@@ -115,13 +115,13 @@ Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more 
 If you judge that you cannot price this segment, say so in the same form:
   rwa: unavailable
 That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
-    Depends on: 78dffb61-b3ac-499a-9a1d-7488f9d6444f, fd132cff-51a2-424d-84e4-7f9dab64f273
-  • Task: Risk-weighted assets — seg_02 (ID: 8d470086-1fee-46e6-873b-668a4ad63b34)
+    Depends on: 0c4e6262-98f9-436b-9958-2b372021b9ca, f5f417fb-f6df-4fb3-9014-17d53b7f989e
+  • Task: Risk-weighted assets — seg_02 (ID: e758edbc-064b-4fba-ba7f-504a32544d05)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Compute the risk-weighted assets for exposure segment seg_02.
   asset class: corporate
-  rating bucket: BBB+ to BBB-
+  rating bucket: Below BB-
   exposure at default: 209516626.27
   loss given default: 0.5811
   effective maturity (years): 1.67
@@ -133,8 +133,8 @@ Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more 
 If you judge that you cannot price this segment, say so in the same form:
   rwa: unavailable
 That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
-    Depends on: 78dffb61-b3ac-499a-9a1d-7488f9d6444f, fd132cff-51a2-424d-84e4-7f9dab64f273
-  • Task: Risk-weighted assets — seg_08 (ID: d7586ab8-9d8b-461b-b594-5cc395e6ef0a)
+    Depends on: 0c4e6262-98f9-436b-9958-2b372021b9ca, f5f417fb-f6df-4fb3-9014-17d53b7f989e
+  • Task: Risk-weighted assets — seg_08 (ID: 44ace931-4e62-4447-bea2-4e03797024c1)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Compute the risk-weighted assets for exposure segment seg_08.
@@ -151,8 +151,8 @@ Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more 
 If you judge that you cannot price this segment, say so in the same form:
   rwa: unavailable
 That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
-    Depends on: 78dffb61-b3ac-499a-9a1d-7488f9d6444f, fd132cff-51a2-424d-84e4-7f9dab64f273
-  • Task: Risk-weighted assets — seg_05 (ID: 8749ce86-0341-4d45-90c7-4bdb57c63d99)
+    Depends on: 0c4e6262-98f9-436b-9958-2b372021b9ca, f5f417fb-f6df-4fb3-9014-17d53b7f989e
+  • Task: Risk-weighted assets — seg_05 (ID: c814d102-3319-4881-9539-7a4c700a7e37)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Compute the risk-weighted assets for exposure segment seg_05.
@@ -169,13 +169,13 @@ Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more 
 If you judge that you cannot price this segment, say so in the same form:
   rwa: unavailable
 That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
-    Depends on: 78dffb61-b3ac-499a-9a1d-7488f9d6444f, fd132cff-51a2-424d-84e4-7f9dab64f273
-  • Task: Risk-weighted assets — seg_01 (ID: 659599de-dd6e-40fd-ab81-b8090e1d975f)
+    Depends on: 0c4e6262-98f9-436b-9958-2b372021b9ca, f5f417fb-f6df-4fb3-9014-17d53b7f989e
+  • Task: Risk-weighted assets — seg_01 (ID: 91c0062d-0852-4b93-a99d-35efa4a3f7fc)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Compute the risk-weighted assets for exposure segment seg_01.
   asset class: corporate
-  rating bucket: Below BB-
+  rating bucket: AAA to AA-
   exposure at default: 214054078.22
   loss given default: 0.3828
   effective maturity (years): 3.76
@@ -187,22 +187,22 @@ Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more 
 If you judge that you cannot price this segment, say so in the same form:
   rwa: unavailable
 That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
-    Depends on: 78dffb61-b3ac-499a-9a1d-7488f9d6444f, fd132cff-51a2-424d-84e4-7f9dab64f273
-  • Task: Aggregate risk-weighted assets (ID: 25f153f9-eaab-4259-b148-b724da2cd763)
+    Depends on: 0c4e6262-98f9-436b-9958-2b372021b9ca, f5f417fb-f6df-4fb3-9014-17d53b7f989e
+  • Task: Aggregate risk-weighted assets (ID: e133ccc1-5e61-49df-9165-8c5588e5317e)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Sum the reported risk-weighted asset figures across all exposure segments and present the portfolio total, broken down by approach.
-    Depends on: 65bc0258-8e00-41a1-a80e-9d8d61a5f57c, e6de5f08-89f5-4049-a931-9c21a9091cdc, 659599de-dd6e-40fd-ab81-b8090e1d975f, 8749ce86-0341-4d45-90c7-4bdb57c63d99, 7911400a-ecc9-4fac-93db-062412e91ba9, 8d470086-1fee-46e6-873b-668a4ad63b34, 745fe659-7934-44c4-856e-de3dc018de4e, 7f36e388-d4f0-4676-b0cd-8dcf3652429e, d7586ab8-9d8b-461b-b594-5cc395e6ef0a
-  • Task: Output floor check (ID: 6d2f02ab-8381-4897-a394-fb2e9ba28532)
+    Depends on: 97d5c59c-57fd-4736-b773-11ba427f3d66, 05dfd22d-56cf-4f49-ab2e-be4ba9a64793, 459ae078-08ee-4882-9fc7-a3192ab65926, 1c62d963-8da0-4035-b387-7a5338a3f1f9, 44ace931-4e62-4447-bea2-4e03797024c1, e758edbc-064b-4fba-ba7f-504a32544d05, c814d102-3319-4881-9539-7a4c700a7e37, 2c1ab002-cb51-45ea-af5b-54774f4b4e36, 91c0062d-0852-4b93-a99d-35efa4a3f7fc
+  • Task: Output floor check (ID: 4492f609-f53d-456b-9081-90f7fe691018)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Compare the aggregate internally-modelled risk-weighted assets against the aggregate standardised figure and state whether the 72.5% output floor binds for this portfolio.
-    Depends on: 25f153f9-eaab-4259-b148-b724da2cd763
-  • Task: Capital adequacy report (ID: 9f14df3b-42ce-465b-b997-5cb38d2632dd)
+    Depends on: e133ccc1-5e61-49df-9165-8c5588e5317e
+  • Task: Capital adequacy report (ID: 6e47cfb7-505b-44c2-ac25-3e4d1459f49d)
     Status: not started (waiting on dependencies)
     Assigned to: (unassigned)
     Description: Write the capital adequacy report for the portfolio: the aggregate risk-weighted assets, the approach used per segment, and the output floor conclusion.
-    Depends on: 6d2f02ab-8381-4897-a394-fb2e9ba28532
+    Depends on: 4492f609-f53d-456b-9081-90f7fe691018
 
 - execution_state: waiting_for_manager
 - progress: 0.0%
@@ -212,23 +212,23 @@ That is a legitimate outcome and is recorded as one; it is not a failure to foll
 - ready: 4 | running: 0 | completed: 0 | failed: 0
 
 ### ID Universes
-["- all_task_ids (count=16): sample=['fd132cff-51a2-424d-84e4-7f9dab64f273', '78dffb61-b3ac-499a-9a1d-7488f9d6444f', '3e9ea931-89e8-4edd-85ca-2b985a53f10c', '499a080f-23e0-4f07-9386-79dd1e139ea3', '745fe659-7934-44c4-856e-de3dc018de4e', '7f36e388-d4f0-4676-b0cd-8dcf3652429e', '7911400a-ecc9-4fac-93db-062412e91ba9', 'e6de5f08-89f5-4049-a931-9c21a9091cdc', '65bc0258-8e00-41a1-a80e-9d8d61a5f57c', '8d470086-1fee-46e6-873b-668a4ad63b34']", "- all_agent_ids (count=4): sample=['stakeholder', 'w_26f14e', 'w_68358d', 'w_e172a9']", '- all_resource_ids (count=0): sample=[]']
+["- all_task_ids (count=16): sample=['0c4e6262-98f9-436b-9958-2b372021b9ca', 'f5f417fb-f6df-4fb3-9014-17d53b7f989e', '5a0db4d4-86fc-4dda-a92e-3480dce298f1', '56841a56-3fe0-47b7-8d49-71aaa83d9eb4', '05dfd22d-56cf-4f49-ab2e-be4ba9a64793', '97d5c59c-57fd-4736-b773-11ba427f3d66', '2c1ab002-cb51-45ea-af5b-54774f4b4e36', '1c62d963-8da0-4035-b387-7a5338a3f1f9', '459ae078-08ee-4882-9fc7-a3192ab65926', 'e758edbc-064b-4fba-ba7f-504a32544d05']", "- all_agent_ids (count=4): sample=['stakeholder', 'w_26f14e', 'w_68358d', 'w_e172a9']", '- all_resource_ids (count=0): sample=[]']
 
 ### Performance Indicators
 - completion_rate: 0.0% of tracked
 - resource_utilization: 50.0%
 
 ### Actionable ID Previews
-- ready_task_ids (sample): ['fd132cff-51a2-424d-84e4-7f9dab64f273', '78dffb61-b3ac-499a-9a1d-7488f9d6444f', '3e9ea931-89e8-4edd-85ca-2b985a53f10c', '499a080f-23e0-4f07-9386-79dd1e139ea3']
+- ready_task_ids (sample): ['0c4e6262-98f9-436b-9958-2b372021b9ca', 'f5f417fb-f6df-4fb3-9014-17d53b7f989e', '5a0db4d4-86fc-4dda-a92e-3480dce298f1', '56841a56-3fe0-47b7-8d49-71aaa83d9eb4']
 - running_task_ids (sample): []
 - completed_task_ids (sample): []
 - failed_task_ids (sample): []
 
 
 ### Worker Load (all workers currently on the roster)
-- w_26f14e: concurrent tasks 0/1 (frees when a task finishes) · segment allotment 0/3 (used this episode; does NOT reset when a task finishes)
-- w_68358d: concurrent tasks 0/1 (frees when a task finishes) · segment allotment 0/3 (used this episode; does NOT reset when a task finishes)
-- w_e172a9: concurrent tasks 0/1 (frees when a task finishes) · segment allotment 0/3 (used this episode; does NOT reset when a task finishes)
+- w_26f14e: concurrent tasks 0/1 (frees when a task finishes)
+- w_68358d: concurrent tasks 0/1 (frees when a task finishes)
+- w_e172a9: concurrent tasks 0/1 (frees when a task finishes)
 
 ### Assignments Refused Since Your Last Action
 - (none since your last action)

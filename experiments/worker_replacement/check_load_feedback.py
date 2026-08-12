@@ -86,11 +86,9 @@ class _FreeWorker(env.CapacityBoundedAIAgent):
     """
 
     async def execute_task(self, task: Any, resources: Any):
-        # `is_metered`, NOT the name prefix. A double that meters differently from
-        # the production agent tests the double — and the name prefix is the exact
-        # predicate criterion (e) removed.
-        if self.is_metered(task):
-            self.segment_task_ids.add(task.id)
+        # NO ALLOTMENT TO CONSUME (L14). The double used to mirror the production
+        # agent by adding to `segment_task_ids`; that set is gone, and a double
+        # that meters differently from production tests the double.
         return create_task_result(task_id=task.id, agent_id=self.agent_id,
                                   success=True, execution_time=0.01, resources=[])
 
@@ -377,22 +375,38 @@ def main() -> int:
     if not persisted:
         failures.append(f"refused state did not persist: {refused_per_step}")
 
-    # (a) THE REASON IS COMPUTED AT THE SITE, and this episode contains the case
-    # that makes it necessary: the same tasks are refused for CONCURRENCY early
-    # and for ALLOTMENT later. A signal derived from the load numbers alone would
-    # have called both the same thing.
-    reasons_seen = {
-        reason for o in manager.observations for line in o.assignment_refusals
-        for reason in (["concurrency"] if "concurrency limit" in line else [])
-        + (["allotment"] if "segment allotment" in line else [])
-    }
-    both_reasons = reasons_seen == {"concurrency", "allotment"}
-    print(f"   [{'ok' if both_reasons else 'FAIL'}] refusals name their OWN cause: "
-          f"{sorted(reasons_seen)} — the transient and the permanent case are "
-          f"distinguished, not merged")
-    if not both_reasons:
-        failures.append(f"only {sorted(reasons_seen)} refusal causes appeared; "
-                        f"the concurrency/allotment distinction is untested here")
+    # (a) THE REASON IS COMPUTED AT THE SITE, so a refusal says why it happened
+    # rather than leaving the manager to infer it from the load numbers.
+    #
+    # THIS ASSERTION WAS RETIRED AND REPLACED (L14). It read
+    # `reasons_seen == {"concurrency", "allotment"}` and existed because the same
+    # tasks were refused for CONCURRENCY early and for ALLOTMENT later, and a
+    # signal derived from the load numbers alone would have called both the same
+    # thing. With the allotment removed there is ONE cause, and asserting a
+    # distinction between one thing and nothing is a check that cannot fail --
+    # exactly the shape that retired property 2. So the DISTINCTION claim is gone
+    # and the SITE-COMPUTED claim, which is the part that survives, is kept in a
+    # form that can still break: every rendered refusal must name a cause the code
+    # actually emits. A refusal rendered with no cause, or with a cause invented by
+    # the renderer, fails this.
+    KNOWN_CAUSES = {"concurrency": "concurrency limit"}
+    refusal_lines = [line for o in manager.observations
+                     for line in o.assignment_refusals]
+    reasons_seen = {name for name, marker in KNOWN_CAUSES.items()
+                    for line in refusal_lines if marker in line}
+    uncaused = [line for line in refusal_lines
+                if not any(m in line for m in KNOWN_CAUSES.values())]
+    causes_named = bool(refusal_lines) and not uncaused
+    print(f"   [{'ok' if causes_named else 'FAIL'}] every refusal names a cause the "
+          f"code emits: {sorted(reasons_seen)} over {len(refusal_lines)} lines "
+          f"({len(uncaused)} uncaused)")
+    print(f"   NOTE, not a check: there is now ONE refusal cause. The "
+          f"concurrency/allotment\n        distinction this assertion used to make "
+          f"is RETIRED, not failing — see L14.")
+    if not causes_named:
+        failures.append(
+            f"{len(uncaused)} refusal lines named no cause the code emits"
+            if uncaused else "no refusal lines were produced to check causes on")
 
     # (i, second half) A REFUSAL THAT FIRED IS A REFUSAL THAT WAS RENDERED. This is
     # the part that would have caught the original defect: the run event existed,
@@ -407,29 +421,57 @@ def main() -> int:
         failures.append("no refusal was rendered despite 9 segments on one worker "
                         "at C=3")
 
-    # (b) BOTH CAPACITIES, WITH RELEASE SEMANTICS VISIBLE IN THE RENDERING. The
-    # check is on the RENDERED text, not on the model fields: "true in the code"
-    # is precisely what the criterion rules out.
+    # (b) EVERY CAPACITY THE WORKER HAS IS REPORTED, WITH ITS RELEASE SEMANTICS.
+    # The check is on the RENDERED text, not on the model fields: "true in the
+    # code" is precisely what the criterion rules out.
+    #
+    # RESTATED (L14). It used to hardcode `{("concurrent tasks", True),
+    # ("segment allotment", False)} <= dims_seen`, which named a dimension that no
+    # longer exists. The replacement asks the PRODUCTION `load_report()` what
+    # dimensions there are and requires every one of them to reach the manager.
+    # That is falsifiable in the way that matters -- a dimension dropped from the
+    # rendering breaks it -- and it survives a second capacity being ADDED without
+    # another rewrite, which the hardcoded pair could not.
+    expected_dims = {(d["name"], d["releases_on_completion"])
+                     for d in _fixture_worker("w_probe", held=1)
+                     .load_report()["dimensions"]}
     dims_seen = {(d.name, d.releases_on_completion)
                  for o in manager.observations for row in o.agent_load
                  for d in row.dimensions}
-    both_dims = {("concurrent tasks", True), ("segment allotment", False)} <= dims_seen
+    all_dims = bool(expected_dims) and expected_dims <= dims_seen
     load_text = "\n".join(block_of(r, LOAD_HEADER) or "" for r in manager.rendered)
-    release_rendered = ("frees when a task finishes" in load_text
-                        and "does NOT reset when a task finishes" in load_text)
     exhausted_rendered = "[EXHAUSTED]" in load_text
-    print(f"   [{'ok' if both_dims else 'FAIL'}] both capacities reported, "
-          f"distinguishable: {sorted(dims_seen)}")
-    print(f"   [{'ok' if release_rendered else 'FAIL'}] and their OPPOSITE release "
-          f"semantics are in the RENDERED text, not just the model")
+    print(f"   [{'ok' if all_dims else 'FAIL'}] every capacity `load_report()` "
+          f"produces reaches the manager: {sorted(dims_seen)}")
     print(f"   [{'ok' if exhausted_rendered else 'FAIL'}] a worker is observed "
           f"exhausting a capacity")
-    if not both_dims:
-        failures.append(f"capacity dimensions were {sorted(dims_seen)}")
-    if not release_rendered:
-        failures.append("release semantics are not visible in the rendering")
+    if not all_dims:
+        failures.append(f"capacity dimensions rendered were {sorted(dims_seen)}, "
+                        f"missing {sorted(expected_dims - dims_seen)}")
     if not exhausted_rendered:
         failures.append("no worker ever rendered as exhausted")
+
+    # THE OPPOSITE-RELEASE-SEMANTICS CHECK IS UNEXERCISED, NOT DELETED (L14).
+    # The renderer still distinguishes the two, and the assertion below still
+    # compares them -- but nothing in the environment now produces a dimension
+    # that does NOT release on completion, so there is no instance to check it on.
+    # Reported as UNINFORMATIVE rather than run, on the `MANIPULATION_UNREACHABLE`
+    # pattern: a zero here means the STATE cannot arise, not that the machinery
+    # failed. Kept because the moment a second capacity appears this is the check
+    # that catches its semantics being rendered wrong, and rebuilding a deleted
+    # renderer then is strictly worse than carrying an idle one now.
+    non_releasing = sorted(n for n, rel in expected_dims if not rel)
+    release_rendered = ("frees when a task finishes" in load_text
+                        and "does NOT reset when a task finishes" in load_text)
+    if non_releasing:
+        print(f"   [{'ok' if release_rendered else 'FAIL'}] OPPOSITE release "
+              f"semantics are in the RENDERED text, not just the model")
+        if not release_rendered:
+            failures.append("release semantics are not visible in the rendering")
+    else:
+        print(f"   [UNEXERCISED] opposite release semantics — every dimension "
+              f"releases on completion,\n        so the contrast has no instance. "
+              f"Machinery intact; would fire if one appeared.")
 
     # (d) NO CAPABILITY TEXT ANYWHERE IN THESE BLOCKS. A descriptor rendered beside
     # the id would reintroduce successor capability into the cells whose card is
@@ -746,9 +788,14 @@ def main() -> int:
                      "after stripping", a != b))
 
     # 5. release-semantics check vs a rendering that omits them.
+    # THE PREDICATE IS LIVE; THE CHECK IT GUARDS IS CURRENTLY UNEXERCISED (L14) --
+    # no dimension fails to release on completion, so nothing in the live path
+    # evaluates it. Kept and LABELLED as such: a green here says the predicate
+    # still discriminates, NOT that anything was checked with it this run.
     fires = not ("frees when a task finishes" in "- w_x: 3/3"
                  and "does NOT reset when a task finishes" in "- w_x: 3/3")
-    controls.append(("release-semantics check fires on a bare `3/3`", fires))
+    controls.append(("release-semantics PREDICATE fires on a bare `3/3` "
+                     "(predicate only — its live check is UNEXERCISED)", fires))
 
     # 6. metered-set reconciliation vs a mismatched pair.
     controls.append(("reconciliation check fires on a mismatched set",
@@ -814,7 +861,11 @@ def _fixture_worker(agent_id: str, held: int):
         update={"agent_id": agent_id})
     from manager_agent_gym.core.workflow_agents.tool_factory import ToolFactory
     worker = _FreeWorker(config, tools=ToolFactory.create_ai_tools())
-    worker.segment_task_ids = {uuid4() for _ in range(held)}
+    # `held` used to preload the segment allotment. With the allotment removed the
+    # only capacity is concurrency, so it preloads THAT -- otherwise the helper
+    # would silently ignore its own argument and every caller would build the same
+    # worker while believing it had varied one.
+    worker.current_task_ids = {uuid4() for _ in range(held)}
     return worker
 
 

@@ -115,9 +115,21 @@ def p1_ceiling_positive(inst: dict[str, Any]) -> tuple[bool, str]:
     return (share or 0.0) > 1e-9, f"ceiling_share={0.0 if share is None else share:.5f}"
 
 
-def p2_na_below_cap(inst: dict[str, Any]) -> tuple[bool, str]:
-    v = n_a(inst)
-    return v < CAP, f"nA={v} cap={CAP} unique_class={successor_unique_class(inst)!r}"
+def p2_RETIRED_na_below_cap(inst: dict[str, Any]) -> tuple[bool, str]:
+    """RETIRED 2026-08-09 when the researcher ruled the segment allowance out entirely.
+
+    It asserted `nA < cap`, encoding "the covered lie needs a free slot to misdirect
+    into". WITH NO ALLOWANCE THERE IS ALWAYS A FREE SLOT, so the condition is
+    unconditionally true and the check cannot fail.
+
+    It would NOT have gone red after the change -- `CAP` is a constant in this module,
+    not read from the environment -- so it would have kept passing and asserting
+    nothing. That is the failure mode this project spent the day removing, and it is
+    why the property is retired rather than left green.
+
+    Kept as a named function so the retirement is visible to anyone counting six.
+    """
+    raise AssertionError("property 2 is retired; see the docstring")
 
 
 def p3_lied_class_has_other_holder(inst: dict[str, Any]) -> tuple[bool, str]:
@@ -136,10 +148,26 @@ def p3_lied_class_has_other_holder(inst: dict[str, Any]) -> tuple[bool, str]:
     return bool(holders), f"lied_class={cls!r} other_post_swap_holders={holders}"
 
 
-def p4_capacity_binds(inst: dict[str, Any]) -> tuple[bool, str]:
-    n_seg = len(inst["segments"])
-    n_post = len(inst["event"]["roster_post_swap"])
-    return n_seg == n_post * CAP, f"{n_seg} segments vs {n_post} workers x cap {CAP}"
+def p4_allocation_is_non_trivial(inst: dict[str, Any]) -> tuple[bool, str]:
+    """No single post-swap worker's IRB coverage spans every segment class.
+
+    REPLACES "capacity binds exactly" (`len(segments) == len(roster) * cap`), retired
+    with the allowance. That predicate would still have PASSED after the removal --
+    9 == 3 x 3 is a fact about the instance shape, not about any enforced capacity --
+    while no longer meaning what its name said. A true statement that has stopped
+    being the statement you wanted is harder to catch than a false one.
+
+    This does the job the old property did: it keeps the allocation non-trivial, so
+    the manager cannot route everything to one worker and still reach the oracle. And
+    unlike its predecessor it is falsifiable without a cap -- a roster where one
+    worker covers every class present breaks it.
+    """
+    post = inst["event"]["roster_post_swap"]
+    coverage = {w["worker_id"]: set(w["irb_coverage"]) for w in inst["workers"]}
+    classes = {s["asset_class"] for s in inst["segments"]}
+    spanning = [w for w in post if classes <= coverage[w]]
+    return not spanning, (f"{len(classes)} segment classes; workers spanning all of "
+                          f"them: {spanning or 'none'}")
 
 
 def p5_basel_intact_and_switch_off(inst: dict[str, Any], pinned: str) -> tuple[bool, str]:
@@ -156,9 +184,9 @@ def p6_admitted(seed: int, **kwargs: Any) -> tuple[bool, str]:
 
 PROPERTIES = (
     ("1 ceiling > 0", p1_ceiling_positive),
-    ("2 nA < cap", p2_na_below_cap),
+
     ("3 lied class has another post-swap holder", p3_lied_class_has_other_holder),
-    ("4 capacity binds exactly", p4_capacity_binds),
+    ("4 allocation is non-trivial", p4_allocation_is_non_trivial),
     ("5 Basel tables intact AND divergence off", p5_basel_intact_and_switch_off),
     ("6 admitted", p6_admitted),
 )
@@ -265,12 +293,15 @@ def _fixture_p3(seed: int, pinned: str) -> tuple[bool, str]:
 
 
 def _fixture_p4(seed: int, pinned: str) -> tuple[bool, str]:
-    """8 segments against 3 workers x cap 3 -- capacity no longer binds exactly.
-    Applied to the OBJECT rather than through the generator, which asserts capacity
-    binds and would refuse to build it: the fixture has to reach the predicate."""
+    """Give one post-swap worker coverage of every class present. Applied to the
+    OBJECT, because the generator will not build a roster like this -- the fixture
+    has to reach the predicate, not be refused before it."""
     inst = gen.generate(seed, **SHIPPED)
-    inst = {**inst, "segments": inst["segments"][:-1]}
-    ok, detail = p4_capacity_binds(inst)
+    classes = sorted({s["asset_class"] for s in inst["segments"]})
+    target = inst["event"]["roster_post_swap"][0]
+    workers = [{**w, "irb_coverage": classes} if w["worker_id"] == target else w
+               for w in inst["workers"]]
+    ok, detail = p4_allocation_is_non_trivial({**inst, "workers": workers})
     return (not ok), detail
 
 
@@ -349,9 +380,8 @@ def _fixture_p6(seed: int, pinned: str) -> tuple[bool, str]:
 
 FIXTURES = (
     ("1 ceiling > 0", "`current` at nA=1", _fixture_p1),
-    ("2 nA < cap", f"shared_class_segments = cap = {CAP} (searches seeds)", _fixture_p2),
     ("3 lied class has another holder", "`current` -- the relational one", _fixture_p3),
-    ("4 capacity binds exactly", "8 segments vs 3 x 3", _fixture_p4),
+    ("4 allocation is non-trivial", "a worker covering every segment class", _fixture_p4),
     ("5a Basel tables intact", "perturbed SA_SOVEREIGN", _fixture_p5a),
     ("5b divergence off", "switch left ON (the generator default)", _fixture_p5b),
     ("5c retail not skipped", "perturbed SA_RETAIL_FLAT (RR's hole)", _fixture_p5c),
