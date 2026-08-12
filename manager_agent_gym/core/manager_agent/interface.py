@@ -24,14 +24,6 @@ if TYPE_CHECKING:
     from ..communication.service import CommunicationService
 
 
-class ObservationAidBuilder(Protocol):
-    """Build a representation from manager-visible evidence only."""
-
-    async def build(
-        self, *, source_text: str, observation: ManagerObservation
-    ) -> str: ...
-
-
 class ManagerAgent(ABC):
     """Abstract interface for manager agents.
 
@@ -69,7 +61,6 @@ class ManagerAgent(ABC):
         self._seed: int = 42
         # Observation contract (set by engine; defaults to redacted baseline)
         self._observation_policy: ObservationPolicy = ObservationPolicy()
-        self._observation_aid_builder: ObservationAidBuilder | None = None
         self._last_decision_observation: ManagerObservation | None = None
         # Roster changes applied by the engine at the current timestep, set just
         # before step(). A SETTER rather than a step() parameter, deliberately:
@@ -134,12 +125,6 @@ class ManagerAgent(ABC):
     def set_observation_policy(self, policy: ObservationPolicy) -> None:
         """Set the observation contract for this execution (set by engine)."""
         self._observation_policy = policy
-
-    def set_observation_aid_builder(
-        self, builder: ObservationAidBuilder | None
-    ) -> None:
-        """Configure the runtime builder selected by the observation policy."""
-        self._observation_aid_builder = builder
 
     def clear_last_decision_observation(self) -> None:
         """Clear the per-step capture before a manager decision begins."""

@@ -145,13 +145,6 @@ class ManagerObservation(BaseModel):
         ),
     )
 
-    observation_aid: str | None = Field(
-        default=None,
-        description=(
-            "Optional derived representation of evidence already visible elsewhere "
-            "in this observation. It must not contain hidden environment state."
-        ),
-    )
 
     # Optional timeline awareness
     max_timesteps: int | None = Field(

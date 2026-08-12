@@ -27,11 +27,6 @@ class Settings(BaseSettings):
     WORKER_MODEL_NAME: str = "openai/gpt-4o-mini"
     STAKEHOLDER_MODEL_NAME: str = "openai/gpt-4o-mini"
     JUDGE_MODEL_NAME: str = "openai/gpt-4o-mini"
-    # Belief-layer (Arm-3 semantic comparator) model. Deliberately separate
-    # from MANAGER_MODEL_NAME -- the belief layer is not the manager and its
-    # model is an experiment-chosen, swappable config value, not the
-    # orchestration policy under test. See COMPARATOR_GENERALIZATION.md.
-    BELIEF_MODEL_NAME: str = "openai/gpt-4o-mini"
 
     # Default simulation configuration
     default_output_dir: str = "./simulation_outputs"

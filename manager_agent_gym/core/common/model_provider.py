@@ -24,7 +24,7 @@ import os
 from dataclasses import dataclass
 from typing import Any, Literal
 
-ModelRole = Literal["manager", "worker", "stakeholder", "judge", "belief"]
+ModelRole = Literal["manager", "worker", "stakeholder", "judge"]
 
 _OPENROUTER_PREFIX = "openrouter/"
 _OPENAI_PREFIX = "openai/"
@@ -40,7 +40,6 @@ def get_model_for_role(role: ModelRole) -> str:
         "worker": settings.WORKER_MODEL_NAME,
         "stakeholder": settings.STAKEHOLDER_MODEL_NAME,
         "judge": settings.JUDGE_MODEL_NAME,
-        "belief": settings.BELIEF_MODEL_NAME,
     }[role]
 
 

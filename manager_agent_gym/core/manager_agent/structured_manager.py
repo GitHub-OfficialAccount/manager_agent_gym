@@ -152,32 +152,7 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
             communication_service=communication_service,
             stakeholder_profile=stakeholder_profile,
         )
-        match self._observation_policy.observation_aid:
-            case "none":
-                pass
-            case (
-                "generic_summary"
-                | "append_only_summary_log"
-                | "atomic_evidence_ledger"
-                | "arm3i_noq"
-                | "arm3i_q"
-                | "arm3t"
-            ):
-                if self._observation_aid_builder is None:
-                    raise RuntimeError(
-                        "ObservationPolicy selects an observation aid but no "
-                        "observation-aid builder is configured."
-                    )
-                # This is the exact native user-context text the manager would
-                # otherwise receive. The summarizer therefore cannot see hidden
-                # workflow state, full tool traces, or private worker prompts.
-                source_text = self._prepare_context(observation)
-                aid = await self._observation_aid_builder.build(
-                    source_text=source_text,
-                    observation=observation,
-                )
-                observation = observation.model_copy(update={"observation_aid": aid})
-                self.capture_decision_observation(observation)
+        self.capture_decision_observation(observation)
         return await self.take_action(observation)
 
     def reset(self) -> None:
@@ -343,13 +318,6 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
 {refusal_lines}
 """
 
-        observation_aid_block = ""
-        if observation.observation_aid:
-            observation_aid_block = f"""
-### Observation Aid (derived only from already-visible evidence)
-{observation.observation_aid}
-"""
-
         # Valid ID universes (helps the model avoid fabricating IDs)
         id_guidance_lines = [
             f"- all_task_ids (count={len(observation.task_ids)}): sample={[str(x) for x in observation.task_ids[:preview_n]]}",
@@ -411,7 +379,7 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
 
 ### Manager Action History (recent)
 {actions_block}
-{roster_block}{observation_aid_block}
+{roster_block}
 
 ### Stakeholder Profile (public)
 {stakeholder_block}

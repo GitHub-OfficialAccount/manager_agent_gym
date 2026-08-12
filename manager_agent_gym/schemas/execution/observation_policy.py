@@ -21,17 +21,6 @@ if TYPE_CHECKING:
     from ...core.communication.service import CommunicationService
 
 WorkerMetadataLevel = Literal["id_only", "capabilities", "full"]
-ObservationAidMode = Literal[
-    "none",
-    "generic_summary",
-    "append_only_summary_log",
-    "atomic_evidence_ledger",
-    "arm3i_noq",
-    "arm3i_q",
-    "arm3t",
-]
-
-
 class WorkerObservationDisclosure(BaseModel):
     """A scheduled change to one worker's manager-visible projection."""
 
@@ -94,19 +83,6 @@ class ObservationPolicy(BaseModel):
             "Per-worker quality signal in the observation: 'none' (blind) or "
             "'per_worker' (a recent-correctness summary per worker). The detection "
             "channel for teammate-change experiments; populated by the engine."
-        ),
-    )
-    observation_aid: ObservationAidMode = Field(
-        default="none",
-        description=(
-            "Optional information-preserving representation of the manager-visible "
-            "observation. 'none' is the native baseline; 'generic_summary' adds a "
-            "neutral free-form summary; 'append_only_summary_log' retains those "
-            "summaries as a persistence-only control; 'atomic_evidence_ledger' "
-            "deterministically retains every eligible source-grounded fact; "
-            "'arm3i_noq' and 'arm3i_q' append an interpreted task-fit state, "
-            "differing only in whether completion contributes to fit. All consume "
-            "already-visible evidence only."
         ),
     )
     scheduled_worker_disclosures: list[WorkerObservationDisclosure] = Field(
