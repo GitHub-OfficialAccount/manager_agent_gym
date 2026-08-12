@@ -18,6 +18,7 @@ from ...schemas.core.communication import Message, MessageType
 from .state_restorer import WorkflowStateRestorer
 
 from ..common.logging import logger
+from ..common.run_trace import record_run_event, trace_scope
 from asyncio import TaskGroup
 from ..workflow_agents.interface import StakeholderBase
 from ...schemas.config import OutputConfig
@@ -29,8 +30,10 @@ from ...schemas.core.workflow import Workflow
 from ...schemas.execution.state import ExecutionState
 
 from ...schemas.execution.callbacks import TimestepEndContext
+from ...schemas.execution.observation_policy import ObservationPolicy
 from ...schemas.unified_results import ExecutionResult, create_timestep_result
 from ..workflow_agents.registry import AgentRegistry
+from ..common.run_trace import record_run_event
 from ..manager_agent.interface import ManagerAgent
 from ..workflow_agents.interface import AgentInterface
 from ..workflow_agents.tool_factory import ToolFactory
@@ -116,6 +119,7 @@ class WorkflowExecutionEngine:
             Callable[[TimestepEndContext], Awaitable[None]]
         ]
         | None = None,
+        observation_policy: ObservationPolicy | None = None,
         # Preference evaluation controls
         log_preference_evaluation_progress: bool = True,
         max_concurrent_rubrics: int = 100,
@@ -124,6 +128,9 @@ class WorkflowExecutionEngine:
     ):
         self.workflow = workflow
         self.agent_registry = agent_registry
+        self.observation_policy = observation_policy or ObservationPolicy()
+        if manager_agent is not None:
+            manager_agent.set_observation_policy(self.observation_policy)
         self.evaluations = list(evaluations or [])
         self.manager_agent = manager_agent
         self.stakeholder_agent: StakeholderBase = stakeholder_agent
@@ -147,6 +154,11 @@ class WorkflowExecutionEngine:
         self.running_tasks: dict[UUID, asyncio.Task] = {}
         self.completed_task_ids: set[UUID] = set()
         self.failed_task_ids: set[UUID] = set()
+        # Assignment refusals accumulated since the manager last acted (L1).
+        # DRAINED at the manager step, not at the end of a timestep: the manager
+        # is the only party that can re-route refused work, so the buffer's life
+        # is exactly the gap between two manager decisions.
+        self._pending_assignment_refusals: list[str] = []
 
         self.max_timesteps = max_timesteps
         self._task_group: TaskGroup | None = None
@@ -399,17 +411,56 @@ class WorkflowExecutionEngine:
         Returns:
             ExecutionResult with details of what happened
         """
+        # EVERY EVENT EMITTED IN THIS TIMESTEP CARRIES THE TIMESTEP (L7 blocker).
+        # The engine knows it; nothing downstream should have to infer it. The
+        # first version of the DV mapped the Nth assignment to the Nth timestep,
+        # which is correct only if exactly one assignment happens per timestep —
+        # and the manager bulk-assigns, so nine assignments in one timestep were
+        # attributed to nine consecutive ones. That is an INDEX used as a name for
+        # a predicate: "position in the assignment stream" is not "the timestep
+        # the manager acted on". It corrupted the capacity view each move was
+        # judged against, and with it the FORCED/DISCRETIONARY split that the
+        # whole DV rests on.
+        with trace_scope(timestep=self.current_timestep):
+            return await self._execute_timestep_inner()
+
+    async def _execute_timestep_inner(self) -> ExecutionResult:
         if not self.manager_agent:
             raise ValueError("Manager agent not configured")
 
         start_time = datetime.now()
         timestep = self.current_timestep
 
-        agent_coordination_changes = self._check_and_apply_agent_changes()
+        agent_coordination_changes = await self._check_and_apply_agent_changes()
 
         manager_action = None
+        observation = None
         if self.manager_agent:
             self.execution_state = ExecutionState.WAITING_FOR_MANAGER
+            self.manager_agent.clear_last_decision_observation()
+            # Arrival announcement channel. Built from the registry's STRUCTURED record,
+            # not from `agent_coordination_changes`: those strings embed the
+            # scenario-authored `reason`, which in real timelines is a capability
+            # description, and this channel must carry verb + id only.
+            # `agent_coordination_changes` still flows to the ExecutionResult/callback
+            # path below, unchanged. Passed by setter rather than as a step() keyword
+            # so no ManagerAgent subclass signature has to change.
+            # Public accessor, NOT getattr(..., []) on a private field: a default
+            # would fail OPEN, so a subclassed/mocked registry or a renamed field
+            # would silently produce a run with no announcement -- indistinguishable
+            # from a legitimately quiet timestep. Absence must raise. (RR review F2.)
+            # The accessor also owns the canonical ordering, so there is one
+            # definition of the announcement rather than one here and one in tests.
+            roster_lines = self.agent_registry.roster_change_lines()
+            self.manager_agent.set_pending_roster_changes(roster_lines)
+            # Refusals since the last decision, then DRAINED. Set
+            # UNCONDITIONALLY — a timestep with nothing refused must overwrite
+            # with an empty list, or a stale refusal survives into a timestep
+            # where the work is already running and gets acted on.
+            self.manager_agent.set_pending_assignment_refusals(
+                self._pending_assignment_refusals
+            )
+            self._pending_assignment_refusals = []
             # Unified RL-style step: agent constructs observation internally
             done_flag = self._is_terminal_state() or self.workflow.is_complete()
             manager_action = await self.manager_agent.step(
@@ -424,6 +475,68 @@ class WorkflowExecutionEngine:
                 done=done_flag,
                 stakeholder_profile=self.stakeholder_agent.public_profile,
             )
+            observation = self.manager_agent.get_last_decision_observation()
+            # Which branch produced the observation. Recorded because the two are
+            # materially different facts that would otherwise log identically:
+            # "manager" means the manager captured this observation as its DECISION
+            # input (pre-decision visibility); "engine_fallback" means the engine
+            # built one afterwards for logging, so the announcement was carried but
+            # the manager had already chosen its action. See the event below.
+            observation_source = "manager" if observation is not None else "engine_fallback"
+            if observation is None:
+                # Compatibility fallback for custom managers that do not call
+                # create_observation(). This still happens before action execution
+                # and worker transitions, but such a manager did not itself use an
+                # observation object that the engine can capture.
+                observation = await self.manager_agent.create_observation(
+                    workflow=self.workflow,
+                    execution_state=self.execution_state,
+                    current_timestep=self.current_timestep,
+                    running_tasks=self.running_tasks,
+                    completed_task_ids=self.completed_task_ids,
+                    failed_task_ids=self.failed_task_ids,
+                    communication_service=self.communication_service,
+                    stakeholder_profile=self.stakeholder_agent.public_profile,
+                )
+
+            # RUN-TIME ANNOUNCEMENT ASSERTION (RR review F2). The study depends on the
+            # arrival being visible to the manager at t_swap; a unit test proves the
+            # path CAN work, not that it DID in this run, so this is checked and
+            # logged on every run and a silently unannounced swap cannot reach
+            # analysis.
+            #
+            # Placed AFTER the compatibility fallback above, deliberately: a manager
+            # that never calls create_observation itself (stubs, custom baselines)
+            # has its observation built by that fallback, which does carry the
+            # pending changes. Asserting before it would fail such managers for a
+            # reason that is about WHERE the observation was built, not about
+            # whether the announcement reached it. (First version did exactly that
+            # and broke two engine-coordination tests.)
+            if roster_lines:
+                announced = bool(observation is not None and observation.roster_changes)
+                record_run_event(
+                    "roster_arrival_announced",
+                    {
+                        "timestep": self.current_timestep,
+                        "applied_changes": roster_lines,
+                        "rendered_into_observation": announced,
+                        # STRONG vs WEAK form of the arrival evidence. Without this,
+                        # `rendered_into_observation: true` means two different
+                        # things -- the manager SAW the announcement before deciding,
+                        # or the engine carried it into a post-hoc observation after
+                        # the action was already chosen -- and post hoc nobody can
+                        # tell which. Any arm whose runs carry "engine_fallback" has
+                        # arrival proven weak-form only (HARNESS_SPEC_v2 §5).
+                        "observation_source": observation_source,
+                    },
+                    actor_type="engine",
+                )
+                if not announced:
+                    raise RuntimeError(
+                        f"roster change applied at timestep {self.current_timestep} "
+                        f"({roster_lines}) did not reach the manager's observation "
+                        "— the arrival announcement channel is broken for this run"
+                    )
             try:
                 action_result = await manager_action.execute(
                     self.workflow, self.communication_service
@@ -431,6 +544,28 @@ class WorkflowExecutionEngine:
             except Exception:
                 logger.error("failed to execute manager action", exc_info=True)
                 action_result = None
+
+            # Write the result back onto the action so the recorded action and the
+            # manager's own context agree. Each action's `execute()` sets
+            # `success`/`result_summary` on its SUCCESS path only, so every early
+            # return — task not found, wrong status, unknown agent — left them
+            # `None`. The manager still saw the refusal in its action history, but
+            # `manager_actions.json`, which most analyses read, recorded silence.
+            # Observed 2026-07-27: a `retry_task` correctly refused with "only
+            # failed tasks can be retried" was indistinguishable from an action
+            # that did nothing. Recording only; no behaviour changes.
+            if action_result is not None:
+                manager_action.success = action_result.success
+                manager_action.result_summary = action_result.summary
+
+            if (
+                action_result is not None
+                and action_result.success
+                and action_result.action_type == "retry_task"
+            ):
+                retried_task_id = action_result.data.get("task_id")
+                if retried_task_id is not None:
+                    self.failed_task_ids.discard(UUID(str(retried_task_id)))
 
             # Delegate action logging to the manager agent hook
             self.manager_agent.on_action_executed(
@@ -525,19 +660,8 @@ class WorkflowExecutionEngine:
             ),
         }
 
-        # Build observation for outputs/callbacks
-        # Note: this is a duplicicative secdondary observation, which is not used by the manager agent directly
-        # TODO: move this around so we expose the last observ
-        observation = await self.manager_agent.create_observation(
-            workflow=self.workflow,
-            execution_state=self.execution_state,
-            current_timestep=self.current_timestep,
-            running_tasks=self.running_tasks,
-            completed_task_ids=self.completed_task_ids,
-            failed_task_ids=self.failed_task_ids,
-            communication_service=self.communication_service,
-            stakeholder_profile=self.stakeholder_agent.public_profile,
-        )
+        if observation is None:  # pragma: no cover - manager is required above
+            raise RuntimeError("No pre-action manager observation was captured")
 
         # Calculate total simulated time from completed tasks in this timestep
         total_simulated_hours = 0.0
@@ -634,6 +758,14 @@ class WorkflowExecutionEngine:
                         break
 
                 if task_id:
+                    # FREE THE AGENT'S SLOT HERE, not in `_update_workflow_state`.
+                    # That runs after ready-task selection, so a slot freed there
+                    # would still look occupied to the task that follows this one
+                    # in the same timestep, and an A->B->C chain would advance one
+                    # task per two timesteps instead of one per timestep.
+                    for _agent in self.workflow.agents.values():
+                        if task_id in _agent.current_task_ids:
+                            _agent.current_task_ids.remove(task_id)
                     try:
                         result = await done_task
                         if result.success:
@@ -735,6 +867,98 @@ class WorkflowExecutionEngine:
                 if task.assigned_agent_id:
                     agent = self.workflow.agents.get(task.assigned_agent_id)
 
+                # CAPACITY: honour the agent's own `can_handle_task`, which checks
+                # availability and `max_concurrent_tasks`. The method existed and
+                # was never called from the execution path, so `max_concurrent_tasks`
+                # was inert and an agent assigned N ready tasks started all N at
+                # once. Anything sizing per-worker throughput by episode time (see
+                # experiments/worker_replacement/finance_env.py) was therefore unbounded.
+                # A task whose agent is at capacity simply is not started this
+                # timestep; it stays READY and is picked up when a slot frees.
+                refusal_reasons = (
+                    agent.refusal_reasons(task) if agent is not None else [])
+                if agent is not None and refusal_reasons:
+                    # DEFERRAL IS LOGGED, NOT INFERRED (spec §4.1, S9). Scoring is
+                    # realised-authoritative: the manager assigned all k, the
+                    # engine realised a subset it did not choose, and the
+                    # difference is charged to ALLOCATION loss. That charge is only
+                    # defensible if realised-vs-intended is reconstructible from
+                    # the record rather than guessed from what happens to be
+                    # missing -- a segment absent from the completions could be a
+                    # deferral, a crash, or a task never assigned at all, and those
+                    # are three different findings.
+                    record_run_event(
+                        "assignment_deferred",
+                        {
+                            "task_id": str(task.id),
+                            "task_name": task.name,
+                            "agent_id": task.assigned_agent_id,
+                            "timestep": self.current_timestep,
+                            "agent_current_task_count": len(agent.current_task_ids),
+                            "agent_max_concurrent": agent.max_concurrent_tasks,
+                            "agent_available": agent.is_available,
+                            # THE REASON, COMPUTED AT THE SITE (L1 criterion (a)).
+                            # The three fields above are all CONCURRENCY
+                            # quantities, and the dominant refusal cause in the
+                            # scope run was a per-episode work ALLOTMENT that none
+                            # of them describes. Read through, they assert that a
+                            # permanently-barred worker is idle, available and
+                            # below cap — the exact reverse — on 58% of the 580
+                            # refusals and on all the ones that mattered. They are
+                            # kept for continuity with existing bundles and are no
+                            # longer the reason.
+                            # BOTH FORMS. The prose is what the manager reads;
+                            # the CODES are what analysis classifies on, because
+                            # a substring test over a formatted sentence is
+                            # identity derived from display text — the same
+                            # predicate we removed from metering.
+                            "refusal_reasons": [r.detail for r in refusal_reasons],
+                            "refusal_codes": [r.code for r in refusal_reasons],
+                            "agent_load": agent.load_report(),
+                        },
+                        actor_type="engine",
+                        actor_id="workflow_engine",
+                    )
+                    # REFUSAL IS SIGNALLED, NOT ONLY LOGGED (L1). The run event
+                    # above makes the refusal reconstructible AFTER the episode;
+                    # it does nothing for the manager DURING it, and in the scope
+                    # run 580 of them fired while the board showed the work as
+                    # ready to start. The line carries the task, the assignee and
+                    # the load that caused it — no capability or coverage content,
+                    # because this signal is constant across every cell and must
+                    # not become a channel about the worker.
+                    #
+                    # THE REASON IS THE ONE COMPUTED ABOVE, not a re-derivation
+                    # from the load numbers. A line that says "3/3 segment
+                    # allotment" when the branch that actually fired was
+                    # concurrency would be a true number attached to the wrong
+                    # cause, which is worse than no line at all.
+                    refusal = (
+                        f"task '{task.name}' was not started: "
+                        f"{task.assigned_agent_id} refused it — "
+                        f"{'; '.join(r.detail for r in refusal_reasons)}. It "
+                        f"remains assigned and "
+                        f"will not run unless you re-assign it."
+                    )
+                    # PERSISTENT BOARD STATE (L1 criterion (c)). The engine leaves
+                    # the task READY and assigned, so without this it renders as
+                    # `not started` — true, and indistinguishable from work nobody
+                    # has picked up. A manager reading the board five timesteps
+                    # later would be exactly where it began.
+                    task.refusal_count += 1
+                    task.last_refusal_timestep = self.current_timestep
+                    task.last_refusal_reasons = [
+                        r.detail for r in refusal_reasons]
+                    if refusal not in self._pending_assignment_refusals:
+                        # DEDUPLICATED WITHIN THE GAP, not across the episode. The
+                        # same task is retried every timestep, so an undeduplicated
+                        # buffer would hand the manager the same line dozens of
+                        # times and crowd the window; deduplicating across the
+                        # whole run instead would report a persistent refusal once
+                        # and then go silent, which is the failure being fixed.
+                        self._pending_assignment_refusals.append(refusal)
+                    agent = None
+
                 if agent:
                     # Get task resources
                     resources = self._get_task_resources(task)
@@ -744,6 +968,11 @@ class WorkflowExecutionEngine:
                         agent.execute_task(task, resources)
                     )
                     self.running_tasks[task.id] = execution_task
+                    # Occupy a slot on the agent. `current_task_ids` was pruned on
+                    # completion but never APPENDED on start, so it was always
+                    # empty and `can_handle_task`'s capacity branch could not fire.
+                    if task.id not in agent.current_task_ids:
+                        agent.current_task_ids.append(task.id)
 
                     # Update task status and timing
                     # READY -> RUNNING when the engine actually starts execution
@@ -1013,7 +1242,7 @@ class WorkflowExecutionEngine:
             "running_tasks": len(self.running_tasks),
         }
 
-    def _check_and_apply_agent_changes(self) -> list[str]:
+    async def _check_and_apply_agent_changes(self) -> list[str]:
         """
         Check if agents should change and apply changes if needed.
 
@@ -1022,10 +1251,16 @@ class WorkflowExecutionEngine:
         """
         changes: list[str] = []
 
-        changes = self.agent_registry.apply_scheduled_changes_for_timestep(
+        changes = await self.agent_registry.apply_scheduled_changes_for_timestep(
             timestep=self.current_timestep,
             communication_service=self.communication_service,
             tool_factory=ToolFactory(),
+        )
+        changes.extend(
+            await self.observation_policy.apply_scheduled_disclosures_for_timestep(
+                timestep=self.current_timestep,
+                communication_service=self.communication_service,
+            )
         )
 
         # Mirror registry agents into workflow so observations/assignments can see them

@@ -102,7 +102,6 @@ async def setup_communication_demo() -> tuple[
         agent_id="coordinator_ai",
         agent_type="ai_agent",
         system_prompt="You are a coordination specialist AI agent. Your role is to help plan, coordinate, and communicate with other agents to ensure high-quality collaborative work. Focus on clear communication, efficient task coordination, and maintaining team alignment.",
-        model_name="gpt-4o-mini",
         agent_description="You are a coordination specialist AI agent. Your role is to help plan, coordinate, and communicate with other agents to ensure high-quality collaborative work. Focus on clear communication, efficient task coordination, and maintaining team alignment.",
         agent_capabilities=[
             "coordinate",
@@ -131,7 +130,6 @@ async def setup_communication_demo() -> tuple[
         work_style="methodical",
         background="8 years of experience in quality assurance across multiple industries, specializing in technical review and process optimization.",
         hourly_rate=75.0,
-        model_name="gpt-4o-mini",
         agent_description="You are roleplaying as an experienced quality reviewer. You provide thorough, constructive feedback on work products and communicate clearly with team members. You're professional, detail-oriented, and collaborative.",
         agent_capabilities=[
             "provide_feedback",
@@ -150,7 +148,6 @@ async def setup_communication_demo() -> tuple[
     preferences = create_communication_focused_preferences()
     manager = ChainOfThoughtManagerAgent(
         preferences=preferences,
-        model_name="gpt-4o-mini",
         manager_persona="Collaborative Team Coordinator",
     )
     print("✅ Manager ready with collaboration preferences")

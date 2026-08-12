@@ -1,0 +1,124 @@
+{
+  "caveats": [
+    "ADMISSIBILITY IS NOT A CEILING. These counts say a template satisfies the five structural properties, NOT that its card channel is detectable. Every count here must be priced before it means anything.",
+    "roles are DECLARED positionally; the generator's _designate_swap_pair derives them instead and is NOT on the template path",
+    "P5 is imposed on all cells including coverage size 2, so the size-2 counts are not the counts for the CURRENT lattice, which lacks P5"
+  ],
+  "cells": [
+    {
+      "coverage_size": 2,
+      "example_disjoint": [
+        "ab",
+        "cd",
+        "ac",
+        "ce"
+      ],
+      "example_partial": null,
+      "n_admissible": 480,
+      "n_classes": 5,
+      "n_disjoint": 480,
+      "n_partial_overlap": 0,
+      "n_subsets": 10,
+      "partial_by_carrier_count": {}
+    },
+    {
+      "coverage_size": 3,
+      "example_disjoint": null,
+      "example_partial": null,
+      "n_admissible": 0,
+      "n_classes": 5,
+      "n_disjoint": 0,
+      "n_partial_overlap": 0,
+      "n_subsets": 10,
+      "partial_by_carrier_count": {}
+    },
+    {
+      "coverage_size": 2,
+      "example_disjoint": [
+        "ab",
+        "cd",
+        "ac",
+        "ef"
+      ],
+      "example_partial": null,
+      "n_admissible": 2880,
+      "n_classes": 6,
+      "n_disjoint": 2880,
+      "n_partial_overlap": 0,
+      "n_subsets": 15,
+      "partial_by_carrier_count": {}
+    },
+    {
+      "coverage_size": 3,
+      "example_disjoint": [
+        "abc",
+        "def",
+        "abd",
+        "ade"
+      ],
+      "example_partial": [
+        "abc",
+        "ade",
+        "abd",
+        "adf"
+      ],
+      "n_admissible": 8280,
+      "n_classes": 6,
+      "n_disjoint": 1800,
+      "n_partial_overlap": 6480,
+      "n_subsets": 20,
+      "partial_by_carrier_count": {
+        "1": 2160,
+        "2": 4320
+      }
+    },
+    {
+      "coverage_size": 2,
+      "example_disjoint": [
+        "ab",
+        "cd",
+        "ae",
+        "fg"
+      ],
+      "example_partial": null,
+      "n_admissible": 2520,
+      "n_classes": 7,
+      "n_disjoint": 2520,
+      "n_partial_overlap": 0,
+      "n_subsets": 21,
+      "partial_by_carrier_count": {}
+    },
+    {
+      "coverage_size": 3,
+      "example_disjoint": [
+        "abc",
+        "def",
+        "abd",
+        "adg"
+      ],
+      "example_partial": [
+        "abc",
+        "ade",
+        "abd",
+        "afg"
+      ],
+      "n_admissible": 171360,
+      "n_classes": 7,
+      "n_disjoint": 57960,
+      "n_partial_overlap": 113400,
+      "n_subsets": 35,
+      "partial_by_carrier_count": {
+        "1": 30240,
+        "2": 75600,
+        "3": 7560
+      }
+    }
+  ],
+  "predicate": {
+    "P1": "four distinct equal-size subsets",
+    "P2prime": "successor is the sole post-swap holder of some class (GENERALISED from '_lattice_from_template''s 'A has exactly two holders', which presumes a shared class and would rule disjoint templates out definitionally)",
+    "P3": "some class held by the predecessor alone",
+    "P4": "every class has a holder in the pool",
+    "P5": "some lied class is covered by exactly one incumbent (NEW \u2014 the property the L9 proposal adds; the current template does not have it)"
+  }
+}

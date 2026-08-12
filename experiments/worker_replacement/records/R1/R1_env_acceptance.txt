@@ -1,0 +1,77 @@
+S8 — environment assembly (offline, zero model calls)
+
+1. provenance (E6 — no hand-authored environment data):
+   instance seed 101, admitted True, conditions ['1_bit_identical_regeneration', '2_interior_spread_and_disclosures', '3_scripted_baseline_below_oracle']
+   [ok] the environment is built from an ADMITTED instance, not a hand-authored one
+   instance sha256 2c18cccac4c58052... -> [ok] reproducible from the seed alone
+
+2. the task DAG: 16 tasks
+   2 upstream FIXED (pre-assigned to the predecessor), 4 upstream total,
+   9 per-segment, 3 downstream
+   [ok] task count in the specified 15-20
+   [ok] every segment has exactly one task
+   [ok] every segment task depends on the FIXED upstream tasks
+   [ok] and on NONE of the discretionary upstream tasks — the study's
+        payload is not behind a task that can fail (it did, in the first episode)
+   [ok] aggregation depends on ALL segment tasks
+
+3. capacity mapping (S7 ruled C = 3; the runtime must MIRROR it):
+   3 timesteps x 1 task/timestep/worker = 3 tasks per worker
+   x 3 post-swap workers = 9 vs 9 segments
+   [ok] per-worker capacity is exactly 3
+   [ok] capacity is consumed EXACTLY (no slack, so the allocation problem is which-goes-where)
+   horizon 22 = t_swap 3 + 14 tasks needing assignment
+        + 3 downstream chain + 2 slack -> [ok] follows from the DAG and t_swap
+   SIZED FOR THE MANAGER, NOT THE WORK: ChainOfThoughtManagerAgent returns ONE
+        action per timestep, so tasks needing assignment set the floor. The landed
+        episode ran out at a pipeline-sized horizon of 14 with 2 segments unassigned.
+   A generous horizon is FREE (the engine stops at the terminal state) and SAFE
+        (C=3 is enforced by the worker, not by the horizon).
+
+4. leakage — private calibrations and raw coverage must not appear in
+   anything public (cards, capabilities, task text):
+   searched 25 calibration values across 24 public strings
+   [ok] no calibration value appears in public text (0 leaks)
+   [ok] and the search is NOT vacuous: 4/4 calibration holders
+        carry their values in their PRIVATE system prompt
+   [ok] the raw `irb_coverage` field name appears nowhere public
+
+5. swap wiring (driven off schema v2's event block):
+   t=0 applied: 3 change(s) -> pre-swap roster ['w_26f14e', 'w_68358d', 'w_e172a9']
+   [ok] the t=0 roster IS the event block's roster_pre_swap
+   t=3 applied: 2 change(s) -> post-swap roster ['w_68358d', 'w_6f6097', 'w_e172a9']
+     removed w_26f14e
+     added w_6f6097
+   [ok] exactly two changes at t_swap (one remove, one add)
+   [ok] the post-swap roster IS the event block's roster_post_swap
+   [ok] both changes name the event block's predecessor and successor
+
+6. identifier opacity: worker ids ['w_26f14e', 'w_6f6097', 'w_68358d', 'w_e172a9']
+   [ok] no worker id carries a competence-bearing token
+
+7. the report convention reaches the worker:
+   [ok] in every system prompt
+   [ok] and in every segment task description (which the engine's task template renders)
+
+8. capacity enforcement, driven through the production engine:
+   5 ready tasks, one worker at max_concurrent_tasks=1: 1 started in timestep 0
+   5 ready tasks, one worker at max_concurrent_tasks=3: 3 started in timestep 0
+   [ok] starts track the CAP (cap 1 -> 1 started, cap 3 -> 3 started), so the limit is
+        the cap and not a fixed one-per-timestep
+
+9. task-board fidelity (assignment visible, channel-safe):
+   [ok] the board names the assignee (an unassigned task and one parked on a
+        busy worker were previously indistinguishable)
+   [ok] no capacity vocabulary in the board (none)
+   assignment line: 'Assigned to: w_6f6097'
+   [ok] the assignment line carries an OPAQUE ID only — no coverage, no capability
+   [ok] the line is a fixed shape ('Assigned to: <id>'), so it is constant across cells by construction
+
+10. worker is UNSCRIPTED (E3a) — asserted as absences:
+   [ok] none of the 6 procedure clauses appears in any worker prompt
+   [ok] and the SITUATION survives (approved scope + holdings) — unscripted is not
+        the same as uninformed, and an empty prompt would satisfy the absence check alone
+   [ok] the public default-rate line is GONE from task text — SA stays
+        computable from class+rating; IRB needs the mapping only holders have
+
+RESULT: PASS — DAG shape and count, capacity mapping arithmetic, no calibration leakage into public text, swap wired off the event block

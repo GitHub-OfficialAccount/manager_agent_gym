@@ -39,11 +39,21 @@ class AgentRegistry:
     """
 
     def __init__(self):
+        # (action, agent_id) for changes applied at the most recent timestep, for the
+        # manager-observation path. Reset on every apply call. See the note there.
+        self._last_applied_changes: list[tuple[str, str]] = []
         self._agents: dict[str, AgentInterface] = {}
         self._agent_classes: dict[str, Type[AgentInterface]] = {}
         # Optional: simple built-in scheduler for adding/removing agents at timesteps
         self._scheduled_changes: dict[int, list[ScheduledAgentChange]] = {}
         self._executed_change_timesteps: set[int] = set()
+        # Named tools, so serializable schedules can reference tool objects by id
+        # (used by tool-swap perturbations).
+        self._tool_registry: dict[str, object] = {}
+
+    def register_tool(self, tool_id: str, tool: object) -> None:
+        """Register a task-tool object under an id for tool-swap resolution."""
+        self._tool_registry[tool_id] = tool
 
     def register_agent_class(
         self, agent_type: str, agent_class: Type[AgentInterface]
@@ -161,7 +171,14 @@ class AgentRegistry:
                 "config must be an AIAgentConfig, received: " + str(type(config))
             )
 
-        agent = AIAgent(config=config, tools=additional_tools)
+        # Honour a registered class for "ai" rather than hard-coding AIAgent.
+        # The registry already keeps `_agent_classes` and `create_agent()` uses it,
+        # but THIS path -- the one every scheduled add goes through -- bypassed it,
+        # so `register_agent_class("ai", X)` silently had no effect on any agent
+        # that arrived on the timeline. Falls back to AIAgent when nothing is
+        # registered, so existing behaviour is unchanged.
+        agent_class = self._agent_classes.get("ai", AIAgent)
+        agent = agent_class(config=config, tools=additional_tools)
         self.register_agent(agent)
 
     def register_human_agent(
@@ -211,7 +228,108 @@ class AgentRegistry:
         )
         self._scheduled_changes.setdefault(timestep, []).append(change)
 
-    def apply_scheduled_changes_for_timestep(
+    def schedule_prompt_swap(
+        self,
+        timestep: int,
+        agent_id: str,
+        new_system_prompt: str,
+        announce: bool = False,
+        reason: str = "",
+    ) -> None:
+        """Schedule an in-place policy change: same agent id, new system prompt.
+
+        The agent instance is rebuilt from its current config with the new
+        prompt at the target timestep (configs cache the underlying SDK agent,
+        so mutation alone is not enough). With announce=False nothing about
+        the change is observable except the agent's subsequent behavior.
+        """
+        change = ScheduledAgentChange(
+            timestep=timestep,
+            action="replace",
+            agent_id=agent_id,
+            new_system_prompt=new_system_prompt,
+            announce=announce,
+            reason=reason,
+        )
+        self._scheduled_changes.setdefault(timestep, []).append(change)
+
+    def schedule_model_swap(
+        self,
+        timestep: int,
+        agent_id: str,
+        new_model_name: str,
+        announce: bool = False,
+        reason: str = "",
+    ) -> None:
+        """Schedule an in-place capability change: same agent id, new model.
+
+        Rebuilds the agent from its current config with a different underlying
+        LLM (e.g. a weaker model) at the target timestep. With announce=False
+        nothing about the change is observable except subsequent behavior.
+        """
+        change = ScheduledAgentChange(
+            timestep=timestep,
+            action="replace",
+            agent_id=agent_id,
+            new_model_name=new_model_name,
+            announce=announce,
+            reason=reason,
+        )
+        self._scheduled_changes.setdefault(timestep, []).append(change)
+
+    def schedule_tool_swap(
+        self,
+        timestep: int,
+        agent_id: str,
+        new_tool_ids: list[str],
+        new_agent_capabilities: list[str] | None = None,
+        announce: bool = False,
+        reason: str = "",
+    ) -> None:
+        """Schedule an in-place toolset change (e.g. downgrade advanced->basic).
+
+        Tool ids are resolved against the registry's tool registry at apply time.
+        """
+        change = ScheduledAgentChange(
+            timestep=timestep,
+            action="replace",
+            agent_id=agent_id,
+            new_tool_ids=new_tool_ids,
+            new_agent_capabilities=new_agent_capabilities,
+            announce=announce,
+            reason=reason,
+        )
+        self._scheduled_changes.setdefault(timestep, []).append(change)
+
+    def roster_change_lines(self) -> list[str]:
+        """Roster changes applied at the last-applied timestep, canonically ordered.
+
+        The single definition of the manager-facing arrival announcement. Public so
+        the engine does not reach into a private field: a registry that lacks this
+        method raises rather than silently yielding "no announcement", which is
+        indistinguishable from a legitimately quiet timestep (RR review F2).
+
+        ORDER: removals first; then additions and replacements TOGETHER, ordered by
+        agent id. The key is `(action != "removed", agent_id)`, so "added" and
+        "replaced" share the second bucket and interleave by id rather than being
+        grouped by verb. That is deterministic and byte-stable — which is the
+        property this ordering exists for — but it is not "removals, then additions,
+        then replacements", and the distinction matters to anyone diffing blocks.
+        The key is TOTAL, so no two lines can reorder between runs.
+
+        CONTENT: verb + agent id only. Never `change.reason` and never the swapped
+        field names — both are capability information, which this channel must not
+        carry (HARNESS_SPEC_v2 §5).
+        """
+        return [
+            f"{action} {agent_id}"
+            for action, agent_id in sorted(
+                self._last_applied_changes,
+                key=lambda pair: (pair[0] != "removed", pair[1]),
+            )
+        ]
+
+    async def apply_scheduled_changes_for_timestep(
         self,
         timestep: int,
         communication_service: "CommunicationService | None" = None,
@@ -222,6 +340,20 @@ class AgentRegistry:
 
         Returns a list of human-readable change descriptions.
         """
+        # RESET FIRST, unconditionally, BEFORE the early return below.
+        #
+        # This record is per-timestep by contract ("changes applied at THIS
+        # timestep") and the engine reads it on EVERY timestep. If the reset sat
+        # after the early return, a quiet timestep would leave the previous
+        # timestep's record in place and the manager's one-off arrival
+        # announcement would ghost-repeat as a permanent banner -- with its
+        # "timestep N" label falsely advancing each step, misdating the event for
+        # anyone reading the prompts afterwards and turning an event that is
+        # supposed to be constant across cells into a standing prompt differential.
+        # Found by LS review of the first S2 commit; reproduction at
+        # experiments/worker_replacement/records/S2/S2_ghost_repro_LS.py.
+        self._last_applied_changes = []
+
         if (
             timestep not in self._scheduled_changes
             or timestep in self._executed_change_timesteps
@@ -229,6 +361,17 @@ class AgentRegistry:
             return []
 
         changes: list[str] = []
+        # Structured record of the SAME changes, kept beside the human-readable
+        # strings rather than replacing them (the ExecutionResult/callback path at
+        # engine.py:601/:621 consumes the strings and is untouched).
+        #
+        # WHY A SEPARATE RECORD: the strings embed `change.reason`, which in real
+        # timelines is a CAPABILITY DESCRIPTION ("Forensic collection & processing",
+        # "ECA, seed sets, TAR & QC"). Rendering those into the manager's observation
+        # would leak capability information about the newcomer through the arrival
+        # channel -- exactly what the card channel is supposed to control
+        # (HARNESS_SPEC_v2 §5). The observation path therefore gets verb + agent_id
+        # only, and cannot accidentally carry the reason.
         for change in self._scheduled_changes.get(timestep, []):
             if change.action == "add" and change.agent_config is not None:
                 # Prepare tools and register based on type
@@ -255,15 +398,108 @@ class AgentRegistry:
                         agent.communication_service = communication_service
 
                 changes.append(f"Added {change.agent_config.agent_id}: {change.reason}")
+                self._last_applied_changes.append(
+                    ("added", change.agent_config.agent_id)
+                )
 
             elif change.action == "remove" and change.agent_id is not None:
                 removed = self.remove_agent(change.agent_id)
                 if removed:
                     changes.append(f"Removed {change.agent_id}: {change.reason}")
+                    self._last_applied_changes.append(("removed", change.agent_id))
                 else:
                     changes.append(
                         f"Could not remove {change.agent_id}: {change.reason}"
                     )
+            elif (
+                change.action == "replace"
+                and change.agent_id is not None
+                and (
+                    change.new_system_prompt is not None
+                    or change.new_model_name is not None
+                    or change.new_tool_ids is not None
+                    or change.new_agent_capabilities is not None
+                )
+            ):
+                existing = self.get_agent(change.agent_id)
+                if existing is None:
+                    changes.append(
+                        f"Could not replace {change.agent_id}: agent not registered"
+                    )
+                    continue
+                # Apply whichever config fields the change specifies; unset
+                # fields are left untouched (prompt swap, model swap, or both).
+                config_updates: dict[str, object] = {}
+                if change.new_system_prompt is not None:
+                    config_updates["system_prompt"] = change.new_system_prompt
+                if change.new_model_name is not None:
+                    config_updates["model_name"] = change.new_model_name
+                if change.new_agent_capabilities is not None:
+                    config_updates["agent_capabilities"] = change.new_agent_capabilities
+                new_config = existing.config.model_copy(update=config_updates)
+                # Tool swap: resolve new task-tools by id (communication tools are
+                # re-added by the agent). Otherwise keep the existing toolset (a
+                # prompt/model swap changes policy/capability, not tools).
+                if change.new_tool_ids is not None:
+                    tools = [
+                        self._tool_registry[tid]
+                        for tid in change.new_tool_ids
+                        if tid in self._tool_registry
+                    ]
+                else:
+                    tools = list(getattr(existing, "tools", []) or [])
+                    if (
+                        not tools
+                        and tool_factory is not None
+                        and communication_service is not None
+                    ):
+                        tools = tool_factory.add_communication_tools(
+                            tools, communication_service, change.agent_id
+                        )
+                if isinstance(new_config, AIAgentConfig):
+                    self.register_ai_agent(new_config, tools)
+                elif isinstance(new_config, HumanAgentConfig):
+                    self.register_human_agent(new_config, tools)
+                else:
+                    changes.append(
+                        f"Unsupported agent type for replace: {type(new_config)}"
+                    )
+                    continue
+                if communication_service is not None:
+                    agent = self.get_agent(change.agent_id)
+                    if agent is not None:
+                        agent.communication_service = communication_service
+                if change.announce and communication_service is not None:
+                    await communication_service.broadcast_message(
+                        from_agent=change.agent_id,
+                        content=(
+                            f"Notice: agent '{change.agent_id}' has been updated"
+                            + (f" — {change.reason}" if change.reason else "")
+                        ),
+                    )
+                swapped_fields = [
+                    k for k in ("system_prompt", "model_name") if k in config_updates
+                ]
+                if change.new_tool_ids is not None:
+                    swapped_fields.append("tools")
+                if change.new_agent_capabilities is not None:
+                    swapped_fields.append("agent_capabilities")
+                swapped = "+".join(swapped_fields)
+                changes.append(
+                    f"Replaced {change.agent_id} [{swapped}]"
+                    + (" (announced)" if change.announce else " (silent)")
+                    + (f": {change.reason}" if change.reason else "")
+                )
+                # RECORDED STRUCTURALLY TOO (RR review F3). Study 1's event is
+                # remove+add, so this branch never fires there -- but leaving it
+                # unrecorded while the ExecutionResult path reports it is an
+                # undocumented asymmetry in which an in-place change reaches the
+                # logs and NOT the manager. An unannounced change is precisely the
+                # failure this whole line of work is about, so silence is the
+                # wrong default: recorded here, and the swapped FIELD NAMES are
+                # deliberately excluded (they are capability information, same
+                # rule as `reason`) -- verb + id only, like every other line.
+                self._last_applied_changes.append(("replaced", change.agent_id))
             else:
                 changes.append("Invalid scheduled change entry")
 

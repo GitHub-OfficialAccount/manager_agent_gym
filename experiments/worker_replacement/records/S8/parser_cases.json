@@ -1,0 +1,96 @@
+{
+  "negatives": [
+    {
+      "label": "empty",
+      "reason": "deliverable is empty",
+      "text": ""
+    },
+    {
+      "label": "none",
+      "reason": "deliverable is empty",
+      "text": null
+    },
+    {
+      "label": "no rwa line",
+      "reason": "no line matching the 'rwa:' convention",
+      "text": "method: IRB\nThe capital charge is roughly 4.2 million."
+    },
+    {
+      "label": "prose number only",
+      "reason": "no line matching the 'rwa:' convention",
+      "text": "The risk-weighted assets come to EUR 4,200,000."
+    },
+    {
+      "label": "AMBIGUOUS \u2014 two different values",
+      "reason": "2 DIFFERENT 'rwa:' values in one deliverable ([4200000.0, 4300000.0]) \u2014 ambiguous, and guessing one is not allowed",
+      "text": "rwa: 4200000\nmethod: IRB\nOn reflection, rwa: 4300000"
+    },
+    {
+      "label": "unparseable number",
+      "reason": "no line matching the 'rwa:' convention",
+      "text": "method: SA\nrwa: about four million"
+    },
+    {
+      "label": "range instead of a number",
+      "reason": "the 'rwa:' line holds a RANGE, not a figure \u2014 the convention asks for a single number and picking an endpoint would invent one",
+      "text": "method: IRB\nrwa: 4000000-4500000"
+    }
+  ],
+  "positives": [
+    {
+      "expected_method": "IRB",
+      "expected_rwa": 12345678.9,
+      "label": "plain",
+      "text": "method: IRB\nrwa: 12345678.90"
+    },
+    {
+      "expected_method": "SA",
+      "expected_rwa": 12345678.9,
+      "label": "thousands separators",
+      "text": "method: SA\nrwa: 12,345,678.90"
+    },
+    {
+      "expected_method": "IRB",
+      "expected_rwa": 4200000.0,
+      "label": "currency prefix",
+      "text": "method: IRB\nrwa: EUR 4200000"
+    },
+    {
+      "expected_method": "SA",
+      "expected_rwa": 999.5,
+      "label": "markdown bullet",
+      "text": "- method: SA\n- rwa: 999.5"
+    },
+    {
+      "expected_method": "IRB",
+      "expected_rwa": 1000.0,
+      "label": "lowercase keys and value",
+      "text": "method: irb\nrwa: 1000"
+    },
+    {
+      "expected_method": "IRB",
+      "expected_rwa": 8675309.0,
+      "label": "surrounded by prose",
+      "text": "I applied the internal model to this segment.\n\nmethod: IRB\nrwa: 8,675,309.00\n\nThe figure reflects the maturity adjustment."
+    },
+    {
+      "expected_method": "SA",
+      "expected_rwa": 250000.0,
+      "label": "trailing period",
+      "text": "method: SA.\nrwa: 250000.00."
+    },
+    {
+      "expected_method": "SA",
+      "expected_rwa": 1000.0,
+      "label": "repeated but IDENTICAL value is not ambiguous",
+      "text": "rwa: 1000.00\nmethod: SA\nSummary line \u2014 rwa: 1000.00"
+    }
+  ],
+  "seam": {
+    "achieved": 6.868282833356298,
+    "faithful": 7.868282833371012,
+    "missing_segments": [
+      "seg_04"
+    ]
+  }
+}

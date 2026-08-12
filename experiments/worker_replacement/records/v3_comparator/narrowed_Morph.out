@@ -1,0 +1,13 @@
+done B/asis
+done B/busted
+
+PRODUCTION payload, pinned Morph
+batch  cache     n  contra  distribution                                 cache-hit calls
+B      asis     20       0  {'supports_fit': 20}                                      16
+B      busted   20       2  {'supports_fit': 18, 'contradicts_fit': 2}                 0
+
+  MANIPULATION CHECK (cached_tokens by call index)
+    B asis    cached=[0, 1792, 0, 1792, 1792, 1792, 1792, 0, 1792, 1792, 0, 1792, 1792, 1792, 1792, 1792, 1792, 1792, 1792, 1792]
+               served=['Morph']
+    B busted  cached=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+               served=['Morph']

@@ -1,0 +1,256 @@
+
+### Execution Snapshot (timestep 0)
+- workflow_id: 512a0561-6ee7-479e-a3ae-e9bb6e6e5aca
+
+- current_workflow_summary: ----------------------------------------------------------------------
+Workflow: basel_capital_calculation (ID: 512a0561-6ee7-479e-a3ae-e9bb6e6e5aca)
+Goal: Produce the portfolio's Basel capital calculation: risk-weighted assets for every exposure segment, aggregated, floor-checked, and reported.
+Budget (est): $0.00 | Expected hours: 0.00
+Cost (actual): $0.00
+Agents: 4 | Resources: 0 | Tasks: 16
+----------------------------------------------------------------------
+Tasks:
+  • Task: Scope and approval inventory (ID: 44134bb4-59dc-4503-a415-af8e45a7fdfc)
+    Status: not started (dependencies met, not yet running)
+    Assigned to: (unassigned)
+    Description: List, for each exposure segment in the portfolio, whether it falls under an internal-ratings-based (IRB) model approval or must use the standardised approach. Produce the inventory as a table.
+  • Task: Exposure data preparation (ID: 74ecc419-13c9-4b93-9c6f-07265cf991c6)
+    Status: not started (dependencies met, not yet running)
+    Assigned to: (unassigned)
+    Description: Check the portfolio's exposure records for completeness: exposure at default, rating bucket, maturity and loss-given-default must be present for every segment. Report any gaps.
+  • Task: Approval scope note (ID: a329e345-9b7f-4b49-a101-7cc3e9d1808d)
+    Status: not started (dependencies met, not yet running)
+    Assigned to: (unassigned)
+    Description: Write a short note stating, in general terms, what an internal-ratings-based model approval permits a bank to do that the standardised approach does not. Two or three sentences. No portfolio data is required.
+  • Task: Data quality checklist (ID: 62b444d2-f06c-4723-a766-158d77fa1f14)
+    Status: not started (dependencies met, not yet running)
+    Assigned to: (unassigned)
+    Description: List the data fields a risk-weighted asset calculation requires for a single exposure segment, and state briefly why each one matters. No portfolio data is required.
+  • Task: Risk-weighted assets — seg_00 (ID: 4c6add73-c81a-43e2-9d0a-5780c6b31a99)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Compute the risk-weighted assets for exposure segment seg_00.
+  asset class: corporate
+  rating bucket: Below BB-
+  exposure at default: 96177574.61
+  loss given default: 0.3761
+  effective maturity (years): 2.25
+  IRB model approval in force for this segment: yes
+
+REPORT FORMAT — so your answer can be read automatically, put your conclusion in this line:
+  rwa: <the risk-weighted assets figure, in currency units>
+Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more than one rwa line. Explanatory prose around it is fine.
+If you judge that you cannot price this segment, say so in the same form:
+  rwa: unavailable
+That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
+    Depends on: 74ecc419-13c9-4b93-9c6f-07265cf991c6, 44134bb4-59dc-4503-a415-af8e45a7fdfc
+  • Task: Risk-weighted assets — seg_06 (ID: 81cd1a4f-5c3b-4c44-9efd-79f4b4968c59)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Compute the risk-weighted assets for exposure segment seg_06.
+  asset class: retail
+  rating bucket: Unrated
+  exposure at default: 91133590.05
+  loss given default: 0.5693
+  effective maturity (years): 3.72
+  IRB model approval in force for this segment: no
+
+REPORT FORMAT — so your answer can be read automatically, put your conclusion in this line:
+  rwa: <the risk-weighted assets figure, in currency units>
+Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more than one rwa line. Explanatory prose around it is fine.
+If you judge that you cannot price this segment, say so in the same form:
+  rwa: unavailable
+That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
+    Depends on: 74ecc419-13c9-4b93-9c6f-07265cf991c6, 44134bb4-59dc-4503-a415-af8e45a7fdfc
+  • Task: Risk-weighted assets — seg_04 (ID: 67f7fa8e-07ac-4e30-b72e-5e584f93b346)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Compute the risk-weighted assets for exposure segment seg_04.
+  asset class: sovereign
+  rating bucket: BBB+ to BBB-
+  exposure at default: 97428730.25
+  loss given default: 0.4987
+  effective maturity (years): 2.03
+  IRB model approval in force for this segment: yes
+
+REPORT FORMAT — so your answer can be read automatically, put your conclusion in this line:
+  rwa: <the risk-weighted assets figure, in currency units>
+Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more than one rwa line. Explanatory prose around it is fine.
+If you judge that you cannot price this segment, say so in the same form:
+  rwa: unavailable
+That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
+    Depends on: 74ecc419-13c9-4b93-9c6f-07265cf991c6, 44134bb4-59dc-4503-a415-af8e45a7fdfc
+  • Task: Risk-weighted assets — seg_07 (ID: 60bb0fb6-796a-4bad-a69f-37d93def6944)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Compute the risk-weighted assets for exposure segment seg_07.
+  asset class: mdb
+  rating bucket: Unrated
+  exposure at default: 192675880.30
+  loss given default: 0.5581
+  effective maturity (years): 3.67
+  IRB model approval in force for this segment: no
+
+REPORT FORMAT — so your answer can be read automatically, put your conclusion in this line:
+  rwa: <the risk-weighted assets figure, in currency units>
+Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more than one rwa line. Explanatory prose around it is fine.
+If you judge that you cannot price this segment, say so in the same form:
+  rwa: unavailable
+That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
+    Depends on: 74ecc419-13c9-4b93-9c6f-07265cf991c6, 44134bb4-59dc-4503-a415-af8e45a7fdfc
+  • Task: Risk-weighted assets — seg_03 (ID: 2564a43e-a8a4-416e-bae6-69a9a60fa29f)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Compute the risk-weighted assets for exposure segment seg_03.
+  asset class: corporate
+  rating bucket: Unrated
+  exposure at default: 118687421.63
+  loss given default: 0.4188
+  effective maturity (years): 1.94
+  IRB model approval in force for this segment: yes
+
+REPORT FORMAT — so your answer can be read automatically, put your conclusion in this line:
+  rwa: <the risk-weighted assets figure, in currency units>
+Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more than one rwa line. Explanatory prose around it is fine.
+If you judge that you cannot price this segment, say so in the same form:
+  rwa: unavailable
+That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
+    Depends on: 74ecc419-13c9-4b93-9c6f-07265cf991c6, 44134bb4-59dc-4503-a415-af8e45a7fdfc
+  • Task: Risk-weighted assets — seg_02 (ID: eadc9690-32b4-4fd0-9f9b-ffaad8fd8c4c)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Compute the risk-weighted assets for exposure segment seg_02.
+  asset class: corporate
+  rating bucket: BBB+ to BBB-
+  exposure at default: 209516626.27
+  loss given default: 0.5811
+  effective maturity (years): 1.67
+  IRB model approval in force for this segment: yes
+
+REPORT FORMAT — so your answer can be read automatically, put your conclusion in this line:
+  rwa: <the risk-weighted assets figure, in currency units>
+Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more than one rwa line. Explanatory prose around it is fine.
+If you judge that you cannot price this segment, say so in the same form:
+  rwa: unavailable
+That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
+    Depends on: 74ecc419-13c9-4b93-9c6f-07265cf991c6, 44134bb4-59dc-4503-a415-af8e45a7fdfc
+  • Task: Risk-weighted assets — seg_08 (ID: 0af8eab5-2054-4402-80fb-c7d6d2ce1b8d)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Compute the risk-weighted assets for exposure segment seg_08.
+  asset class: sovereign
+  rating bucket: Unrated
+  exposure at default: 63739764.19
+  loss given default: 0.5726
+  effective maturity (years): 3.90
+  IRB model approval in force for this segment: no
+
+REPORT FORMAT — so your answer can be read automatically, put your conclusion in this line:
+  rwa: <the risk-weighted assets figure, in currency units>
+Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more than one rwa line. Explanatory prose around it is fine.
+If you judge that you cannot price this segment, say so in the same form:
+  rwa: unavailable
+That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
+    Depends on: 74ecc419-13c9-4b93-9c6f-07265cf991c6, 44134bb4-59dc-4503-a415-af8e45a7fdfc
+  • Task: Risk-weighted assets — seg_05 (ID: 08305d02-8628-448c-a933-1ea657f0898e)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Compute the risk-weighted assets for exposure segment seg_05.
+  asset class: bank
+  rating bucket: BBB+ to BBB-
+  exposure at default: 58087957.84
+  loss given default: 0.4468
+  effective maturity (years): 3.95
+  IRB model approval in force for this segment: yes
+
+REPORT FORMAT — so your answer can be read automatically, put your conclusion in this line:
+  rwa: <the risk-weighted assets figure, in currency units>
+Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more than one rwa line. Explanatory prose around it is fine.
+If you judge that you cannot price this segment, say so in the same form:
+  rwa: unavailable
+That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
+    Depends on: 74ecc419-13c9-4b93-9c6f-07265cf991c6, 44134bb4-59dc-4503-a415-af8e45a7fdfc
+  • Task: Risk-weighted assets — seg_01 (ID: 27d59510-8bd1-46fe-bcca-7543346c06ef)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Compute the risk-weighted assets for exposure segment seg_01.
+  asset class: corporate
+  rating bucket: Below BB-
+  exposure at default: 214054078.22
+  loss given default: 0.3828
+  effective maturity (years): 3.76
+  IRB model approval in force for this segment: yes
+
+REPORT FORMAT — so your answer can be read automatically, put your conclusion in this line:
+  rwa: <the risk-weighted assets figure, in currency units>
+Write the number plainly, e.g. 'rwa: 12345678.90' — not a range, and not more than one rwa line. Explanatory prose around it is fine.
+If you judge that you cannot price this segment, say so in the same form:
+  rwa: unavailable
+That is a legitimate outcome and is recorded as one; it is not a failure to follow the format.
+    Depends on: 74ecc419-13c9-4b93-9c6f-07265cf991c6, 44134bb4-59dc-4503-a415-af8e45a7fdfc
+  • Task: Aggregate risk-weighted assets (ID: 323c0553-9655-49fc-9056-ee19f15b8a3a)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Sum the reported risk-weighted asset figures across all exposure segments and present the portfolio total, broken down by approach.
+    Depends on: 4c6add73-c81a-43e2-9d0a-5780c6b31a99, 0af8eab5-2054-4402-80fb-c7d6d2ce1b8d, 67f7fa8e-07ac-4e30-b72e-5e584f93b346, 60bb0fb6-796a-4bad-a69f-37d93def6944, eadc9690-32b4-4fd0-9f9b-ffaad8fd8c4c, 81cd1a4f-5c3b-4c44-9efd-79f4b4968c59, 27d59510-8bd1-46fe-bcca-7543346c06ef, 08305d02-8628-448c-a933-1ea657f0898e, 2564a43e-a8a4-416e-bae6-69a9a60fa29f
+  • Task: Output floor check (ID: 93b29084-1796-46ce-a7ae-531733f35913)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Compare the aggregate internally-modelled risk-weighted assets against the aggregate standardised figure and state whether the 72.5% output floor binds for this portfolio.
+    Depends on: 323c0553-9655-49fc-9056-ee19f15b8a3a
+  • Task: Capital adequacy report (ID: 1c3f1748-20cb-4bc5-9b1f-ae4503135579)
+    Status: not started (waiting on dependencies)
+    Assigned to: (unassigned)
+    Description: Write the capital adequacy report for the portfolio: the aggregate risk-weighted assets, the approach used per segment, and the output floor conclusion.
+    Depends on: 93b29084-1796-46ce-a7ae-531733f35913
+
+- execution_state: waiting_for_manager
+- progress: 0.0%
+
+
+### Task Status Counts
+- ready: 4 | running: 0 | completed: 0 | failed: 0
+
+### ID Universes
+["- all_task_ids (count=16): sample=['44134bb4-59dc-4503-a415-af8e45a7fdfc', '74ecc419-13c9-4b93-9c6f-07265cf991c6', 'a329e345-9b7f-4b49-a101-7cc3e9d1808d', '62b444d2-f06c-4723-a766-158d77fa1f14', '4c6add73-c81a-43e2-9d0a-5780c6b31a99', '81cd1a4f-5c3b-4c44-9efd-79f4b4968c59', '67f7fa8e-07ac-4e30-b72e-5e584f93b346', '60bb0fb6-796a-4bad-a69f-37d93def6944', '2564a43e-a8a4-416e-bae6-69a9a60fa29f', 'eadc9690-32b4-4fd0-9f9b-ffaad8fd8c4c']", "- all_agent_ids (count=4): sample=['stakeholder', 'w_26f14e', 'w_68358d', 'w_e172a9']", '- all_resource_ids (count=0): sample=[]']
+
+### Performance Indicators
+- completion_rate: 0.0% of tracked
+- resource_utilization: 50.0%
+
+### Actionable ID Previews
+- ready_task_ids (sample): ['44134bb4-59dc-4503-a415-af8e45a7fdfc', '74ecc419-13c9-4b93-9c6f-07265cf991c6', 'a329e345-9b7f-4b49-a101-7cc3e9d1808d', '62b444d2-f06c-4723-a766-158d77fa1f14']
+- running_task_ids (sample): []
+- completed_task_ids (sample): []
+- failed_task_ids (sample): []
+
+
+### Worker Load (all workers currently on the roster)
+- w_26f14e: concurrent tasks 0/1 (frees when a task finishes) · segment allotment 0/3 (used this episode; does NOT reset when a task finishes)
+- w_68358d: concurrent tasks 0/1 (frees when a task finishes) · segment allotment 0/3 (used this episode; does NOT reset when a task finishes)
+- w_e172a9: concurrent tasks 0/1 (frees when a task finishes) · segment allotment 0/3 (used this episode; does NOT reset when a task finishes)
+
+### Assignments Refused Since Your Last Action
+- (none since your last action)
+
+### Constraints (sample)
+(none)
+
+### Recent Communications (sample)
+(no recent messages)
+
+### Manager Action History (recent)
+(no prior manager actions)
+
+### Roster Changes (timestep 0)
+- added w_26f14e
+- added w_68358d
+- added w_e172a9
+
+
+### Stakeholder Profile (public)
+{
+  "display_name": "S",
+  "role": "Owner",
+  "preference_summary": ""
+}

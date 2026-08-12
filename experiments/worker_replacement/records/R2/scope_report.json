@@ -1,0 +1,820 @@
+{
+  "NO_CLAIM": "NO SIGNIFICANCE CLAIM. At 2-3 episodes per cell there is no contrast verdict in either direction \u2014 not 'channel X moved allocation', and not 'channel X did not'. These are descriptive point estimates with intervals wide enough to contain almost anything. The run exists to see behaviour and measure variance.",
+  "concurrency": {
+    "absent_means": "the first four scope episodes (cells U/0/1/2 on seed 3), which ran at N=4 before `concurrency` was a manifest field. Not backfilled: a committed record edited to tidy a report stops being evidence.",
+    "concurrency_values_seen": [
+      "2",
+      "__ABSENT__"
+    ],
+    "concurrency_varies": true,
+    "limitation": "concurrency varies across cells in this exploratory run; recorded rather than erased. Constant across cells for any powered study, no exceptions.",
+    "per_cell": {
+      "0/23": {
+        "completions": 12,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 41.80749333333333
+      },
+      "0/3": {
+        "completions": 12,
+        "concurrency": "__ABSENT__",
+        "n_tasks": 16,
+        "wall_clock_min": 51.441169566666666
+      },
+      "0/36": {
+        "completions": 15,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 83.02496686666667
+      },
+      "1/23": {
+        "completions": 12,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 52.958072816666665
+      },
+      "1/3": {
+        "completions": 12,
+        "concurrency": "__ABSENT__",
+        "n_tasks": 16,
+        "wall_clock_min": 61.37628975
+      },
+      "1/36": {
+        "completions": 12,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 48.212449033333336
+      },
+      "2/23": {
+        "completions": 11,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 17.30524216666667
+      },
+      "2/3": {
+        "completions": 12,
+        "concurrency": "__ABSENT__",
+        "n_tasks": 16,
+        "wall_clock_min": 31.418623733333334
+      },
+      "2/36": {
+        "completions": 12,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 32.2972463
+      },
+      "3/23": {
+        "completions": 12,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 32.40270806666667
+      },
+      "3/3": {
+        "completions": 11,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 34.97632731666667
+      },
+      "3/36": {
+        "completions": 11,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 22.193480883333333
+      },
+      "4/23": {
+        "completions": 14,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 66.05540421666667
+      },
+      "4/3": {
+        "completions": 12,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 44.10439735
+      },
+      "4/36": {
+        "completions": 15,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 64.65997608333333
+      },
+      "U/23": {
+        "completions": 10,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 19.442628016666667
+      },
+      "U/3": {
+        "completions": 11,
+        "concurrency": "__ABSENT__",
+        "n_tasks": 16,
+        "wall_clock_min": 43.86630371666667
+      },
+      "U/36": {
+        "completions": 11,
+        "concurrency": 2,
+        "n_tasks": 16,
+        "wall_clock_min": 31.963659816666667
+      }
+    }
+  },
+  "coverage_misrouting": {
+    "assigned_total": {
+      "misrouted": 3,
+      "n": 105,
+      "rate": 0.02857142857142857
+    },
+    "capacitated_optimum_comparator": {
+      "avoidable_mismatches_per_instance": 1.0,
+      "n_checked": 17,
+      "reading": "the optimum accepts one mismatch per instance AS THE PRICE OF FEASIBILITY. This is NOT a ranking: the manager's allocation violates the cap, so its lower rate is coverage fidelity bought by breaking the constraint. Quote the manager's rate only with this beside it \u2014 alone it carries the wrong sign \u2014 but do NOT read it as the manager outperforming the optimum."
+    },
+    "excluded_sole_held_class": 15,
+    "executed": {
+      "misrouted": 1,
+      "n": 83,
+      "rate": 0.012048192771084338
+    },
+    "note": "REPORT THE ASSIGNED FIGURE, with the executed one BESIDE it and not replaced by it. The executed-only number conditions on the allocation having worked; the unexecuted set is where it failed and is several times enriched.",
+    "unexecuted_capacity_refused": {
+      "misrouted": 0,
+      "n": 20,
+      "rate": 0.0,
+      "reading": "every overflow placement is COVERAGE-CORRECT \u2014 the manager fills a covering worker past capacity and the invisible constraint absorbs the cost. This is the load-bearing figure for the surviving account, and it is better evidence than the aggregate because it is about the FAILING segments specifically."
+    },
+    "unexecuted_timing_cutoff": {
+      "misrouted": 2,
+      "n": 2,
+      "rate": 1.0,
+      "reading": "a different failure mode; n=2, no rate claimed"
+    }
+  },
+  "declines": {
+    "n_declined": 7,
+    "n_unreadable": 22,
+    "note": "an explicit decline and an unreadable deliverable both score 0 and are NEVER summed \u2014 they are different behaviours, and the decline is the one the unscripting was built to make observable"
+  },
+  "episodes": [
+    {
+      "achieved": 6.7629861290702875,
+      "allocation_loss_staffed": -0.08290059645372683,
+      "cell": "0",
+      "completions": 12,
+      "concurrency": "__ABSENT__",
+      "execution_loss_signed": 0.8661182057329554,
+      "n_declined": 0,
+      "n_parsed": 8,
+      "n_tasks": 16,
+      "n_unreadable": 1,
+      "n_unstaffed": 1,
+      "oracle": 8.546203738349515,
+      "oracle_roster_phase": "post_swap",
+      "regret": 1.7832176092792276,
+      "regret_share": 0.20865610789002922,
+      "seed": 3,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": -8.881784197001252e-16,
+      "staffed_regret_share": 0.09164508982680623,
+      "unstaffed_loss": 1.0
+    },
+    {
+      "achieved": 5.33863266918939,
+      "allocation_loss_staffed": -0.06370658899654358,
+      "cell": "0",
+      "completions": 12,
+      "concurrency": 2,
+      "execution_loss_signed": 2.482037900037336,
+      "n_declined": 1,
+      "n_parsed": 7,
+      "n_tasks": 16,
+      "n_unreadable": 1,
+      "n_unstaffed": 1,
+      "oracle": 8.756963980230182,
+      "oracle_roster_phase": "post_swap",
+      "regret": 3.4183313110407925,
+      "regret_share": 0.3903557578583233,
+      "seed": 23,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_but_unparseable"
+      },
+      "split_residual": 0.0,
+      "staffed_regret_share": 0.27616092934725367,
+      "unstaffed_loss": 1.0
+    },
+    {
+      "achieved": 7.07867366227864,
+      "allocation_loss_staffed": 0.46005447414582923,
+      "cell": "0",
+      "completions": 15,
+      "concurrency": 2,
+      "execution_loss_signed": 1.4349729181398836,
+      "n_declined": 1,
+      "n_parsed": 8,
+      "n_tasks": 16,
+      "n_unreadable": 0,
+      "n_unstaffed": 0,
+      "oracle": 8.973701054564353,
+      "oracle_roster_phase": "post_swap",
+      "regret": 1.895027392285713,
+      "regret_share": 0.21117567665370718,
+      "seed": 36,
+      "segment_states": {
+        "seg_00": "executed_and_parsed",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_but_unparseable",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": 2.220446049250313e-16,
+      "staffed_regret_share": 0.21117567665370715,
+      "unstaffed_loss": 0.0
+    },
+    {
+      "achieved": 6.5749755815761,
+      "allocation_loss_staffed": -0.08290059645372683,
+      "cell": "1",
+      "completions": 12,
+      "concurrency": "__ABSENT__",
+      "execution_loss_signed": 1.054128753227142,
+      "n_declined": 1,
+      "n_parsed": 7,
+      "n_tasks": 16,
+      "n_unreadable": 1,
+      "n_unstaffed": 1,
+      "oracle": 8.546203738349515,
+      "oracle_roster_phase": "post_swap",
+      "regret": 1.9712281567734147,
+      "regret_share": 0.23065541345894802,
+      "seed": 3,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_but_unparseable",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": -4.440892098500626e-16,
+      "staffed_regret_share": 0.11364439539572496,
+      "unstaffed_loss": 1.0
+    },
+    {
+      "achieved": 5.672803510635323,
+      "allocation_loss_staffed": -0.06370658899654358,
+      "cell": "1",
+      "completions": 12,
+      "concurrency": 2,
+      "execution_loss_signed": 2.147867058591402,
+      "n_declined": 1,
+      "n_parsed": 7,
+      "n_tasks": 16,
+      "n_unreadable": 1,
+      "n_unstaffed": 1,
+      "oracle": 8.756963980230182,
+      "oracle_roster_phase": "post_swap",
+      "regret": 3.084160469594859,
+      "regret_share": 0.3521951759260051,
+      "seed": 23,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_but_unparseable",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": 0.0,
+      "staffed_regret_share": 0.2380003474149354,
+      "unstaffed_loss": 1.0
+    },
+    {
+      "achieved": 6.976789579697483,
+      "allocation_loss_staffed": 0.0,
+      "cell": "1",
+      "completions": 12,
+      "concurrency": 2,
+      "execution_loss_signed": 1.0188789821255988,
+      "n_declined": 0,
+      "n_parsed": 8,
+      "n_tasks": 16,
+      "n_unreadable": 1,
+      "n_unstaffed": 1,
+      "oracle": 8.973701054564353,
+      "oracle_roster_phase": "post_swap",
+      "regret": 1.9969114748668702,
+      "regret_share": 0.2225293067737272,
+      "seed": 36,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": -2.220446049250313e-16,
+      "staffed_regret_share": 0.11354055321548288,
+      "unstaffed_loss": 0.9780324927412716
+    },
+    {
+      "achieved": 6.9515095668725175,
+      "allocation_loss_staffed": -0.08290059645372683,
+      "cell": "2",
+      "completions": 12,
+      "concurrency": "__ABSENT__",
+      "execution_loss_signed": 0.677594767930725,
+      "n_declined": 0,
+      "n_parsed": 8,
+      "n_tasks": 16,
+      "n_unreadable": 1,
+      "n_unstaffed": 1,
+      "oracle": 8.546203738349515,
+      "oracle_roster_phase": "post_swap",
+      "regret": 1.5946941714769975,
+      "regret_share": 0.18659678850401157,
+      "seed": 3,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": -6.661338147750939e-16,
+      "staffed_regret_share": 0.06958577044078854,
+      "unstaffed_loss": 1.0
+    },
+    {
+      "achieved": 5.927300093737227,
+      "allocation_loss_staffed": -0.06370658899654358,
+      "cell": "2",
+      "completions": 11,
+      "concurrency": 2,
+      "execution_loss_signed": 0.8933704754894988,
+      "n_declined": 0,
+      "n_parsed": 7,
+      "n_tasks": 16,
+      "n_unreadable": 2,
+      "n_unstaffed": 2,
+      "oracle": 8.756963980230182,
+      "oracle_roster_phase": "post_swap",
+      "regret": 2.8296638864929555,
+      "regret_share": 0.3231329822620301,
+      "seed": 23,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "assigned_but_unexecuted",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": 4.440892098500626e-16,
+      "staffed_regret_share": 0.09474332523989061,
+      "unstaffed_loss": 2.0
+    },
+    {
+      "achieved": 7.04304226292818,
+      "allocation_loss_staffed": 0.0,
+      "cell": "2",
+      "completions": 12,
+      "concurrency": 2,
+      "execution_loss_signed": 0.9526262988949009,
+      "n_declined": 0,
+      "n_parsed": 8,
+      "n_tasks": 16,
+      "n_unreadable": 1,
+      "n_unstaffed": 1,
+      "oracle": 8.973701054564353,
+      "oracle_roster_phase": "post_swap",
+      "regret": 1.9306587916361728,
+      "regret_share": 0.215146323673683,
+      "seed": 36,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": 4.440892098500626e-16,
+      "staffed_regret_share": 0.10615757011543864,
+      "unstaffed_loss": 0.9780324927412716
+    },
+    {
+      "achieved": 5.954535309287734,
+      "allocation_loss_staffed": -0.08290059645372683,
+      "cell": "3",
+      "completions": 11,
+      "concurrency": 2,
+      "execution_loss_signed": 0.6745690255155086,
+      "n_declined": 1,
+      "n_parsed": 6,
+      "n_tasks": 16,
+      "n_unreadable": 2,
+      "n_unstaffed": 2,
+      "oracle": 8.546203738349515,
+      "oracle_roster_phase": "post_swap",
+      "regret": 2.591668429061781,
+      "regret_share": 0.30325376136683313,
+      "seed": 3,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "assigned_but_unexecuted",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_but_unparseable",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": -8.881784197001252e-16,
+      "staffed_regret_share": 0.06923172524038698,
+      "unstaffed_loss": 2.0
+    },
+    {
+      "achieved": 5.016496710553419,
+      "allocation_loss_staffed": -0.06370658899654358,
+      "cell": "3",
+      "completions": 12,
+      "concurrency": 2,
+      "execution_loss_signed": 2.8041738586733063,
+      "n_declined": 1,
+      "n_parsed": 7,
+      "n_tasks": 16,
+      "n_unreadable": 1,
+      "n_unstaffed": 1,
+      "oracle": 8.756963980230182,
+      "oracle_roster_phase": "post_swap",
+      "regret": 3.7404672696767634,
+      "regret_share": 0.4271420184120071,
+      "seed": 23,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_but_unparseable",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": 8.881784197001252e-16,
+      "staffed_regret_share": 0.3129471899009373,
+      "unstaffed_loss": 1.0
+    },
+    {
+      "achieved": 5.85518726943372,
+      "allocation_loss_staffed": 0.0,
+      "cell": "3",
+      "completions": 11,
+      "concurrency": 2,
+      "execution_loss_signed": 1.140481292389362,
+      "n_declined": 1,
+      "n_parsed": 6,
+      "n_tasks": 16,
+      "n_unreadable": 2,
+      "n_unstaffed": 2,
+      "oracle": 8.973701054564353,
+      "oracle_roster_phase": "post_swap",
+      "regret": 3.1185137851306335,
+      "regret_share": 0.3475170128989803,
+      "seed": 36,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "assigned_but_unexecuted",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_but_unparseable",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": 0.0,
+      "staffed_regret_share": 0.12709151836624547,
+      "unstaffed_loss": 1.9780324927412716
+    },
+    {
+      "achieved": 6.949144877763593,
+      "allocation_loss_staffed": -0.08290059645372683,
+      "cell": "4",
+      "completions": 12,
+      "concurrency": 2,
+      "execution_loss_signed": 0.6799594570396499,
+      "n_declined": 0,
+      "n_parsed": 8,
+      "n_tasks": 16,
+      "n_unreadable": 1,
+      "n_unstaffed": 1,
+      "oracle": 8.546203738349515,
+      "oracle_roster_phase": "post_swap",
+      "regret": 1.5970588605859222,
+      "regret_share": 0.18687348318404987,
+      "seed": 3,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": -8.881784197001252e-16,
+      "staffed_regret_share": 0.06986246512082685,
+      "unstaffed_loss": 1.0
+    },
+    {
+      "achieved": 6.991885396179521,
+      "allocation_loss_staffed": -0.06370658899654358,
+      "cell": "4",
+      "completions": 14,
+      "concurrency": 2,
+      "execution_loss_signed": 1.828785173047204,
+      "n_declined": 0,
+      "n_parsed": 9,
+      "n_tasks": 16,
+      "n_unreadable": 0,
+      "n_unstaffed": 0,
+      "oracle": 8.756963980230182,
+      "oracle_roster_phase": "post_swap",
+      "regret": 1.765078584050661,
+      "regret_share": 0.20156284621422696,
+      "seed": 23,
+      "segment_states": {
+        "seg_00": "executed_and_parsed",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": 6.661338147750939e-16,
+      "staffed_regret_share": 0.2015628462142269,
+      "unstaffed_loss": 0.0
+    },
+    {
+      "achieved": 6.708397971268346,
+      "allocation_loss_staffed": -0.021967507258728425,
+      "cell": "4",
+      "completions": 15,
+      "concurrency": 2,
+      "execution_loss_signed": 2.2872705905547353,
+      "n_declined": 0,
+      "n_parsed": 9,
+      "n_tasks": 16,
+      "n_unreadable": 0,
+      "n_unstaffed": 0,
+      "oracle": 8.973701054564353,
+      "oracle_roster_phase": "post_swap",
+      "regret": 2.265303083296007,
+      "regret_share": 0.2524379929219718,
+      "seed": 36,
+      "segment_states": {
+        "seg_00": "executed_and_parsed",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": 0.0,
+      "staffed_regret_share": 0.2524379929219718,
+      "unstaffed_loss": 0.0
+    },
+    {
+      "achieved": 6.592776843932647,
+      "allocation_loss_staffed": -0.08290059645372683,
+      "cell": "U",
+      "completions": 11,
+      "concurrency": "__ABSENT__",
+      "execution_loss_signed": 0.40722315606735293,
+      "n_declined": 0,
+      "n_parsed": 7,
+      "n_tasks": 16,
+      "n_unreadable": 2,
+      "n_unstaffed": 2,
+      "oracle": 8.733745394569143,
+      "oracle_roster_phase": "pre_swap",
+      "regret": 2.1409685506364955,
+      "regret_share": 0.24513750446261032,
+      "seed": 3,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "executed_and_parsed",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "assigned_but_unexecuted",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": 0.0,
+      "staffed_regret_share": 0.03713441885027904,
+      "unstaffed_loss": 1.8166459910228692
+    },
+    {
+      "achieved": 4.957582174235767,
+      "allocation_loss_staffed": -0.06370658899654358,
+      "cell": "U",
+      "completions": 10,
+      "concurrency": 2,
+      "execution_loss_signed": 1.042417825764233,
+      "n_declined": 0,
+      "n_parsed": 6,
+      "n_tasks": 16,
+      "n_unreadable": 3,
+      "n_unstaffed": 3,
+      "oracle": 8.756963980230182,
+      "oracle_roster_phase": "pre_swap",
+      "regret": 3.7993818059944156,
+      "regret_share": 0.4338697537836106,
+      "seed": 23,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "assigned_but_unexecuted",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "assigned_but_unexecuted",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": 4.440892098500626e-16,
+      "staffed_regret_share": 0.11176376184454322,
+      "unstaffed_loss": 2.8206705692267255
+    },
+    {
+      "achieved": 5.8381717339794745,
+      "allocation_loss_staffed": -0.004331438176918279,
+      "cell": "U",
+      "completions": 11,
+      "concurrency": 2,
+      "execution_loss_signed": 1.1618282660205255,
+      "n_declined": 0,
+      "n_parsed": 7,
+      "n_tasks": 16,
+      "n_unreadable": 2,
+      "n_unstaffed": 2,
+      "oracle": 8.973701054564353,
+      "oracle_roster_phase": "pre_swap",
+      "regret": 3.1355293205848787,
+      "regret_share": 0.3494131687159373,
+      "seed": 36,
+      "segment_states": {
+        "seg_00": "assigned_but_unexecuted",
+        "seg_01": "assigned_but_unexecuted",
+        "seg_02": "executed_and_parsed",
+        "seg_03": "executed_and_parsed",
+        "seg_04": "executed_and_parsed",
+        "seg_05": "executed_and_parsed",
+        "seg_06": "executed_and_parsed",
+        "seg_07": "executed_and_parsed",
+        "seg_08": "executed_and_parsed"
+      },
+      "split_residual": 0.0,
+      "staffed_regret_share": 0.12898767418320245,
+      "unstaffed_loss": 1.9780324927412716
+    }
+  ],
+  "n_episodes": 18,
+  "per_cell_descriptive": {
+    "0": {
+      "mean_regret_share": 0.2700625141340199,
+      "n_episodes": 3,
+      "role": "information-absent control; allocation-visibility gate",
+      "values": [
+        0.20865610789002922,
+        0.3903557578583233,
+        0.21117567665370718
+      ]
+    },
+    "1": {
+      "mean_regret_share": 0.2684599653862268,
+      "n_episodes": 3,
+      "role": "card channel (marginal)",
+      "values": [
+        0.23065541345894802,
+        0.3521951759260051,
+        0.2225293067737272
+      ]
+    },
+    "2": {
+      "mean_regret_share": 0.24162536481324157,
+      "n_episodes": 3,
+      "role": "declaration channel (marginal)",
+      "values": [
+        0.18659678850401157,
+        0.3231329822620301,
+        0.215146323673683
+      ]
+    },
+    "3": {
+      "mean_regret_share": 0.35930426422594014,
+      "n_episodes": 3,
+      "role": "ask channel (ride-along)",
+      "values": [
+        0.30325376136683313,
+        0.4271420184120071,
+        0.3475170128989803
+      ]
+    },
+    "4": {
+      "mean_regret_share": 0.21362477410674954,
+      "n_episodes": 3,
+      "role": "CEILING \u2014 a bound, NOT an interaction claim",
+      "values": [
+        0.18687348318404987,
+        0.20156284621422696,
+        0.2524379929219718
+      ]
+    },
+    "U": {
+      "mean_regret_share": 0.3428068089873861,
+      "n_episodes": 3,
+      "role": "unswapped control \u2014 the JOINT effect of the swap and the roster change it entails (NOT the swap effect alone: U and 0 differ by which workers are present as well as by the swap)",
+      "values": [
+        0.24513750446261032,
+        0.4338697537836106,
+        0.3494131687159373
+      ]
+    }
+  },
+  "sampling_caveats": "the low pick is the SUITE MINIMUM (seed 23 at 0.0516) and the chosen mean 0.0938 sits below the admitted mean 0.1034, so EFFECT MAGNITUDES ARE BELOW THE SUITE'S BY CONSTRUCTION; and this compounds with the stratification inflation, which widens sigma_between by design. Harmless for sigma, not harmless for effect magnitudes.",
+  "segment_state_counts": {
+    "assigned_but_unexecuted": 22,
+    "executed_and_parsed": 133,
+    "executed_but_unparseable": 7
+  },
+  "state_note": "'assigned_but_unexecuted' is what was previously reported as UNSTAFFED and read as NON-ROUTING. The manager assigned every one of them; the engine never ran them. It is capacity starvation, not a routing failure, and it must not be folded into a routing metric.",
+  "variance_quantities": {
+    "design_side_prior_ceiling_sd": 0.0254,
+    "pairing_heterogeneity_coupling": "sigma_d and sigma_between are ONE COUPLED QUESTION, not two independent inflators: effective pairing shrinks sigma_d AND promotes between-instance heterogeneity to the leading term, so the two corrections partially self-cancel.",
+    "sigma_between_df": 2,
+    "sigma_between_instance": 0.06545964727169483,
+    "sigma_d_df": 10,
+    "sigma_d_paired_vs_cell0": 0.06661699354628473,
+    "sigma_gap_full_minus_staffed": -0.0066231354113441,
+    "sigma_gap_reading": "THE GAP CARRIES NO INFORMATION ABOUT STALLING \u2014 that reading was retracted. The two components are anti-correlated because they partition the same units, so no gap was predicted either way. Use the STAFFED-ONLY sigma for sizing: it is the variance of the quantity a channel could move.",
+    "sigma_pooled_df": 12,
+    "sigma_pooled_staffed_df": 12,
+    "sigma_pooled_staffed_only": 0.08341158128628416,
+    "sigma_pooled_within_cell": 0.07678844587494006
+  }
+}

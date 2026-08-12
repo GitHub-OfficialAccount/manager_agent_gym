@@ -1,0 +1,199 @@
+[
+  {
+    "name": "q_profile_early",
+    "note": "profile_scope batch, t=0, 4 packets (arm3i_q)",
+    "batch_kind": "profile_scope_batch",
+    "group_key": "Reference Portfolio Profile",
+    "packet_count": 4,
+    "expected_fingerprints": [
+      "3ffe3a0dc47fc681b610a95948ddf757ec731a7331336f1a074c6f265a2eeedc",
+      "5a723efe46d7cd508188875f37f9fab1d328e2ac039c1aa2e1fcb7ea9c27f698",
+      "761724a157da3f6c4167fef6e792eddb276792cd35ac33d1c7960c79f025168e",
+      "c9bfff66aaf9853af4216fc70647ee2c8590b3192b3af0581dedc72c2f46cf5a"
+    ],
+    "constraint_check_count": 0,
+    "expected_shape": {
+      "pos0": {
+        "packet_kind": "profile_scope",
+        "constraint_ids": []
+      },
+      "pos1": {
+        "packet_kind": "profile_scope",
+        "constraint_ids": []
+      },
+      "pos2": {
+        "packet_kind": "profile_scope",
+        "constraint_ids": []
+      },
+      "pos3": {
+        "packet_kind": "profile_scope",
+        "constraint_ids": []
+      }
+    },
+    "user_prompt": "{\"batch_kind\": \"profile_scope_batch\", \"group_key\": \"Reference Portfolio Profile\", \"packets\": [{\"packet_fingerprint\": \"761724a157da3f6c4167fef6e792eddb276792cd35ac33d1c7960c79f025168e\", \"packet\": {\"packet_kind\": \"profile_scope\", \"first_observed_timestep\": 0, \"worker\": \"audit_coordinator\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"task_scope\": \"Reference Portfolio Profile\", \"trigger_source_pointer\": null, \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q51\", \"first_observed_timestep\": 0, \"kind\": \"declared_profile\", \"text\": \"Agent audit_coordinator [ai] | Description: Primary: audit reconciliation, prioritization, and synthesis. | Capabilities: ['Methods: completed-artifact comparison and aggregation']\", \"source_pointer\": \"worker:audit_coordinator:declared_profile\", \"task_id\": null, \"worker_id\": \"audit_coordinator\"}, {\"requirement_id\": \"q2\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Profile the reference portfolio. Report its row count as the metric and briefly note the available analytical columns.\", \"source_pointer\": \"task:aeb305f2-2582-41d1-87d3-4022690c0d0a:description\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"worker_id\": null}, {\"requirement_id\": \"q1\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Reference Portfolio Profile\", \"source_pointer\": \"task:aeb305f2-2582-41d1-87d3-4022690c0d0a:title\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"worker_id\": null}], \"task_constraints\": []}, \"method_claims\": [], \"excluded_non_authoritative_evidence_ids\": [], \"constraint_checks\": []}, {\"packet_fingerprint\": \"3ffe3a0dc47fc681b610a95948ddf757ec731a7331336f1a074c6f265a2eeedc\", \"packet\": {\"packet_kind\": \"profile_scope\", \"first_observed_timestep\": 0, \"worker\": \"portfolio_analyst\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"task_scope\": \"Reference Portfolio Profile\", \"trigger_source_pointer\": null, \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q48\", \"first_observed_timestep\": 0, \"kind\": \"declared_profile\", \"text\": \"Agent portfolio_analyst [ai] | Description: Primary: income and loan-amount portfolio audits. | Capabilities: ['Methods: percentile outlier screening', 'Methods: portfolio profiling']\", \"source_pointer\": \"worker:portfolio_analyst:declared_profile\", \"task_id\": null, \"worker_id\": \"portfolio_analyst\"}, {\"requirement_id\": \"q2\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Profile the reference portfolio. Report its row count as the metric and briefly note the available analytical columns.\", \"source_pointer\": \"task:aeb305f2-2582-41d1-87d3-4022690c0d0a:description\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"worker_id\": null}, {\"requirement_id\": \"q1\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Reference Portfolio Profile\", \"source_pointer\": \"task:aeb305f2-2582-41d1-87d3-4022690c0d0a:title\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"worker_id\": null}], \"task_constraints\": []}, \"method_claims\": [], \"excluded_non_authoritative_evidence_ids\": [], \"constraint_checks\": []}, {\"packet_fingerprint\": \"5a723efe46d7cd508188875f37f9fab1d328e2ac039c1aa2e1fcb7ea9c27f698\", \"packet\": {\"packet_kind\": \"profile_scope\", \"first_observed_timestep\": 0, \"worker\": \"risk_analyst\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"task_scope\": \"Reference Portfolio Profile\", \"trigger_source_pointer\": null, \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q49\", \"first_observed_timestep\": 0, \"kind\": \"declared_profile\", \"text\": \"Agent risk_analyst [ai] | Description: Primary: DTI and interest-rate risk audits. | Capabilities: ['Methods: percentile outlier screening', 'Methods: portfolio profiling']\", \"source_pointer\": \"worker:risk_analyst:declared_profile\", \"task_id\": null, \"worker_id\": \"risk_analyst\"}, {\"requirement_id\": \"q2\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Profile the reference portfolio. Report its row count as the metric and briefly note the available analytical columns.\", \"source_pointer\": \"task:aeb305f2-2582-41d1-87d3-4022690c0d0a:description\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"worker_id\": null}, {\"requirement_id\": \"q1\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Reference Portfolio Profile\", \"source_pointer\": \"task:aeb305f2-2582-41d1-87d3-4022690c0d0a:title\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"worker_id\": null}], \"task_constraints\": []}, \"method_claims\": [], \"excluded_non_authoritative_evidence_ids\": [], \"constraint_checks\": []}, {\"packet_fingerprint\": \"c9bfff66aaf9853af4216fc70647ee2c8590b3192b3af0581dedc72c2f46cf5a\", \"packet\": {\"packet_kind\": \"profile_scope\", \"first_observed_timestep\": 0, \"worker\": \"screening_analyst\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"task_scope\": \"Reference Portfolio Profile\", \"trigger_source_pointer\": null, \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q50\", \"first_observed_timestep\": 0, \"kind\": \"declared_profile\", \"text\": \"Agent screening_analyst [ai] | Description: Primary: rapid portfolio triage. | Capabilities: ['Methods: mean-plus-two-SD screening', 'Methods: portfolio profiling']\", \"source_pointer\": \"worker:screening_analyst:declared_profile\", \"task_id\": null, \"worker_id\": \"screening_analyst\"}, {\"requirement_id\": \"q2\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Profile the reference portfolio. Report its row count as the metric and briefly note the available analytical columns.\", \"source_pointer\": \"task:aeb305f2-2582-41d1-87d3-4022690c0d0a:description\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"worker_id\": null}, {\"requirement_id\": \"q1\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Reference Portfolio Profile\", \"source_pointer\": \"task:aeb305f2-2582-41d1-87d3-4022690c0d0a:title\", \"task_id\": \"aeb305f2-2582-41d1-87d3-4022690c0d0a\", \"worker_id\": null}], \"task_constraints\": []}, \"method_claims\": [], \"excluded_non_authoritative_evidence_ids\": [], \"constraint_checks\": []}]}"
+  },
+  {
+    "name": "q_profile_late",
+    "note": "profile_scope batch, late run, 4 packets (arm3i_q)",
+    "batch_kind": "profile_scope_batch",
+    "group_key": "Plan Manual Review Capacity",
+    "packet_count": 4,
+    "expected_fingerprints": [
+      "9fba13fc1dc0fa426dd7d1b6d65469e3ef75ea518accdb2637c05263bc9142e6",
+      "a9481bd0b1a74ff5d8a4f763b701e945b717146e5a885cd1531b4802903a0956",
+      "e194e4ccbac08813dd285b208c1ab327e8f0964eabf9f1d2eb042b578a8fdb13",
+      "e8e800ac42b877599f454d1ee86492bb7741aeec8eaead8fbf1c3d6bad80b274"
+    ],
+    "constraint_check_count": 0,
+    "expected_shape": {
+      "pos0": {
+        "packet_kind": "profile_scope",
+        "constraint_ids": []
+      },
+      "pos1": {
+        "packet_kind": "profile_scope",
+        "constraint_ids": []
+      },
+      "pos2": {
+        "packet_kind": "profile_scope",
+        "constraint_ids": []
+      },
+      "pos3": {
+        "packet_kind": "profile_scope",
+        "constraint_ids": []
+      }
+    },
+    "user_prompt": "{\"batch_kind\": \"profile_scope_batch\", \"group_key\": \"Plan Manual Review Capacity\", \"packets\": [{\"packet_fingerprint\": \"e8e800ac42b877599f454d1ee86492bb7741aeec8eaead8fbf1c3d6bad80b274\", \"packet\": {\"packet_kind\": \"profile_scope\", \"first_observed_timestep\": 25, \"worker\": \"audit_coordinator\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"task_scope\": \"Plan Manual Review Capacity\", \"trigger_source_pointer\": null, \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q51\", \"first_observed_timestep\": 0, \"kind\": \"declared_profile\", \"text\": \"Agent audit_coordinator [ai] | Description: Primary: audit reconciliation, prioritization, and synthesis. | Capabilities: ['Methods: completed-artifact comparison and aggregation']\", \"source_pointer\": \"worker:audit_coordinator:declared_profile\", \"task_id\": null, \"worker_id\": \"audit_coordinator\"}, {\"requirement_id\": \"q46\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Use the prioritization artifact and the corresponding robust-audit artifact. At 15 minutes per flag, report required reviewer-hours as the metric. The shared artifact analysis tool can calculate this from completed native artifacts.\", \"source_pointer\": \"task:b154c94e-480f-40ac-a84c-f0d06bcbfe60:description\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"worker_id\": null}, {\"requirement_id\": \"q45\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Plan Manual Review Capacity\", \"source_pointer\": \"task:b154c94e-480f-40ac-a84c-f0d06bcbfe60:title\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"worker_id\": null}], \"task_constraints\": []}, \"method_claims\": [], \"excluded_non_authoritative_evidence_ids\": [], \"constraint_checks\": []}, {\"packet_fingerprint\": \"e194e4ccbac08813dd285b208c1ab327e8f0964eabf9f1d2eb042b578a8fdb13\", \"packet\": {\"packet_kind\": \"profile_scope\", \"first_observed_timestep\": 25, \"worker\": \"portfolio_analyst\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"task_scope\": \"Plan Manual Review Capacity\", \"trigger_source_pointer\": null, \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q48\", \"first_observed_timestep\": 0, \"kind\": \"declared_profile\", \"text\": \"Agent portfolio_analyst [ai] | Description: Primary: income and loan-amount portfolio audits. | Capabilities: ['Methods: percentile outlier screening', 'Methods: portfolio profiling']\", \"source_pointer\": \"worker:portfolio_analyst:declared_profile\", \"task_id\": null, \"worker_id\": \"portfolio_analyst\"}, {\"requirement_id\": \"q46\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Use the prioritization artifact and the corresponding robust-audit artifact. At 15 minutes per flag, report required reviewer-hours as the metric. The shared artifact analysis tool can calculate this from completed native artifacts.\", \"source_pointer\": \"task:b154c94e-480f-40ac-a84c-f0d06bcbfe60:description\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"worker_id\": null}, {\"requirement_id\": \"q45\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Plan Manual Review Capacity\", \"source_pointer\": \"task:b154c94e-480f-40ac-a84c-f0d06bcbfe60:title\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"worker_id\": null}], \"task_constraints\": []}, \"method_claims\": [], \"excluded_non_authoritative_evidence_ids\": [], \"constraint_checks\": []}, {\"packet_fingerprint\": \"a9481bd0b1a74ff5d8a4f763b701e945b717146e5a885cd1531b4802903a0956\", \"packet\": {\"packet_kind\": \"profile_scope\", \"first_observed_timestep\": 25, \"worker\": \"risk_analyst\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"task_scope\": \"Plan Manual Review Capacity\", \"trigger_source_pointer\": null, \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q49\", \"first_observed_timestep\": 0, \"kind\": \"declared_profile\", \"text\": \"Agent risk_analyst [ai] | Description: Primary: DTI and interest-rate risk audits. | Capabilities: ['Methods: percentile outlier screening', 'Methods: portfolio profiling']\", \"source_pointer\": \"worker:risk_analyst:declared_profile\", \"task_id\": null, \"worker_id\": \"risk_analyst\"}, {\"requirement_id\": \"q46\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Use the prioritization artifact and the corresponding robust-audit artifact. At 15 minutes per flag, report required reviewer-hours as the metric. The shared artifact analysis tool can calculate this from completed native artifacts.\", \"source_pointer\": \"task:b154c94e-480f-40ac-a84c-f0d06bcbfe60:description\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"worker_id\": null}, {\"requirement_id\": \"q45\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Plan Manual Review Capacity\", \"source_pointer\": \"task:b154c94e-480f-40ac-a84c-f0d06bcbfe60:title\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"worker_id\": null}], \"task_constraints\": []}, \"method_claims\": [], \"excluded_non_authoritative_evidence_ids\": [], \"constraint_checks\": []}, {\"packet_fingerprint\": \"9fba13fc1dc0fa426dd7d1b6d65469e3ef75ea518accdb2637c05263bc9142e6\", \"packet\": {\"packet_kind\": \"profile_scope\", \"first_observed_timestep\": 25, \"worker\": \"screening_analyst\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"task_scope\": \"Plan Manual Review Capacity\", \"trigger_source_pointer\": null, \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q50\", \"first_observed_timestep\": 0, \"kind\": \"declared_profile\", \"text\": \"Agent screening_analyst [ai] | Description: Primary: rapid portfolio triage. | Capabilities: ['Methods: mean-plus-two-SD screening', 'Methods: portfolio profiling']\", \"source_pointer\": \"worker:screening_analyst:declared_profile\", \"task_id\": null, \"worker_id\": \"screening_analyst\"}, {\"requirement_id\": \"q46\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Use the prioritization artifact and the corresponding robust-audit artifact. At 15 minutes per flag, report required reviewer-hours as the metric. The shared artifact analysis tool can calculate this from completed native artifacts.\", \"source_pointer\": \"task:b154c94e-480f-40ac-a84c-f0d06bcbfe60:description\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"worker_id\": null}, {\"requirement_id\": \"q45\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Plan Manual Review Capacity\", \"source_pointer\": \"task:b154c94e-480f-40ac-a84c-f0d06bcbfe60:title\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"worker_id\": null}], \"task_constraints\": []}, \"method_claims\": [], \"excluded_non_authoritative_evidence_ids\": [], \"constraint_checks\": []}]}"
+  },
+  {
+    "name": "q_artifact_jsonblob_e24",
+    "note": "JSON-blob artifact: requirement=95th-percentile, claim=zscore (arm3i_q t=10)",
+    "batch_kind": "artifact_event_batch",
+    "group_key": "43b9595b-0ee1-4d1c-8d17-07c2f4055961",
+    "packet_count": 1,
+    "expected_fingerprints": [
+      "be0dad23db4b4d360d34862065d7064d2aede3c3273b43e0863c17f814d070fb"
+    ],
+    "constraint_check_count": 3,
+    "expected_shape": {
+      "pos0": {
+        "packet_kind": "requirement_artifact",
+        "constraint_ids": [
+          "c-13f62f64958cdcd4",
+          "c-204bb7a791b14d3a",
+          "c-595612563e01733c"
+        ]
+      }
+    },
+    "user_prompt": "{\"batch_kind\": \"artifact_event_batch\", \"group_key\": \"43b9595b-0ee1-4d1c-8d17-07c2f4055961\", \"packets\": [{\"packet_fingerprint\": \"be0dad23db4b4d360d34862065d7064d2aede3c3273b43e0863c17f814d070fb\", \"packet\": {\"packet_kind\": \"requirement_artifact\", \"first_observed_timestep\": 10, \"worker\": \"portfolio_analyst\", \"task_id\": \"c1cbcf8c-dfd9-4575-a689-25b5d290b7f7\", \"task_scope\": \"Robust Audit\", \"trigger_source_pointer\": \"43b9595b-0ee1-4d1c-8d17-07c2f4055961\", \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q16\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Apply the robust 95th-percentile reference standard to audit batch A for all four columns. Report the sum of the four flagged counts as the metric, with method and cutoffs in details. The outlier tool accepts column='all' for a batch-level result.\", \"source_pointer\": \"task:c1cbcf8c-dfd9-4575-a689-25b5d290b7f7:description\", \"task_id\": \"c1cbcf8c-dfd9-4575-a689-25b5d290b7f7\", \"worker_id\": null}, {\"requirement_id\": \"q15\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Batch A Robust Audit\", \"source_pointer\": \"task:c1cbcf8c-dfd9-4575-a689-25b5d290b7f7:title\", \"task_id\": \"c1cbcf8c-dfd9-4575-a689-25b5d290b7f7\", \"worker_id\": null}], \"task_constraints\": [{\"constraint_id\": \"c-13f62f64958cdcd4\", \"task_id\": \"c1cbcf8c-dfd9-4575-a689-25b5d290b7f7\", \"requirement_source_id\": \"q16\", \"exact_excerpt\": \"The outlier tool accepts column='all' for a batch-level result.\"}, {\"constraint_id\": \"c-204bb7a791b14d3a\", \"task_id\": \"c1cbcf8c-dfd9-4575-a689-25b5d290b7f7\", \"requirement_source_id\": \"q16\", \"exact_excerpt\": \"Report the sum of the four flagged counts as the metric, with method and cutoffs in details.\"}, {\"constraint_id\": \"c-595612563e01733c\", \"task_id\": \"c1cbcf8c-dfd9-4575-a689-25b5d290b7f7\", \"requirement_source_id\": \"q16\", \"exact_excerpt\": \"Apply the robust 95th-percentile reference standard to audit batch A for all four columns.\"}]}, \"method_claims\": [{\"evidence_id\": \"e24\", \"fact\": \"zscore (reference mean + 2*SD)\"}], \"excluded_non_authoritative_evidence_ids\": [\"e23\"], \"constraint_checks\": [{\"constraint_id\": \"c-13f62f64958cdcd4\", \"requirement_source_id\": \"q16\", \"requirement_exact_excerpt\": \"The outlier tool accepts column='all' for a batch-level result.\"}, {\"constraint_id\": \"c-204bb7a791b14d3a\", \"requirement_source_id\": \"q16\", \"requirement_exact_excerpt\": \"Report the sum of the four flagged counts as the metric, with method and cutoffs in details.\"}, {\"constraint_id\": \"c-595612563e01733c\", \"requirement_source_id\": \"q16\", \"requirement_exact_excerpt\": \"Apply the robust 95th-percentile reference standard to audit batch A for all four columns.\"}]}]}"
+  },
+  {
+    "name": "t_artifact_mixed_claim",
+    "note": "mixed claim: '95th-percentile reference standard (mean+2*SD cutoff)' (arm3t t=10)",
+    "batch_kind": "artifact_event_batch",
+    "group_key": "561d5139-fc98-4072-bd9a-734a6ff013dc",
+    "packet_count": 1,
+    "expected_fingerprints": [
+      "95fbb3266bfb27fae04331afeac3382080e1fec5381b883bac8ef8e97ec1f935"
+    ],
+    "constraint_check_count": 3,
+    "expected_shape": {
+      "pos0": {
+        "packet_kind": "requirement_artifact",
+        "constraint_ids": [
+          "c-49ba2fb2ebe1329c",
+          "c-5dc35f5d8205050b",
+          "c-faf17d868b363c34"
+        ]
+      }
+    },
+    "user_prompt": "{\"batch_kind\": \"artifact_event_batch\", \"group_key\": \"561d5139-fc98-4072-bd9a-734a6ff013dc\", \"packets\": [{\"packet_fingerprint\": \"95fbb3266bfb27fae04331afeac3382080e1fec5381b883bac8ef8e97ec1f935\", \"packet\": {\"packet_kind\": \"requirement_artifact\", \"first_observed_timestep\": 10, \"worker\": \"portfolio_analyst\", \"task_id\": \"a2e8785b-4e17-4fc7-b097-ba6bda59ce9b\", \"task_scope\": \"Robust Audit\", \"trigger_source_pointer\": \"561d5139-fc98-4072-bd9a-734a6ff013dc\", \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q16\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Apply the robust 95th-percentile reference standard to audit batch A for all four columns. Report the sum of the four flagged counts as the metric, with method and cutoffs in details. The outlier tool accepts column='all' for a batch-level result.\", \"source_pointer\": \"task:a2e8785b-4e17-4fc7-b097-ba6bda59ce9b:description\", \"task_id\": \"a2e8785b-4e17-4fc7-b097-ba6bda59ce9b\", \"worker_id\": null}, {\"requirement_id\": \"q15\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Batch A Robust Audit\", \"source_pointer\": \"task:a2e8785b-4e17-4fc7-b097-ba6bda59ce9b:title\", \"task_id\": \"a2e8785b-4e17-4fc7-b097-ba6bda59ce9b\", \"worker_id\": null}], \"task_constraints\": [{\"constraint_id\": \"c-49ba2fb2ebe1329c\", \"task_id\": \"a2e8785b-4e17-4fc7-b097-ba6bda59ce9b\", \"requirement_source_id\": \"q16\", \"exact_excerpt\": \"Apply the robust 95th-percentile reference standard to audit batch A for all four columns.\"}, {\"constraint_id\": \"c-5dc35f5d8205050b\", \"task_id\": \"a2e8785b-4e17-4fc7-b097-ba6bda59ce9b\", \"requirement_source_id\": \"q16\", \"exact_excerpt\": \"The outlier tool accepts column='all' for a batch-level result.\"}, {\"constraint_id\": \"c-faf17d868b363c34\", \"task_id\": \"a2e8785b-4e17-4fc7-b097-ba6bda59ce9b\", \"requirement_source_id\": \"q16\", \"exact_excerpt\": \"Report the sum of the four flagged counts as the metric, with method and cutoffs in details.\"}]}, \"method_claims\": [{\"evidence_id\": \"e31\", \"fact\": \"robust 95th-percentile reference standard (mean+2*SD cutoff from reference population)\"}], \"excluded_non_authoritative_evidence_ids\": [\"e29\", \"e30\", \"e32\"], \"constraint_checks\": [{\"constraint_id\": \"c-49ba2fb2ebe1329c\", \"requirement_source_id\": \"q16\", \"requirement_exact_excerpt\": \"Apply the robust 95th-percentile reference standard to audit batch A for all four columns.\"}, {\"constraint_id\": \"c-5dc35f5d8205050b\", \"requirement_source_id\": \"q16\", \"requirement_exact_excerpt\": \"The outlier tool accepts column='all' for a batch-level result.\"}, {\"constraint_id\": \"c-faf17d868b363c34\", \"requirement_source_id\": \"q16\", \"requirement_exact_excerpt\": \"Report the sum of the four flagged counts as the metric, with method and cutoffs in details.\"}]}]}"
+  },
+  {
+    "name": "q_artifact_consistent",
+    "note": "consistent artifact: mean+2SD rapid screen vs mean+2SD clause (arm3i_q t=13)",
+    "batch_kind": "artifact_event_batch",
+    "group_key": "e41dce90-0beb-4549-b715-0d9742c6dc1a",
+    "packet_count": 1,
+    "expected_fingerprints": [
+      "93bdc8cf36782c233aca9194284109eeaee6f76d855db06899af9ef8944a301e"
+    ],
+    "constraint_check_count": 3,
+    "expected_shape": {
+      "pos0": {
+        "packet_kind": "requirement_artifact",
+        "constraint_ids": [
+          "c-48f242fa17079cd8",
+          "c-de3c4175ccfa6b0d",
+          "c-e6dc49a0d5695ffc"
+        ]
+      }
+    },
+    "user_prompt": "{\"batch_kind\": \"artifact_event_batch\", \"group_key\": \"e41dce90-0beb-4549-b715-0d9742c6dc1a\", \"packets\": [{\"packet_fingerprint\": \"93bdc8cf36782c233aca9194284109eeaee6f76d855db06899af9ef8944a301e\", \"packet\": {\"packet_kind\": \"requirement_artifact\", \"first_observed_timestep\": 13, \"worker\": \"screening_analyst\", \"task_id\": \"0aefc0a0-1835-4301-ab08-ab4e6a3b88c2\", \"task_scope\": \"Rapid Screen\", \"trigger_source_pointer\": \"e41dce90-0beb-4549-b715-0d9742c6dc1a\", \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q19\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Apply the mean-plus-two-SD rapid-screening standard to audit batch A for all four columns. Report the sum of the four flagged counts as the metric, with method and cutoffs in details. The outlier tool accepts column='all' for a batch-level result.\", \"source_pointer\": \"task:0aefc0a0-1835-4301-ab08-ab4e6a3b88c2:description\", \"task_id\": \"0aefc0a0-1835-4301-ab08-ab4e6a3b88c2\", \"worker_id\": null}, {\"requirement_id\": \"q18\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Batch A Rapid Screen\", \"source_pointer\": \"task:0aefc0a0-1835-4301-ab08-ab4e6a3b88c2:title\", \"task_id\": \"0aefc0a0-1835-4301-ab08-ab4e6a3b88c2\", \"worker_id\": null}], \"task_constraints\": [{\"constraint_id\": \"c-48f242fa17079cd8\", \"task_id\": \"0aefc0a0-1835-4301-ab08-ab4e6a3b88c2\", \"requirement_source_id\": \"q19\", \"exact_excerpt\": \"The outlier tool accepts column='all' for a batch-level result.\"}, {\"constraint_id\": \"c-de3c4175ccfa6b0d\", \"task_id\": \"0aefc0a0-1835-4301-ab08-ab4e6a3b88c2\", \"requirement_source_id\": \"q19\", \"exact_excerpt\": \"Apply the mean-plus-two-SD rapid-screening standard to audit batch A for all four columns.\"}, {\"constraint_id\": \"c-e6dc49a0d5695ffc\", \"task_id\": \"0aefc0a0-1835-4301-ab08-ab4e6a3b88c2\", \"requirement_source_id\": \"q19\", \"exact_excerpt\": \"Report the sum of the four flagged counts as the metric, with method and cutoffs in details.\"}]}, \"method_claims\": [{\"evidence_id\": \"e34\", \"fact\": \"mean-plus-two-standard-deviation (z-score) rapid screening\"}], \"excluded_non_authoritative_evidence_ids\": [\"e32\", \"e33\", \"e35\"], \"constraint_checks\": [{\"constraint_id\": \"c-48f242fa17079cd8\", \"requirement_source_id\": \"q19\", \"requirement_exact_excerpt\": \"The outlier tool accepts column='all' for a batch-level result.\"}, {\"constraint_id\": \"c-de3c4175ccfa6b0d\", \"requirement_source_id\": \"q19\", \"requirement_exact_excerpt\": \"Apply the mean-plus-two-SD rapid-screening standard to audit batch A for all four columns.\"}, {\"constraint_id\": \"c-e6dc49a0d5695ffc\", \"requirement_source_id\": \"q19\", \"requirement_exact_excerpt\": \"Report the sum of the four flagged counts as the metric, with method and cutoffs in details.\"}]}]}"
+  },
+  {
+    "name": "q_artifact_single_claim",
+    "note": "one method claim vs a reporting-format clause (arm3i_q t=5)",
+    "batch_kind": "artifact_event_batch",
+    "group_key": "e6a4655a-6275-4c67-9b52-898ebbe0b8b1",
+    "packet_count": 1,
+    "expected_fingerprints": [
+      "3f30b7169d1041f42e53954fdfa004954155b225a84ab97b5492039d44162675"
+    ],
+    "constraint_check_count": 2,
+    "expected_shape": {
+      "pos0": {
+        "packet_kind": "requirement_artifact",
+        "constraint_ids": [
+          "c-0be2f35a543103ad",
+          "c-73ee34ad94b3b5f9"
+        ]
+      }
+    },
+    "user_prompt": "{\"batch_kind\": \"artifact_event_batch\", \"group_key\": \"e6a4655a-6275-4c67-9b52-898ebbe0b8b1\", \"packets\": [{\"packet_fingerprint\": \"3f30b7169d1041f42e53954fdfa004954155b225a84ab97b5492039d44162675\", \"packet\": {\"packet_kind\": \"requirement_artifact\", \"first_observed_timestep\": 5, \"worker\": \"risk_analyst\", \"task_id\": \"e41373a7-e6f7-4841-87e4-22db5cb656b2\", \"task_scope\": \"Calibrate Risk Tail Standard\", \"trigger_source_pointer\": \"e6a4655a-6275-4c67-9b52-898ebbe0b8b1\", \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q7\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Calibrate the robust 95th-percentile reference cutoff for DTI. Report the cutoff as the metric.\", \"source_pointer\": \"task:e41373a7-e6f7-4841-87e4-22db5cb656b2:description\", \"task_id\": \"e41373a7-e6f7-4841-87e4-22db5cb656b2\", \"worker_id\": null}, {\"requirement_id\": \"q6\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Calibrate Risk Tail Standard\", \"source_pointer\": \"task:e41373a7-e6f7-4841-87e4-22db5cb656b2:title\", \"task_id\": \"e41373a7-e6f7-4841-87e4-22db5cb656b2\", \"worker_id\": null}], \"task_constraints\": [{\"constraint_id\": \"c-0be2f35a543103ad\", \"task_id\": \"e41373a7-e6f7-4841-87e4-22db5cb656b2\", \"requirement_source_id\": \"q7\", \"exact_excerpt\": \"Calibrate the robust 95th-percentile reference cutoff for DTI.\"}, {\"constraint_id\": \"c-73ee34ad94b3b5f9\", \"task_id\": \"e41373a7-e6f7-4841-87e4-22db5cb656b2\", \"requirement_source_id\": \"q7\", \"exact_excerpt\": \"Report the cutoff as the metric.\"}]}, \"method_claims\": [{\"evidence_id\": \"e13\", \"fact\": \"95th-percentile reference cutoff calibrated from reference population\"}], \"excluded_non_authoritative_evidence_ids\": [\"e12\"], \"constraint_checks\": [{\"constraint_id\": \"c-0be2f35a543103ad\", \"requirement_source_id\": \"q7\", \"requirement_exact_excerpt\": \"Calibrate the robust 95th-percentile reference cutoff for DTI.\"}, {\"constraint_id\": \"c-73ee34ad94b3b5f9\", \"requirement_source_id\": \"q7\", \"requirement_exact_excerpt\": \"Report the cutoff as the metric.\"}]}]}"
+  },
+  {
+    "name": "t_artifact_tool_named",
+    "note": "method stated as a tool call: analyze_audit_artifacts(...) (arm3t t=18)",
+    "batch_kind": "artifact_event_batch",
+    "group_key": "88ee89ea-89a6-459a-ad8c-4949db495bfd",
+    "packet_count": 1,
+    "expected_fingerprints": [
+      "0e64780a745812a241a794ce97ad736371636eb3a741bb65316fcc3b7f7b762a"
+    ],
+    "constraint_check_count": 3,
+    "expected_shape": {
+      "pos0": {
+        "packet_kind": "requirement_artifact",
+        "constraint_ids": [
+          "c-80ef37ce929f456d",
+          "c-ec6ef14f1d468d2a",
+          "c-f904a53e9aed1eae"
+        ]
+      }
+    },
+    "user_prompt": "{\"batch_kind\": \"artifact_event_batch\", \"group_key\": \"88ee89ea-89a6-459a-ad8c-4949db495bfd\", \"packets\": [{\"packet_fingerprint\": \"0e64780a745812a241a794ce97ad736371636eb3a741bb65316fcc3b7f7b762a\", \"packet\": {\"packet_kind\": \"requirement_artifact\", \"first_observed_timestep\": 18, \"worker\": \"audit_coordinator\", \"task_id\": \"893b9e45-3ace-421e-bbd9-cb1f309c20dd\", \"task_scope\": \"Method Reconciliation\", \"trigger_source_pointer\": \"88ee89ea-89a6-459a-ad8c-4949db495bfd\", \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q22\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Read the completed robust-audit and rapid-screen artifacts for batch A. Report their absolute count difference as the metric. The shared artifact analysis tool can reconcile completed native artifacts.\", \"source_pointer\": \"task:893b9e45-3ace-421e-bbd9-cb1f309c20dd:description\", \"task_id\": \"893b9e45-3ace-421e-bbd9-cb1f309c20dd\", \"worker_id\": null}, {\"requirement_id\": \"q21\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Batch A Method Reconciliation\", \"source_pointer\": \"task:893b9e45-3ace-421e-bbd9-cb1f309c20dd:title\", \"task_id\": \"893b9e45-3ace-421e-bbd9-cb1f309c20dd\", \"worker_id\": null}], \"task_constraints\": [{\"constraint_id\": \"c-80ef37ce929f456d\", \"task_id\": \"893b9e45-3ace-421e-bbd9-cb1f309c20dd\", \"requirement_source_id\": \"q22\", \"exact_excerpt\": \"The shared artifact analysis tool can reconcile completed native artifacts.\"}, {\"constraint_id\": \"c-ec6ef14f1d468d2a\", \"task_id\": \"893b9e45-3ace-421e-bbd9-cb1f309c20dd\", \"requirement_source_id\": \"q22\", \"exact_excerpt\": \"Report their absolute count difference as the metric.\"}, {\"constraint_id\": \"c-f904a53e9aed1eae\", \"task_id\": \"893b9e45-3ace-421e-bbd9-cb1f309c20dd\", \"requirement_source_id\": \"q22\", \"exact_excerpt\": \"Read the completed robust-audit and rapid-screen artifacts for batch A.\"}]}, \"method_claims\": [{\"evidence_id\": \"e63\", \"fact\": \"reconcile via analyze_audit_artifacts(operation='reconcile', batch='A')\"}], \"excluded_non_authoritative_evidence_ids\": [\"e61\", \"e62\", \"e64\"], \"constraint_checks\": [{\"constraint_id\": \"c-80ef37ce929f456d\", \"requirement_source_id\": \"q22\", \"requirement_exact_excerpt\": \"The shared artifact analysis tool can reconcile completed native artifacts.\"}, {\"constraint_id\": \"c-ec6ef14f1d468d2a\", \"requirement_source_id\": \"q22\", \"requirement_exact_excerpt\": \"Report their absolute count difference as the metric.\"}, {\"constraint_id\": \"c-f904a53e9aed1eae\", \"requirement_source_id\": \"q22\", \"requirement_exact_excerpt\": \"Read the completed robust-audit and rapid-screen artifacts for batch A.\"}]}]}"
+  },
+  {
+    "name": "q_artifact_capacity",
+    "note": "derived-artifact capacity claim, 3 constraints (arm3i_q t=27)",
+    "batch_kind": "artifact_event_batch",
+    "group_key": "de675ccb-05af-467d-aeba-e214e4cdfa58",
+    "packet_count": 1,
+    "expected_fingerprints": [
+      "6758a1a4685b71e33817b4a7c0c9b576018ce4e1dcd5a2f5275a2193e45f96c9"
+    ],
+    "constraint_check_count": 3,
+    "expected_shape": {
+      "pos0": {
+        "packet_kind": "requirement_artifact",
+        "constraint_ids": [
+          "c-99d6851ecd7b93cd",
+          "c-c77bd535d9cd1a47",
+          "c-f6170736b32af0a0"
+        ]
+      }
+    },
+    "user_prompt": "{\"batch_kind\": \"artifact_event_batch\", \"group_key\": \"de675ccb-05af-467d-aeba-e214e4cdfa58\", \"packets\": [{\"packet_fingerprint\": \"6758a1a4685b71e33817b4a7c0c9b576018ce4e1dcd5a2f5275a2193e45f96c9\", \"packet\": {\"packet_kind\": \"requirement_artifact\", \"first_observed_timestep\": 27, \"worker\": \"audit_coordinator\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"task_scope\": \"Plan Manual Review Capacity\", \"trigger_source_pointer\": \"de675ccb-05af-467d-aeba-e214e4cdfa58\", \"evidence\": [], \"requirements\": [{\"requirement_id\": \"q46\", \"first_observed_timestep\": 0, \"kind\": \"task_requirement\", \"text\": \"Use the prioritization artifact and the corresponding robust-audit artifact. At 15 minutes per flag, report required reviewer-hours as the metric. The shared artifact analysis tool can calculate this from completed native artifacts.\", \"source_pointer\": \"task:b154c94e-480f-40ac-a84c-f0d06bcbfe60:description\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"worker_id\": null}, {\"requirement_id\": \"q45\", \"first_observed_timestep\": 0, \"kind\": \"task_title\", \"text\": \"Plan Manual Review Capacity\", \"source_pointer\": \"task:b154c94e-480f-40ac-a84c-f0d06bcbfe60:title\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"worker_id\": null}], \"task_constraints\": [{\"constraint_id\": \"c-99d6851ecd7b93cd\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"requirement_source_id\": \"q46\", \"exact_excerpt\": \"The shared artifact analysis tool can calculate this from completed native artifacts.\"}, {\"constraint_id\": \"c-c77bd535d9cd1a47\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"requirement_source_id\": \"q46\", \"exact_excerpt\": \"At 15 minutes per flag, report required reviewer-hours as the metric.\"}, {\"constraint_id\": \"c-f6170736b32af0a0\", \"task_id\": \"b154c94e-480f-40ac-a84c-f0d06bcbfe60\", \"requirement_source_id\": \"q46\", \"exact_excerpt\": \"Use the prioritization artifact and the corresponding robust-audit artifact.\"}]}, \"method_claims\": [{\"evidence_id\": \"e77\", \"fact\": \"capacity calculation from prioritization artifact (Batch B) and robust audit (89 flags) at 15 minutes per flag\"}], \"excluded_non_authoritative_evidence_ids\": [\"e75\", \"e76\", \"e78\"], \"constraint_checks\": [{\"constraint_id\": \"c-99d6851ecd7b93cd\", \"requirement_source_id\": \"q46\", \"requirement_exact_excerpt\": \"The shared artifact analysis tool can calculate this from completed native artifacts.\"}, {\"constraint_id\": \"c-c77bd535d9cd1a47\", \"requirement_source_id\": \"q46\", \"requirement_exact_excerpt\": \"At 15 minutes per flag, report required reviewer-hours as the metric.\"}, {\"constraint_id\": \"c-f6170736b32af0a0\", \"requirement_source_id\": \"q46\", \"requirement_exact_excerpt\": \"Use the prioritization artifact and the corresponding robust-audit artifact.\"}]}]}"
+  }
+]

@@ -1,0 +1,122 @@
+FILE-SET: outputs/**/manager_actions.json -> 78 files (35 at outputs/<run>/, 43 at outputs/<group>/<run>/); 74 enter this check.
+  SKIPPED, by reason (never silent -- a new setup that matches none of the
+  setup constants shows up here as a large count, not as a clean run):
+       3  no swap_timestep / target_worker / completions.json
+       1  no post-swap task with key ending '_robust'
+
+manager model recovered from events: {'openrouter/deepseek/deepseek-v4-flash': 73, 'openrouter/deepseek/deepseek-v4-pro': 1}
+perturbation: {'toolset_to_screening': 62, None: 10, 'model_prompt_judgment': 1, 'toolset_corrected': 1}
+
+after exclusions (no observation aid; toolset lever; manager model == openrouter/deepseek/deepseek-v4-flash; perturbation == toolset_to_screening): 36 of 74 runs
+one run per (condition, seed): 30 kept, 6 replicate runs dropped by lexicographic tie-break
+
+==============================================================================
+PER-SEED TABLE — the unit is a distinct scenario, not a run
+==============================================================================
+
+  full  (n=8 distinct seeds)
+    seed      rerouted_share  any_reroute  t_reroute  inspect_afterrun
+    101                1.000            1          5              3  smoke101_5b19b5b/toolset_to_screening_full_t3_seed101
+    102                0.667            1          7              0  toolset_to_screening_full_t3_seed102
+    103                0.333            1         13              2  toolset_to_screening_full_t3_seed103
+    104                1.000            1          5              0  toolset_to_screening_full_t3_seed104
+    105                1.000            1          5              0  toolset_to_screening_full_t3_seed105
+    42                 0.333            1          5              1  toolset_to_screening_full_t3_seed42
+    45                 1.000            1          5              1  soft_prior/toolset_to_screening_full_t3_seed45
+    47                 1.000            1          5              1  soft_prior/toolset_to_screening_full_t3_seed47
+
+  control  (n=6 distinct seeds)
+    seed      rerouted_share  any_reroute  t_reroute  inspect_afterrun
+    101                0.000            0        n/a              3  smoke101_5b19b5b/toolset_to_screening_control_t3_seed101
+    102                0.000            0        n/a              1  toolset_to_screening_control_t3_seed102
+    103                0.000            0        n/a              3  toolset_to_screening_control_t3_seed103
+    104                0.333            1         10              3  toolset_to_screening_control_t3_seed104
+    105                0.000            0        n/a              2  toolset_to_screening_control_t3_seed105
+    42                 0.000            0        n/a              1  toolset_to_screening_control_t3_seed42
+
+  partial  (n=6 distinct seeds)
+    seed      rerouted_share  any_reroute  t_reroute  inspect_afterrun
+    101                0.333            1          7              2  toolset_to_screening_partial_t3_seed101
+    102                0.333            1          5              0  toolset_to_screening_partial_t3_seed102
+    103                1.000            1          5              2  toolset_to_screening_partial_t3_seed103
+    104                1.000            1          5              0  toolset_to_screening_partial_t3_seed104
+    105                0.667            1          5              4  toolset_to_screening_partial_t3_seed105
+    42                 0.333            1          5              0  soft_prior/toolset_to_screening_partial_t3_seed42
+
+  silent  (n=6 distinct seeds)
+    seed      rerouted_share  any_reroute  t_reroute  inspect_afterrun
+    101                0.333            1         10              3  smoke101_5b19b5b/toolset_to_screening_silent_t3_seed101
+    102                0.333            1         12              2  toolset_to_screening_silent_t3_seed102
+    103                0.000            0        n/a              2  toolset_to_screening_silent_t3_seed103
+    104                0.000            0        n/a              1  toolset_to_screening_silent_t3_seed104
+    105                0.000            0        n/a              1  toolset_to_screening_silent_t3_seed105
+    42                 0.000            0        n/a              6  soft_prior/toolset_to_screening_silent_t3_seed42
+
+  silent_declared  (n=3 distinct seeds)
+    seed      rerouted_share  any_reroute  t_reroute  inspect_afterrun
+    101                0.667            1          5              4  silent_declared/toolset_to_screening_silent_declared_t3_seed101
+    201                0.667            1          5              1  silent_declared/toolset_to_screening_silent_declared_t3_seed201
+    202                0.667            1          6              3  silent_declared/toolset_to_screening_silent_declared_t3_seed202
+
+  silent_false_declared  (n=1 distinct seeds)
+    seed      rerouted_share  any_reroute  t_reroute  inspect_afterrun
+    101                0.000            0        n/a              1  silent_false_declared/toolset_to_screening_silent_false_declared_t3_seed101
+
+==============================================================================
+CLEAN RE-ESTIMATE — full vs silent, range across seeds
+==============================================================================
+  full n=8 seeds=['101', '102', '103', '104', '105', '42', '45', '47']
+  silent n=6 seeds=['101', '102', '103', '104', '105', '42']
+
+  DV                  full mean          full range  silent mean        silent range  diff of means
+  rerouted_share          0.792      [0.333, 1.000]        0.111      [0.000, 0.333]         +0.681
+  any_reroute             1.000      [1.000, 1.000]        0.333      [0.000, 1.000]         +0.667
+  time_to_reroute         6.250     [5.000, 13.000]       11.000    [10.000, 12.000]         -4.750
+  inspect_after           1.000      [0.000, 3.000]        2.500      [1.000, 6.000]         -1.500
+  mean_r_check            0.940      [0.790, 1.000]        0.747      [0.685, 0.833]         +0.193
+
+  SEPARATION CHECK (do the two arms' per-seed values overlap at all?)
+    rerouted_share     full [0.333, 1.000] vs silent [0.000, 0.333] -> OVERLAP
+    any_reroute        full [1.000, 1.000] vs silent [0.000, 1.000] -> OVERLAP
+
+==============================================================================
+PAIRED ON SHARED SEEDS (n=6) — removes between-seed scenario variation
+==============================================================================
+
+  rerouted_share
+    seed 101    full=1.000  silent=0.333  diff=+0.667
+    seed 102    full=0.667  silent=0.333  diff=+0.333
+    seed 103    full=0.333  silent=0.000  diff=+0.333
+    seed 104    full=1.000  silent=0.000  diff=+1.000
+    seed 105    full=1.000  silent=0.000  diff=+1.000
+    seed 42     full=0.333  silent=0.000  diff=+0.333
+    -> mean paired diff +0.611  range [+0.333, +1.000]  sign 6+/0-/0=0  (two-sided sign test p=0.031)
+
+  any_reroute
+    seed 101    full=1.000  silent=1.000  diff=+0.000
+    seed 102    full=1.000  silent=1.000  diff=+0.000
+    seed 103    full=1.000  silent=0.000  diff=+1.000
+    seed 104    full=1.000  silent=0.000  diff=+1.000
+    seed 105    full=1.000  silent=0.000  diff=+1.000
+    seed 42     full=1.000  silent=0.000  diff=+1.000
+    -> mean paired diff +0.667  range [+0.000, +1.000]  sign 4+/0-/2=0
+
+  mean_r_check
+    seed 101    full=1.000  silent=0.821  diff=+0.179
+    seed 102    full=0.917  silent=0.833  diff=+0.084
+    seed 103    full=0.814  silent=0.709  diff=+0.105
+    seed 104    full=1.000  silent=0.738  diff=+0.262
+    seed 105    full=1.000  silent=0.685  diff=+0.315
+    seed 42     full=0.790  silent=0.697  diff=+0.093
+    -> mean paired diff +0.173  range [+0.084, +0.315]  sign 6+/0-/0=0  (two-sided sign test p=0.031)
+
+  CAVEATS CARRIED (not removed by these exclusions):
+    * manager model: CLOSED, not carried. Recovered per run from
+      manager `structured_llm_response` events and held constant by
+      filter. The metadata FIELD is still absent and still worth
+      adding -- but the model was never absent from the run bundle.
+    * n is single-digit per arm; a range across seeds describes THESE
+      seeds and is not a confidence statement about the population.
+    * exclusions were chosen from §89's recorded imbalances, i.e. after
+      seeing the original result. Treat as a corrected description of
+      existing runs, not as a pre-registered test.

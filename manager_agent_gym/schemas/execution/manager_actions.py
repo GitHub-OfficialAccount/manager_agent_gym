@@ -7,7 +7,7 @@ validation. These are used for structured output generation and validation.
 
 from abc import ABC, abstractmethod
 from uuid import UUID
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Literal, TYPE_CHECKING, Any
 from ...core.decomposition import decompose_task, get_workflow_context_string
 from ...schemas.core.communication import Message, MessageType
@@ -37,6 +37,7 @@ class ActionResult(BaseModel):
 
     action_type: Literal[
         "assign_task",
+        "retry_task",
         "assign_all_pending_tasks",
         "create_task",
         "remove_task",
@@ -69,6 +70,69 @@ class ActionResult(BaseModel):
     )
 
 
+def record_assignment(
+    *,
+    task: Any,
+    to_agent: str | None,
+    from_agent: str | None,
+    action_type: str,
+    applied: bool,
+    reason: str = "",
+) -> None:
+    """LOGGING RECORD 6 — the assignment that was MADE (L7).
+
+    WHY THIS DID NOT EXIST AND WHY THAT MATTERED. The only assignment-shaped event
+    in the fork was `assignment_deferred`, a REFUSAL: **we logged the assignments
+    that were rejected and not the ones that were made.** The brief
+    (`STUDY1_FOUNDATION.md` §5) names `rerouted_share` — did the manager move work
+    off the newcomer — as the PRIMARY DV, and it was neither implemented nor
+    loggable. What survived in a bundle was `task_board_final`, a terminal
+    snapshot, in which a task assigned once and a task reassigned three times are
+    indistinguishable. The regret decomposition was then used as a stand-in, and
+    every failure in that chain was an un-mixing failure: an outcome aggregate
+    cannot be made to yield allocation behaviour.
+
+    REQUESTED **AND** APPLIED, ALWAYS BOTH. `AssignTasksToAgentsAction` silently
+    skips missing, terminal and unknown-agent pairs; a record of only what landed
+    would make a skipped assignment indistinguishable from one never attempted,
+    which is the same shape of error one level down. `applied=False` rows carry the
+    reason.
+
+    `from_agent` IS THE PREVIOUS ASSIGNEE, READ BEFORE THE MUTATION. Without it a
+    reassignment cannot be told from a first assignment, and the FORCED-versus-
+    DISCRETIONARY split the DV depends on is exactly that distinction.
+
+    Called from EVERY site that mutates `assigned_agent_id`, deliberately: a record
+    that existed for one action type and not another would make the DV a function
+    of which action the manager happened to choose.
+    """
+    try:
+        from ...core.common.run_trace import record_run_event
+
+        record_run_event(
+            "task_assigned",
+            {
+                "task_id": str(getattr(task, "id", "")),
+                "task_name": getattr(task, "name", ""),
+                "task_class": getattr(task, "task_class", None),
+                "from_agent_id": from_agent,
+                "to_agent_id": to_agent,
+                "is_reassignment": bool(
+                    from_agent and to_agent and from_agent != to_agent),
+                "action_type": action_type,
+                "applied": applied,
+                "reason": reason,
+                "task_status_before": getattr(
+                    getattr(task, "status", None), "value", None),
+            },
+            actor_type="manager",
+        )
+    except Exception:
+        # Logging must never break an action, for the same reason it must never
+        # break an observation build.
+        pass
+
+
 class BaseManagerAction(BaseModel, ABC):
     """
     Base class for all manager actions.
@@ -78,15 +142,29 @@ class BaseManagerAction(BaseModel, ABC):
     """
 
     reasoning: str = Field(
+        default="",
         description="Concise 2–3 sentence rationale for the chosen action",
         examples=["Agent idle, task READY, skill match found → assigning ai_writer."],
     )
     success: bool | None = Field(
-        description="Whether the action succeeded (set by execute)"
+        default=None, description="Whether the action succeeded (set by execute)"
     )
     result_summary: str | None = Field(
+        default=None,
         description="Short human-readable summary of the result (set by execute)",
     )
+
+    @field_validator("success", mode="before")
+    @classmethod
+    def _coerce_success(cls, v: Any) -> Any:
+        """Tolerate models that emit boolean-ish strings (e.g. "true") for success."""
+        if isinstance(v, str):
+            s = v.strip().lower()
+            if s in {"true", "1", "yes"}:
+                return True
+            if s in {"false", "0", "no", ""}:
+                return False
+        return v
 
     @abstractmethod
     async def execute(
@@ -155,7 +233,12 @@ class AssignTaskAction(BaseManagerAction):
                 success=False,
             )
 
-        # Execute assignment
+        # Execute assignment. The previous assignee is read BEFORE the mutation —
+        # after it, a reassignment is indistinguishable from a first assignment.
+        target = workflow.tasks[task_uuid]
+        record_assignment(task=target, to_agent=self.agent_id,
+                          from_agent=target.assigned_agent_id,
+                          action_type=self.action_type, applied=True)
         workflow.tasks[task_uuid].assigned_agent_id = self.agent_id
         logger.info(f"Task {self.task_id} assigned to agent {self.agent_id}")
         summary = f"Assigned task {self.task_id} to {self.agent_id}"
@@ -168,6 +251,105 @@ class AssignTaskAction(BaseManagerAction):
             data=data,
             action_type=self.action_type,
             success=self.success,
+        )
+
+
+class RetryTaskAction(BaseManagerAction):
+    """Retry a failed atomic task under the same task ID, optionally with a new agent.
+
+    Use when a task failed but its role in the dependency graph is still valid.
+    The retry preserves the task's identity, dependencies, instructions, and failure
+    notes while resetting attempt-specific execution state. Downstream dependencies
+    remain attached to the same node and unlock normally if the retry succeeds.
+    """
+
+    action_type: Literal["retry_task"] = "retry_task"
+    task_id: UUID = Field(description="ID of the failed atomic task to retry")
+    agent_id: str | None = Field(
+        default=None,
+        description="Optional replacement agent ID; omit to keep the current assignment",
+    )
+
+    async def execute(
+        self,
+        workflow: "Workflow",
+        communication_service: "CommunicationService | None" = None,
+    ) -> ActionResult:
+        task = workflow.tasks.get(self.task_id)
+        if task is None:
+            return ActionResult(
+                summary=f"Failed: Task {self.task_id} not found in workflow",
+                kind="failed_action",
+                data={},
+                action_type=self.action_type,
+                success=False,
+            )
+        if not task.is_atomic_task():
+            return ActionResult(
+                summary=f"Failed: Composite task {self.task_id} cannot be retried directly",
+                kind="failed_action",
+                data={"task_id": str(self.task_id)},
+                action_type=self.action_type,
+                success=False,
+            )
+        if task.status != TaskStatus.FAILED:
+            return ActionResult(
+                summary=(
+                    f"Failed: Task {self.task_id} has status {task.status.value}; "
+                    "only failed tasks can be retried"
+                ),
+                kind="failed_action",
+                data={"task_id": str(self.task_id)},
+                action_type=self.action_type,
+                success=False,
+            )
+        if self.agent_id is not None and self.agent_id not in workflow.agents:
+            return ActionResult(
+                summary=f"Failed: Agent {self.agent_id} not found in workflow",
+                kind="failed_action",
+                data={"task_id": str(self.task_id)},
+                action_type=self.action_type,
+                success=False,
+            )
+
+        previous_agent_id = task.assigned_agent_id
+        if self.agent_id is not None:
+            # A RETRY THAT NAMES A NEW AGENT IS A REASSIGNMENT. Logged here too,
+            # or the DV would depend on which action the manager reached for to
+            # move the same piece of work.
+            record_assignment(task=task, to_agent=self.agent_id,
+                              from_agent=previous_agent_id,
+                              action_type=self.action_type, applied=True,
+                              reason="retry with replacement agent")
+            task.assigned_agent_id = self.agent_id
+        task.status = TaskStatus.PENDING
+        task.effective_status = TaskStatus.PENDING.value
+        task.started_at = None
+        task.completed_at = None
+        task.deps_ready_at = None
+        task.actual_duration_hours = None
+        task.actual_cost = None
+        task.quality_score = None
+        task.output_resource_ids = []
+        task.execution_notes.append("Retry requested by manager")
+
+        assigned_agent_id = task.assigned_agent_id
+        summary = f"Retrying task {self.task_id}"
+        if assigned_agent_id:
+            summary += f" with {assigned_agent_id}"
+        data = {
+            "task_id": str(self.task_id),
+            "previous_agent_id": previous_agent_id,
+            "agent_id": assigned_agent_id,
+        }
+        self.success = True
+        self.result_summary = summary
+        return ActionResult(
+            summary=summary,
+            kind="mutation",
+            data=data,
+            action_type=self.action_type,
+            success=True,
         )
 
 
@@ -209,6 +391,10 @@ class AssignAllPendingTasksAction(BaseManagerAction):
                 TaskStatus.FAILED,
             ):
                 continue
+            record_assignment(task=task, to_agent=target_agent_id,
+                              from_agent=task.assigned_agent_id,
+                              action_type=self.action_type, applied=True,
+                              reason="bulk assignment of unassigned tasks")
             task.assigned_agent_id = target_agent_id
             assigned_count += 1
 
@@ -253,15 +439,37 @@ class AssignTasksToAgentsAction(BaseManagerAction):
         skipped: list[str] = []
         for pair in self.assignments:
             task = workflow.tasks.get(pair.task_id)
+            # EVERY SKIP IS RECORDED AS A REQUESTED-BUT-NOT-APPLIED ASSIGNMENT.
+            # These three branches are the requested-vs-applied gap: without a row
+            # here a skipped assignment is indistinguishable from one the manager
+            # never attempted, and the DV would silently credit the manager with
+            # not having tried.
             if task is None:
                 skipped.append(f"missing:{pair.task_id}")
+                record_assignment(
+                    task=None, to_agent=pair.agent_id, from_agent=None,
+                    action_type=self.action_type, applied=False,
+                    reason=f"missing task {pair.task_id}")
                 continue
             if task.status in (TaskStatus.COMPLETED, TaskStatus.FAILED):
                 skipped.append(f"terminal:{pair.task_id}")
+                record_assignment(
+                    task=task, to_agent=pair.agent_id,
+                    from_agent=task.assigned_agent_id,
+                    action_type=self.action_type, applied=False,
+                    reason=f"task already {task.status.value}")
                 continue
             if pair.agent_id not in workflow.agents:
                 skipped.append(f"no_agent:{pair.agent_id}")
+                record_assignment(
+                    task=task, to_agent=pair.agent_id,
+                    from_agent=task.assigned_agent_id,
+                    action_type=self.action_type, applied=False,
+                    reason=f"no such agent {pair.agent_id}")
                 continue
+            record_assignment(task=task, to_agent=pair.agent_id,
+                              from_agent=task.assigned_agent_id,
+                              action_type=self.action_type, applied=True)
             task.assigned_agent_id = pair.agent_id
             assigned += 1
 
@@ -616,21 +824,42 @@ class RefineTaskAction(BaseManagerAction):
             updates.append(f"name -> '{self.new_name}'")
 
         if self.new_description:
+            previous_description = task.description
             task.description = self.new_description
             updates.append(
-                f"description updated from {task.description} to {self.new_description}"
+                f"description updated from {previous_description} to {self.new_description}"
+            )
+            # LOGGING RECORD 2 (STUDY1_LOGGING_AND_ORDERING.md §2): the BEFORE and
+            # AFTER text, not a count. `task.description` is a WORKER INPUT --
+            # it is rendered into the task prompt -- so a refine changes what the
+            # worker saw. A counted refine cannot be attributed to an outcome; a
+            # refine carrying its before/after text can. The summary string above
+            # embeds both but is prose and not parseable; this event is the record.
+            from ...core.common.run_trace import record_run_event
+
+            record_run_event(
+                "task_refined",
+                {
+                    "task_id": str(self.task_id),
+                    "task_name": task.name,
+                    "description_before": previous_description,
+                    "description_after": self.new_description,
+                },
+                actor_type="manager",
             )
 
         if self.new_estimated_duration:
+            previous_duration = task.estimated_duration_hours
             task.estimated_duration_hours = self.new_estimated_duration
             updates.append(
-                f"duration updated from {task.estimated_duration_hours}h to {self.new_estimated_duration}h"
+                f"duration updated from {previous_duration}h to {self.new_estimated_duration}h"
             )
 
         if self.new_estimated_cost:
+            previous_cost = task.estimated_cost
             task.estimated_cost = self.new_estimated_cost
             updates.append(
-                f"cost updated from ${task.estimated_cost} to ${self.new_estimated_cost}"
+                f"cost updated from ${previous_cost} to ${self.new_estimated_cost}"
             )
 
         if self.additional_instructions:

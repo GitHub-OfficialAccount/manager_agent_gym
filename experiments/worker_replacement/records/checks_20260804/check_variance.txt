@@ -1,0 +1,185 @@
+FILE-SET: outputs/**/manager_actions.json -> 78 files (35 at outputs/<run>/, 43 at outputs/<group>/<run>/); 74 enter this check.
+  SKIPPED, by reason (never silent -- a new setup that matches none of the
+  setup constants shows up here as a large count, not as a clean run):
+       3  no swap_timestep / target_worker / completions.json
+       1  no post-swap task with key ending '_robust'
+FILE-SET: outputs/**/manager_actions.json -> 78 files (35 at outputs/<run>/, 43 at outputs/<group>/<run>/); 3 on the older flat action schema, all parsed.
+
+note: 74 of 78 runs carry the primary DV (`rerouted_share`); the rest are priced on secondary DVs only.
+
+==============================================================================
+VARIANCE DECOMPOSITION  (within-seed = irreducible; between-seed = what more seeds averages down)
+==============================================================================
+replicate cells (same config AND same seed, >=2 runs): 12
+
+DV              sigma_within  sigma_between  within share
+------------------------------------------------------------------------------
+n_actions              3.356          2.235         0.693
+n_inspect              2.079          1.295         0.720
+n_noop                 1.469          1.229         0.588
+n_retry                0.686          0.772         0.441
+n_assign               1.934          0.407         0.958
+rate_noop              0.062          0.047         0.633
+rate_inspect           0.097          0.045         0.821
+n_graph_edits          0.641          0.645         0.497
+mean_r_check           0.066          0.058         0.561
+rerouted_share         0.240          0.201         0.587
+any_reroute            0.321          0.231         0.659
+time_to_reroute         4.637          1.929         0.852
+
+==============================================================================
+WITHIN-CONDITION SPREAD AND IMPLIED SEEDS PER ARM (TOST, alpha=.05, power=.80)
+==============================================================================
+
+[8 runs] full | - | aid=-   (seed-varying; seeds={45: 2, 43: 4, 44: 2})
+  DV                  mean        sd       CV             sd 95% CI  n/arm @d=0.5sd  n/arm @d=10%
+  n_actions         27.500     4.342    0.158        [2.777, 4.658]              69            43
+  n_inspect          3.000     2.976    0.992        [1.246, 4.036]              69          1686
+  n_noop             2.875     2.167    0.754        [0.756, 2.777]              69           973
+  n_retry            0.500     1.069    2.138        [0.000, 1.553]              69          7831
+  n_assign          15.750     1.581    0.100        [0.000, 2.315]              69            17
+  rate_noop          0.115     0.098    0.854        [0.031, 0.126]              69          1250
+  rate_inspect       0.105     0.094    0.898        [0.045, 0.125]              69          1382
+  n_graph_edits      0.375     0.518    1.380        [0.000, 0.535]              69          3263
+  mean_r_check       0.920     0.117    0.127        [0.000, 0.139]              69            28
+  rerouted_share     0.708     0.452    0.638        [0.000, 0.535]              69           698
+  any_reroute        0.750     0.463    0.617        [0.000, 0.535]              69           653
+  time_to_reroute     7.500     6.124    0.816        [0.000, 8.216]              69          1142
+
+[8 runs] full | toolset_to_screening | aid=-   (seed-varying; seeds={104: 1, 45: 1, 47: 1, 42: 1, 103: 1, 102: 1, 101: 1, 105: 1})
+  DV                  mean        sd       CV             sd 95% CI  n/arm @d=0.5sd  n/arm @d=10%
+  n_actions         30.000     2.563    0.085        [1.356, 2.964]              69            13
+  n_inspect          1.250     1.389    1.111        [0.535, 1.847]              69          2114
+  n_noop             4.750     1.282    0.270        [0.535, 1.506]              69           125
+  n_retry            0.875     1.126    1.287        [0.463, 1.414]              69          2837
+  n_assign          16.750     0.463    0.028        [0.000, 0.535]              69             1
+  rate_noop          0.161     0.051    0.320        [0.027, 0.062]              69           175
+  rate_inspect       0.041     0.043    1.066        [0.019, 0.057]              69          1946
+  n_graph_edits      1.250     1.035    0.828        [0.518, 1.309]              69          1175
+  mean_r_check       0.940     0.090    0.096        [0.000, 0.106]              69            16
+  rerouted_share     0.792     0.305    0.386        [0.000, 0.356]              69           255
+  any_reroute        1.000     0.000    0.000        [0.000, 0.000]             nan             0
+  time_to_reroute     6.375     2.774    0.435        [0.354, 4.051]              69           324
+
+[7 runs] partial | toolset_to_screening | aid=-   (seed-varying; seeds={104: 1, 101: 1, 105: 1, 42: 2, 102: 1, 103: 1})
+  DV                  mean        sd       CV             sd 95% CI  n/arm @d=0.5sd  n/arm @d=10%
+  n_actions         26.000     2.000    0.077        [0.535, 2.610]              69            10
+  n_inspect          1.429     1.512    1.058        [0.756, 1.902]              69          1919
+  n_noop             3.857     1.574    0.408        [0.787, 1.890]              69           285
+  n_retry            0.000     0.000      n/a        [0.000, 0.000]             nan           nan
+  n_assign          16.000     0.000    0.000        [0.000, 0.000]             nan             0
+  rate_noop          0.152     0.070    0.457        [0.035, 0.082]              69           357
+  rate_inspect       0.052     0.054    1.026        [0.029, 0.066]              69          1802
+  n_graph_edits      0.000     0.000      n/a        [0.000, 0.000]             nan           nan
+  mean_r_check       0.903     0.100    0.110        [0.047, 0.109]              69            21
+  rerouted_share     0.667     0.333    0.500        [0.163, 0.356]              69           428
+  any_reroute        1.000     0.000    0.000        [0.000, 0.000]             nan             0
+  time_to_reroute     5.429     0.787    0.145        [0.000, 1.069]              69            36
+
+[7 runs] silent | toolset_to_screening | aid=-   (seed-varying; seeds={42: 2, 105: 1, 102: 1, 101: 1, 104: 1, 103: 1})
+  DV                  mean        sd       CV             sd 95% CI  n/arm @d=0.5sd  n/arm @d=10%
+  n_actions         26.000     2.944    0.113        [0.787, 4.059]              69            22
+  n_inspect          2.571     1.902    0.740        [0.756, 2.545]              69           938
+  n_noop             3.143     1.864    0.593        [0.577, 2.507]              69           603
+  n_retry            0.286     0.756    2.646        [0.000, 1.069]              69         11991
+  n_assign          16.143     0.378    0.023        [0.000, 0.535]              69             1
+  rate_noop          0.121     0.075    0.619        [0.017, 0.103]              69           656
+  rate_inspect       0.101     0.080    0.788        [0.028, 0.104]              69          1064
+  n_graph_edits      0.286     0.756    2.646        [0.000, 1.069]              69         11991
+  mean_r_check       0.727     0.050    0.069        [0.013, 0.069]              69             8
+  rerouted_share     0.048     0.126    2.646        [0.000, 0.178]              69         11991
+  any_reroute        0.143     0.378    2.646        [0.000, 0.535]              69         11991
+
+[6 runs] silent | toolset_to_screening | aid=arm3i_q   (FIXED-SEED replicates; seeds={101: 6})
+  DV                  mean        sd       CV             sd 95% CI  n/arm @d=0.5sd  n/arm @d=10%
+  n_actions         27.000     4.147    0.154        [1.506, 4.930]              69            40
+  n_inspect          2.167     0.753    0.347        [0.408, 0.983]              69           207
+  n_noop             2.500     1.517    0.607        [0.753, 1.975]              69           630
+  n_retry            0.333     0.516    1.549        [0.000, 0.548]              69          4111
+  n_assign          16.500     0.837    0.051        [0.000, 1.095]              69             4
+  rate_noop          0.094     0.052    0.560        [0.020, 0.062]              69           537
+  rate_inspect       0.080     0.027    0.331        [0.010, 0.035]              69           187
+  n_graph_edits      0.667     1.033    1.549        [0.000, 1.095]              69          4111
+  mean_r_check       0.753     0.052    0.069        [0.000, 0.070]              69             8
+  rerouted_share     0.056     0.136    2.449        [0.000, 0.183]              69         10278
+  any_reroute        0.167     0.408    2.449        [0.000, 0.548]              69         10278
+
+[5 runs] control | toolset_to_screening | aid=-   (seed-varying; seeds={101: 1, 105: 1, 42: 1, 103: 1, 104: 1})
+  DV                  mean        sd       CV             sd 95% CI  n/arm @d=0.5sd  n/arm @d=10%
+  n_actions         27.000     3.317    0.123        [1.342, 4.382]              69            26
+  n_inspect          3.000     1.871    0.624        [0.447, 2.510]              69           666
+  n_noop             3.400     1.673    0.492        [0.894, 2.191]              69           415
+  n_retry            0.600     1.342    2.236        [0.000, 1.643]              69          8565
+  n_assign          16.200     0.447    0.028        [0.000, 0.548]              69             1
+  rate_noop          0.127     0.063    0.498        [0.018, 0.086]              69           425
+  rate_inspect       0.107     0.056    0.518        [0.020, 0.073]              69           459
+  n_graph_edits      0.200     0.447    2.236        [0.000, 0.548]              69          8565
+  mean_r_check       1.000     0.000    0.000        [0.000, 0.000]              69             0
+  rerouted_share     0.067     0.149    2.236        [0.000, 0.183]              69          8565
+  any_reroute        0.200     0.447    2.236        [0.000, 0.548]              69          8565
+
+[4 runs] control | - | aid=-   (seed-varying; seeds={43: 3, 42: 1})
+  DV                  mean        sd       CV             sd 95% CI  n/arm @d=0.5sd  n/arm @d=10%
+  n_actions         17.000     4.243    0.250        [0.000, 5.058]              69           107
+  n_inspect          3.000     4.082    1.361        [0.500, 5.196]              69          3172
+  n_noop             1.000     1.155    1.155        [0.000, 1.155]              69          2284
+  n_retry            0.000     0.000      n/a        [0.000, 0.000]             nan           nan
+  n_assign           9.000     5.715    0.635        [0.000, 7.000]              69           691
+  rate_noop          0.053     0.063    1.191        [0.000, 0.072]              69          2431
+  rate_inspect       0.182     0.257    1.415        [0.005, 0.325]              69          3428
+  n_graph_edits      0.500     0.577    1.155        [0.000, 0.577]              69          2284
+
+[3 runs] silent_declared | toolset_to_screening | aid=none   (seed-varying; seeds={201: 1, 101: 1, 202: 1})
+  DV                  mean        sd       CV             sd 95% CI  n/arm @d=0.5sd  n/arm @d=10%
+  n_actions         31.000     1.732    0.056        [0.000, 1.732]              69             5
+  n_inspect          2.667     1.528    0.573        [0.000, 1.732]              69           562
+  n_noop             3.667     1.155    0.315        [0.000, 1.155]              69           170
+  n_retry            0.333     0.577    1.732        [0.000, 0.577]              69          5139
+  n_assign          16.333     0.577    0.035        [0.000, 0.577]              69             2
+  rate_noop          0.118     0.034    0.285        [0.000, 0.036]              69           140
+  rate_inspect       0.087     0.049    0.567        [0.000, 0.054]              69           551
+  n_graph_edits      0.333     0.577    1.732        [0.000, 0.577]              69          5139
+  mean_r_check       0.883     0.005    0.005        [0.000, 0.005]              69             0
+  rerouted_share     0.667     0.000    0.000        [0.000, 0.000]             nan             0
+  any_reroute        1.000     0.000    0.000        [0.000, 0.000]             nan             0
+  time_to_reroute     5.333     0.577    0.108        [0.000, 0.577]              69            20
+
+==============================================================================
+ALLOCATION DVs ON ABSOLUTE MARGINS (proportions; 10%-of-mean is inappropriate here)
+==============================================================================
+
+  rerouted_share: sigma_total=0.314 (within 0.240, between 0.201)
+    equivalence margin       n per arm
+    +/- 0.10                       168
+    +/- 0.15                        75
+    +/- 0.20                        42
+    +/- 0.30                        19
+    detect effect 0.611                 4
+    detect effect 0.400                10
+    detect effect 0.300                17
+
+  any_reroute: sigma_total=0.395 (within 0.321, between 0.231)
+    equivalence margin       n per arm
+    +/- 0.10                       267
+    +/- 0.15                       119
+    +/- 0.20                        67
+    +/- 0.30                        30
+    detect effect 0.611                 7
+    detect effect 0.400                15
+    detect effect 0.300                27
+
+==============================================================================
+HEADLINE: seeds per arm for a 10%-of-mean equivalence margin
+==============================================================================
+  n_actions      median       26   range [5, 107]  across 8 cells
+  n_inspect      median     1686   range [207, 3172]  across 8 cells
+  n_noop         median      603   range [125, 2284]  across 8 cells
+  n_retry        median     7831   range [2837, 11991]  across 6 cells
+  n_assign       median        2   range [0, 691]  across 8 cells
+  rate_noop      median      537   range [140, 2431]  across 8 cells
+  rate_inspect   median     1382   range [187, 3428]  across 8 cells
+  n_graph_edits  median     4111   range [1175, 11991]  across 7 cells
+  mean_r_check   median        8   range [0, 28]  across 7 cells
+  rerouted_share median      698   range [0, 11991]  across 7 cells
+  any_reroute    median      653   range [0, 11991]  across 7 cells
+  time_to_reroute median      324   range [20, 1142]  across 4 cells

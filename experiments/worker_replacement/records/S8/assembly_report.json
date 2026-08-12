@@ -1,0 +1,55 @@
+{
+  "capacity_mapping": {
+    "cap": 3,
+    "max_concurrent_tasks_per_worker": 1,
+    "n_segments": 9,
+    "post_swap_roster_size": 3,
+    "segment_window_timesteps": 3
+  },
+  "cards": {
+    "w_26f14e": "Credit risk analyst. Approved scope \u2014 IRB model approval: bank; IRB model approval: corporate; Standardised approach: all exposure classes.",
+    "w_68358d": "Credit risk analyst. Approved scope \u2014 IRB model approval: retail; IRB model approval: sovereign; Standardised approach: all exposure classes.",
+    "w_6f6097": "Credit risk analyst. Approved scope \u2014 IRB model approval: corporate; IRB model approval: retail; Standardised approach: all exposure classes.",
+    "w_e172a9": "Credit risk analyst. Approved scope \u2014 IRB model approval: mdb; IRB model approval: sovereign; Standardised approach: all exposure classes."
+  },
+  "horizon": 22,
+  "index": {
+    "downstream_task_ids": [
+      "0eddef7f-5195-4441-b4a2-72d8edf46010",
+      "1acfc453-7e5c-472f-9a60-17ede2462209",
+      "acaabe39-2804-4f4e-acf7-a8ddba7163ca"
+    ],
+    "fixed_task_ids": [
+      "63aac03f-076e-4605-89d4-2e2f4baf5208",
+      "cb40aa86-dd2c-4553-97d0-6b399ac25dab"
+    ],
+    "n_tasks": 16,
+    "segment_task_ids": {
+      "seg_00": "a82ac2c9-abc0-4778-a3fe-19850ec710ea",
+      "seg_01": "ddea2679-ec93-4eae-b745-2014534cf3c3",
+      "seg_02": "8b581678-154a-419c-81ab-3f17f4ca58ec",
+      "seg_03": "a00851ba-ea13-4b35-9f92-2c160ddc7d71",
+      "seg_04": "bf9b0fd5-65b0-4c3c-80c8-955860979802",
+      "seg_05": "48a94b01-e614-421f-9078-0dec0c528736",
+      "seg_06": "b930cb70-6749-4e89-83c5-58007ac55947",
+      "seg_07": "2e0ef2fe-f42f-47d2-b20a-efdd251ea2e7",
+      "seg_08": "ba63935b-793b-41ad-a89e-af1bb8cf0e20"
+    },
+    "upstream_task_ids": [
+      "63aac03f-076e-4605-89d4-2e2f4baf5208",
+      "cb40aa86-dd2c-4553-97d0-6b399ac25dab",
+      "d2396618-bc0b-4bc0-9a64-30aeaa86bc38",
+      "bf612459-f31a-443a-a8b6-81afbf956afe"
+    ]
+  },
+  "instance_seed": 101,
+  "instance_sha256": "8da9795da0616ba9c6e983ddcc1e75aad8c54975db054caa49e8dcfc9ed01554",
+  "leaks": [],
+  "n_private_values_searched": 25,
+  "n_public_strings_searched": 24,
+  "n_tasks": 16,
+  "roster_change_lines": [
+    "removed w_26f14e",
+    "added w_6f6097"
+  ]
+}

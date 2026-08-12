@@ -108,6 +108,27 @@ class CommunicationService:
                 f"[{message_type.value}]: {content[:50]}..."
             )
 
+            # LOGGING RECORD 3/4 (STUDY1_LOGGING_AND_ORDERING.md §2): the
+            # addressee AS WRITTEN. Addressing does NOT control delivery here, so
+            # `to_agent` is what the sender intended, not who received it — and
+            # the corpus measured 48 of 56 worker sends addressed to ids that do
+            # not exist. A record that stored the resolved recipient would erase
+            # exactly the fact record 4 exists to establish.
+            from ..common.run_trace import record_run_event
+
+            record_run_event(
+                "message_sent",
+                {
+                    "message_id": str(message.message_id),
+                    "sender_id": from_agent,
+                    "to_agent_as_written": to_agent,
+                    "message_type": message_type.value,
+                    "related_task_id": (str(related_task_id)
+                                        if related_task_id else None),
+                },
+                actor_type="communication",
+            )
+
             return message
 
     async def broadcast_message(

@@ -1,0 +1,486 @@
+[
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 505,
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "761724a157da/proposal/profile_scope_support": "supports_fit",
+      "3ffe3a0dc47f/proposal/profile_scope_support": "supports_fit",
+      "5a723efe46d7/proposal/profile_scope_support": "supports_fit",
+      "c9bfff66aaf9/proposal/profile_scope_support": "supports_fit"
+    },
+    "latency_s": 6.11,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 501,
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "e8e800ac42b8/proposal/profile_scope_support": "supports_fit",
+      "e194e4ccbac0/proposal/profile_scope_support": "supports_fit",
+      "a9481bd0b1a7/proposal/profile_scope_support": "supports_fit",
+      "9fba13fc1dc0/proposal/profile_scope_support": "supports_fit"
+    },
+    "latency_s": 12.62,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 175,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "be0dad23db4b/cmp/c-13f62f64958cdcd4": "neutral",
+      "be0dad23db4b/cmp/c-204bb7a791b14d3a": "neutral",
+      "be0dad23db4b/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "latency_s": 5.46,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 171,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "95fbb3266bfb/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "95fbb3266bfb/cmp/c-5dc35f5d8205050b": "neutral",
+      "95fbb3266bfb/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "latency_s": 3.12,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "93bdc8cf3678/cmp/c-48f242fa17079cd8": "neutral",
+      "93bdc8cf3678/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "93bdc8cf3678/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "latency_s": 5.3,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 143,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "3f30b7169d10/cmp/c-0be2f35a543103ad": "supports_fit",
+      "3f30b7169d10/cmp/c-73ee34ad94b3b5f9": "supports_fit"
+    },
+    "latency_s": 3.15,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 1724,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "0e64780a7458/cmp/c-80ef37ce929f456d": "supports_fit",
+      "0e64780a7458/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "0e64780a7458/cmp/c-f904a53e9aed1eae": "neutral"
+    },
+    "latency_s": 28.2,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 181,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "6758a1a4685b/cmp/c-99d6851ecd7b93cd": "neutral",
+      "6758a1a4685b/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "6758a1a4685b/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "latency_s": 5.57,
+    "repeat": 0
+  },
+  {
+    "arm": "or_structured",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 741,
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "761724a157da/proposal/profile_scope_support": "neutral",
+      "3ffe3a0dc47f/proposal/profile_scope_support": "neutral",
+      "5a723efe46d7/proposal/profile_scope_support": "neutral",
+      "c9bfff66aaf9/proposal/profile_scope_support": "neutral"
+    },
+    "latency_s": 29.96,
+    "repeat": 0
+  },
+  {
+    "arm": "or_structured",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 501,
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "e8e800ac42b8/proposal/profile_scope_support": "supports_fit",
+      "e194e4ccbac0/proposal/profile_scope_support": "supports_fit",
+      "a9481bd0b1a7/proposal/profile_scope_support": "supports_fit",
+      "9fba13fc1dc0/proposal/profile_scope_support": "supports_fit"
+    },
+    "latency_s": 11.96,
+    "repeat": 0
+  },
+  {
+    "arm": "or_structured",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "be0dad23db4b/cmp/c-13f62f64958cdcd4": "neutral",
+      "be0dad23db4b/cmp/c-204bb7a791b14d3a": "neutral",
+      "be0dad23db4b/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "latency_s": 8.9,
+    "repeat": 0
+  },
+  {
+    "arm": "or_structured",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 171,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "95fbb3266bfb/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "95fbb3266bfb/cmp/c-5dc35f5d8205050b": "neutral",
+      "95fbb3266bfb/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "latency_s": 2.72,
+    "repeat": 0
+  },
+  {
+    "arm": "or_structured",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 161,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "93bdc8cf3678/cmp/c-48f242fa17079cd8": "neutral",
+      "93bdc8cf3678/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "93bdc8cf3678/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "latency_s": 2.6,
+    "repeat": 0
+  },
+  {
+    "arm": "or_structured",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 140,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "3f30b7169d10/cmp/c-0be2f35a543103ad": "supports_fit",
+      "3f30b7169d10/cmp/c-73ee34ad94b3b5f9": "neutral"
+    },
+    "latency_s": 3.13,
+    "repeat": 0
+  },
+  {
+    "arm": "or_structured",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 1869,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "0e64780a7458/cmp/c-80ef37ce929f456d": "supports_fit",
+      "0e64780a7458/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "0e64780a7458/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "latency_s": 52.12,
+    "repeat": 0
+  },
+  {
+    "arm": "or_structured",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 175,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "6758a1a4685b/cmp/c-99d6851ecd7b93cd": "neutral",
+      "6758a1a4685b/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "6758a1a4685b/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "latency_s": 2.78,
+    "repeat": 0
+  },
+  {
+    "arm": "md_json",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 489,
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "761724a157da/proposal/profile_scope_support": "supports_fit",
+      "3ffe3a0dc47f/proposal/profile_scope_support": "supports_fit",
+      "5a723efe46d7/proposal/profile_scope_support": "supports_fit",
+      "c9bfff66aaf9/proposal/profile_scope_support": "supports_fit"
+    },
+    "latency_s": 7.57,
+    "repeat": 0
+  },
+  {
+    "arm": "md_json",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 483,
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "e8e800ac42b8/proposal/profile_scope_support": "supports_fit",
+      "e194e4ccbac0/proposal/profile_scope_support": "neutral",
+      "a9481bd0b1a7/proposal/profile_scope_support": "neutral",
+      "9fba13fc1dc0/proposal/profile_scope_support": "neutral"
+    },
+    "latency_s": 13.6,
+    "repeat": 0
+  },
+  {
+    "arm": "md_json",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 175,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "be0dad23db4b/cmp/c-13f62f64958cdcd4": "neutral",
+      "be0dad23db4b/cmp/c-204bb7a791b14d3a": "neutral",
+      "be0dad23db4b/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "latency_s": 5.83,
+    "repeat": 0
+  },
+  {
+    "arm": "md_json",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 174,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "95fbb3266bfb/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "95fbb3266bfb/cmp/c-5dc35f5d8205050b": "neutral",
+      "95fbb3266bfb/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "latency_s": 4.62,
+    "repeat": 0
+  },
+  {
+    "arm": "md_json",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 171,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "93bdc8cf3678/cmp/c-48f242fa17079cd8": "neutral",
+      "93bdc8cf3678/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "93bdc8cf3678/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "latency_s": 3.17,
+    "repeat": 0
+  },
+  {
+    "arm": "md_json",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 143,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "3f30b7169d10/cmp/c-0be2f35a543103ad": "supports_fit",
+      "3f30b7169d10/cmp/c-73ee34ad94b3b5f9": "neutral"
+    },
+    "latency_s": 2.68,
+    "repeat": 0
+  },
+  {
+    "arm": "md_json",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 1414,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "0e64780a7458/cmp/c-80ef37ce929f456d": "supports_fit",
+      "0e64780a7458/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "0e64780a7458/cmp/c-f904a53e9aed1eae": "neutral"
+    },
+    "latency_s": 24.46,
+    "repeat": 0
+  },
+  {
+    "arm": "md_json",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 184,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "6758a1a4685b/cmp/c-99d6851ecd7b93cd": "neutral",
+      "6758a1a4685b/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "6758a1a4685b/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "latency_s": 3.83,
+    "repeat": 0
+  },
+  {
+    "arm": "live",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 0,
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "761724a157da/proposal/profile_scope_support": "supports_fit",
+      "3ffe3a0dc47f/proposal/profile_scope_support": "supports_fit",
+      "5a723efe46d7/proposal/profile_scope_support": "supports_fit",
+      "c9bfff66aaf9/proposal/profile_scope_support": "supports_fit"
+    },
+    "latency_s": 9.51,
+    "repeat": 0
+  },
+  {
+    "arm": "live",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 0,
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "e8e800ac42b8/proposal/profile_scope_support": "supports_fit",
+      "e194e4ccbac0/proposal/profile_scope_support": "neutral",
+      "a9481bd0b1a7/proposal/profile_scope_support": "neutral",
+      "9fba13fc1dc0/proposal/profile_scope_support": "neutral"
+    },
+    "latency_s": 9.05,
+    "repeat": 0
+  },
+  {
+    "arm": "live",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 0,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "be0dad23db4b/cmp/c-13f62f64958cdcd4": "neutral",
+      "be0dad23db4b/cmp/c-204bb7a791b14d3a": "neutral",
+      "be0dad23db4b/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "latency_s": 6.42,
+    "repeat": 0
+  },
+  {
+    "arm": "live",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 0,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "95fbb3266bfb/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "95fbb3266bfb/cmp/c-5dc35f5d8205050b": "neutral",
+      "95fbb3266bfb/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "latency_s": 30.85,
+    "repeat": 0
+  },
+  {
+    "arm": "live",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 0,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "93bdc8cf3678/cmp/c-48f242fa17079cd8": "neutral",
+      "93bdc8cf3678/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "93bdc8cf3678/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "latency_s": 3.68,
+    "repeat": 0
+  },
+  {
+    "arm": "live",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 0,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "3f30b7169d10/cmp/c-0be2f35a543103ad": "supports_fit",
+      "3f30b7169d10/cmp/c-73ee34ad94b3b5f9": "neutral"
+    },
+    "latency_s": 3.34,
+    "repeat": 0
+  },
+  {
+    "arm": "live",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 0,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "0e64780a7458/cmp/c-80ef37ce929f456d": "supports_fit",
+      "0e64780a7458/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "0e64780a7458/cmp/c-f904a53e9aed1eae": "neutral"
+    },
+    "latency_s": 3.69,
+    "repeat": 0
+  },
+  {
+    "arm": "live",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 0,
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "6758a1a4685b/cmp/c-99d6851ecd7b93cd": "supports_fit",
+      "6758a1a4685b/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "6758a1a4685b/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "latency_s": 25.06,
+    "repeat": 0
+  }
+]

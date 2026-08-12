@@ -1,0 +1,689 @@
+{
+  "caveats": [
+    "the segment mix OVERSTATES these candidates, it does not understate them: labels_of recovers `a` as the OLD template's shared class, shared_class_segments=4 forces four segments into it, and the disjoint candidate's successor-unique class IS `a` \u2014 so nA=4 in 30/30 seeds, the most favourable point in the range. RR's decomposition: nA=0 -> 0.16 sigma (identical to current), nA=1 -> 0.44, nA=4 -> 1.02. The 30/30-nonzero result is the same artifact: a constant, not a distribution. See check_mix_sweep.py.",
+    "sigma is the PRE-L1 measurement and must not size a suite",
+    "a CEILING: optimal play under truth minus optimal play under the card; it does not say any manager realises it"
+  ],
+  "per_seed": {
+    "current": [
+      {
+        "ceiling": 0.0,
+        "realised": 8.40984371043795,
+        "seed": 0,
+        "share": 0.0,
+        "true_optimum": 8.40984371043795
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.650564564113433,
+        "seed": 1,
+        "share": 0.0,
+        "true_optimum": 8.650564564113433
+      },
+      {
+        "ceiling": 0.1265649001738769,
+        "realised": 8.305820872110607,
+        "seed": 2,
+        "share": 0.015009382112221392,
+        "true_optimum": 8.432385772284483
+      },
+      {
+        "ceiling": 0.18335400897712972,
+        "realised": 8.362849729372385,
+        "seed": 3,
+        "share": 0.0214544392563873,
+        "true_optimum": 8.546203738349515
+      },
+      {
+        "ceiling": 0.1446888757388276,
+        "realised": 8.38326990484639,
+        "seed": 4,
+        "share": 0.01696641358870388,
+        "true_optimum": 8.527958780585218
+      },
+      {
+        "ceiling": 0.1516188489530883,
+        "realised": 8.58052612169436,
+        "seed": 5,
+        "share": 0.01736329956302208,
+        "true_optimum": 8.732144970647449
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.274653424445404,
+        "seed": 6,
+        "share": 0.0,
+        "true_optimum": 8.274653424445404
+      },
+      {
+        "ceiling": 0.14910387927930024,
+        "realised": 8.562629267542341,
+        "seed": 7,
+        "share": 0.017115294599410313,
+        "true_optimum": 8.711733146821642
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.731380454035808,
+        "seed": 8,
+        "share": 0.0,
+        "true_optimum": 8.731380454035808
+      },
+      {
+        "ceiling": 0.17753574816694062,
+        "realised": 8.511375644722367,
+        "seed": 9,
+        "share": 0.020432450066440944,
+        "true_optimum": 8.688911392889308
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.513897873961936,
+        "seed": 10,
+        "share": 0.0,
+        "true_optimum": 8.513897873961936
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.352261019634815,
+        "seed": 11,
+        "share": 0.0,
+        "true_optimum": 8.352261019634815
+      },
+      {
+        "ceiling": 0.08586651980200877,
+        "realised": 8.610205053530798,
+        "seed": 12,
+        "share": 0.009874173536626039,
+        "true_optimum": 8.696071573332807
+      },
+      {
+        "ceiling": 0.17038443092718225,
+        "realised": 8.447563092915393,
+        "seed": 13,
+        "share": 0.019770882852998755,
+        "true_optimum": 8.617947523842576
+      },
+      {
+        "ceiling": 0.09113340418410232,
+        "realised": 8.401397195065515,
+        "seed": 14,
+        "share": 0.010731006867629617,
+        "true_optimum": 8.492530599249617
+      },
+      {
+        "ceiling": 0.11646401722161848,
+        "realised": 8.458784627159915,
+        "seed": 15,
+        "share": 0.013581415775964141,
+        "true_optimum": 8.575248644381533
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.566894033566914,
+        "seed": 16,
+        "share": 0.0,
+        "true_optimum": 8.566894033566914
+      },
+      {
+        "ceiling": 0.12856540281783602,
+        "realised": 8.248621385168676,
+        "seed": 17,
+        "share": 0.015347085611390216,
+        "true_optimum": 8.377186787986512
+      },
+      {
+        "ceiling": 0.29994803350802357,
+        "realised": 8.087247820115536,
+        "seed": 18,
+        "share": 0.0357626122893548,
+        "true_optimum": 8.38719585362356
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.681809031798583,
+        "seed": 19,
+        "share": 0.0,
+        "true_optimum": 8.681809031798583
+      },
+      {
+        "ceiling": 0.043691737253400476,
+        "realised": 8.59887373305211,
+        "seed": 20,
+        "share": 0.005055412933060025,
+        "true_optimum": 8.642565470305511
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.11938822382205,
+        "seed": 21,
+        "share": 0.0,
+        "true_optimum": 8.11938822382205
+      },
+      {
+        "ceiling": 0.19896529332190305,
+        "realised": 8.380896582308816,
+        "seed": 22,
+        "share": 0.023189801445058437,
+        "true_optimum": 8.57986187563072
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.756963980230182,
+        "seed": 23,
+        "share": 0.0,
+        "true_optimum": 8.756963980230182
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.353861997696919,
+        "seed": 24,
+        "share": 0.0,
+        "true_optimum": 8.353861997696919
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.908622360586191,
+        "seed": 25,
+        "share": 0.0,
+        "true_optimum": 8.908622360586191
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.790753762051411,
+        "seed": 26,
+        "share": 0.0,
+        "true_optimum": 8.790753762051411
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.66874655482271,
+        "seed": 27,
+        "share": 0.0,
+        "true_optimum": 8.66874655482271
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.750778746795879,
+        "seed": 28,
+        "share": 0.0,
+        "true_optimum": 8.750778746795879
+      },
+      {
+        "ceiling": 0.10303470684450744,
+        "realised": 8.462569192669115,
+        "seed": 29,
+        "share": 0.012028889971243946,
+        "true_optimum": 8.565603899513622
+      }
+    ],
+    "partial_overlap": [
+      {
+        "ceiling": 0.0,
+        "realised": 8.58602338803266,
+        "seed": 0,
+        "share": 0.0,
+        "true_optimum": 8.58602338803266
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.763495618696888,
+        "seed": 1,
+        "share": 0.0,
+        "true_optimum": 8.763495618696888
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.799514361739401,
+        "seed": 2,
+        "share": 0.0,
+        "true_optimum": 8.799514361739401
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.817795004513755,
+        "seed": 3,
+        "share": 0.0,
+        "true_optimum": 8.817795004513755
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.91627692702618,
+        "seed": 4,
+        "share": 0.0,
+        "true_optimum": 8.91627692702618
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.23896720251028,
+        "seed": 5,
+        "share": 0.0,
+        "true_optimum": 8.23896720251028
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.632974711799452,
+        "seed": 6,
+        "share": 0.0,
+        "true_optimum": 8.632974711799452
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.866772300716452,
+        "seed": 7,
+        "share": 0.0,
+        "true_optimum": 8.866772300716452
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.570352404747156,
+        "seed": 8,
+        "share": 0.0,
+        "true_optimum": 8.570352404747156
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.893799694504164,
+        "seed": 9,
+        "share": 0.0,
+        "true_optimum": 8.893799694504164
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.700794692248184,
+        "seed": 10,
+        "share": 0.0,
+        "true_optimum": 8.700794692248184
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.617250227502055,
+        "seed": 11,
+        "share": 0.0,
+        "true_optimum": 8.617250227502055
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.991891396971813,
+        "seed": 12,
+        "share": 0.0,
+        "true_optimum": 8.991891396971813
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.927416928617303,
+        "seed": 13,
+        "share": 0.0,
+        "true_optimum": 8.927416928617303
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.91090506438854,
+        "seed": 14,
+        "share": 0.0,
+        "true_optimum": 8.91090506438854
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.448536571391648,
+        "seed": 15,
+        "share": 0.0,
+        "true_optimum": 8.448536571391648
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.562753305054564,
+        "seed": 16,
+        "share": 0.0,
+        "true_optimum": 8.562753305054564
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.91346724681358,
+        "seed": 17,
+        "share": 0.0,
+        "true_optimum": 8.91346724681358
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.290593596593869,
+        "seed": 18,
+        "share": 0.0,
+        "true_optimum": 8.290593596593869
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.890093861283905,
+        "seed": 19,
+        "share": 0.0,
+        "true_optimum": 8.890093861283905
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.951264175139764,
+        "seed": 20,
+        "share": 0.0,
+        "true_optimum": 8.951264175139764
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.545387012761765,
+        "seed": 21,
+        "share": 0.0,
+        "true_optimum": 8.545387012761765
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.258727720405737,
+        "seed": 22,
+        "share": 0.0,
+        "true_optimum": 8.258727720405737
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.936293411003456,
+        "seed": 23,
+        "share": 0.0,
+        "true_optimum": 8.936293411003456
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.764858313178562,
+        "seed": 24,
+        "share": 0.0,
+        "true_optimum": 8.764858313178562
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.91975502041482,
+        "seed": 25,
+        "share": 0.0,
+        "true_optimum": 8.91975502041482
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.85703797387948,
+        "seed": 26,
+        "share": 0.0,
+        "true_optimum": 8.85703797387948
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.730678234848947,
+        "seed": 27,
+        "share": 0.0,
+        "true_optimum": 8.730678234848947
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.80286995165384,
+        "seed": 28,
+        "share": 0.0,
+        "true_optimum": 8.80286995165384
+      },
+      {
+        "ceiling": 0.0,
+        "realised": 8.992249907712,
+        "seed": 29,
+        "share": 0.0,
+        "true_optimum": 8.992249907712
+      }
+    ],
+    "proposed_disjoint": [
+      {
+        "ceiling": 1.2294549031821562,
+        "realised": 7.356568484850503,
+        "seed": 0,
+        "share": 0.14319258725707534,
+        "true_optimum": 8.58602338803266
+      },
+      {
+        "ceiling": 0.5812388397146169,
+        "realised": 8.182256778982271,
+        "seed": 1,
+        "share": 0.06632499917892876,
+        "true_optimum": 8.763495618696888
+      },
+      {
+        "ceiling": 0.9229057341840807,
+        "realised": 7.876608627555321,
+        "seed": 2,
+        "share": 0.10488143961636194,
+        "true_optimum": 8.799514361739401
+      },
+      {
+        "ceiling": 0.6405600856208409,
+        "realised": 8.177234918892914,
+        "seed": 3,
+        "share": 0.07264402101579177,
+        "true_optimum": 8.817795004513755
+      },
+      {
+        "ceiling": 0.6318458895297265,
+        "realised": 8.284431037496454,
+        "seed": 4,
+        "share": 0.07086431867257674,
+        "true_optimum": 8.91627692702618
+      },
+      {
+        "ceiling": 0.42053036754747897,
+        "realised": 7.8184368349628,
+        "seed": 5,
+        "share": 0.05104163631326875,
+        "true_optimum": 8.23896720251028
+      },
+      {
+        "ceiling": 1.0266906197555281,
+        "realised": 7.606284092043924,
+        "seed": 6,
+        "share": 0.11892663352207658,
+        "true_optimum": 8.632974711799452
+      },
+      {
+        "ceiling": 0.6336550895488102,
+        "realised": 8.233117211167642,
+        "seed": 7,
+        "share": 0.07146400832889435,
+        "true_optimum": 8.866772300716452
+      },
+      {
+        "ceiling": 0.46832969073393116,
+        "realised": 8.102022714013225,
+        "seed": 8,
+        "share": 0.05464532479137279,
+        "true_optimum": 8.570352404747156
+      },
+      {
+        "ceiling": 0.9797158000421042,
+        "realised": 7.91408389446206,
+        "seed": 9,
+        "share": 0.11015716945452572,
+        "true_optimum": 8.893799694504164
+      },
+      {
+        "ceiling": 0.44433712814098847,
+        "realised": 8.256457564107196,
+        "seed": 10,
+        "share": 0.05106856831558876,
+        "true_optimum": 8.700794692248184
+      },
+      {
+        "ceiling": 0.5907664553578655,
+        "realised": 8.02648377214419,
+        "seed": 11,
+        "share": 0.06855626096041954,
+        "true_optimum": 8.617250227502055
+      },
+      {
+        "ceiling": 0.7302071482959143,
+        "realised": 8.261684248675898,
+        "seed": 12,
+        "share": 0.08120729177643596,
+        "true_optimum": 8.991891396971813
+      },
+      {
+        "ceiling": 0.6399138561512103,
+        "realised": 8.287503072466093,
+        "seed": 13,
+        "share": 0.07167962035019704,
+        "true_optimum": 8.927416928617303
+      },
+      {
+        "ceiling": 0.09113340418410232,
+        "realised": 8.819771660204438,
+        "seed": 14,
+        "share": 0.010227177096556333,
+        "true_optimum": 8.91090506438854
+      },
+      {
+        "ceiling": 0.6645031604155731,
+        "realised": 7.7840334109760745,
+        "seed": 15,
+        "share": 0.07865304893935209,
+        "true_optimum": 8.448536571391648
+      },
+      {
+        "ceiling": 0.8295134249879474,
+        "realised": 7.733239880066616,
+        "seed": 16,
+        "share": 0.09687461444186282,
+        "true_optimum": 8.562753305054564
+      },
+      {
+        "ceiling": 0.8505245203211764,
+        "realised": 8.062942726492404,
+        "seed": 17,
+        "share": 0.09542016555064194,
+        "true_optimum": 8.91346724681358
+      },
+      {
+        "ceiling": 0.5925789121772125,
+        "realised": 7.698014684416656,
+        "seed": 18,
+        "share": 0.07147605358688301,
+        "true_optimum": 8.290593596593869
+      },
+      {
+        "ceiling": 0.110986179576269,
+        "realised": 8.779107681707636,
+        "seed": 19,
+        "share": 0.012484252844574625,
+        "true_optimum": 8.890093861283905
+      },
+      {
+        "ceiling": 0.9993948191114956,
+        "realised": 7.9518693560282685,
+        "seed": 20,
+        "share": 0.11164845540891337,
+        "true_optimum": 8.951264175139764
+      },
+      {
+        "ceiling": 1.0906653284302426,
+        "realised": 7.454721684331522,
+        "seed": 21,
+        "share": 0.12763205771738978,
+        "true_optimum": 8.545387012761765
+      },
+      {
+        "ceiling": 1.331904645282398,
+        "realised": 6.926823075123339,
+        "seed": 22,
+        "share": 0.16127237637239406,
+        "true_optimum": 8.258727720405737
+      },
+      {
+        "ceiling": 0.36648890385029453,
+        "realised": 8.569804507153162,
+        "seed": 23,
+        "share": 0.041011288125234184,
+        "true_optimum": 8.936293411003456
+      },
+      {
+        "ceiling": 1.5735824542938612,
+        "realised": 7.191275858884701,
+        "seed": 24,
+        "share": 0.17953313083542635,
+        "true_optimum": 8.764858313178562
+      },
+      {
+        "ceiling": 0.7986783736842789,
+        "realised": 8.121076646730542,
+        "seed": 25,
+        "share": 0.08954039341398141,
+        "true_optimum": 8.91975502041482
+      },
+      {
+        "ceiling": 0.5451933953599148,
+        "realised": 8.311844578519565,
+        "seed": 26,
+        "share": 0.06155482193570343,
+        "true_optimum": 8.85703797387948
+      },
+      {
+        "ceiling": 1.3319801257336001,
+        "realised": 7.3986981091153465,
+        "seed": 27,
+        "share": 0.15256319038501884,
+        "true_optimum": 8.730678234848947
+      },
+      {
+        "ceiling": 0.4991610919957239,
+        "realised": 8.303708859658116,
+        "seed": 28,
+        "share": 0.056704358321452195,
+        "true_optimum": 8.80286995165384
+      },
+      {
+        "ceiling": 0.6163595236362358,
+        "realised": 8.375890384075765,
+        "seed": 29,
+        "share": 0.0685434157148623,
+        "true_optimum": 8.992249907712
+      }
+    ]
+  },
+  "results": {
+    "current": {
+      "max": 0.0357626122893548,
+      "mean_share": 0.00845608534898373,
+      "n_nonzero": 15,
+      "nonzero_mean": 0.01691217069796746,
+      "sigma_units": 0.11010527798155899
+    },
+    "partial_overlap": {
+      "max": 0.0,
+      "mean_share": 0.0,
+      "n_nonzero": 0,
+      "nonzero_mean": 0.0,
+      "sigma_units": 0.0
+    },
+    "proposed_disjoint": {
+      "max": 0.17953313083542635,
+      "mean_share": 0.08505975600812536,
+      "n_nonzero": 30,
+      "nonzero_mean": 0.08505975600812536,
+      "sigma_units": 1.107548906355799
+    }
+  },
+  "sigma_used": 0.0768,
+  "templates": {
+    "current": [
+      "ae",
+      "ab",
+      "bc",
+      "cd"
+    ],
+    "partial_overlap": [
+      "ae",
+      "ab",
+      "ce",
+      "cb"
+    ],
+    "proposed_disjoint": [
+      "de",
+      "ab",
+      "ce",
+      "cb"
+    ]
+  }
+}

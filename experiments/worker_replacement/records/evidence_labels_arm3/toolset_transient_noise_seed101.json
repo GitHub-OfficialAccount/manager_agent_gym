@@ -1,0 +1,59 @@
+{
+  "protocol_version": "relation-judgments-v1.1-transient-noise",
+  "seed": 101,
+  "scope": "Manager-visible methods in the fixed one-shot-noise evidence schedule.",
+  "expected_correct_agents": ["portfolio_analyst", "risk_analyst"],
+  "engagement_patterns": ["z.?score", "percentile", "robust.*audit"],
+  "labels": [
+    {
+      "label_id": "a_robust_method",
+      "channel": "method_statement",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch A Robust Audit",
+      "fact_pattern": "\"?method\"?\\s*:.*z.?score"
+    },
+    {
+      "label_id": "b_robust_method",
+      "channel": "method_statement",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch B Robust Audit",
+      "fact_pattern": "\"?method\"?\\s*:.*percentile"
+    },
+    {
+      "label_id": "c_robust_method",
+      "channel": "method_statement",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch C Robust Audit",
+      "fact_pattern": "\"?method\"?\\s*:.*percentile"
+    }
+  ],
+  "relations": [
+    {
+      "relation_id": "a_method_mismatch",
+      "channel": "task_artifact_relation",
+      "polarity": "diagnostic",
+      "source_label_ids": ["a_robust_method"],
+      "manager_visible_basis": ["Batch A requests percentile; its artifact reports z-score."],
+      "statement": "Batch A conflicts with its visible method requirement.",
+      "rationale": "The one-shot fault should contradict current task fit."
+    },
+    {
+      "relation_id": "b_method_match",
+      "channel": "task_artifact_relation",
+      "polarity": "exonerating",
+      "source_label_ids": ["b_robust_method"],
+      "manager_visible_basis": ["Batch B requests and reports percentile."],
+      "statement": "Batch B supports restored task fit.",
+      "rationale": "The first post-fault artifact should supply corrective evidence."
+    },
+    {
+      "relation_id": "c_method_match",
+      "channel": "task_artifact_relation",
+      "polarity": "exonerating",
+      "source_label_ids": ["c_robust_method"],
+      "manager_visible_basis": ["Batch C requests and reports percentile."],
+      "statement": "Batch C supports continued task fit.",
+      "rationale": "A second post-fault artifact should reinforce recovery."
+    }
+  ]
+}

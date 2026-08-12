@@ -334,7 +334,6 @@ def create_team_configs():
         system_prompt=(
             "You are the Chief Medical Officer balancing patient safety, regulatory compliance, commercial objectives, and launch timing."
         ),
-        model_name="o3",
         name="Chief Medical Officer",
         role="Executive Stakeholder",
         persona_description="Patient-focused, safety-first, values regulatory excellence with responsible commercial success.",

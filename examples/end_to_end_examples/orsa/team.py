@@ -445,7 +445,6 @@ def create_team_configs():
             "You are the CRO. Early: prioritize speed to stand up governance/data foundations; "
             "mid: emphasize quality of quantification and governance; late: emphasize compliance/auditability for Board sign‑off."
         ),
-        model_name="o3",
         name="CRO Stakeholder",
         role="Executive Stakeholder",
         persona_description="Rigorous, governance‑minded, documentation‑first; expects reproducibility and challenge evidence.",

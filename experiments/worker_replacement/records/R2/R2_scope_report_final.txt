@@ -1,0 +1,70 @@
+SCOPE RUN REPORT — descriptive only
+
+NO SIGNIFICANCE CLAIM. At 2-3 episodes per cell there is no contrast verdict in either direction — not 'channel X moved allocation', and not 'channel X did not'. These are descriptive point estimates with intervals wide enough to contain almost anything. The run exists to see behaviour and measure variance.
+
+episodes: 18
+
+  cell  n   mean regret share    role
+  0     3   0.2701               information-absent control; allocation-visib
+  1     3   0.2685               card channel (marginal)
+  2     3   0.2416               declaration channel (marginal)
+  3     3   0.3593               ask channel (ride-along)
+  4     3   0.2136               CEILING — a bound, NOT an interaction claim
+  U     3   0.3428               unswapped control — the JOINT effect of the 
+
+REGRET SPLIT THREE WAYS (summed over 18 episodes; they sum to regret by construction):
+  ASSIGNED-BUT-UNEXECUTED loss         21.5494   48.3%
+  allocation loss on STAFFED units     -0.4459   -1.0%
+  execution loss (signed)              23.5543   52.7%
+  total regret                         44.6579   (max per-episode residual 8.88e-16)
+  THE FIRST TERM IS NOT 'NON-ROUTING' — that label was WRONG. All 22 of these
+  segments carry a real assignee on the board and ZERO were never assigned. The
+  manager routed every one; the engine never ran them (580 deferral events,
+  workers at max_concurrent_tasks=1). It is CAPACITY STARVATION, and folding it
+  into a routing metric is what produced a week of wrong statements.
+  NOTE ON THE NEGATIVE ALLOCATION TERM, which is not evidence the manager
+  out-allocated the oracle: the capacitated oracle DELIBERATELY UNDER-SERVES some
+  segments to free capacity for others (measured on seed 3: 1 of 9). A manager that
+  staffs such a segment beats the oracle's choice ON THAT SEGMENT while losing
+  overall by failing to staff the ones the oracle was protecting. The split is
+  exact; this term is a difference from the oracle's own attribution, not a
+  per-segment optimum.
+
+THE FOUR QUANTITIES (each with its df — at this size the precision matters
+more than the point value):
+  sigma pooled within cell : 0.0768  df=12
+  sigma pooled STAFFED-ONLY: 0.0834  df=12
+  GAP (full - staffed)     : -0.0066
+    THE GAP CARRIES NO INFORMATION ABOUT STALLING — that reading was retracted. The two components are anti-correlated because they partition the same units, so no gap was predicted either way. Use the STAFFED-ONLY sigma for sizing: it is the variance of the quantity a channel could move.
+  sigma_d paired vs cell 0 : 0.0666  df=10
+  sigma between instances  : 0.0655  df=2   (design-side prior 0.0254)
+
+  sigma_d and sigma_between are ONE COUPLED QUESTION, not two independent inflators: effective pairing shrinks sigma_d AND promotes between-instance heterogeneity to the leading term, so the two corrections partially self-cancel.
+
+COVERAGE MIS-ROUTING — both populations, neither replacing the other:
+  executed         n= 83  mis-routed 1  1.2%
+  unexecuted_capacity_refused n= 20  mis-routed 0  0.0%
+  unexecuted_timing_cutoff n=  2  mis-routed 2  100.0%
+  assigned_total   n=105  mis-routed 3  2.9%
+  CAPACITATED OPTIMUM, same measure: 1.00 avoidable mismatches per instance —
+     THE PRICE OF FEASIBILITY, not a benchmark the manager beat.
+     the optimum accepts one mismatch per instance AS THE PRICE OF FEASIBILITY. This is NOT a ranking: the manager's allocation violates the cap, so its lower rate is coverage fidelity bought by breaking the constraint. Quote the manager's rate only with this beside it — alone it carries the wrong sign — but do NOT read it as the manager outperforming the optimum.
+  excluded as sole-held-class (no correct choice existed): 15
+  REPORT THE ASSIGNED FIGURE, with the executed one BESIDE it and not replaced by it. The executed-only number conditions on the allocation having worked; the unexecuted set is where it failed and is several times enriched.
+
+SEGMENT STATES — the four-way split that replaces 'unstaffed':
+  never_assigned               0
+  assigned_but_unexecuted      22
+  executed_but_unparseable     7
+  executed_and_parsed          133
+  'assigned_but_unexecuted' is what was previously reported as UNSTAFFED and read as NON-ROUTING. The manager assigned every one of them; the engine never ran them. It is capacity starvation, not a routing failure, and it must not be folded into a routing metric.
+
+DECLINE CHANNEL (what the unscripting was built to expose): 7 explicit declines,
+  22 unreadable deliverables — never summed, different behaviours.
+
+CONCURRENCY (an instrument setting that VARIES here): ['2', '__ABSENT__']
+  concurrency varies across cells in this exploratory run; recorded rather than erased. Constant across cells for any powered study, no exceptions.
+
+SAMPLING: the low pick is the SUITE MINIMUM (seed 23 at 0.0516) and the chosen mean 0.0938 sits below the admitted mean 0.1034, so EFFECT MAGNITUDES ARE BELOW THE SUITE'S BY CONSTRUCTION; and this compounds with the stratification inflation, which widens sigma_between by design. Harmless for sigma, not harmless for effect magnitudes.
+
+written -> /home/therealgod/Projects/AdHocTeamwork/manager_agent_gym/experiments/worker_replacement/records/R2/scope_report.json

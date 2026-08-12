@@ -1,0 +1,79 @@
+{
+  "caveats": [
+    "measured on ONE size-3 template; not a property of clones in general",
+    "ties are counted with the project's TIE_EPS against bit-identical scores, so this counts EXACT ties, not near-ties that a different float path could turn into ties"
+  ],
+  "clone_source": "corporate",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "six_class_template": [
+    [
+      "sovereign",
+      "bank",
+      "corporate"
+    ],
+    [
+      "sovereign",
+      "retail",
+      "mdb"
+    ],
+    [
+      "corporate",
+      "retail",
+      "corporate_clone"
+    ],
+    [
+      "mdb",
+      "corporate_clone",
+      "bank"
+    ]
+  ],
+  "summary": {
+    "five_class": {
+      "ceiling_spread_max": 0.0,
+      "ceiling_spread_mean": 0.0,
+      "feasible_allocations": 1680,
+      "max_optima_believed": 20,
+      "max_optima_true": 20,
+      "mean_optima_believed": 11.7,
+      "mean_optima_true": 11.7,
+      "seeds_with_ambiguous_ceiling": 0,
+      "seeds_with_tie_believed": 20,
+      "seeds_with_tie_true": 20
+    },
+    "six_class_clone": {
+      "ceiling_spread_max": 0.1409649136770113,
+      "ceiling_spread_mean": 0.07002116386563838,
+      "feasible_allocations": 1680,
+      "max_optima_believed": 49,
+      "max_optima_true": 30,
+      "mean_optima_believed": 30.95,
+      "mean_optima_true": 29.45,
+      "seeds_with_ambiguous_ceiling": 20,
+      "seeds_with_tie_believed": 20,
+      "seeds_with_tie_true": 20
+    }
+  },
+  "tie_eps": 1e-12,
+  "tie_rate_rises_with_clone": true
+}

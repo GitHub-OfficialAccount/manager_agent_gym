@@ -1,0 +1,54 @@
+Stage A: 28 genuine-support judgments x n=20 = 560 calls, interleaved
+  round 1/20
+  round 2/20
+  round 3/20
+  round 4/20
+  round 5/20
+  round 6/20
+  round 7/20
+  round 8/20
+  round 9/20
+  round 10/20
+  round 11/20
+  round 12/20
+  round 13/20
+  round 14/20
+  round 15/20
+  round 16/20
+  round 17/20
+  round 18/20
+  round 19/20
+  round 20/20
+
+judgment   modal             share  FALSE CONTRA  distribution
+00e4673a   supports_fit       0.95             -  {'supports_fit': 19, 'neutral': 1}
+0921e778   supports_fit       0.53          1/19  {'neutral': 8, 'supports_fit': 10, 'contradicts_fit': 1}
+0be21920   supports_fit       0.90          1/20  {'supports_fit': 18, 'neutral': 1, 'contradicts_fit': 1}
+16b9db9b   supports_fit       1.00             -  {'supports_fit': 20}
+17a77444   supports_fit       1.00             -  {'supports_fit': 19}
+20181a8d   supports_fit       1.00             -  {'supports_fit': 20}
+25064766   supports_fit       1.00             -  {'supports_fit': 20}
+2d6514df   supports_fit       1.00             -  {'supports_fit': 20}
+3864027a   supports_fit       1.00             -  {'supports_fit': 20}
+3971b53e   supports_fit       1.00             -  {'supports_fit': 20}
+3e30be38   supports_fit       1.00             -  {'supports_fit': 20}
+721c78ec   supports_fit       1.00             -  {'supports_fit': 20}
+80a52b5f   supports_fit       0.55             -  {'supports_fit': 11, 'neutral': 9}
+89f08a3f   supports_fit       0.80          1/20  {'supports_fit': 16, 'contradicts_fit': 1, 'neutral': 3}
+8e75e128   supports_fit       0.79             -  {'supports_fit': 15, 'neutral': 4}
+95ed9d8f   supports_fit       1.00             -  {'supports_fit': 20}
+99f650e1   supports_fit       1.00             -  {'supports_fit': 20}
+9d328608   supports_fit       0.90             -  {'supports_fit': 18, 'neutral': 2}
+9ec2cef9   supports_fit       1.00             -  {'supports_fit': 20}
+a41afdf4   supports_fit       1.00             -  {'supports_fit': 20}
+aa450811   supports_fit       0.90             -  {'supports_fit': 18, 'neutral': 2}
+c47dff98   supports_fit       0.95             -  {'supports_fit': 19, 'neutral': 1}
+d7296790   supports_fit       1.00             -  {'supports_fit': 20}
+de8e8464   supports_fit       1.00             -  {'supports_fit': 20}
+f4e3e6b7   supports_fit       0.70             -  {'supports_fit': 14, 'neutral': 6}
+f6c684e5   supports_fit       1.00             -  {'supports_fit': 20}
+f9cd0aa2   neutral            0.75          2/20  {'neutral': 15, 'supports_fit': 3, 'contradicts_fit': 2}
+f9e064ec   supports_fit       1.00             -  {'supports_fit': 20}
+
+false contradictions: 5/557 calls = 0.90%
+judgments with ANY false contradiction: 4/28

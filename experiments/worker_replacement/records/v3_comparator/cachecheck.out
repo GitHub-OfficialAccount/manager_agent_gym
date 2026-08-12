@@ -1,0 +1,11 @@
+provider       repeated               nonced                 clean?
+DeepInfra      [256, 256, 64]         [64, 64, 64]           no
+Parasail       unavailable/error
+AkashML        [0, 0, 256]            [0, 0, 0]              no
+Alibaba        [0, 0, 0]              [0, 0, 0]              no
+Fireworks      unavailable/error
+Morph          [0, 512, 512]          [0, 0, 0]              no
+AtlasCloud     [0, 0, 0]              [0, 0, 0]              no
+Ambient        [0, 0, 256]            [0, 0, 0]              no
+Ionstream      [0, 256, 256]          [0, 0, 0]              no
+CoreWeave      [0, 0, 0]              [0, 0, 0]              no

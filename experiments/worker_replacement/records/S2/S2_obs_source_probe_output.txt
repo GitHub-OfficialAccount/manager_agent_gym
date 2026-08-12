@@ -1,0 +1,6 @@
+S2 RR round-2 item 1 — observation_source distinguishes the two branches
+
+  captures own obs       observation_source='manager'          rendered=True  ['added newcomer']
+  relies on fallback     observation_source='engine_fallback'  rendered=True  ['added newcomer']
+
+RESULT: PASS — branches distinguishable in the log ('manager' vs 'engine_fallback')

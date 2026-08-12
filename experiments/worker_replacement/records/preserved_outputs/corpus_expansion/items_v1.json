@@ -1,0 +1,147 @@
+{
+ "_readme": "GENERATED WITHOUT EXPECTED VERDICTS. The generator does not label its own corpus; labels are assigned independently from the text by a party that did not write the items. Add a `label` field per item when assigning. CONSTRUCTED INPUT: none of these strings occurs in any run artifact, so results may not be pooled with corpus-derived rates.",
+ "_note_for_labeller": "flag_outliers_percentile computes a plain np.percentile with no trimming (scenario.py:200), so within this scenario 'robust' modifies the percentile rather than naming an additional operation. That is a fact about the code, not a verdict.",
+ "_contrasts": [
+  {
+   "a": "x2_wrong_percentile_unbundled",
+   "b": "x3_wrong_percentile_bundled",
+   "isolates": "bundling, holding the mismatch fixed"
+  },
+  {
+   "a": "x5_match_unbundled",
+   "b": "x6_match_bundled",
+   "isolates": "bundling, holding the match fixed"
+  }
+ ],
+ "items": [
+  {
+   "id": "x1_sample_vs_population",
+   "manipulation": "sample-versus-population",
+   "varied": "the population the cutoff is calibrated from",
+   "requirement": "Apply the 95th-percentile reference-population standard to audit batch A for all four columns. Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+   "stated_method": "95th-percentile cutoff computed from batch A itself",
+   "label": "contradicts_fit",
+   "rule": "method-requirement",
+   "reason": "The clause names the calibration population (\"reference-population standard\"); the method states the cutoff was computed from batch A itself. Same estimator, different population, and the population is explicitly required.",
+   "determinable_from_text_alone": true,
+   "bundling": "unbundled",
+   "labeller_exposure": "blind"
+  },
+  {
+   "id": "x2_wrong_percentile_unbundled",
+   "manipulation": "wrong percentile, unbundled requirement",
+   "varied": "the quantile; requirement names no estimator class",
+   "requirement": "Apply the 95th-percentile reference standard to audit batch A for all four columns. Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+   "stated_method": "90th-percentile reference cutoff",
+   "label": "contradicts_fit",
+   "rule": "method-requirement",
+   "reason": "Two named quantiles: requirement 95th, method 90th. Direct departure, no approximation judgment involved.",
+   "determinable_from_text_alone": true,
+   "bundling": "unbundled",
+   "labeller_exposure": "blind"
+  },
+  {
+   "id": "x3_wrong_percentile_bundled",
+   "manipulation": "wrong percentile, BUNDLED requirement",
+   "varied": "the quantile; requirement bundles an estimator class with it",
+   "requirement": "Apply the robust 95th-percentile reference standard to audit batch A for all four columns. Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+   "stated_method": "90th-percentile reference cutoff",
+   "label": "contradicts_fit",
+   "rule": "method-requirement",
+   "reason": "Same quantile departure as x2 (95th vs 90th). The \"robust\" modifier is separately satisfied - a 90th percentile is an order statistic - so exactly one substantive mismatch, as in x2.",
+   "determinable_from_text_alone": true,
+   "bundling": "bundled",
+   "labeller_exposure": "blind"
+  },
+  {
+   "id": "x4_right_estimator_wrong_columns",
+   "manipulation": "right estimator, wrong column set",
+   "varied": "the columns audited; the estimator is as required",
+   "requirement": "Apply the 95th-percentile reference standard to audit batch A for all four columns. Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+   "stated_method": "95th-percentile reference cutoff applied to income and loan_amount",
+   "label": "contradicts_fit",
+   "rule": "method-requirement",
+   "reason": "Estimator matches; column scope does not. The clause requires all four columns and its second sentence (\"the four flagged counts\") restates it; the method covers two.",
+   "determinable_from_text_alone": true,
+   "bundling": "unbundled",
+   "labeller_exposure": "blind"
+  },
+  {
+   "id": "x5_match_unbundled",
+   "manipulation": "matching method, unbundled requirement",
+   "varied": "nothing; requirement names no estimator class",
+   "requirement": "Apply the 90th-percentile reference standard to audit batch A for all four columns. Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+   "stated_method": "90th-percentile reference cutoff",
+   "label": "supports_fit",
+   "rule": "method-requirement",
+   "reason": "Exact correspondence: 90th-percentile required, 90th-percentile reference cutoff stated.",
+   "determinable_from_text_alone": true,
+   "bundling": "unbundled",
+   "labeller_exposure": "blind"
+  },
+  {
+   "id": "x6_match_bundled",
+   "manipulation": "matching method, BUNDLED requirement",
+   "varied": "nothing; requirement bundles an estimator class with the quantile",
+   "requirement": "Apply the robust 90th-percentile reference standard to audit batch A for all four columns. Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+   "stated_method": "90th-percentile reference cutoff",
+   "label": "supports_fit",
+   "rule": "method-requirement",
+   "reason": "Quantile matches. \"robust\" is satisfied on general statistical grounds - a percentile is an order statistic and therefore a robust estimator - so the adjective describes the named standard rather than requiring an additional operation. NOTE: the scenario fact supplied by the generator (np.percentile, no trimming) corroborates this but was NOT load-bearing; the label follows from statistical convention alone, which is what the comparator can also reach.",
+   "determinable_from_text_alone": true,
+   "bundling": "bundled",
+   "labeller_exposure": "blind"
+  }
+ ],
+ "_labelling": {
+  "labeller": "reviewer-reproducer",
+  "labelled_from": "requirement + stated_method text only",
+  "shapes_run_against_these_before_labelling": "none",
+  "cannot_judge_count": 0,
+  "cannot_judge_ids": [],
+  "note": "Labels assigned before any shape was run against these items."
+ },
+ "_determinability_criterion": {
+  "_status": "LATER ADDITION \u2014 2026-07-27",
+  "_ordering": "The six items in this file were labelled BEFORE this criterion was formalised. The labels are contemporaneous with the items; the criterion is not. A reader must not infer that these six were labelled by applying the rule below.",
+  "author": "reviewer-reproducer",
+  "reference_reader": "a competent reader of the domain, working from the supplied requirement and stated_method text plus general domain knowledge, WITHOUT access to scenario code or ground truth",
+  "determinable_iff_all": [
+   "the requirement's demand is identifiable",
+   "the method's claim is identifiable",
+   "a property recoverable from general domain knowledge decides whether the method's claim satisfies the requirement's demand, and that property does not depend on a numeric value the reader cannot compute"
+  ],
+  "undeterminable_if_any": {
+   "a": "deciding requires a numeric comparison the reader cannot perform",
+   "b": "the requirement admits two readings yielding different verdicts and nothing in the text selects between them",
+   "c": "the decision turns on approximation quality with no tolerance stated in the text"
+  },
+  "consistency_check": {
+   "run_by": "reviewer-reproducer",
+   "date": "2026-07-27",
+   "result": "6 of 6 determinable; no label, flag or reason changed",
+   "per_item_deciding_property": {
+    "x1": "two populations named explicitly on both sides \u2014 'reference-population' vs 'from batch A itself'; no numeric needed",
+    "x2": "two named quantiles, 95 != 90; no equivalence asserted, so the procedure-identity and target-value readings converge",
+    "x3": "same quantile departure as x2; the class specifier is separately satisfied, so exactly one mismatch",
+    "x4": "column count stated in the requirement and restated by 'the four flagged counts'; two != four by counting named items, not by computing a value",
+    "x5": "exact correspondence of quantile and population",
+    "x6": "class satisfied by general domain knowledge \u2014 a percentile is an order statistic, hence robust; a trimmed or winsorized variant would not be called 'robust 90th-percentile', so (b) has no live competing reading"
+   }
+  },
+  "warrant": {
+   "claim": "this is a backfill, not a retrofit",
+   "ordering_of_record": [
+    "1. six v1 items labelled \u2014 rule not yet formalised",
+    "2. rule written and sent, 2026-07-27 \u2014 BEFORE x7/x8 existed",
+    "3. consistency check run against the six \u2014 at the same time as (2)",
+    "4. x7/x8 generated, one bundled one unbundled, with no prediction stated in the generator",
+    "5. x7/x8 labelled \u2014 bundled determinable, unbundled cannot-judge"
+   ],
+   "why_it_holds": "(3) precedes (4): the rule was verified against the existing labels before anyone knew what the new items would return, so it cannot have been shaped to produce the prediction it then confirmed. The ordering is checkable in the message record and the commit sequence.",
+   "strength_limit": "x7/x8 confirmed the rule on n=2, labelled by the party who committed it. Report as 'consistent with the rule on both items', not as the rule established. The design property that matters is that x7 was written so procedure-identity and target-value both had a live route, so it COULD have failed."
+  },
+  "contrast_with_x7": "x2 and x7 differ under the same rule for a reason located in the text, not in the labeller's judgement. In x2 no equivalence is asserted, so both readings converge and clause (b) does not fire. In x7 the method asserts equivalence and substantiates it, which opens the target-value reading and fires (b) and (c).",
+  "file_reachable_by_two_paths": "experiments/worker_replacement/outputs/corpus_expansion/ is a SYMLINK to this tracked directory under records/preserved_outputs/. Editing either path edits this tracked file. Pre-addition content is recoverable from commit f505d74."
+ }
+}

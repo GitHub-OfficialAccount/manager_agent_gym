@@ -1,0 +1,258 @@
+{
+ "extracted||Report the sum of the four flagged count||robust 95th-percentile reference standar": {
+  "arm": "extracted",
+  "requirement_clause": "Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+  "extracted_method": "robust 95th-percentile reference standard",
+  "sent_text": [
+   "robust 95th-percentile reference standard"
+  ],
+  "samples": [
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit"
+  ],
+  "providers": [
+   "AkashML",
+   "Novita",
+   "Morph",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "AkashML",
+   "AkashML",
+   "AkashML"
+  ]
+ },
+ "full_content||Report the sum of the four flagged count||robust 95th-percentile reference standar": {
+  "arm": "full_content",
+  "requirement_clause": "Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+  "extracted_method": "robust 95th-percentile reference standard",
+  "sent_text": [
+   "method: mean-plus-two-standard-deviation (z-score) rapid screening"
+  ],
+  "samples": [
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit"
+  ],
+  "providers": [
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud"
+  ]
+ },
+ "extracted||Report the sum of the four flagged count||mean-plus-two-standard-deviations": {
+  "arm": "extracted",
+  "requirement_clause": "Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+  "extracted_method": "mean-plus-two-standard-deviations",
+  "sent_text": [
+   "mean-plus-two-standard-deviations"
+  ],
+  "samples": [
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "neutral",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit"
+  ],
+  "providers": [
+   "DigitalOcean",
+   "Alibaba",
+   "AtlasCloud",
+   "AkashML",
+   "Novita",
+   "Novita",
+   "Novita",
+   "Novita",
+   "Novita",
+   "Novita"
+  ]
+ },
+ "full_content||Report the sum of the four flagged count||mean-plus-two-standard-deviations": {
+  "arm": "full_content",
+  "requirement_clause": "Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+  "extracted_method": "mean-plus-two-standard-deviations",
+  "sent_text": [
+   "metric: 59"
+  ],
+  "samples": [
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit"
+  ],
+  "providers": [
+   "Cloudflare",
+   "Morph",
+   "Baidu",
+   "DigitalOcean",
+   "Baidu",
+   "GMICloud",
+   "Morph",
+   "AkashML",
+   "AkashML",
+   "AkashML"
+  ]
+ },
+ "extracted||Report the sum of the four flagged count||mean-plus-two-standard-deviation (z-scor": {
+  "arm": "extracted",
+  "requirement_clause": "Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+  "extracted_method": "mean-plus-two-standard-deviation (z-score) rapid screening",
+  "sent_text": [
+   "mean-plus-two-standard-deviation (z-score) rapid screening"
+  ],
+  "samples": [
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "neutral",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "neutral"
+  ],
+  "providers": [
+   "StreamLake",
+   "StreamLake",
+   "DigitalOcean",
+   "GMICloud",
+   "Baidu",
+   "Baidu",
+   "Baidu",
+   "Baidu",
+   "Baidu",
+   "Baidu"
+  ]
+ },
+ "full_content||Report the sum of the four flagged count||mean-plus-two-standard-deviation (z-scor": {
+  "arm": "full_content",
+  "requirement_clause": "Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+  "extracted_method": "mean-plus-two-standard-deviation (z-score) rapid screening",
+  "sent_text": [
+   "Description: Sum of flagged counts across all four columns for Batch A under the mean-plus-two-SD rapid screening standard"
+  ],
+  "samples": [
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit"
+  ],
+  "providers": [
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra"
+  ]
+ },
+ "extracted||Report the cutoff as the metric.||mean_plus_two_sd": {
+  "arm": "extracted",
+  "requirement_clause": "Report the cutoff as the metric.",
+  "extracted_method": "mean_plus_two_sd",
+  "sent_text": [
+   "mean_plus_two_sd"
+  ],
+  "samples": [
+   "supports_fit",
+   "supports_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit"
+  ],
+  "providers": [
+   "SiliconFlow",
+   "Ambient",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud"
+  ]
+ },
+ "full_content||Report the cutoff as the metric.||mean_plus_two_sd": {
+  "arm": "full_content",
+  "requirement_clause": "Report the cutoff as the metric.",
+  "extracted_method": "mean_plus_two_sd",
+  "sent_text": [
+   "method: mean_plus_two_sd"
+  ],
+  "samples": [
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit"
+  ],
+  "providers": [
+   "AkashML",
+   "CoreWeave",
+   "Io Net",
+   "CoreWeave",
+   "Ambient",
+   "Ambient",
+   "Ambient",
+   "Ambient",
+   "Ambient",
+   "Ambient"
+  ]
+ }
+}

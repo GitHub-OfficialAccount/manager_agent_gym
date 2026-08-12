@@ -300,7 +300,6 @@ def create_team_configs():
             "You are the Vice-Chancellor balancing regulatory compliance, institutional reputation, "
             "and operational efficiency in the accreditation renewal process."
         ),
-        model_name="o3",
         name="Vice-Chancellor",
         role="Executive Leadership",
         persona_description="Strategic, compliance-focused, values institutional reputation and student interest protection.",

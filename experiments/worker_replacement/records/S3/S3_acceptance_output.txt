@@ -1,0 +1,39 @@
+S3 — finance generator acceptance
+
+1. determinism — generate(101) in two separate processes:
+   [ok] byte-identical across processes (6357 bytes)
+   committed instance -> experiments/worker_replacement/records/S3/instance_seed101.json
+
+2. instance shape:
+   [ok] >=2 asset classes (got 5: ['bank', 'corporate', 'mdb', 'retail', 'sovereign'])
+   [ok] >=4 workers (got 4)
+   [ok] 8-10 segments (got 9)
+   [ok] SA takes no worker argument (signature ['asset_class', 'rating']) — universal by construction
+   [ok] every segment resolves under SA
+
+   coverage lattice (non-nested BY CONSTRUCTION — distinct equal-size sets):
+     w_26f14e  IRB['bank', 'corporate']  + SA[all]
+     w_68358d  IRB['retail', 'sovereign']  + SA[all]
+     w_6f6097  IRB['corporate', 'retail']  + SA[all]
+     w_e172a9  IRB['mdb', 'sovereign']  + SA[all]
+   [ok] no worker's coverage contains another's
+
+   identifier opacity (ids must carry no method/coverage/class token):
+   [ok] 4 ids opaque
+   [ok] make_worker_id() reproduces exactly the instance's ids — it IS the production path
+
+3. SA table vs the FETCHED d424.pdf (values transcribed per class):
+   [ok] 18 published values match
+
+   negative controls — wrong-table selections must NOT match:
+   [ok] Table 5 (MDB) mistaken for Table 10 (corporate): ours 0.5 vs trap 0.3
+   [ok] Table 6 short-term ROW mistaken for the base row: ours 0.5 vs trap 0.2
+   [ok] Table 7 (SCRA grades) mistaken for Table 6 (ECRA ratings): ours 0.2 vs trap 0.4
+   [ok] corporate weights mistaken for sovereign: ours 0.0 vs trap 0.2
+
+4. IRB provenance:
+   [ok] generator uses the S1-validated capital_requirement by IDENTITY (not a copy)
+   covered worker   -> IRB RW 1.0032
+   uncovered worker -> None (falls back to SA 1.0)
+
+RESULT: PASS — deterministic across processes; shape and lattice correct; SA matches published values and avoids every wrong-table trap; IRB imported

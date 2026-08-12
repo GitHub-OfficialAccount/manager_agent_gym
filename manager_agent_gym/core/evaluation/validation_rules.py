@@ -35,7 +35,7 @@ class WorkflowValidationRule:
         seed: int,
         validator: WorkflowValidatorFunc | None = None,
         llm_prompt: str | None = None,
-        model: str = "o3",
+        model: str | None = None,
         max_score: float = 1.0,
         description: str = "",
         frequency: ValidationFrequency = ValidationFrequency.ON_COMPLETION,
@@ -60,6 +60,10 @@ class WorkflowValidationRule:
 
         self.validator = validator
         self.llm_prompt = llm_prompt
+        if model is None:
+            from ..common.model_provider import get_model_for_role
+
+            model = get_model_for_role("judge")
         self.model = model
         self.scope = scope
         self.seed: int = seed
@@ -215,6 +219,10 @@ OUTPUT REQUIREMENTS (JSON only, no prose outside JSON):
                 model=self.model,
                 # temperature=0.1,
                 seed=self.seed,
+                # Judge outputs occasionally fail to parse (e.g. malformed JSON from
+                # fast models); Instructor re-prompts with the parse error, and a
+                # failed rubric otherwise records a hard 0.0.
+                max_retries=2,
             )
 
             # Interpret union score (bool | level | numeric)

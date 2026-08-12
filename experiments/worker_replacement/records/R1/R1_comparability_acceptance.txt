@@ -1,0 +1,19 @@
+S8 — cross-cell comparability assertions
+
+cases built by MUTATING a real bundle: run_seed101.json
+   its action space (15 actions): ['add_task_dependency', 'assign_task', 'assign_tasks_to_agents', 'create_task', 'decompose_task', 'get_available_agents', 'get_pending_tasks', 'get_workflow_status', 'inspect_task', 'noop', 'refine_task', 'remove_task', 'remove_task_dependency', 'retry_task', 'send_message']
+
+1. two cells from the same configuration:
+   settings checked: ['capacity_mapping', 'horizon', 'manager_action_types', 'manager_model', 'n_tasks', 'worker_model']
+   [ok] comparable
+
+2. negatives — each must be REJECTED with a distinct named cause:
+   [ok] ACTION SPACE differs -> rejected
+       names the setting (manager_action_types) and what differs: U has ['assign_tasks_to_agents'] and T does not
+   [ok] WORKER MODEL differs -> rejected
+   [ok] setting UNRECORDED in one cell -> rejected (absent is not evidence of 'same')
+       unrecorded: [{'setting': 'manager_action_types', 'cells': ['T']}]
+   [ok] REORDERED action list -> still comparable (the check compares content, not JSON order)
+   [ok] 3 DISTINCT rejection payloads — no catch-all masquerading as three checks
+
+RESULT: PASS — identical configurations compare; differing action space, differing model and an unrecorded setting are each rejected with a distinct named cause; list ordering does not matter

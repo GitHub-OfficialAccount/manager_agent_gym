@@ -1,0 +1,3 @@
+batch A: contradicts= 5/20  {'supports_fit': 14, 'contradicts_fit': 5, 'neutral': 1}
+batch B: contradicts= 9/20  {'contradicts_fit': 9, 'supports_fit': 11}
+batch C: contradicts=17/20  {'supports_fit': 2, 'neutral': 1, 'contradicts_fit': 17}

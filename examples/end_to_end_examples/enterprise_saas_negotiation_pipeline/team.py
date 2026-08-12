@@ -217,7 +217,6 @@ def create_team_configs():
             "As deviations mount, you expect principled risk management and clear escalation. Near close, you emphasize "
             "execution hygiene (CLM ingest, metadata) and smooth handoff to Customer Success."
         ),
-        model_name="o3",
         name="Chief Revenue Officer (Stakeholder)",
         role="Executive Stakeholder",
         persona_description="Outcome‑driven; intolerant of avoidable delays; expects crisp blocker lists with owners/ETAs.",

@@ -1,0 +1,31 @@
+{
+  "classes": [
+    "count",
+    "identifier",
+    "measure",
+    "parameter",
+    "rate",
+    "setting"
+  ],
+  "entries_with_retraction_notes": [
+    "coverage_misrouting.executed.rate",
+    "coverage_misrouting.unexecuted_capacity_refused.n",
+    "declines.n_unreadable",
+    "episodes[].n_unstaffed",
+    "variance_quantities.sigma_gap_full_minus_staffed"
+  ],
+  "failures": [],
+  "n_path_derived_kinds": 55,
+  "n_registered_entries": 67,
+  "verdict": {
+    "n_kinds_matched": 55,
+    "n_kinds_registered": 55,
+    "n_values": 448,
+    "ok": true,
+    "registered_kinds_never_emitted": [],
+    "summary": "55/55 registered kinds emitted \u00b7 448/448 values covered \u00b7 0 unregistered \u00b7 0 stale entries \u00b7 0 out-of-range values \u00b7 0 undeclared None",
+    "undeclared_none_values": [],
+    "unregistered_values": [],
+    "wrong_class_for_value": []
+  }
+}

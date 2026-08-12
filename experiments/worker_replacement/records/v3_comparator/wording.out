@@ -1,0 +1,17 @@
+4 wordings x 28 supports + 8 contradictions x n=8 = 1152 calls, interleaved
+  round 1/8
+  round 2/8
+  round 3/8
+  round 4/8
+  round 5/8
+  round 6/8
+  round 7/8
+  round 8/8
+
+wording         FALSE CONTRA (28 supports)  RECALL (8 contradictions)
+current             2/224   =   0.89%         63/64    =  98.44%
+a paraphrase        2/224   =   0.89%         63/64    =  98.44%
+b thin-text         2/224   =   0.89%         64/64    = 100.00%
+a+b combined        6/224   =   2.68%         58/64    =  90.62%
+
+  any wording that moves recall off 100% is disqualified regardless of its false-contradiction rate.

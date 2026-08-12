@@ -14,9 +14,37 @@ class ScheduledAgentChange(BaseModel):
     """A scheduled agent change at a specific timestep."""
 
     timestep: int = Field(..., description="Timestep when change should occur")
-    action: Literal["add", "remove"] = Field(..., description="Add or remove agent")
+    action: Literal["add", "remove", "replace"] = Field(
+        ..., description="Add, remove, or replace (in-place mutation) an agent"
+    )
     agent_config: Any = Field(default=None, description="Agent config for addition")
-    agent_id: str | None = Field(default=None, description="Agent ID for removal")
+    agent_id: str | None = Field(
+        default=None, description="Agent ID for removal or replacement"
+    )
+    new_system_prompt: str | None = Field(
+        default=None,
+        description="Replacement system prompt for 'replace' (same id, new policy)",
+    )
+    new_model_name: str | None = Field(
+        default=None,
+        description="Replacement model name for 'replace' (same id, new capability)",
+    )
+    new_tool_ids: list[str] | None = Field(
+        default=None,
+        description="Replacement task-tool ids for 'replace', resolved via the "
+        "registry's tool registry (same id, new toolset — e.g. a downgrade)",
+    )
+    new_agent_capabilities: list[str] | None = Field(
+        default=None,
+        description="Optional replacement for manager-visible declared capabilities",
+    )
+    announce: bool = Field(
+        default=False,
+        description=(
+            "For 'replace': broadcast the change to all agents. False = silent "
+            "swap (behavior changes with no observable announcement)."
+        ),
+    )
     reason: str = Field(..., description="Reason for this agent change")
     # Note: tools will be handled separately, not stored in schema
 
@@ -26,6 +54,20 @@ class ScheduledAgentChange(BaseModel):
             raise ValueError("agent_config is required for 'add' action")
         if self.action == "remove" and not self.agent_id:
             raise ValueError("agent_id is required for 'remove' action")
+        if self.action == "replace" and not (
+            self.agent_id
+            and (
+                self.new_system_prompt
+                or self.new_model_name
+                or self.new_tool_ids is not None
+                or self.new_agent_capabilities is not None
+            )
+        ):
+            raise ValueError(
+                "agent_id and at least one of new_system_prompt / new_model_name "
+                "/ new_tool_ids / new_agent_capabilities are required for "
+                "'replace' action"
+            )
 
 
 class AgentCoordinationConfig(BaseModel):

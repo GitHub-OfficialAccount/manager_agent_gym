@@ -1,0 +1,59 @@
+{
+  "protocol_version": "relation-judgments-v1.1-competent-control",
+  "seed": 101,
+  "scope": "Manager-visible robust-audit methods in the competent no-change control.",
+  "expected_correct_agents": ["portfolio_analyst", "risk_analyst"],
+  "engagement_patterns": ["percentile", "robust.*audit"],
+  "labels": [
+    {
+      "label_id": "a_robust_method",
+      "channel": "method_statement",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch A Robust Audit",
+      "fact_pattern": "\"?method\"?\\s*:.*percentile"
+    },
+    {
+      "label_id": "b_robust_method",
+      "channel": "method_statement",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch B Robust Audit",
+      "fact_pattern": "\"?method\"?\\s*:.*percentile"
+    },
+    {
+      "label_id": "c_robust_method",
+      "channel": "method_statement",
+      "worker": "portfolio_analyst",
+      "task_pattern": "Batch C Robust Audit",
+      "fact_pattern": "\"?method\"?\\s*:.*percentile"
+    }
+  ],
+  "relations": [
+    {
+      "relation_id": "a_method_match",
+      "channel": "task_artifact_relation",
+      "polarity": "exonerating",
+      "source_label_ids": ["a_robust_method"],
+      "manager_visible_basis": ["Batch A requests and reports percentile."],
+      "statement": "Batch A supports stable task fit.",
+      "rationale": "The competent no-change artifact should not contradict its task requirement."
+    },
+    {
+      "relation_id": "b_method_match",
+      "channel": "task_artifact_relation",
+      "polarity": "exonerating",
+      "source_label_ids": ["b_robust_method"],
+      "manager_visible_basis": ["Batch B requests and reports percentile."],
+      "statement": "Batch B supports stable task fit.",
+      "rationale": "The competent no-change artifact should not contradict its task requirement."
+    },
+    {
+      "relation_id": "c_method_match",
+      "channel": "task_artifact_relation",
+      "polarity": "exonerating",
+      "source_label_ids": ["c_robust_method"],
+      "manager_visible_basis": ["Batch C requests and reports percentile."],
+      "statement": "Batch C supports stable task fit.",
+      "rationale": "The competent no-change artifact should not contradict its task requirement."
+    }
+  ]
+}

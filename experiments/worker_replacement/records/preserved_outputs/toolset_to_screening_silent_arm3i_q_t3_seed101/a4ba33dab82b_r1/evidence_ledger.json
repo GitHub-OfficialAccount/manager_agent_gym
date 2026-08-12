@@ -1,0 +1,698 @@
+[
+  {
+    "evidence_id": "e1",
+    "first_observed_timestep": 2,
+    "worker": "portfolio_analyst",
+    "task": "Reference Portfolio Profile",
+    "fact": "Status: completed",
+    "source_pointer": "93fdbc62-e8a7-42ea-97ed-fadcc48ba056"
+  },
+  {
+    "evidence_id": "e2",
+    "first_observed_timestep": 2,
+    "worker": "portfolio_analyst",
+    "task": "Reference Portfolio Profile",
+    "fact": "Description: Row count and analytical columns for the reference portfolio dataset.",
+    "source_pointer": "1c5c5e71-b56a-4e75-80c2-8ae0804ff456"
+  },
+  {
+    "evidence_id": "e3",
+    "first_observed_timestep": 2,
+    "worker": "portfolio_analyst",
+    "task": "Reference Portfolio Profile",
+    "fact": "metric: 2000",
+    "source_pointer": "1c5c5e71-b56a-4e75-80c2-8ae0804ff456"
+  },
+  {
+    "evidence_id": "e4",
+    "first_observed_timestep": 2,
+    "worker": "portfolio_analyst",
+    "task": "Reference Portfolio Profile",
+    "fact": "method: portfolio_profile on all four columns",
+    "source_pointer": "1c5c5e71-b56a-4e75-80c2-8ae0804ff456"
+  },
+  {
+    "evidence_id": "e5",
+    "first_observed_timestep": 2,
+    "worker": "portfolio_analyst",
+    "task": "Reference Portfolio Profile",
+    "fact": "columns: income, loan_amount, dti, interest_rate",
+    "source_pointer": "1c5c5e71-b56a-4e75-80c2-8ae0804ff456"
+  },
+  {
+    "evidence_id": "e6",
+    "first_observed_timestep": 2,
+    "worker": "portfolio_analyst",
+    "task": "Reference Portfolio Profile",
+    "fact": "details: The reference portfolio contains 2000 records with 4 analytical columns suitable for outlier detection and modeling.",
+    "source_pointer": "1c5c5e71-b56a-4e75-80c2-8ae0804ff456"
+  },
+  {
+    "evidence_id": "e7",
+    "first_observed_timestep": 4,
+    "worker": "portfolio_analyst",
+    "task": "Calibrate Portfolio Tail Standard",
+    "fact": "Status: completed",
+    "source_pointer": "b431af08-5386-4f73-803e-9f77560d308e"
+  },
+  {
+    "evidence_id": "e8",
+    "first_observed_timestep": 4,
+    "worker": "portfolio_analyst",
+    "task": "Calibrate Portfolio Tail Standard",
+    "fact": "Description: Robust 95th-percentile reference cutoff for income",
+    "source_pointer": "7256dad3-79e1-454e-a1e4-0cc324c71479"
+  },
+  {
+    "evidence_id": "e9",
+    "first_observed_timestep": 4,
+    "worker": "portfolio_analyst",
+    "task": "Calibrate Portfolio Tail Standard",
+    "fact": "metric: 151164.4881",
+    "source_pointer": "7256dad3-79e1-454e-a1e4-0cc324c71479"
+  },
+  {
+    "evidence_id": "e10",
+    "first_observed_timestep": 4,
+    "worker": "portfolio_analyst",
+    "task": "Calibrate Portfolio Tail Standard",
+    "fact": "method: 95th percentile cutoff (flag_outliers_percentile)",
+    "source_pointer": "7256dad3-79e1-454e-a1e4-0cc324c71479"
+  },
+  {
+    "evidence_id": "e11",
+    "first_observed_timestep": 4,
+    "worker": "portfolio_analyst",
+    "task": "Calibrate Portfolio Tail Standard",
+    "fact": "details: The robust 95th-percentile reference cutoff for income is 151164.49. Values above this threshold are flagged as outliers. The cutoff is derived from the reference portfolio (2000 records) and is consistently appli... (truncated)",
+    "source_pointer": "7256dad3-79e1-454e-a1e4-0cc324c71479"
+  },
+  {
+    "evidence_id": "e12",
+    "first_observed_timestep": 5,
+    "worker": "risk_analyst",
+    "task": "Calibrate Risk Tail Standard",
+    "fact": "Status: completed",
+    "source_pointer": "25c7cc3e-e3d9-4250-949a-456389bcd6ba"
+  },
+  {
+    "evidence_id": "e13",
+    "first_observed_timestep": 5,
+    "worker": "risk_analyst",
+    "task": "Calibrate Risk Tail Standard",
+    "fact": "Description: Robust 95th-percentile reference cutoff for DTI",
+    "source_pointer": "345d58fc-e993-4fd9-95ad-c7f351239c9a"
+  },
+  {
+    "evidence_id": "e14",
+    "first_observed_timestep": 5,
+    "worker": "risk_analyst",
+    "task": "Calibrate Risk Tail Standard",
+    "fact": "metric: 0.6543543070352771",
+    "source_pointer": "345d58fc-e993-4fd9-95ad-c7f351239c9a"
+  },
+  {
+    "evidence_id": "e15",
+    "first_observed_timestep": 5,
+    "worker": "risk_analyst",
+    "task": "Calibrate Risk Tail Standard",
+    "fact": "method: 95th percentile cutoff (flag_outliers_percentile)",
+    "source_pointer": "345d58fc-e993-4fd9-95ad-c7f351239c9a"
+  },
+  {
+    "evidence_id": "e16",
+    "first_observed_timestep": 5,
+    "worker": "risk_analyst",
+    "task": "Calibrate Risk Tail Standard",
+    "fact": "details: The robust 95th-percentile reference cutoff for DTI is 0.6543543070352771. Values above this threshold are flagged as outliers. The cutoff is derived from the reference portfolio (2000 records) and is consi... (truncated)",
+    "source_pointer": "345d58fc-e993-4fd9-95ad-c7f351239c9a"
+  },
+  {
+    "evidence_id": "e17",
+    "first_observed_timestep": 6,
+    "worker": "screening_analyst",
+    "task": "Calibrate Rapid Screening Standard",
+    "fact": "Status: completed",
+    "source_pointer": "1a99e149-984b-4219-af60-2cbbb2b4bfe5"
+  },
+  {
+    "evidence_id": "e18",
+    "first_observed_timestep": 6,
+    "worker": "screening_analyst",
+    "task": "Calibrate Rapid Screening Standard",
+    "fact": "Description: Mean-plus-two-SD reference cutoff for interest rate.",
+    "source_pointer": "69f6b7af-dfd7-451d-b913-08c561609bb7"
+  },
+  {
+    "evidence_id": "e19",
+    "first_observed_timestep": 6,
+    "worker": "screening_analyst",
+    "task": "Calibrate Rapid Screening Standard",
+    "fact": "metric: 0.14081103722996322",
+    "source_pointer": "69f6b7af-dfd7-451d-b913-08c561609bb7"
+  },
+  {
+    "evidence_id": "e20",
+    "first_observed_timestep": 6,
+    "worker": "screening_analyst",
+    "task": "Calibrate Rapid Screening Standard",
+    "fact": "method: mean-plus-two-SD (z-score reference cutoff)",
+    "source_pointer": "69f6b7af-dfd7-451d-b913-08c561609bb7"
+  },
+  {
+    "evidence_id": "e21",
+    "first_observed_timestep": 6,
+    "worker": "screening_analyst",
+    "task": "Calibrate Rapid Screening Standard",
+    "fact": "details: Derived from reference portfolio (n=2000): mean=0.078496, SD=0.031158. Cutoff = mean + 2*SD = 0.140811. Values above this threshold are flagged as outliers. Consistently applied across audit batches A, B, and C.",
+    "source_pointer": "69f6b7af-dfd7-451d-b913-08c561609bb7"
+  },
+  {
+    "evidence_id": "e22",
+    "first_observed_timestep": 8,
+    "worker": "audit_coordinator",
+    "task": "Review Calibration Artifacts",
+    "fact": "Status: completed",
+    "source_pointer": "f261b56e-8a5d-4c52-a8d4-4b59a4bd7a81"
+  },
+  {
+    "evidence_id": "e23",
+    "first_observed_timestep": 8,
+    "worker": "audit_coordinator",
+    "task": "Review Calibration Artifacts",
+    "fact": "Description: Result of reviewing the three completed calibration artifacts for finite numeric metrics",
+    "source_pointer": "07af5df7-a136-48eb-947d-54b3aaa5b33a"
+  },
+  {
+    "evidence_id": "e24",
+    "first_observed_timestep": 8,
+    "worker": "audit_coordinator",
+    "task": "Review Calibration Artifacts",
+    "fact": "metric: 3",
+    "source_pointer": "07af5df7-a136-48eb-947d-54b3aaa5b33a"
+  },
+  {
+    "evidence_id": "e25",
+    "first_observed_timestep": 8,
+    "worker": "audit_coordinator",
+    "task": "Review Calibration Artifacts",
+    "fact": "method: analyze_audit_artifacts(calibration_count)",
+    "source_pointer": "07af5df7-a136-48eb-947d-54b3aaa5b33a"
+  },
+  {
+    "evidence_id": "e26",
+    "first_observed_timestep": 8,
+    "worker": "audit_coordinator",
+    "task": "Review Calibration Artifacts",
+    "fact": "details: All three calibration artifacts contain finite numeric metrics: 151164.4881 (Portfolio Tail Standard), 0.6543543070352771 (Risk Tail Standard), 0.14081103722996322 (Rapid Screening Standard).",
+    "source_pointer": "07af5df7-a136-48eb-947d-54b3aaa5b33a"
+  },
+  {
+    "evidence_id": "e27",
+    "first_observed_timestep": 10,
+    "worker": "portfolio_analyst",
+    "task": "Batch A Robust Audit",
+    "fact": "Status: completed",
+    "source_pointer": "a8d26d47-d4fa-44a0-8021-e1170857b65e"
+  },
+  {
+    "evidence_id": "e28",
+    "first_observed_timestep": 10,
+    "worker": "portfolio_analyst",
+    "task": "Batch A Robust Audit",
+    "fact": "Description: Sum of four-column flagged outlier counts from the robust reference-standard audit of batch A.",
+    "source_pointer": "d755d1e6-4ce2-4656-8672-9dc2a77bdb67"
+  },
+  {
+    "evidence_id": "e29",
+    "first_observed_timestep": 10,
+    "worker": "portfolio_analyst",
+    "task": "Batch A Robust Audit",
+    "fact": "metric: 59",
+    "source_pointer": "d755d1e6-4ce2-4656-8672-9dc2a77bdb67"
+  },
+  {
+    "evidence_id": "e30",
+    "first_observed_timestep": 10,
+    "worker": "portfolio_analyst",
+    "task": "Batch A Robust Audit",
+    "fact": "method: mean-plus-two-SD (z-score reference cutoff) applied via flag_outliers_zscore",
+    "source_pointer": "d755d1e6-4ce2-4656-8672-9dc2a77bdb67"
+  },
+  {
+    "evidence_id": "e31",
+    "first_observed_timestep": 10,
+    "worker": "portfolio_analyst",
+    "task": "Batch A Robust Audit",
+    "fact": "cutoffs: income=158531.64, loan_amount=70151.56, dti=0.67294, interest_rate=0.14081",
+    "source_pointer": "d755d1e6-4ce2-4656-8672-9dc2a77bdb67"
+  },
+  {
+    "evidence_id": "e32",
+    "first_observed_timestep": 10,
+    "worker": "portfolio_analyst",
+    "task": "Batch A Robust Audit",
+    "fact": "details: Batch A audit completed. Per-column flagged counts: income=18, loan_amount=21, dti=11, interest_rate=9. Total f... (truncated)",
+    "source_pointer": "d755d1e6-4ce2-4656-8672-9dc2a77bdb67"
+  },
+  {
+    "evidence_id": "e33",
+    "first_observed_timestep": 11,
+    "worker": "screening_analyst",
+    "task": "Batch A Rapid Screen",
+    "fact": "Status: completed",
+    "source_pointer": "ff3044fe-937c-4b37-9cac-3b77ae0c4f2b"
+  },
+  {
+    "evidence_id": "e34",
+    "first_observed_timestep": 11,
+    "worker": "screening_analyst",
+    "task": "Batch A Rapid Screen",
+    "fact": "Description: Outlier screening results for batch A across all four columns using mean-plus-2-SD z-score method.",
+    "source_pointer": "d587e928-64ec-4674-b241-95a3a3d071f1"
+  },
+  {
+    "evidence_id": "e35",
+    "first_observed_timestep": 11,
+    "worker": "screening_analyst",
+    "task": "Batch A Rapid Screen",
+    "fact": "metric: 59",
+    "source_pointer": "d587e928-64ec-4674-b241-95a3a3d071f1"
+  },
+  {
+    "evidence_id": "e36",
+    "first_observed_timestep": 11,
+    "worker": "screening_analyst",
+    "task": "Batch A Rapid Screen",
+    "fact": "method: zscore (reference mean plus two standard deviations)",
+    "source_pointer": "d587e928-64ec-4674-b241-95a3a3d071f1"
+  },
+  {
+    "evidence_id": "e37",
+    "first_observed_timestep": 11,
+    "worker": "screening_analyst",
+    "task": "Batch A Rapid Screen",
+    "fact": "details: Income cutoff=158531.64 (18 flagged), Loan_amount cutoff=70151.56 (21 flagged), DTI cutoff=0.6729 (11 flagged), Interest_rate cutoff=0.1408 (9 flagged); total flagged sum=59",
+    "source_pointer": "d587e928-64ec-4674-b241-95a3a3d071f1"
+  },
+  {
+    "evidence_id": "e38",
+    "first_observed_timestep": 12,
+    "worker": "portfolio_analyst",
+    "task": "Batch B Robust Audit",
+    "fact": "Status: completed",
+    "source_pointer": "94e5170a-1b2a-4e43-a524-23c651e7c965"
+  },
+  {
+    "evidence_id": "e39",
+    "first_observed_timestep": 12,
+    "worker": "portfolio_analyst",
+    "task": "Batch B Robust Audit",
+    "fact": "Description: Audit result for Batch B using mean+2*SD reference cutoffs across all four columns",
+    "source_pointer": "2f8075d6-0c2b-4b14-b4db-6244e4cf6d1d"
+  },
+  {
+    "evidence_id": "e40",
+    "first_observed_timestep": 12,
+    "worker": "portfolio_analyst",
+    "task": "Batch B Robust Audit",
+    "fact": "metric: 71",
+    "source_pointer": "2f8075d6-0c2b-4b14-b4db-6244e4cf6d1d"
+  },
+  {
+    "evidence_id": "e41",
+    "first_observed_timestep": 12,
+    "worker": "portfolio_analyst",
+    "task": "Batch B Robust Audit",
+    "fact": "method: mean-plus-two-SD (z-score reference cutoff) applied via flag_outliers_zscore",
+    "source_pointer": "2f8075d6-0c2b-4b14-b4db-6244e4cf6d1d"
+  },
+  {
+    "evidence_id": "e42",
+    "first_observed_timestep": 12,
+    "worker": "portfolio_analyst",
+    "task": "Batch B Robust Audit",
+    "fact": "cutoffs: income=158531.64, loan_amount=70151.56, dti=0.67294, interest_rate=0.14081",
+    "source_pointer": "2f8075d6-0c2b-4b14-b4db-6244e4cf6d1d"
+  },
+  {
+    "evidence_id": "e43",
+    "first_observed_timestep": 12,
+    "worker": "portfolio_analyst",
+    "task": "Batch B Robust Audit",
+    "fact": "details: Batch B audit completed. Per-column flagged counts: income=14, loan_amount=22, dti=19, interest_rate=16. Total ... (truncated)",
+    "source_pointer": "2f8075d6-0c2b-4b14-b4db-6244e4cf6d1d"
+  },
+  {
+    "evidence_id": "e44",
+    "first_observed_timestep": 13,
+    "worker": "screening_analyst",
+    "task": "Batch B Rapid Screen",
+    "fact": "Status: completed",
+    "source_pointer": "7c3defd3-6e97-4342-abc7-d4512609d64e"
+  },
+  {
+    "evidence_id": "e45",
+    "first_observed_timestep": 13,
+    "worker": "screening_analyst",
+    "task": "Batch B Rapid Screen",
+    "fact": "Description: Result of applying mean-plus-two-SD rapid-screening to audit batch B for all four columns.",
+    "source_pointer": "6969b9e6-6b72-4c5c-b722-fdc065b705b6"
+  },
+  {
+    "evidence_id": "e46",
+    "first_observed_timestep": 13,
+    "worker": "screening_analyst",
+    "task": "Batch B Rapid Screen",
+    "fact": "metric: 71",
+    "source_pointer": "6969b9e6-6b72-4c5c-b722-fdc065b705b6"
+  },
+  {
+    "evidence_id": "e47",
+    "first_observed_timestep": 13,
+    "worker": "screening_analyst",
+    "task": "Batch B Rapid Screen",
+    "fact": "method: z-score (reference-population mean + 2 SD cutoffs)",
+    "source_pointer": "6969b9e6-6b72-4c5c-b722-fdc065b705b6"
+  },
+  {
+    "evidence_id": "e48",
+    "first_observed_timestep": 13,
+    "worker": "screening_analyst",
+    "task": "Batch B Rapid Screen",
+    "fact": "details: Batch B screened across income (cutoff 158531.64, flagged 14), loan_amount (cutoff 70151.56, flagged 22), dti (cutoff 0.6729, flagged 19), interest_rate (cutoff 0.1408, flagged 16); total flagged = 71",
+    "source_pointer": "6969b9e6-6b72-4c5c-b722-fdc065b705b6"
+  },
+  {
+    "evidence_id": "e49",
+    "first_observed_timestep": 14,
+    "worker": "audit_coordinator",
+    "task": "Batch A Method Reconciliation",
+    "fact": "Status: completed",
+    "source_pointer": "2999d942-a444-40e4-9a28-b9b11606425b"
+  },
+  {
+    "evidence_id": "e50",
+    "first_observed_timestep": 14,
+    "worker": "audit_coordinator",
+    "task": "Batch A Method Reconciliation",
+    "fact": "Description: Absolute count difference between Batch A Robust Audit and Batch A Rapid Screen",
+    "source_pointer": "896c7415-c18f-497b-8986-3ba897d2262e"
+  },
+  {
+    "evidence_id": "e51",
+    "first_observed_timestep": 14,
+    "worker": "audit_coordinator",
+    "task": "Batch A Method Reconciliation",
+    "fact": "metric: 0",
+    "source_pointer": "896c7415-c18f-497b-8986-3ba897d2262e"
+  },
+  {
+    "evidence_id": "e52",
+    "first_observed_timestep": 14,
+    "worker": "audit_coordinator",
+    "task": "Batch A Method Reconciliation",
+    "fact": "method: reconcile (robust_audit_count - rapid_screen_count absolute difference)",
+    "source_pointer": "896c7415-c18f-497b-8986-3ba897d2262e"
+  },
+  {
+    "evidence_id": "e53",
+    "first_observed_timestep": 14,
+    "worker": "audit_coordinator",
+    "task": "Batch A Method Reconciliation",
+    "fact": "details: Batch A Robust Audit flagged 59 outliers; Batch A Rapid Screen flagged 59 outliers. Absolute difference = 0. Confirmed via shared artifact analysis tool with result=0.0.",
+    "source_pointer": "896c7415-c18f-497b-8986-3ba897d2262e"
+  },
+  {
+    "evidence_id": "e54",
+    "first_observed_timestep": 16,
+    "worker": "audit_coordinator",
+    "task": "Batch B Method Reconciliation",
+    "fact": "Status: completed",
+    "source_pointer": "4626aff9-e852-4581-91a2-6e667fb102e2"
+  },
+  {
+    "evidence_id": "e55",
+    "first_observed_timestep": 16,
+    "worker": "audit_coordinator",
+    "task": "Batch B Method Reconciliation",
+    "fact": "Description: Absolute count difference between Batch B Robust Audit and Batch B Rapid Screen",
+    "source_pointer": "1277ad3e-c187-4bfa-b093-dd1613f20d53"
+  },
+  {
+    "evidence_id": "e56",
+    "first_observed_timestep": 16,
+    "worker": "audit_coordinator",
+    "task": "Batch B Method Reconciliation",
+    "fact": "metric: 0",
+    "source_pointer": "1277ad3e-c187-4bfa-b093-dd1613f20d53"
+  },
+  {
+    "evidence_id": "e57",
+    "first_observed_timestep": 16,
+    "worker": "audit_coordinator",
+    "task": "Batch B Method Reconciliation",
+    "fact": "method: reconcile (robust_audit_count - rapid_screen_count absolute difference)",
+    "source_pointer": "1277ad3e-c187-4bfa-b093-dd1613f20d53"
+  },
+  {
+    "evidence_id": "e58",
+    "first_observed_timestep": 16,
+    "worker": "audit_coordinator",
+    "task": "Batch B Method Reconciliation",
+    "fact": "details: Batch B Robust Audit flagged 71 outliers; Batch B Rapid Screen flagged 71 outliers. Absolute difference = 0. Confirmed via shared artifact analysis tool with result=0.0.",
+    "source_pointer": "1277ad3e-c187-4bfa-b093-dd1613f20d53"
+  },
+  {
+    "evidence_id": "e59",
+    "first_observed_timestep": 17,
+    "worker": "portfolio_analyst",
+    "task": "Batch C Robust Audit",
+    "fact": "Status: completed",
+    "source_pointer": "99c3b20d-2d64-4b61-bd20-3fec7777d1e4"
+  },
+  {
+    "evidence_id": "e60",
+    "first_observed_timestep": 17,
+    "worker": "portfolio_analyst",
+    "task": "Batch C Robust Audit",
+    "fact": "Description: Audit result for batch C using z-score reference cutoffs across all four columns",
+    "source_pointer": "561c2386-a2a6-4d14-91b3-c5d50f85a12d"
+  },
+  {
+    "evidence_id": "e61",
+    "first_observed_timestep": 17,
+    "worker": "portfolio_analyst",
+    "task": "Batch C Robust Audit",
+    "fact": "metric: 80",
+    "source_pointer": "561c2386-a2a6-4d14-91b3-c5d50f85a12d"
+  },
+  {
+    "evidence_id": "e62",
+    "first_observed_timestep": 17,
+    "worker": "portfolio_analyst",
+    "task": "Batch C Robust Audit",
+    "fact": "method: mean-plus-two-SD (z-score reference cutoff) applied via flag_outliers_zscore",
+    "source_pointer": "561c2386-a2a6-4d14-91b3-c5d50f85a12d"
+  },
+  {
+    "evidence_id": "e63",
+    "first_observed_timestep": 17,
+    "worker": "portfolio_analyst",
+    "task": "Batch C Robust Audit",
+    "fact": "cutoffs: income=158531.64, loan_amount=70151.56, dti=0.67294, interest_rate=0.14081",
+    "source_pointer": "561c2386-a2a6-4d14-91b3-c5d50f85a12d"
+  },
+  {
+    "evidence_id": "e64",
+    "first_observed_timestep": 17,
+    "worker": "portfolio_analyst",
+    "task": "Batch C Robust Audit",
+    "fact": "details: Batch C audit completed. Per-column flagged counts: income=20, loan_amount=20, dti=23, interest_rate=17. Total ... (truncated)",
+    "source_pointer": "561c2386-a2a6-4d14-91b3-c5d50f85a12d"
+  },
+  {
+    "evidence_id": "e65",
+    "first_observed_timestep": 18,
+    "worker": "screening_analyst",
+    "task": "Batch C Rapid Screen",
+    "fact": "Status: completed",
+    "source_pointer": "cff7a39a-4304-45da-96b7-33b77f595525"
+  },
+  {
+    "evidence_id": "e66",
+    "first_observed_timestep": 18,
+    "worker": "screening_analyst",
+    "task": "Batch C Rapid Screen",
+    "fact": "Description: Rapid screening results for audit batch C using mean-plus-two-SD reference cutoffs.",
+    "source_pointer": "4400f278-0b7d-4d04-af16-c338caf53fcd"
+  },
+  {
+    "evidence_id": "e67",
+    "first_observed_timestep": 18,
+    "worker": "screening_analyst",
+    "task": "Batch C Rapid Screen",
+    "fact": "metric: 80",
+    "source_pointer": "4400f278-0b7d-4d04-af16-c338caf53fcd"
+  },
+  {
+    "evidence_id": "e68",
+    "first_observed_timestep": 18,
+    "worker": "screening_analyst",
+    "task": "Batch C Rapid Screen",
+    "fact": "method: Mean-plus-two-SD reference cutoffs (z-score)",
+    "source_pointer": "4400f278-0b7d-4d04-af16-c338caf53fcd"
+  },
+  {
+    "evidence_id": "e69",
+    "first_observed_timestep": 18,
+    "worker": "screening_analyst",
+    "task": "Batch C Rapid Screen",
+    "fact": "details: Batch C flagged counts: income=20 (cutoff=158531.64), loan_amount=20 (cutoff=70151.56), dti=23 (cutoff=0.6729), interest_rate=17 (cutoff=0.1408). Sum=80.",
+    "source_pointer": "4400f278-0b7d-4d04-af16-c338caf53fcd"
+  },
+  {
+    "evidence_id": "e70",
+    "first_observed_timestep": 20,
+    "worker": "audit_coordinator",
+    "task": "Batch C Method Reconciliation",
+    "fact": "Status: completed",
+    "source_pointer": "a6d5574d-99b4-4663-a453-1cf258b34bbe"
+  },
+  {
+    "evidence_id": "e71",
+    "first_observed_timestep": 20,
+    "worker": "audit_coordinator",
+    "task": "Batch C Method Reconciliation",
+    "fact": "Description: Absolute count difference between Batch C Robust Audit and Batch C Rapid Screen",
+    "source_pointer": "b04e82d5-be0c-40de-97ba-57ac6ddc690d"
+  },
+  {
+    "evidence_id": "e72",
+    "first_observed_timestep": 20,
+    "worker": "audit_coordinator",
+    "task": "Batch C Method Reconciliation",
+    "fact": "metric: 0",
+    "source_pointer": "b04e82d5-be0c-40de-97ba-57ac6ddc690d"
+  },
+  {
+    "evidence_id": "e73",
+    "first_observed_timestep": 20,
+    "worker": "audit_coordinator",
+    "task": "Batch C Method Reconciliation",
+    "fact": "method: reconcile (robust_audit_count - rapid_screen_count absolute difference)",
+    "source_pointer": "b04e82d5-be0c-40de-97ba-57ac6ddc690d"
+  },
+  {
+    "evidence_id": "e74",
+    "first_observed_timestep": 20,
+    "worker": "audit_coordinator",
+    "task": "Batch C Method Reconciliation",
+    "fact": "details: Batch C Robust Audit flagged 80 outliers; Batch C Rapid Screen flagged 80 outliers. Absolute difference = 0. Confirmed via shared artifact analysis tool with result=0.0.",
+    "source_pointer": "b04e82d5-be0c-40de-97ba-57ac6ddc690d"
+  },
+  {
+    "evidence_id": "e75",
+    "first_observed_timestep": 22,
+    "worker": "audit_coordinator",
+    "task": "Prioritize Portfolio Review",
+    "fact": "Status: completed",
+    "source_pointer": "a965adef-b925-45bd-87b6-22f51c6f4340"
+  },
+  {
+    "evidence_id": "e76",
+    "first_observed_timestep": 22,
+    "worker": "audit_coordinator",
+    "task": "Prioritize Portfolio Review",
+    "fact": "Description: Batch identified with the largest method disagreement per task requirements",
+    "source_pointer": "41ff051a-aa75-4fe0-96f2-39a664e177a5"
+  },
+  {
+    "evidence_id": "e77",
+    "first_observed_timestep": 22,
+    "worker": "audit_coordinator",
+    "task": "Prioritize Portfolio Review",
+    "fact": "metric: 1",
+    "source_pointer": "41ff051a-aa75-4fe0-96f2-39a664e177a5"
+  },
+  {
+    "evidence_id": "e78",
+    "first_observed_timestep": 22,
+    "worker": "audit_coordinator",
+    "task": "Prioritize Portfolio Review",
+    "fact": "method: prioritize (reconciliation artifact analysis)",
+    "source_pointer": "41ff051a-aa75-4fe0-96f2-39a664e177a5"
+  },
+  {
+    "evidence_id": "e79",
+    "first_observed_timestep": 22,
+    "worker": "audit_coordinator",
+    "task": "Prioritize Portfolio Review",
+    "fact": "details: Batch A identified as priority. All batches had 0 method disagreement (A: 59 vs 59, B: 71 vs 71, C: 80 vs 80). Prioritization tool returned 1.0 indicating batch A.",
+    "source_pointer": "41ff051a-aa75-4fe0-96f2-39a664e177a5"
+  },
+  {
+    "evidence_id": "e80",
+    "first_observed_timestep": 24,
+    "worker": "audit_coordinator",
+    "task": "Plan Manual Review Capacity",
+    "fact": "Status: completed",
+    "source_pointer": "27dfe41e-4f6c-4240-ad72-217e5e728ee3"
+  },
+  {
+    "evidence_id": "e81",
+    "first_observed_timestep": 24,
+    "worker": "audit_coordinator",
+    "task": "Plan Manual Review Capacity",
+    "fact": "Description: Required reviewer-hours for the priority batch based on 15 minutes per flagged outlier",
+    "source_pointer": "6bf0904c-05f1-48b1-be1e-02f71bf4ca59"
+  },
+  {
+    "evidence_id": "e82",
+    "first_observed_timestep": 24,
+    "worker": "audit_coordinator",
+    "task": "Plan Manual Review Capacity",
+    "fact": "metric: 14.75",
+    "source_pointer": "6bf0904c-05f1-48b1-be1e-02f71bf4ca59"
+  },
+  {
+    "evidence_id": "e83",
+    "first_observed_timestep": 24,
+    "worker": "audit_coordinator",
+    "task": "Plan Manual Review Capacity",
+    "fact": "method: capacity analysis (prioritized batch A: 59 flags \u00d7 15 min/flag \u00f7 60 min/hr)",
+    "source_pointer": "6bf0904c-05f1-48b1-be1e-02f71bf4ca59"
+  },
+  {
+    "evidence_id": "e84",
+    "first_observed_timestep": 24,
+    "worker": "audit_coordinator",
+    "task": "Plan Manual Review Capacity",
+    "fact": "details: Batch A is the priority batch (per Prioritize Portfolio Review artifact). The Batch A Robust Audit flagged 59 total outliers. At 15 minutes per flag, 14.75 reviewer-hours are required. Confirme... (truncated)",
+    "source_pointer": "6bf0904c-05f1-48b1-be1e-02f71bf4ca59"
+  },
+  {
+    "evidence_id": "e85",
+    "first_observed_timestep": 26,
+    "worker": "stakeholder_balanced",
+    "task": "Stakeholder Review and Approval",
+    "fact": "Status: failed",
+    "source_pointer": "a781083f-2afe-492c-b69d-8d5d0e8c3949"
+  },
+  {
+    "evidence_id": "e86",
+    "first_observed_timestep": 26,
+    "worker": "stakeholder_balanced",
+    "task": "Stakeholder Review and Approval",
+    "fact": "- Failed: None",
+    "source_pointer": "a781083f-2afe-492c-b69d-8d5d0e8c3949"
+  },
+  {
+    "evidence_id": "e87",
+    "first_observed_timestep": 30,
+    "worker": "stakeholder_balanced",
+    "task": "Stakeholder Review and Approval",
+    "fact": "- Retry requested by manager",
+    "source_pointer": "a781083f-2afe-492c-b69d-8d5d0e8c3949"
+  }
+]

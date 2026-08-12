@@ -1,0 +1,97 @@
+{
+  "condition": "control",
+  "perturbation_name": "toolset_to_screening",
+  "lever": "toolset",
+  "seed": 101,
+  "swap_timestep": 3,
+  "max_timesteps": 32,
+  "target_worker": "portfolio_analyst",
+  "artifact_reporting": "standard",
+  "worker_noise": "none",
+  "arm": "native",
+  "matrix_name": null,
+  "matrix_hash": null,
+  "arms_spec_hash": "795a596a3086e6fc466cb2044854fd3a6495f83fa15ce5426258f0388bf07cda",
+  "working_tree_clean": null,
+  "code_commit": "5b19b5b1b4793ce37aaaa0d434638fe15980b49b",
+  "started_at": "2026-07-24T21:06:25.831592",
+  "finished_at": "2026-07-24T21:22:38.625822",
+  "observation_policy": {
+    "expose_worker_system_prompts": false,
+    "worker_metadata": "capabilities",
+    "message_window": 10,
+    "quality_digest": "none",
+    "observation_aid": "none",
+    "scheduled_worker_disclosures": []
+  },
+  "observability": {
+    "condition": "control",
+    "capability_projection": "baseline",
+    "announce": false,
+    "announcement_detail": "none"
+  },
+  "perturbation": {
+    "num_perturbations": 0,
+    "perturbations": []
+  },
+  "final_tools": {
+    "portfolio_analyst": [
+      "list_audit_artifacts",
+      "read_audit_artifact",
+      "portfolio_profile",
+      "flag_outliers_percentile",
+      "send_message",
+      "broadcast_message",
+      "get_recent_messages"
+    ],
+    "risk_analyst": [
+      "list_audit_artifacts",
+      "read_audit_artifact",
+      "portfolio_profile",
+      "flag_outliers_percentile",
+      "send_message",
+      "broadcast_message",
+      "get_recent_messages"
+    ],
+    "screening_analyst": [
+      "list_audit_artifacts",
+      "read_audit_artifact",
+      "portfolio_profile",
+      "flag_outliers_zscore",
+      "send_message",
+      "broadcast_message",
+      "get_recent_messages"
+    ],
+    "audit_coordinator": [
+      "list_audit_artifacts",
+      "read_audit_artifact",
+      "analyze_audit_artifacts",
+      "send_message",
+      "broadcast_message",
+      "get_recent_messages"
+    ]
+  },
+  "final_target_model": "openrouter/deepseek/deepseek-v4-flash",
+  "observation_aid_diagnostics": null,
+  "r_check": 0.999999996889686,
+  "completed_predefined": 16,
+  "total_predefined": 16,
+  "task_scores": {
+    "Reference Portfolio Profile": 1.0,
+    "Calibrate Portfolio Tail Standard": 0.9999999874649388,
+    "Calibrate Risk Tail Standard": 1.0,
+    "Calibrate Rapid Screening Standard": 0.9999999627700368,
+    "Review Calibration Artifacts": 1.0,
+    "Batch A Robust Audit": 1.0,
+    "Batch A Rapid Screen": 1.0,
+    "Batch A Method Reconciliation": 1.0,
+    "Batch B Robust Audit": 1.0,
+    "Batch B Rapid Screen": 1.0,
+    "Batch B Method Reconciliation": 1.0,
+    "Batch C Robust Audit": 1.0,
+    "Batch C Rapid Screen": 1.0,
+    "Batch C Method Reconciliation": 1.0,
+    "Prioritize Portfolio Review": 1.0,
+    "Plan Manual Review Capacity": 1.0
+  }
+}

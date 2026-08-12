@@ -1,0 +1,45 @@
+S7 — admission pipeline (cap K6 = 3)
+
+per-instance conditions (1 regeneration / 2 gate / 3 baseline):
+  seed   1   2   3    oracle  baseline  shortfall  M/oracle
+     0   P   P   F    8.4098    8.4098     0.0000    0.1316
+     1   P   P   P    8.6506    8.4978     0.1528    0.0753
+     2   P   P   P    8.4324    7.3307     1.1017    0.1037
+     3   P   P   P    8.5462    7.8063     0.7399    0.0965
+     4   P   P   P    8.5280    8.3929     0.1350    0.0756
+     5   P   P   P    8.7321    8.6846     0.0475    0.1195
+     6   P   P   F    8.2747    8.2747     0.0000    0.1073
+     7   P   P   P    8.7117    8.6959     0.0159    0.0607
+     8   P   P   P    8.7314    8.5300     0.2014    0.1347
+     9   P   P   P    8.6889    8.4459     0.2430    0.0815
+    10   P   P   P    8.5139    8.4018     0.1121    0.0924
+    11   P   P   F    8.3523    8.3523     0.0000    0.1164
+    12   P   P   P    8.6961    8.2928     0.4032    0.0824
+    13   P   P   P    8.6179    8.1484     0.4695    0.1011
+  ... 40 seeds total
+
+  generated 40/40, fully admitted 34/40
+  failures by condition: {'1_bit_identical_regeneration': 0, '2_interior_spread_and_disclosures': 0, '3_scripted_baseline_below_oracle': 6}
+  baseline shortfall: min -0.0000, median 0.2868
+  [ok] every seed generates at cap 3 (assertion 2b binds universally)
+
+label-trivial instances (capped baseline TIES the oracle): [0, 6, 11, 17, 32, 35]
+  these are the gate working: an instance a public-information script
+  solves completely measures lookup, not management.
+  condition 3 rejects: [0, 6, 11, 17, 32, 35]
+  [ok] condition 3 rejects EXACTLY the label-trivial instances — no more, no fewer
+
+  [ok] every rejected row names a cause (6 rejected, 0 unexplained)
+     seed   0: scripted baseline attains oracle — the instance is solvable from public inform
+     seed   6: scripted baseline attains oracle — the instance is solvable from public inform
+     seed  11: scripted baseline attains oracle — the instance is solvable from public inform
+     seed  17: scripted baseline attains oracle — the instance is solvable from public inform
+     seed  32: scripted baseline attains oracle — the instance is solvable from public inform
+     seed  35: scripted baseline attains oracle — the instance is solvable from public inform
+
+capacity consequences (asserted, not narrated):
+  greedy card-match load 6 vs cap 3 -> [ok] the cap BINDS
+  without the successor: 6 capacity for 9 segments -> [ok] segments MUST go unstaffed (oracle 8.3913 -> 5.7491, M/oracle 0.3149)
+  [ok] capacitated oracle 8.3913 <= Sigma-max bound 8.4665
+
+RESULT: PASS — all seeds generate; condition 3 rejects exactly the label-trivial instances; the cap binds and the successor is structurally load-bearing

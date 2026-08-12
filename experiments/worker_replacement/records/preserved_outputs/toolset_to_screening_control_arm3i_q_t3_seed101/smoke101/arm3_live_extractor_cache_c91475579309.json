@@ -1,0 +1,607 @@
+{
+  "model": "openrouter/deepseek/deepseek-v4-flash",
+  "seed": 101,
+  "deterministic_extractor_version": "arm3-relations-v2.6-deterministic-scopes",
+  "task_scope_version": "deterministic-title-family-v1",
+  "task_scope_spec_sha256": "b324786e1276ae12d0e91a55f54156f37931e370d458d4eb816be1c6a06690e5",
+  "relation_prompt_sha256": "be6eed907d148e07e7a2afadee2f3b36745912cd735181809eb837d763a76f87",
+  "relation_schema_sha256": "53397c53317fd041b451dd75adf50b574b3a8688ef99884794570b4737f3d312",
+  "relation": {
+    "58c4ce002271e345ae3574576af08c9f67ed24035599e23c248771d2a844cdb3": {
+      "results": [
+        {
+          "packet_fingerprint": "db3d264c349edb73b7b57d86009afc5e03e42b25c140ec7c30d2a3b7d5ce05a8",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q51",
+                "q1",
+                "q2"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "361dd407d408fe9aba0c691583247375a22feea8bce3ff675e6a4bb8e89e51f0",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q48",
+                "q1",
+                "q2"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "28b579d56a2358dca0aaecf3c710637b647046516024117af39bf877f422536f",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q49",
+                "q1",
+                "q2"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "ea1ade30cc621a7688dc2634bde418061508031542a7134df81c4e26a0883b62",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q50",
+                "q1",
+                "q2"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        }
+      ]
+    },
+    "b5940f8640dd160f208721fddef2a51d7cf3175c5a7994286bc129b3ba81aec4": {
+      "results": [
+        {
+          "packet_fingerprint": "4afe4fca2d47d15c12211a71a8c7758024719a61eb1f3c272cc37406f7f61cc5",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q51",
+                "q10",
+                "q9"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "6bad6a36e7a43f1d76dfb1fb7c8a6eb4f2e34202d8fab94ce55e1b9d0db4dd52",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q48",
+                "q10",
+                "q9"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "c927b099e8307ceda2ba30afea940b043262de2226d43cace6f782387edb494d",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q49",
+                "q10",
+                "q9"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "2dec22306edc1516860e7e71c7836b6fb8dafe412967886e87eb62dd3a5257dd",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q50",
+                "q10",
+                "q9"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        }
+      ]
+    },
+    "802d862d4e04822fb426a22c11347c0f190cd2fc98408cbe4520e16e5ea2898a": {
+      "results": [
+        {
+          "packet_fingerprint": "ea5af38a3002e7bf5339bc1e6e984ed9c99546df257bbde4799a6e3a724829b4",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q51",
+                "q7"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "a26b6fde75627a5c50479bd55faeff6e4b21e35e87340af4a362b7732816310e",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q48",
+                "q7"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "8a78c439bebe5d664f4df74ea06f99b1c300dec0104abb7c25e01542c2a87243",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q49",
+                "q7"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "af56e01f84ed81d62371bbbd5ca2152367f3bea3dab8f03c0c1072b18b0fed03",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "contradicts_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q50",
+                "q7"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        }
+      ]
+    },
+    "d995137342a6741889118f35c8c017e38634a51ff7e2ccd1377da8ea1d3b2139": {
+      "results": [
+        {
+          "packet_fingerprint": "1a7997403f39d5f98159d23b9a703f252407c648a8955491274efa447af1e127",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q51",
+                "q13",
+                "q12"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "12ef4d4d630e5982ce64fc46f6bd1cac02efb6b397e9fdfe8c757f4445a740c7",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q48",
+                "q13",
+                "q12"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "59bea60066912cbaf72e961ccdf5f7c3e82b93a9dbad4b1ec39da2ee5282166b",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q49",
+                "q13",
+                "q12"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "e4e379e0624f2ed0553bd4b2fca9b415a80f37e69346ff7e2726cd3214581bc8",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q50",
+                "q13",
+                "q12"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        }
+      ]
+    },
+    "2ed0513fa83db55a674a8b9d16d496b024006fc148b96612b76ebf133026b09e": {
+      "results": [
+        {
+          "packet_fingerprint": "e920c835097f2a6794f3d8a8e2f85ab33c8531419611c4a4165959295488ae04",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "contradicts_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q51",
+                "q37"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "c8b7dcc47aa0bd1195b92f83b21439c23bfb226a6c8f23da2709ec98a312e431",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "contradicts_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q48",
+                "q37"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "32e94142b1214db8f389a0a80d3ef62194945f18e64e927562b884cc2ee1aa95",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "contradicts_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q49",
+                "q37"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "f13c234e44e74fa55bceac222f8f3c12a7a7d08148d95ad2d1cf1bf7082c1329",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q50",
+                "q37"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        }
+      ]
+    },
+    "95e82a2f588f87cda0c766e691913f3870e07bd0ead57aa6eb85d09db5337cc8": {
+      "results": [
+        {
+          "packet_fingerprint": "5ac789c7c378e3880f18e38f3756faaaf47bcc2b3fc852cb384fed96169c905f",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q51",
+                "q25"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "48c3087dc521cfd9486a58e8cbdfefb73b2f550bb6c059f30a259291fa884254",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q48",
+                "q25"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "8a0124a159eeec1bf83b6d4926126f68fa3772fa8979dd37fc0ef32d668bf4b0",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q49",
+                "q25"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "367b229c52ad32b3e7d0e5fffda5c27a174f5cec767b351bad68138e5f4ac0ba",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "contradicts_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q50",
+                "q25"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        }
+      ]
+    },
+    "67eaded3983b53aadf915db639fc6916747b6ca5627be9a92b3ed058fb2c1b99": {
+      "results": [
+        {
+          "packet_fingerprint": "6ffad20eba7e7e89695ab37cde74eed878d13de39eef05dffa5068b04c094783",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q51",
+                "q31",
+                "q30"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "e89b6b4e3c96fbd59743d599f9e8d64058ca5a975b4ec9180f7062fa4cf6235f",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q48",
+                "q31",
+                "q30"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "3ccfc7f3f3301787661f6627112c89af11bc1f347785415d62ea06142246276c",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q49",
+                "q31",
+                "q30"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "c92ff60d38a831739a630636f2daac9de0b2e6f3b84c0afc2db0b6d9a4f24c8c",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q50",
+                "q31",
+                "q30"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        }
+      ]
+    },
+    "2355a275bbd75333cf11a41a1595a7446affa83e2b9e62c3afe2e6c81fd44dda": {
+      "results": [
+        {
+          "packet_fingerprint": "4e6f03ef54ab6d15deff5357db99eef6f85c6000c97d2ff744496d81509bc03e",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q42",
+                "q43"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "abfdbd0314f5df72021c45cb65bc42b57a7232ed949151b2c4b9ffb861771103",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q42",
+                "q43"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "1cbfa594dc340a4641944f29fad81ebe499e1a345826ef7f4e05c208002d73c5",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q42",
+                "q43"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "86fb4453b7e080fb972e7d4dfc7d626753a3c4ecfb9d74784d4d1fb3b7d228fc",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "neutral",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q42",
+                "q43"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        }
+      ]
+    },
+    "6661033edc0ad3e56dfe9375c8296ddf60887b53f7256ba9d90476b6e555e800": {
+      "results": [
+        {
+          "packet_fingerprint": "f18f1a239350b0392e7b4b68e9e62a38a5f60c42db3ec1de00164490f73fe4ff",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q51",
+                "q46",
+                "q45"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "0deb61f10a84bf1031258dcedad9a97ba70b360328fc371a1e994d9aab0eb78a",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q48",
+                "q46",
+                "q45"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "db32dfb960a5c7c68f8d6b4745c3773ef52115db6b012a2ea411b0f41158b4e0",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q49",
+                "q46",
+                "q45"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        },
+        {
+          "packet_fingerprint": "8dface140ac35d742e7029b19957c662d631b6ab72c3f3aeac3a769d6347ee16",
+          "proposals": [
+            {
+              "relation_kind": "profile_scope_support",
+              "stance": "supports_fit",
+              "evidence_ids": [],
+              "requirement_source_ids": [
+                "q50",
+                "q46",
+                "q45"
+              ]
+            }
+          ],
+          "evidence_comparisons": []
+        }
+      ]
+    }
+  }
+}

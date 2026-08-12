@@ -41,7 +41,12 @@ def _normalize_mode(raw_mode: str | None) -> str:
 def _resolve_model_name(explicit_model_name: str | None) -> str:
     if explicit_model_name:
         return explicit_model_name
-    return os.environ.get("MAG_MODEL_NAME", "o3")
+    env_model = os.environ.get("MAG_MODEL_NAME")
+    if env_model:
+        return env_model
+    from ..common.model_provider import get_model_for_role
+
+    return get_model_for_role("manager")
 
 
 def create_manager_agent(
@@ -53,7 +58,8 @@ def create_manager_agent(
 
     Args:
         preferences: Preference weights used by the manager agent.
-        model_name: Optional model identifier (defaults from MAG_MODEL_NAME or "o3").
+        model_name: Optional model identifier (defaults from MAG_MODEL_NAME or
+            the manager model configured in settings).
         manager_mode: Optional explicit mode (defaults from MAG_MANAGER_MODE or "cot").
 
     Returns:

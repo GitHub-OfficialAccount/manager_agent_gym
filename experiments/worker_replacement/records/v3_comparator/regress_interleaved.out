@@ -1,0 +1,10 @@
+  round 5/20
+  round 10/20
+  round 15/20
+  round 20/20
+
+condition      contradicts   1st half  2nd half  distribution
+short+plain          20/20         10        10  {'contradicts_fit': 20}
+v3.0 +plain          12/20         10         2  {'contradicts_fit': 12, 'supports_fit': 8}
+short+json           12/20          7         5  {'contradicts_fit': 12, 'ERR:LLMInferenceTruncationError': 3, 'supports_fit': 5}
+v3.0 +json            0/20          0         0  {'supports_fit': 20}

@@ -1,0 +1,172 @@
+{
+  "negative_action_space": {
+    "cells": [
+      "T",
+      "U"
+    ],
+    "comparable": false,
+    "disagreements": [
+      {
+        "by_cell": {
+          "T": [
+            "add_task_dependency",
+            "assign_task",
+            "create_task",
+            "decompose_task",
+            "get_available_agents",
+            "get_pending_tasks",
+            "get_workflow_status",
+            "inspect_task",
+            "noop",
+            "refine_task",
+            "remove_task",
+            "remove_task_dependency",
+            "retry_task",
+            "send_message"
+          ],
+          "U": [
+            "add_task_dependency",
+            "assign_task",
+            "assign_tasks_to_agents",
+            "create_task",
+            "decompose_task",
+            "get_available_agents",
+            "get_pending_tasks",
+            "get_workflow_status",
+            "inspect_task",
+            "noop",
+            "refine_task",
+            "remove_task",
+            "remove_task_dependency",
+            "retry_task",
+            "send_message"
+          ]
+        },
+        "description": "the manager's action space",
+        "setting": "manager_action_types"
+      }
+    ],
+    "n_cells": 2,
+    "settings_checked": [
+      "manager_action_types"
+    ],
+    "unrecorded_settings": []
+  },
+  "negative_unrecorded": {
+    "cells": [
+      "T",
+      "U"
+    ],
+    "comparable": false,
+    "disagreements": [
+      {
+        "by_cell": {
+          "T": "__ABSENT__",
+          "U": [
+            "add_task_dependency",
+            "assign_task",
+            "assign_tasks_to_agents",
+            "create_task",
+            "decompose_task",
+            "get_available_agents",
+            "get_pending_tasks",
+            "get_workflow_status",
+            "inspect_task",
+            "noop",
+            "refine_task",
+            "remove_task",
+            "remove_task_dependency",
+            "retry_task",
+            "send_message"
+          ]
+        },
+        "description": "the manager's action space",
+        "setting": "manager_action_types"
+      }
+    ],
+    "n_cells": 2,
+    "settings_checked": [
+      "capacity_mapping",
+      "horizon",
+      "manager_action_types",
+      "manager_model",
+      "n_tasks",
+      "worker_model"
+    ],
+    "unrecorded_settings": [
+      {
+        "cells": [
+          "T"
+        ],
+        "setting": "manager_action_types"
+      }
+    ]
+  },
+  "negative_worker_model": {
+    "cells": [
+      "T",
+      "U"
+    ],
+    "comparable": false,
+    "disagreements": [
+      {
+        "by_cell": {
+          "T": "openrouter/some/other-model",
+          "U": "openrouter/deepseek/deepseek-v4-flash-0731"
+        },
+        "description": "the workers' model",
+        "setting": "worker_model"
+      }
+    ],
+    "n_cells": 2,
+    "settings_checked": [
+      "capacity_mapping",
+      "horizon",
+      "manager_action_types",
+      "manager_model",
+      "n_tasks",
+      "worker_model"
+    ],
+    "unrecorded_settings": []
+  },
+  "ordering_insensitive": {
+    "cells": [
+      "T",
+      "U"
+    ],
+    "comparable": true,
+    "disagreements": [],
+    "n_cells": 2,
+    "settings_checked": [
+      "manager_action_types"
+    ],
+    "unrecorded_settings": []
+  },
+  "pinned_settings": {
+    "capacity_mapping": "the per-worker capacity mapping",
+    "horizon": "the episode horizon",
+    "manager_action_types": "the manager's action space",
+    "manager_model": "the manager's model",
+    "n_tasks": "the task count",
+    "worker_model": "the workers' model"
+  },
+  "positive": {
+    "cells": [
+      "T",
+      "U"
+    ],
+    "comparable": true,
+    "disagreements": [],
+    "n_cells": 2,
+    "settings_checked": [
+      "capacity_mapping",
+      "horizon",
+      "manager_action_types",
+      "manager_model",
+      "n_tasks",
+      "worker_model"
+    ],
+    "unrecorded_settings": []
+  },
+  "source_bundle": "run_seed101.json"
+}

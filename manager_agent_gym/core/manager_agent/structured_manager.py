@@ -18,6 +18,7 @@ from .action_constraints import build_context_constrained_action_schema
 from .llm_action_utils import (
     get_action_descriptions,
     get_default_action_classes,
+    unwrap_constrained_action,
 )
 from ...schemas.core.workflow import Workflow
 from ...schemas.execution import ManagerObservation, ExecutionState
@@ -29,6 +30,7 @@ from ..common.llm_interface import (
     generate_structured_response,
     LLMInferenceTruncationError,
 )
+from ..common.run_trace import trace_scope
 from ...schemas.workflow_agents.config import AgentConfig
 
 
@@ -46,12 +48,14 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
     def __init__(
         self,
         preferences: PreferenceWeights,
-        model_name: str = "o3",
+        model_name: str | None = None,
         action_classes: list[type[BaseManagerAction]] | None = None,
         manager_persona: str = "Strategic Project Manager",
     ):
         super().__init__("structured_manager", preferences)
-        self.model_name = model_name
+        from ..common.model_provider import get_model_for_role
+
+        self.model_name = model_name or get_model_for_role("manager")
         self.action_classes = action_classes or get_default_action_classes()
         self.manager_persona = manager_persona
 
@@ -80,14 +84,20 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
             user_prompt = self._prepare_context(observation)
 
             # Direct LLM call with structured output (validated by Pydantic)
-            parsed_action = await generate_structured_response(
-                system_prompt=system_prompt,
-                user_prompt=user_prompt,
-                response_type=constrained_schema,
-                model=self.model_name,
-                seed=self._seed,
-            )
-            return parsed_action.action  # type: ignore[attr-defined]
+            with trace_scope(
+                timestep=observation.timestep,
+                actor_type="manager",
+                actor_id=self.agent_id,
+                operation="choose_action",
+            ):
+                parsed_action = await generate_structured_response(
+                    system_prompt=system_prompt,
+                    user_prompt=user_prompt,
+                    response_type=constrained_schema,
+                    model=self.model_name,
+                    seed=self._seed,
+                )
+            return unwrap_constrained_action(parsed_action)
 
         except LLMInferenceTruncationError as e:
             concise_reason = (
@@ -142,6 +152,32 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
             communication_service=communication_service,
             stakeholder_profile=stakeholder_profile,
         )
+        match self._observation_policy.observation_aid:
+            case "none":
+                pass
+            case (
+                "generic_summary"
+                | "append_only_summary_log"
+                | "atomic_evidence_ledger"
+                | "arm3i_noq"
+                | "arm3i_q"
+                | "arm3t"
+            ):
+                if self._observation_aid_builder is None:
+                    raise RuntimeError(
+                        "ObservationPolicy selects an observation aid but no "
+                        "observation-aid builder is configured."
+                    )
+                # This is the exact native user-context text the manager would
+                # otherwise receive. The summarizer therefore cannot see hidden
+                # workflow state, full tool traces, or private worker prompts.
+                source_text = self._prepare_context(observation)
+                aid = await self._observation_aid_builder.build(
+                    source_text=source_text,
+                    observation=observation,
+                )
+                observation = observation.model_copy(update={"observation_aid": aid})
+                self.capture_decision_observation(observation)
         return await self.take_action(observation)
 
     def reset(self) -> None:
@@ -267,6 +303,53 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
             "\n".join(action_lines) if action_lines else "(no prior manager actions)"
         )
 
+        # Roster-change block. OMITTED ENTIRELY when nothing changed -- not rendered
+        # empty -- so a prompt from an unswapped run stays byte-comparable to a
+        # pre-swap prompt. Content is verb + agent id + timestep and nothing else:
+        # this is the arrival announcement held constant across channel cells, so any
+        # interpretation or capability claim here would leak what those cells control.
+        roster_block = ""
+        if observation.roster_changes:
+            roster_lines = "\n".join(f"- {line}" for line in observation.roster_changes)
+            roster_block = (
+                f"\n### Roster Changes (timestep {observation.timestep})\n"
+                f"{roster_lines}\n"
+            )
+
+        # LOAD AND REFUSAL BLOCKS (L1). ALWAYS RENDERED, unlike the roster block
+        # above, and the difference is deliberate. The roster block is omitted
+        # when empty so an unswapped prompt stays byte-comparable to a pre-swap
+        # one — it is an EVENT announcement. These two are STATE: a load board
+        # that disappears when nothing is loaded, or a refusal block that
+        # disappears when nothing was refused, makes absence and zero look
+        # identical to the reader. That is the exact defect this step repairs, and
+        # reproducing it in the repair would be a poor joke. Both blocks are
+        # constant in form across all six cells and carry no capability, coverage
+        # or description content.
+        load_lines = (
+            "\n".join(row.render() for row in observation.agent_load)
+            or "- (no workers on the roster)"
+        )
+        load_block = f"""
+### Worker Load (all workers currently on the roster)
+{load_lines}
+"""
+        refusal_lines = (
+            "\n".join(f"- {line}" for line in observation.assignment_refusals)
+            or "- (none since your last action)"
+        )
+        refusal_block = f"""
+### Assignments Refused Since Your Last Action
+{refusal_lines}
+"""
+
+        observation_aid_block = ""
+        if observation.observation_aid:
+            observation_aid_block = f"""
+### Observation Aid (derived only from already-visible evidence)
+{observation.observation_aid}
+"""
+
         # Valid ID universes (helps the model avoid fabricating IDs)
         id_guidance_lines = [
             f"- all_task_ids (count={len(observation.task_ids)}): sample={[str(x) for x in observation.task_ids[:preview_n]]}",
@@ -319,6 +402,7 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
 - completed_task_ids (sample): {completed_ids_preview}
 - failed_task_ids (sample): {failed_ids_preview}
 
+{load_block}{refusal_block}
 ### Constraints (sample)
 {constraints_block}
 
@@ -327,6 +411,7 @@ class ChainOfThoughtManagerAgent(ManagerAgent):
 
 ### Manager Action History (recent)
 {actions_block}
+{roster_block}{observation_aid_block}
 
 ### Stakeholder Profile (public)
 {stakeholder_block}

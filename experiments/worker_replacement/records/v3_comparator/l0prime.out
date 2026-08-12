@@ -1,0 +1,35 @@
+done L0prime-A
+done L0prime-B
+done L0prime-C
+
+=== L0-PRIME: minimal payload + the inconsistency rule only
+cond                     n  contra  distribution                                  hits
+L0prime-A               20      15  {'contradicts_fit': 15, 'supports_fit': 5}      13
+L0prime-B               20      18  {'contradicts_fit': 18, 'supports_fit': 2}      19
+L0prime-C               20      15  {'contradicts_fit': 15, 'supports_fit': 5}      12
+
+  verdict by CALL INDEX (separates cache-warmth from any time-varying effect)
+    L0prime-A              verdict=CCCCCCCCsCCCsCssCCsC
+                           cache  =.......HHHHHHHHHHHHH
+    L0prime-B              verdict=CCsCCCCCCsCCCCCCCCCC
+                           cache  =.HHHHHHHHHHHHHHHHHHH
+    L0prime-C              verdict=CCCCCCCCCCCsCsCsCsCs
+                           cache  =........HHHHHHHHHHHH
+
+  verdict x cache x backend
+    L0prime-A              cache=MISS AkashML      {'contradicts_fit': 1}
+    L0prime-A              cache=MISS Alibaba      {'contradicts_fit': 1}
+    L0prime-A              cache=MISS Ambient      {'contradicts_fit': 1}
+    L0prime-A              cache=MISS Baidu        {'contradicts_fit': 1}
+    L0prime-A              cache=MISS Cloudflare   {'contradicts_fit': 1}
+    L0prime-A              cache=MISS DigitalOcean {'contradicts_fit': 1}
+    L0prime-A              cache=MISS Venice       {'contradicts_fit': 1}
+    L0prime-A              cache=HIT  DeepInfra    {'contradicts_fit': 8, 'supports_fit': 5}
+    L0prime-B              cache=MISS CoreWeave    {'contradicts_fit': 1}
+    L0prime-B              cache=HIT  DeepInfra    {'contradicts_fit': 17, 'supports_fit': 2}
+    L0prime-C              cache=MISS Alibaba      {'contradicts_fit': 1}
+    L0prime-C              cache=MISS AtlasCloud   {'contradicts_fit': 1}
+    L0prime-C              cache=MISS Baidu        {'contradicts_fit': 2}
+    L0prime-C              cache=MISS Cloudflare   {'contradicts_fit': 1}
+    L0prime-C              cache=MISS DigitalOcean {'contradicts_fit': 3}
+    L0prime-C              cache=HIT  DeepInfra    {'contradicts_fit': 7, 'supports_fit': 5}

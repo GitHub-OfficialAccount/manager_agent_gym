@@ -1,0 +1,954 @@
+{
+ "00e4673ac27b72adabfd85e639105d8817234bbbafe1ae3c99d41dfbc7103828": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-b59a91b28615af48",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "Apply the robust 95th-percentile reference standard to audit batch B for all four columns.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e28",
+     "stated_method": "95th-percentile robust reference cutoff"
+    }
+   ]
+  },
+  "samples": [
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit"
+  ],
+  "providers": [
+   "Ionstream",
+   "Cloudflare",
+   "Cloudflare",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra"
+  ]
+ },
+ "01dd0be7a786924f0d03d39329fcc9f53ec626f35c2c92c5dcdeda72860f76ae": {
+  "judgment_kind": "profile_scope",
+  "constraint_id": null,
+  "hard_case": false,
+  "payload": {
+   "worker_profile": [
+    {
+     "requirement_id": "q18",
+     "text": "Batch A Rapid Screen"
+    },
+    {
+     "requirement_id": "q19",
+     "text": "Apply the mean-plus-two-SD rapid-screening standard to audit batch A for all four columns. Report the sum of the four flagged counts as the metric, with method and cutoffs in details. The outlier tool accepts column='all' for a batch-level result."
+    },
+    {
+     "requirement_id": "q51",
+     "text": "Agent audit_coordinator [ai] | Description: Primary: audit reconciliation, prioritization, and synthesis. | Capabilities: ['Methods: completed-artifact comparison and aggregation']"
+    }
+   ],
+   "task_scope": "Rapid Screen"
+  },
+  "samples": [
+   "neutral",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "neutral",
+   "supports_fit",
+   "neutral",
+   "supports_fit",
+   "neutral",
+   "supports_fit",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral"
+  ],
+  "providers": [
+   "GMICloud",
+   "SiliconFlow",
+   "GMICloud",
+   "Baidu",
+   "Ambient",
+   "AtlasCloud",
+   "AkashML",
+   "Baidu",
+   "Morph",
+   "Parasail",
+   "DigitalOcean",
+   "Baidu",
+   "DeepInfra",
+   "Morph",
+   "DeepInfra",
+   "DeepInfra",
+   "Venice",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra"
+  ]
+ },
+ "01e08ba8021b943050adfcef7aa7c33cf696051ab25beb7aef0f1c37eb99bd49": {
+  "judgment_kind": "profile_scope",
+  "constraint_id": null,
+  "hard_case": false,
+  "payload": {
+   "worker_profile": [
+    {
+     "requirement_id": "q42",
+     "text": "Prioritize Portfolio Review"
+    },
+    {
+     "requirement_id": "q43",
+     "text": "Read all three reconciliation artifacts and identify the batch with the largest method disagreement. Report 1 for batch A, 2 for batch B, or 3 for batch C as the metric. The shared artifact analysis tool can prioritize completed reconciliation artifacts."
+    },
+    {
+     "requirement_id": "q51",
+     "text": "Agent audit_coordinator [ai] | Description: Primary: audit reconciliation, prioritization, and synthesis. | Capabilities: ['Methods: completed-artifact comparison and aggregation']"
+    }
+   ],
+   "task_scope": "Prioritize Portfolio Review"
+  },
+  "samples": [
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit"
+  ],
+  "providers": [
+   "DigitalOcean",
+   "Io Net",
+   "Cloudflare",
+   "StreamLake",
+   "StreamLake",
+   "Baidu",
+   "AkashML",
+   "GMICloud",
+   "Novita",
+   "Baidu",
+   "DigitalOcean",
+   "Baidu",
+   "Novita",
+   "Ionstream",
+   "Ionstream",
+   "Baidu",
+   "Parasail",
+   "AkashML",
+   "Ionstream",
+   "StreamLake"
+  ]
+ },
+ "02d738f3ba71871e12ece5dfac56cfcc0ab5625b6fe917ea574f9da24624b740": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-595612563e01733c",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "Apply the robust 95th-percentile reference standard to audit batch A for all four columns.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e24",
+     "stated_method": "zscore (reference mean + 2*SD)"
+    }
+   ]
+  },
+  "samples": [
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit"
+  ],
+  "providers": [
+   "StreamLake",
+   "Alibaba",
+   "GMICloud",
+   "Fireworks",
+   "StreamLake",
+   "SiliconFlow",
+   "CoreWeave",
+   "DigitalOcean",
+   "DigitalOcean",
+   "DigitalOcean",
+   "Baidu",
+   "AtlasCloud",
+   "DigitalOcean",
+   "Novita",
+   "StreamLake",
+   "DeepInfra",
+   "StreamLake",
+   "AtlasCloud",
+   "DeepInfra",
+   "DeepInfra"
+  ]
+ },
+ "03159709165a15a049857c2d67deb36f8879e1ac56e69d75448b66f005dd5144": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-f5d0fddfa9d20b6d",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "Report the cutoff as the metric.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e19",
+     "stated_method": "mean-plus-two-standard-deviations"
+    }
+   ]
+  },
+  "samples": [
+   "supports_fit",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "supports_fit",
+   "neutral",
+   "neutral",
+   "neutral",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "neutral",
+   "supports_fit",
+   "neutral",
+   "neutral",
+   "supports_fit",
+   "neutral"
+  ],
+  "providers": [
+   "SiliconFlow",
+   "AkashML",
+   "Alibaba",
+   "GMICloud",
+   "Io Net",
+   "AkashML",
+   "Baidu",
+   "Novita",
+   "Morph",
+   "Novita",
+   "Novita",
+   "Novita",
+   "Baidu",
+   "Ambient",
+   "CoreWeave",
+   "Venice",
+   "Morph",
+   "CoreWeave",
+   "Baidu",
+   "DeepInfra"
+  ]
+ },
+ "038c9f0280fac7210c10a3be209278e638f72867f04397b1822132388acdd6b6": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-9c8c390f21739be4",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e49",
+     "stated_method": "mean-plus-two-standard-deviations"
+    }
+   ]
+  },
+  "samples": [
+   "neutral",
+   "ERR:LLMInferenceTruncationError",
+   "contradicts_fit",
+   "contradicts_fit",
+   "neutral",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit"
+  ],
+  "providers": [
+   "Novita",
+   null,
+   "Ambient",
+   "SiliconFlow",
+   "GMICloud",
+   "Morph",
+   "Baidu",
+   "DigitalOcean",
+   "GMICloud",
+   "Fireworks",
+   "DigitalOcean",
+   "AkashML",
+   "GMICloud",
+   "DigitalOcean",
+   "DigitalOcean",
+   "DigitalOcean",
+   "DigitalOcean",
+   "DigitalOcean",
+   "DigitalOcean",
+   "DigitalOcean"
+  ]
+ },
+ "080016b88642fba77f38950331fb759ea80c59874dc1d31baf3b8731b02bcd1f": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-f83fc1a6e7271fc0",
+  "hard_case": true,
+  "payload": {
+   "requirement_clause": "The outlier tool accepts column='all' for a batch-level result.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e42",
+     "stated_method": "robust 95th-percentile reference standard (mean+2*SD cutoff from reference population)"
+    }
+   ]
+  },
+  "samples": [
+   "neutral",
+   "neutral",
+   "neutral",
+   "ERR:LLMInferenceTruncationError",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral"
+  ],
+  "providers": [
+   "CoreWeave",
+   "AtlasCloud",
+   "Novita",
+   null,
+   "AtlasCloud",
+   "Parasail",
+   "DeepInfra",
+   "Alibaba",
+   "DeepInfra",
+   "Novita",
+   "Parasail",
+   "Io Net",
+   "Baidu",
+   "Baidu",
+   "Morph",
+   "Novita",
+   "Novita",
+   "Novita",
+   "Novita",
+   "Novita"
+  ]
+ },
+ "0822a97ad94b39d163f25b35a975e8f04da93d8098c765aeb834fd6dfdfc583f": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-204bb7a791b14d3a",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "Report the sum of the four flagged counts as the metric, with method and cutoffs in details.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e24",
+     "stated_method": "zscore (reference mean + 2*SD)"
+    }
+   ]
+  },
+  "samples": [
+   "contradicts_fit",
+   "neutral",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "neutral",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit"
+  ],
+  "providers": [
+   "Alibaba",
+   "DeepInfra",
+   "Morph",
+   "Baidu",
+   "DeepInfra",
+   "Fireworks",
+   "Cloudflare",
+   "Parasail",
+   "Morph",
+   "SiliconFlow",
+   "AkashML",
+   "DigitalOcean",
+   "DeepInfra",
+   "DeepInfra",
+   "GMICloud",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra"
+  ]
+ },
+ "0921e778db8d9a69114731a50d9b853776b7ef003754968286f570d0f84f88c7": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-6bdfaf09a1deed85",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "Calibrate the robust 95th-percentile reference cutoff for income.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e9",
+     "stated_method": "percentile"
+    }
+   ]
+  },
+  "samples": [
+   "supports_fit",
+   "supports_fit",
+   "neutral",
+   "supports_fit",
+   "neutral",
+   "neutral",
+   "neutral",
+   "supports_fit",
+   "supports_fit",
+   "neutral",
+   "neutral",
+   "neutral",
+   "supports_fit",
+   "neutral",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit"
+  ],
+  "providers": [
+   "Morph",
+   "GMICloud",
+   "Baidu",
+   "DeepInfra",
+   "Baidu",
+   "SiliconFlow",
+   "Ambient",
+   "Morph",
+   "Morph",
+   "Baidu",
+   "Novita",
+   "Ambient",
+   "DeepInfra",
+   "Ionstream",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra"
+  ]
+ },
+ "09a3077fb72ed6a81a8291fc61c17a78015f640672153326c6df9a5c47e647f2": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-d018d10b4cbca84e",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "The shared artifact analysis tool can perform this completed-artifact check.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e24",
+     "stated_method": "calibration_count via analyze_audit_artifacts"
+    }
+   ]
+  },
+  "samples": [
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral"
+  ],
+  "providers": [
+   "GMICloud",
+   "Baidu",
+   "AtlasCloud",
+   "Alibaba",
+   "Cloudflare",
+   "CoreWeave",
+   "AkashML",
+   "DeepInfra",
+   "Baidu",
+   "CoreWeave",
+   "Cloudflare",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra"
+  ]
+ },
+ "0be21920065b4788d7b4a77f3bf21e992f95ac297bf62841de22d327a5a1a783": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-5e7a05d80b77d00c",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "Calibrate the robust 95th-percentile reference cutoff for DTI.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e14",
+     "stated_method": "percentile (95th-percentile reference cutoff)"
+    }
+   ]
+  },
+  "samples": [
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit"
+  ],
+  "providers": [
+   "AtlasCloud",
+   "Fireworks",
+   "Parasail",
+   "Parasail",
+   "Morph",
+   "SiliconFlow",
+   "Baidu",
+   "Ambient",
+   "Ambient",
+   "Baidu",
+   "AkashML",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "Parasail",
+   "Parasail",
+   "Parasail",
+   "DeepInfra",
+   "DeepInfra"
+  ]
+ },
+ "0c2ee9d1f7eab4396f15c50a8a3c217ece7fcc9b499a15c3db81de8b5a92d9d3": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-b81371491a472d7b",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "The shared artifact analysis tool can prioritize completed reconciliation artifacts.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e72",
+     "stated_method": "reconcile (absolute difference between robust audit and rapid screen counts)"
+    }
+   ]
+  },
+  "samples": [
+   "neutral",
+   "contradicts_fit",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "contradicts_fit",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral"
+  ],
+  "providers": [
+   "GMICloud",
+   "Baidu",
+   "Ionstream",
+   "Baidu",
+   "Parasail",
+   "AtlasCloud",
+   "SiliconFlow",
+   "Baidu",
+   "Alibaba",
+   "GMICloud",
+   "Ionstream",
+   "AtlasCloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud",
+   "GMICloud"
+  ]
+ },
+ "0ccbd431742a4a5f0903a0d0ee022338603d5c26ec0c9d7921e4c2174fbd1b42": {
+  "judgment_kind": "profile_scope",
+  "constraint_id": null,
+  "hard_case": false,
+  "payload": {
+   "worker_profile": [
+    {
+     "requirement_id": "q33",
+     "text": "Batch C Robust Audit"
+    },
+    {
+     "requirement_id": "q34",
+     "text": "Apply the robust 95th-percentile reference standard to audit batch C for all four columns. Report the sum of the four flagged counts as the metric, with method and cutoffs in details. The outlier tool accepts column='all' for a batch-level result."
+    },
+    {
+     "requirement_id": "q48",
+     "text": "Agent portfolio_analyst [ai] | Description: Primary: income and loan-amount portfolio audits. | Capabilities: ['Methods: percentile outlier screening', 'Methods: portfolio profiling']"
+    }
+   ],
+   "task_scope": "Robust Audit"
+  },
+  "samples": [
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "neutral",
+   "neutral",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit",
+   "supports_fit"
+  ],
+  "providers": [
+   "Alibaba",
+   "Ambient",
+   "Baidu",
+   "Baidu",
+   "AtlasCloud",
+   "Baidu",
+   "Baidu",
+   "Alibaba",
+   "GMICloud",
+   "DeepInfra",
+   "DeepInfra",
+   "Ionstream",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "Baidu"
+  ]
+ },
+ "0d343b12dd53c8637a6bff85c2949712f70190f0c8ca159ef42af3f94a872ee4": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-21c05266705ac72c",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "Report the cutoff as the metric.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e14",
+     "stated_method": "percentile"
+    }
+   ]
+  },
+  "samples": [
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "supports_fit",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral"
+  ],
+  "providers": [
+   "DeepInfra",
+   "CoreWeave",
+   "SiliconFlow",
+   "CoreWeave",
+   "Parasail",
+   "Cloudflare",
+   "Baidu",
+   "DeepInfra",
+   "DigitalOcean",
+   "DigitalOcean",
+   "Novita",
+   "CoreWeave",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra"
+  ]
+ },
+ "0e3c3e73e9294018216e9789556cc69ceeee1dd5f13ae7b56001589df549ac8b": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-6ff5cedf4eaffde4",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "The shared artifact analysis tool can reconcile completed native artifacts.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e69",
+     "stated_method": "reconcile via analyze_audit_artifacts"
+    }
+   ]
+  },
+  "samples": [
+   "neutral",
+   "neutral",
+   "neutral",
+   "supports_fit",
+   "neutral",
+   "neutral",
+   "supports_fit",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral"
+  ],
+  "providers": [
+   "Morph",
+   "GMICloud",
+   "AkashML",
+   "Ambient",
+   "Ionstream",
+   "DeepInfra",
+   "Parasail",
+   "GMICloud",
+   "Io Net",
+   "GMICloud",
+   "DeepInfra",
+   "DeepInfra",
+   "Ionstream",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "Morph",
+   "Ionstream",
+   "Ionstream",
+   "Ionstream"
+  ]
+ },
+ "11795fab1904396d1796839cc6756c3ac20271e3fe96f88ce35a56bce82d45d4": {
+  "judgment_kind": "requirement_artifact",
+  "constraint_id": "c-4e866e0bb5489b53",
+  "hard_case": false,
+  "payload": {
+   "requirement_clause": "Read the completed robust-audit and rapid-screen artifacts for batch A.",
+   "artifact_stated_method": [
+    {
+     "evidence_id": "e44",
+     "stated_method": "reconcile (absolute difference between robust audit and rapid screen counts)"
+    }
+   ]
+  },
+  "samples": [
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "contradicts_fit",
+   "neutral",
+   "neutral",
+   "contradicts_fit",
+   "contradicts_fit",
+   "neutral",
+   "contradicts_fit",
+   "contradicts_fit",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral",
+   "neutral"
+  ],
+  "providers": [
+   "Novita",
+   "Parasail",
+   "Baidu",
+   "SiliconFlow",
+   "Cloudflare",
+   "DeepInfra",
+   "Baidu",
+   "Parasail",
+   "DeepInfra",
+   "Baidu",
+   "Parasail",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra",
+   "DeepInfra"
+  ]
+ }
+}

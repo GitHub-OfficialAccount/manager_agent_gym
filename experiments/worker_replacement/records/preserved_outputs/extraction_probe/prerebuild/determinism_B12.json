@@ -1,0 +1,1646 @@
+[
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 502,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos3/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 6.95,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 504,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "supports_fit",
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 28.77,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 10.49,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 171,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.6,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 5.41,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 143,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 3.71,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 173,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 4.31,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 181,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "neutral",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 3.14,
+    "repeat": 0
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 506,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos3/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 7.84,
+    "repeat": 1
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 501,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "supports_fit",
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 20.36,
+    "repeat": 1
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 14.76,
+    "repeat": 1
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 171,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.29,
+    "repeat": 1
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.22,
+    "repeat": 1
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 143,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 5.51,
+    "repeat": 1
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 173,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 7.45,
+    "repeat": 1
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 181,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "neutral",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 4.4,
+    "repeat": 1
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 506,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos3/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 5.53,
+    "repeat": 2
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 504,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "supports_fit",
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 24.61,
+    "repeat": 2
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 20.03,
+    "repeat": 2
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 170,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 1.97,
+    "repeat": 2
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.43,
+    "repeat": 2
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 140,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.23,
+    "repeat": 2
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 173,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.48,
+    "repeat": 2
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 181,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "neutral",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.33,
+    "repeat": 2
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 506,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos3/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 6.21,
+    "repeat": 3
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 1704,
+    "provider": "AtlasCloud",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "supports_fit",
+      "pos2/proposal/profile_scope_support": "neutral",
+      "pos1/proposal/profile_scope_support": "neutral",
+      "pos0/proposal/profile_scope_support": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 20.47,
+    "repeat": 3
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 12.55,
+    "repeat": 3
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 171,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 9.01,
+    "repeat": 3
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.77,
+    "repeat": 3
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 143,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.38,
+    "repeat": 3
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 173,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.69,
+    "repeat": 3
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 181,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "neutral",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.33,
+    "repeat": 3
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 496,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "neutral",
+      "pos0/proposal/profile_scope_support": "neutral",
+      "pos1/proposal/profile_scope_support": "neutral",
+      "pos3/proposal/profile_scope_support": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 6.29,
+    "repeat": 4
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 495,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "neutral",
+      "pos2/proposal/profile_scope_support": "neutral",
+      "pos1/proposal/profile_scope_support": "neutral",
+      "pos0/proposal/profile_scope_support": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 6.22,
+    "repeat": 4
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 6.86,
+    "repeat": 4
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 171,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 4.97,
+    "repeat": 4
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.62,
+    "repeat": 4
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 143,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.56,
+    "repeat": 4
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 173,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.51,
+    "repeat": 4
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 181,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "neutral",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 3.0,
+    "repeat": 4
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 506,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos3/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 9.5,
+    "repeat": 5
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 493,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "neutral",
+      "pos2/proposal/profile_scope_support": "neutral",
+      "pos1/proposal/profile_scope_support": "neutral",
+      "pos0/proposal/profile_scope_support": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 5.83,
+    "repeat": 5
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 9.44,
+    "repeat": 5
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 171,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 5.01,
+    "repeat": 5
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.29,
+    "repeat": 5
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 143,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.14,
+    "repeat": 5
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 173,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.7,
+    "repeat": 5
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 186,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "contradicts_fit",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.98,
+    "repeat": 5
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 506,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos3/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 6.29,
+    "repeat": 6
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 493,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "neutral",
+      "pos2/proposal/profile_scope_support": "neutral",
+      "pos1/proposal/profile_scope_support": "neutral",
+      "pos0/proposal/profile_scope_support": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 7.08,
+    "repeat": 6
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 6.0,
+    "repeat": 6
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 171,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.88,
+    "repeat": 6
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.36,
+    "repeat": 6
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 143,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.3,
+    "repeat": 6
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 170,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.06,
+    "repeat": 6
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 181,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "neutral",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 5.68,
+    "repeat": 6
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 506,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos3/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 5.96,
+    "repeat": 7
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 492,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "supports_fit",
+      "pos2/proposal/profile_scope_support": "neutral",
+      "pos1/proposal/profile_scope_support": "neutral",
+      "pos0/proposal/profile_scope_support": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 4.5,
+    "repeat": 7
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 10.02,
+    "repeat": 7
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 1652,
+    "provider": "Venice",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 20.75,
+    "repeat": 7
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 3.17,
+    "repeat": 7
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 143,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.75,
+    "repeat": 7
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 173,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.5,
+    "repeat": 7
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 186,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "contradicts_fit",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 3.31,
+    "repeat": 7
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 506,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos3/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 5.93,
+    "repeat": 8
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 505,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "supports_fit",
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 5.8,
+    "repeat": 8
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 6.79,
+    "repeat": 8
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 2037,
+    "provider": "Venice",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 36.05,
+    "repeat": 8
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.74,
+    "repeat": 8
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 140,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 1.98,
+    "repeat": 8
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 173,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 5.63,
+    "repeat": 8
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 181,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "neutral",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 3.01,
+    "repeat": 8
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 502,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos3/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 6.11,
+    "repeat": 9
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 495,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "neutral",
+      "pos2/proposal/profile_scope_support": "neutral",
+      "pos1/proposal/profile_scope_support": "neutral",
+      "pos0/proposal/profile_scope_support": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 7.21,
+    "repeat": 9
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 4.39,
+    "repeat": 9
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 1077,
+    "provider": "Venice",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 17.23,
+    "repeat": 9
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.66,
+    "repeat": 9
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 143,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 7.42,
+    "repeat": 9
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 173,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 3.65,
+    "repeat": 9
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 181,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "neutral",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.5,
+    "repeat": 9
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 505,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos3/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 5.43,
+    "repeat": 10
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 493,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "neutral",
+      "pos2/proposal/profile_scope_support": "neutral",
+      "pos1/proposal/profile_scope_support": "neutral",
+      "pos0/proposal/profile_scope_support": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 6.94,
+    "repeat": 10
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 7.33,
+    "repeat": 10
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 998,
+    "provider": "Venice",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 16.81,
+    "repeat": 10
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 3.11,
+    "repeat": 10
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 142,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.13,
+    "repeat": 10
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 173,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.69,
+    "repeat": 10
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 181,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "neutral",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.78,
+    "repeat": 10
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_early",
+    "parse_ok": true,
+    "output_tokens": 506,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos2/proposal/profile_scope_support": "supports_fit",
+      "pos0/proposal/profile_scope_support": "supports_fit",
+      "pos1/proposal/profile_scope_support": "supports_fit",
+      "pos3/proposal/profile_scope_support": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 5.99,
+    "repeat": 11
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_profile_late",
+    "parse_ok": true,
+    "output_tokens": 493,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 4,
+    "verdicts": {
+      "pos3/proposal/profile_scope_support": "neutral",
+      "pos2/proposal/profile_scope_support": "neutral",
+      "pos1/proposal/profile_scope_support": "neutral",
+      "pos0/proposal/profile_scope_support": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 6.12,
+    "repeat": 11
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_jsonblob_e24",
+    "parse_ok": true,
+    "output_tokens": 172,
+    "provider": "Ionstream",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-13f62f64958cdcd4": "neutral",
+      "pos0/cmp/c-204bb7a791b14d3a": "neutral",
+      "pos0/cmp/c-595612563e01733c": "contradicts_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 6.52,
+    "repeat": 11
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_mixed_claim",
+    "parse_ok": true,
+    "output_tokens": 2109,
+    "provider": "Venice",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-49ba2fb2ebe1329c": "contradicts_fit",
+      "pos0/cmp/c-5dc35f5d8205050b": "neutral",
+      "pos0/cmp/c-faf17d868b363c34": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 24.43,
+    "repeat": 11
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_consistent",
+    "parse_ok": true,
+    "output_tokens": 168,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-48f242fa17079cd8": "neutral",
+      "pos0/cmp/c-de3c4175ccfa6b0d": "supports_fit",
+      "pos0/cmp/c-e6dc49a0d5695ffc": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 2.35,
+    "repeat": 11
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_no_method",
+    "parse_ok": true,
+    "output_tokens": 140,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-0be2f35a543103ad": "supports_fit",
+      "pos0/cmp/c-73ee34ad94b3b5f9": "neutral"
+    },
+    "shape_ok": true,
+    "latency_s": 3.23,
+    "repeat": 11
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "t_artifact_tool_named",
+    "parse_ok": true,
+    "output_tokens": 173,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-80ef37ce929f456d": "supports_fit",
+      "pos0/cmp/c-ec6ef14f1d468d2a": "neutral",
+      "pos0/cmp/c-f904a53e9aed1eae": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.54,
+    "repeat": 11
+  },
+  {
+    "arm": "raw_json_schema",
+    "packet": "q_artifact_capacity",
+    "parse_ok": true,
+    "output_tokens": 181,
+    "provider": "DeepInfra",
+    "echo_exact": true,
+    "n_results": 1,
+    "verdicts": {
+      "pos0/cmp/c-99d6851ecd7b93cd": "neutral",
+      "pos0/cmp/c-c77bd535d9cd1a47": "supports_fit",
+      "pos0/cmp/c-f6170736b32af0a0": "supports_fit"
+    },
+    "shape_ok": true,
+    "latency_s": 2.06,
+    "repeat": 11
+  }
+]

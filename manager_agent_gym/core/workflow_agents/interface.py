@@ -6,6 +6,7 @@ and produce resources in the workflow system.
 """
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from datetime import datetime
 from typing import TypeVar, Generic, TYPE_CHECKING
 from uuid import UUID
@@ -27,6 +28,36 @@ if TYPE_CHECKING:
     pass
 
 ConfigType = TypeVar("ConfigType", bound=AgentConfig)
+
+
+# REFUSAL CODES — the ANALYSIS's handle on why work did not start.
+#
+# The first version returned formatted English sentences only, and the segment
+# split then classified permanent-versus-transient by testing whether the
+# substring "allotment" appeared in the prose. That is the display-name predicate
+# one level down: **identity derived from text meant for a human reader.** It was
+# already misclassifying — the base class's availability refusal contains no
+# "allotment", so it fell through a catch-all and was recorded as a CONCURRENCY
+# refusal, and availability is exactly what a roster change touches.
+#
+# So each reason carries BOTH: a stable CODE the analysis classifies on, and the
+# sentence the manager reads. The sentence keeps its interpolated numbers — it is
+# the human-readable signal L1 exists to deliver. **The sentence informs, the code
+# classifies.**
+REFUSAL_UNAVAILABLE = "unavailable"
+REFUSAL_CONCURRENCY = "concurrency"
+REFUSAL_SEGMENT_ALLOTMENT = "segment_allotment"
+
+
+@dataclass(frozen=True)
+class RefusalReason:
+    """One reason an assignment could not start: a code, and prose for the manager."""
+
+    code: str
+    detail: str
+
+    def as_dict(self) -> dict[str, str]:
+        return {"code": self.code, "detail": self.detail}
 
 
 class AgentInterface(ABC, Generic[ConfigType]):
@@ -72,13 +103,73 @@ class AgentInterface(ABC, Generic[ConfigType]):
         """Get the agent's type."""
         return self.config.agent_type
 
+    def refusal_reasons(self, task: Task) -> list["RefusalReason"]:
+        """EVERY reason this agent cannot start this task, not the first one (L1).
+
+        WHY ALL OF THEM, AND WHY THIS IS THE SOURCE OF TRUTH RATHER THAN A
+        REPORTING HELPER. The previous `can_handle_task` returned on the first
+        failing branch, so an agent that was BOTH busy and out of its work
+        allotment refused for a reason recorded as transient while being
+        permanently barred — and no combination of the logged fields could recover
+        which it was, even in principle. Short-circuiting is fine for a boolean and
+        fatal for a reason, so the reason is computed here and the boolean is
+        derived from it, rather than the reverse.
+
+        Subclasses that add a refusal condition override THIS, not
+        `can_handle_task`, and append rather than replace.
+        """
+        reasons: list[RefusalReason] = []
+        if not self.is_available:
+            reasons.append(RefusalReason(
+                REFUSAL_UNAVAILABLE,
+                "the worker is not available"))
+        if len(self.current_task_ids) >= self.max_concurrent_tasks:
+            reasons.append(RefusalReason(
+                REFUSAL_CONCURRENCY,
+                f"concurrency limit reached ({len(self.current_task_ids)}/"
+                f"{self.max_concurrent_tasks} concurrent tasks; frees when a "
+                f"running task finishes)"))
+        return reasons
+
     def can_handle_task(self, task: Task) -> bool:
         """Check if agent can handle a given task based on availability."""
-        if not self.is_available:
-            return False
-        if len(self.current_task_ids) >= self.max_concurrent_tasks:
-            return False
-        return True
+        return not self.refusal_reasons(task)
+
+    def load_report(self) -> dict:
+        """This agent's load, one row per capacity DIMENSION (L1).
+
+        THE AGENT OWNS THE DEFINITION OF ITS OWN LOAD, deliberately. The engine
+        cannot compute it: `can_handle_task` is overridable, and a subclass whose
+        real constraint is something other than concurrent-task count (see
+        `CapacityBoundedAIAgent`, bounded on SEGMENT tasks over the whole episode)
+        would have its load reported against a limit that never binds. Reporting
+        the wrong denominator is worse than reporting nothing: it would show 1/1
+        beside a worker refusing everything, and the manager would have no way to
+        tell an honest board from a broken one.
+
+        MULTIPLE DIMENSIONS, AND RELEASE SEMANTICS CARRIED WITH EACH. Concurrency
+        frees when a task finishes; a per-episode allotment does not. Both rendered
+        as `3/3` would inherit the universal scheduler convention that finishing
+        earns another slot, which for an allotment is false — so
+        `releases_on_completion` travels with the number and is rendered, not left
+        true-in-the-code.
+
+        The default is the base-class constraint, which is what `can_handle_task`
+        enforces here. Any subclass that overrides `refusal_reasons` should
+        override this too — the pairing is the contract.
+        """
+        return {
+            "agent_id": self.agent_id,
+            "available": self.is_available,
+            "dimensions": [
+                {
+                    "name": "concurrent tasks",
+                    "held": len(self.current_task_ids),
+                    "capacity": self.max_concurrent_tasks,
+                    "releases_on_completion": True,
+                }
+            ],
+        }
 
     def record_tool_use_event(self, event: AgentToolUseEvent) -> None:
         """Record a tool usage event under the current task bucket."""

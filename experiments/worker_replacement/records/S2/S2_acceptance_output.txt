@@ -1,0 +1,48 @@
+S2 — roster-arrival render acceptance
+
+registry structured record -> ['removed capital_quant_alpha', 'added capital_quant_beta']
+  [ok] block header present
+  [ok] timestep 3 named
+  [ok] predecessor id present
+  [ok] successor id present
+  [ok] verb 'removed' present
+  [ok] verb 'added' present
+
+leak check — reason text must NOT reach the prompt:
+  [ok] remove reason absent
+  [ok] add reason absent
+  [ok] capability phrase 'approval lapses' absent
+  [ok] capability phrase 'specialist' absent
+  [ok] capability phrase 'model ownership' absent
+
+rendered block, verbatim:
+    ### Roster Changes (timestep 3)
+    - removed capital_quant_alpha
+    - added capital_quant_beta
+
+engine path — set_pending_roster_changes before the observation:
+  [ok] setter path renders both ids
+
+ghost-repeat — quiet timesteps after the swap, through the registry:
+  t=3   engine expression -> ['removed capital_quant_alpha', 'added capital_quant_beta']
+  t=4   engine expression -> []  [ok]
+           rendered prompt carries no roster block [ok]
+  t=5   engine expression -> []  [ok]
+           rendered prompt carries no roster block [ok]
+
+canonical ordering — add scheduled BEFORE remove:
+  scheduled order  -> add first, then remove
+  accessor returns -> ['removed capital_quant_alpha', 'added capital_quant_beta']
+  [ok] removals first, then additions, then id
+
+ordering with `replaced` present — adds and replaces interleave by id:
+  -> ['removed m_agent', 'replaced a_agent', 'added b_agent', 'added z_agent']
+  [ok] removals first; adds and replaces interleaved by id, as documented
+
+no-event invisibility:
+  [ok] block omitted entirely when nothing changed
+  [ok] unswapped prompt byte-identical to baseline (1241 chars)
+
+RESULT: PASS — swap rendered with ids+verb+timestep; no reason text leaked; block absent with no event
+FAILED tests/test_llm_interface.py::test_live_anthropic_returns_pydantic - in...
+1 failed, 292 passed, 2 skipped, 2 warnings in 6.53s

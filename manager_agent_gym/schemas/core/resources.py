@@ -12,16 +12,6 @@ class Resource(BaseModel):
 
     Represents inputs/outputs of tasks: documents, datasets, artifacts,
     code snippets, and other digital assets (R in the POSG state).
-
-    Example:
-        ```python
-        Resource(
-            name="Stakeholder Brief v1",
-            description="Two-page summary for exec review",
-            content="...",
-            content_type="text/markdown",
-        )
-        ```
     """
 
     id: UUID = Field(

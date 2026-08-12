@@ -2,10 +2,22 @@
 Centralized LLM interface using Instructor for structured outputs.
 """
 
+from contextvars import ContextVar
 from typing import TypeVar, Type, Any
 import os
 from pydantic import BaseModel
 from .logging import logger
+from .model_provider import (
+    build_litellm_model_id,
+    resolve_native_route,
+)
+from .run_trace import record_run_event
+
+__all__ = [
+    "LLMInferenceTruncationError",
+    "build_litellm_model_id",
+    "generate_structured_response",
+]
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -55,11 +67,58 @@ class LLMInferenceTruncationError(Exception):
         return base + (" [" + ", ".join(details) + "]" if details else "")
 
 
-def _get_openai_client():
-    """Get configured OpenAI async client patched by Instructor.
+_client_cache: dict[Any, Any] = {}
+
+# Serving-backend attribution for the most recent structured call in this task.
+# OpenRouter load-balances one model route across many backends at differing
+# quantizations, so which backend answered is provenance: it can change the
+# output of a byte-identical temperature-0 request. Read-only -- nothing here
+# alters the request we send.
+_last_serving_backend: ContextVar[dict[str, Any] | None] = ContextVar(
+    "last_serving_backend", default=None
+)
+
+
+async def _capture_serving_backend(response: Any) -> None:
+    """httpx response hook: record which backend answered. Never raises."""
+    try:
+        if response.status_code >= 400:
+            return
+        await response.aread()  # cached by httpx; the caller still reads it
+        payload = response.json()
+        if not isinstance(payload, dict):
+            return
+        usage = payload.get("usage") or {}
+        details = usage.get("prompt_tokens_details") or {}
+        _last_serving_backend.set(
+            {
+                "provider": payload.get("provider"),
+                "served_model": payload.get("model"),
+                "generation_id": payload.get("id"),
+                # Prefix-cache state. Recorded because it is provenance: a warm
+                # prefix can change a temperature-0 verdict, and hit rates rise
+                # across an episode as similar prompts accumulate.
+                "cached_tokens": details.get("cached_tokens"),
+                "prompt_tokens": usage.get("prompt_tokens"),
+            }
+        )
+    except Exception:  # observability must never break a call
+        pass
+
+
+def _get_openai_client(
+    base_url: str | None = None,
+    api_key: str | None = None,
+    mode: Any = None,
+):
+    """Get an Instructor-patched OpenAI async client, cached by (base_url, mode).
 
     Lazy-imports provider SDKs so they are optional until actually used.
     """
+    cache_key = (base_url, mode)
+    if cache_key in _client_cache:
+        return _client_cache[cache_key]
+
     try:
         from openai import AsyncOpenAI  # type: ignore
     except Exception as e:  # pragma: no cover - import guard
@@ -67,42 +126,33 @@ def _get_openai_client():
             "OpenAI SDK is not installed. Install with `uv sync --group openai`."
         ) from e
 
+    try:
+        import httpx  # type: ignore
+
+        http_client: Any = httpx.AsyncClient(
+            timeout=300.0, event_hooks={"response": [_capture_serving_backend]}
+        )
+    except Exception:  # pragma: no cover - httpx ships with the OpenAI SDK
+        http_client = None
+
     client = AsyncOpenAI(
-        api_key=os.getenv("OPENAI_API_KEY"),
+        api_key=api_key or os.getenv("OPENAI_API_KEY"),
+        base_url=base_url,
         timeout=300.0,
+        **({"http_client": http_client} if http_client is not None else {}),
     )
 
     try:
         import instructor  # type: ignore
-        instructor.patch(client)  # type: ignore[attr-defined]
+        if mode is not None:
+            instructor.patch(client, mode=mode)
+        else:
+            instructor.patch(client)  # type: ignore[attr-defined]
     except Exception:
         pass
 
+    _client_cache[cache_key] = client
     return client
-
-
-def build_litellm_model_id(model_id: str) -> str:
-    """Build the litellm model ID by prepending the appropriate provider prefix.
-
-    NOTE: This function is kept for backward compatibility with other parts of the codebase
-    that still use LiteLLM directly. The structured generation functionality now uses
-    OpenAI's native client.
-    """
-    # OpenAI models
-    if model_id.startswith(("gpt-", "o")):
-        return f"openai/{model_id}"
-    # Anthropic models
-    elif model_id.startswith("claude-"):
-        return f"anthropic/{model_id}"
-    # Google models
-    elif model_id.startswith("gemini-"):
-        return f"google/{model_id}"
-    # Bedrock models (already have provider prefix)
-    elif model_id.startswith(("eu.anthropic.", "eu.openai.", "eu.google.", "bedrock/")):
-        return model_id
-    # Default case - return as is
-    else:
-        return model_id
 
 
 # Note: Manual prompt truncation and custom retry loops have been removed.
@@ -145,18 +195,37 @@ async def generate_structured_response(
     messages = [{"role": "system", "content": system_prompt}]
     if user_prompt:
         messages.append({"role": "user", "content": user_prompt})
-    # Get Instructor-patched OpenAI client
-    client = _get_openai_client()
 
+    route = resolve_native_route(model)
+    client = _get_openai_client(
+        base_url=route.base_url, api_key=route.api_key, mode=route.mode
+    )
+
+    request_trace = {
+        "model": model,
+        "wire_model": route.wire_model,
+        "messages": messages,
+        "response_type": response_type.__name__,
+        "response_schema": response_type.model_json_schema(),
+        "temperature": temperature,
+        "seed": seed,
+        "max_completion_tokens": max_completion_tokens or None,
+        "max_retries": max_retries,
+    }
+    record_run_event("structured_llm_request", request_trace)
+
+    _last_serving_backend.set(None)
     try:
         kwargs: dict[str, Any] = {
-            "model": model,
+            "model": route.wire_model,
             "messages": messages,
             "response_model": response_type,
             "temperature": temperature,
             "seed": seed,
         }
-        # Map "max_completion_tokens" if provided
+        # Only cap output when a caller explicitly asks (upstream behavior).
+        # Forcing a default cap truncates long structured outputs (manager
+        # actions, task decomposition) mid-JSON, causing parse failures.
         if max_completion_tokens and max_completion_tokens > 0:
             kwargs["max_tokens"] = max_completion_tokens
 
@@ -166,9 +235,28 @@ async def generate_structured_response(
             max_retries=max_retries,
             **kwargs,
         )
+        record_run_event(
+            "structured_llm_response",
+            {
+                "model": model,
+                "response_type": response_type.__name__,
+                "parsed_response": result,
+                # Which backend actually answered. Provenance, not config:
+                # see CHANGED.md 2026-07-25.
+                "serving_backend": _last_serving_backend.get(),
+            },
+        )
         return result
 
     except Exception as e:
+        record_run_event(
+            "structured_llm_error",
+            {
+                **request_trace,
+                "error_type": type(e).__name__,
+                "error": str(e),
+            },
+        )
         error = LLMInferenceTruncationError(
             f"LLM request failed for {response_type.__name__}: {str(e)}",
             model=model,

@@ -1,0 +1,26 @@
+[
+  {
+    "cap": 2,
+    "feasible": false,
+    "generated": 0,
+    "fully_admitted": 0
+  },
+  {
+    "cap": 3,
+    "feasible": true,
+    "generated": 40,
+    "fully_admitted": 35
+  },
+  {
+    "cap": 4,
+    "feasible": true,
+    "generated": 17,
+    "fully_admitted": 11
+  },
+  {
+    "cap": 5,
+    "feasible": true,
+    "generated": 14,
+    "fully_admitted": 2
+  }
+]

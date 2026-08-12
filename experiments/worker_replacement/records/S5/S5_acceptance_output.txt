@@ -1,0 +1,48 @@
+S5 — generation-time assertions
+
+positive control — default instance generates cleanly:
+   [ok] schema worker_replacement.finance_instance.v2, 9 segments, 4 workers
+   event: w_26f14e -> w_6f6097 at t=3
+   successor required — STRICT 4 ['seg_00', 'seg_01', 'seg_02', 'seg_03']  (threshold k=1, headroom 3)
+                        tie-inclusive 4 ['seg_00', 'seg_01', 'seg_02', 'seg_03']
+   swapped pair's shared class: 'corporate' — uniform across a suite is a suite-level regularity S6 checks
+   recorded for K2: ['seg_00', 'seg_01', 'seg_02', 'seg_03'] (strict)
+   note: no tie-inclusive inflation on this instance
+   (case 6 fixture seed: 20)
+   zero-SA-fallback segments present in the pool: ['seg_04'] (none of them IRB-approved: True)
+
+negative cases — each must be rejected, with a DISTINCT message:
+   [ok] 1 nested lattice
+        ASSERTION 1 (non-nestedness): coverage of w_26f14e ['bank'] is contained in w_6f6097 ['bank', 'corpo
+   [ok] 2a capacity INFEASIBLE (roster x cap < segments)
+        ASSERTION 2a (capacity feasible): 3 workers x cap 2 = 6 < 9 segments
+   [ok] 2b capacity does NOT bind (cap >= greedy card-match load)
+        ASSERTION 2b (capacity binds): cap 9 is not below the greedy card-match load 6
+   [ok] 3 zero-k (successor routes nothing)
+        ASSERTION 3 (O3 oracle-routing): only 4 segment(s) STRICTLY require successor w_6f6097 (tie-inclusiv
+   [ok] 3b k above STRICT but below tie-inclusive — the discriminating case
+        ASSERTION 3 (O3 oracle-routing): only 4 segment(s) STRICTLY require successor w_6f6097 (tie-inclusiv
+   [ok] 5 semantic worker ids
+        ASSERTION 5 (identifier opacity): worker id 'irb_corporate_quant_0' contains ['corporate', 'irb', 'q
+   [ok] 6 zero-SA-fallback IRB segment
+        ASSERTION 6 (no zero-fallback IRB): segment seg_04 (sovereign, AAA to AA-) is IRB-approved but its S
+
+   [ok] 6 distinct assertion markers fired across 7 cases, covering ['1', '2a', '2b', '3', '5', '6'] — no catch-all masquerading
+
+   assertion 4 is a CANARY, not an independent check: under universal SA
+   every roster is serviceable by construction, so it cannot fire while
+   assertion 6 holds. Kept so that a REGRESSION in A6's sampling
+   constraint — or a new zero-weight rating bucket — fires here rather
+   than surfacing as a worthless segment inside a spread.
+
+TIE_EPS guard — a sub-epsilon lead must not count as a strict requirement:
+   baseline strict: ['seg_00', 'seg_01', 'seg_02', 'seg_03']
+   with a 1e-15 lead on seg_00: ['seg_01', 'seg_02', 'seg_03']
+   [ok] sub-epsilon lead NOT counted strict (bare `>` would have counted it)
+
+generator-side constraint (case 6) — 100 seeds:
+   zero-SA-fallback segments appearing across 100 instances: 20
+   of those, IRB-approved by the default sampling: 0
+   [ok] sampling never PRODUCES one, and the condition is not vacuous (20 chances to)
+
+RESULT: PASS — default generates; every constructible negative rejected with a distinct assertion; sampling constraint demonstrated non-vacuously

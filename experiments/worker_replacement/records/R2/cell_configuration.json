@@ -1,0 +1,114 @@
+{
+  "cells": {
+    "0": {
+      "ask_enabled": false,
+      "card_updated": false,
+      "declaration_present": false,
+      "role": "information-absent control; allocation-visibility gate",
+      "swap": true
+    },
+    "1": {
+      "ask_enabled": false,
+      "card_updated": true,
+      "declaration_present": false,
+      "role": "card channel (marginal)",
+      "swap": true
+    },
+    "2": {
+      "ask_enabled": false,
+      "card_updated": false,
+      "declaration_present": true,
+      "role": "declaration channel (marginal)",
+      "swap": true
+    },
+    "3": {
+      "ask_enabled": true,
+      "card_updated": false,
+      "declaration_present": false,
+      "role": "ask channel (ride-along)",
+      "swap": true
+    },
+    "4": {
+      "ask_enabled": true,
+      "card_updated": true,
+      "declaration_present": true,
+      "role": "CEILING \u2014 a bound, NOT an interaction claim",
+      "swap": true
+    },
+    "U": {
+      "ask_enabled": false,
+      "card_updated": false,
+      "declaration_present": false,
+      "role": "unswapped control \u2014 the JOINT effect of the swap and the roster change it entails (NOT the swap effect alone: U and 0 differ by which workers are present as well as by the swap)",
+      "swap": false
+    }
+  },
+  "predecessor_card": "Credit risk analyst. Approved scope \u2014 IRB model approval: bank; IRB model approval: mdb; Standardised approach: all exposure classes.",
+  "residual_prompt_variants": 1,
+  "seed": 3,
+  "shapes": {
+    "0": [
+      "8ef6465302652f52937e2f6aa43689638bae98e999000d3db34bcb4b2e6a2d1a",
+      16,
+      22
+    ],
+    "1": [
+      "8ef6465302652f52937e2f6aa43689638bae98e999000d3db34bcb4b2e6a2d1a",
+      16,
+      22
+    ],
+    "2": [
+      "8ef6465302652f52937e2f6aa43689638bae98e999000d3db34bcb4b2e6a2d1a",
+      16,
+      22
+    ],
+    "3": [
+      "8ef6465302652f52937e2f6aa43689638bae98e999000d3db34bcb4b2e6a2d1a",
+      16,
+      22
+    ],
+    "4": [
+      "8ef6465302652f52937e2f6aa43689638bae98e999000d3db34bcb4b2e6a2d1a",
+      16,
+      22
+    ],
+    "U": [
+      "8ef6465302652f52937e2f6aa43689638bae98e999000d3db34bcb4b2e6a2d1a",
+      16,
+      22
+    ]
+  },
+  "stale_card_is_predecessors": true,
+  "tools_by_cell": {
+    "0": [
+      "broadcast_message",
+      "broadcast_message",
+      "get_conversation_with",
+      "get_recent_messages",
+      "get_recent_messages",
+      "get_task_messages",
+      "send_message",
+      "send_message"
+    ],
+    "3": [
+      "broadcast_message",
+      "broadcast_message",
+      "get_conversation_with",
+      "get_recent_messages",
+      "get_recent_messages",
+      "get_task_messages",
+      "send_message",
+      "send_message"
+    ],
+    "4": [
+      "broadcast_message",
+      "broadcast_message",
+      "get_conversation_with",
+      "get_recent_messages",
+      "get_recent_messages",
+      "get_task_messages",
+      "send_message",
+      "send_message"
+    ]
+  }
+}

@@ -32,6 +32,7 @@ from ...schemas.preferences.preference import PreferenceWeights
 from .llm_action_utils import (
     get_action_descriptions,
     get_default_action_classes,
+    unwrap_constrained_action,
 )
 from .prompts.structured_manager_prompts import (
     STRUCTURED_MANAGER_SYSTEM_PROMPT_TEMPLATE,
@@ -172,12 +173,14 @@ class RandomManagerAgentV2(ManagerAgent):
     def __init__(
         self,
         preferences: PreferenceWeights,
-        model_name: str = "o3",
+        model_name: str | None = None,
         allowed_action_classes: list[type[BaseManagerAction]] | None = None,
         seed: int = 42,
     ):
         super().__init__(agent_id="random_manager_v2", preferences=preferences)
-        self.model_name = model_name
+        from ..common.model_provider import get_model_for_role
+
+        self.model_name = model_name or get_model_for_role("manager")
         self.allowed_action_classes = (
             allowed_action_classes or get_default_action_classes()
         )
@@ -210,8 +213,7 @@ class RandomManagerAgentV2(ManagerAgent):
                 model=self.model_name,
                 seed=self._seed,
             )
-
-            return parsed_action.action  # type: ignore[attr-defined]
+            return unwrap_constrained_action(parsed_action)
 
         except Exception:
             logger.error(
@@ -356,10 +358,12 @@ class RandomManagerAgentV2(ManagerAgent):
 class OneShotDelegateManagerAgent(ManagerAgent):
     """Baseline: delegate all pending tasks to any agent exactly once, then no-op."""
 
-    def __init__(self, preferences: PreferenceWeights, model_name: str = "o3"):
+    def __init__(self, preferences: PreferenceWeights, model_name: str | None = None):
         super().__init__(agent_id="oneshot_delegate_manager", preferences=preferences)
+        from ..common.model_provider import get_model_for_role
+
         self._has_delegated = False
-        self.model_name = model_name
+        self.model_name = model_name or get_model_for_role("manager")
 
     async def take_action(self, observation: ManagerObservation) -> BaseManagerAction:
         await asyncio.sleep(0.5)
@@ -396,7 +400,6 @@ class OneShotDelegateManagerAgent(ManagerAgent):
                 model=self.model_name,
                 seed=self._seed,
             )
-
             action: AssignTasksToAgentsAction = parsed.action  # type: ignore[attr-defined]
 
             # Fill gaps with fallback agent

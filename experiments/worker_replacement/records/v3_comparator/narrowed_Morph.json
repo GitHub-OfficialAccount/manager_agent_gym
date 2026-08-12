@@ -1,0 +1,322 @@
+[
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 0
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 1
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 2
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 3
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 4
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 5
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 6
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 7
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 8
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 9
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 10
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 11
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 12
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 13
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 14
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 15
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 16
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 17
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 18
+ },
+ {
+  "cached": 1792,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "asis",
+  "index": 19
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 0
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 1
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 2
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 3
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 4
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 5
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 6
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 7
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "contradicts_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 8
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 9
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 10
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 11
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 12
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 13
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 14
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "contradicts_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 15
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 16
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 17
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 18
+ },
+ {
+  "cached": 0,
+  "provider": "Morph",
+  "stance": "supports_fit",
+  "batch": "B",
+  "cache": "busted",
+  "index": 19
+ }
+]

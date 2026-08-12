@@ -1,7 +1,10 @@
+from datetime import datetime
+
 import pytest
 from uuid import uuid4
 
 from manager_agent_gym.schemas.core.workflow import Workflow
+from manager_agent_gym.schemas.core.base import TaskStatus
 from manager_agent_gym.schemas.core.tasks import Task
 from manager_agent_gym.core.workflow_agents.interface import AgentInterface
 from manager_agent_gym.schemas.workflow_agents import AgentConfig
@@ -10,6 +13,10 @@ from manager_agent_gym.schemas.core.resources import Resource
 from manager_agent_gym.schemas.execution.manager_actions import (
     AssignTaskAction,
     AssignAllPendingTasksAction,
+    RetryTaskAction,
+)
+from manager_agent_gym.core.manager_agent.llm_action_utils import (
+    get_default_action_classes,
 )
 
 
@@ -112,3 +119,66 @@ async def test_assign_all_pending_tasks_assigns_unassigned_only() -> None:
     assert w.tasks[t2.id].assigned_agent_id == "a1"
     assert w.tasks[t3.id].assigned_agent_id == "preassigned"
     assert res.kind in {"info", "mutation"}
+
+
+@pytest.mark.asyncio
+async def test_retry_task_preserves_identity_and_resets_attempt_state() -> None:
+    w, task, original_agent = _workflow_with_task_and_agent()
+    replacement = _StubAgent("agent-2")
+    w.add_agent(replacement)
+    task.status = TaskStatus.FAILED
+    task.effective_status = TaskStatus.FAILED.value
+    task.started_at = datetime.now()
+    task.actual_duration_hours = 1.25
+    task.actual_cost = 8.0
+    task.quality_score = 0.1
+    task.output_resource_ids = [uuid4()]
+    task.execution_notes = ["Failed: original error"]
+    task.assigned_agent_id = original_agent.agent_id
+
+    result = await RetryTaskAction(
+        reasoning="Retry with another worker.",
+        task_id=task.id,
+        agent_id=replacement.agent_id,
+    ).execute(w)
+
+    retried = w.tasks[task.id]
+    assert retried.id == task.id
+    assert retried.status == TaskStatus.PENDING
+    assert retried.effective_status == TaskStatus.PENDING.value
+    assert retried.assigned_agent_id == replacement.agent_id
+    assert retried.started_at is None
+    assert retried.actual_duration_hours is None
+    assert retried.actual_cost is None
+    assert retried.quality_score is None
+    assert retried.output_resource_ids == []
+    assert retried.execution_notes == [
+        "Failed: original error",
+        "Retry requested by manager",
+    ]
+    assert result.success is True
+    assert result.data["task_id"] == str(task.id)
+
+
+@pytest.mark.asyncio
+async def test_retry_task_rejects_nonfailed_task_and_unknown_agent() -> None:
+    w, task, _ = _workflow_with_task_and_agent()
+
+    not_failed = await RetryTaskAction(
+        reasoning="invalid",
+        task_id=task.id,
+    ).execute(w)
+    task.status = TaskStatus.FAILED
+    unknown_agent = await RetryTaskAction(
+        reasoning="invalid",
+        task_id=task.id,
+        agent_id="missing",
+    ).execute(w)
+
+    assert not_failed.success is False
+    assert unknown_agent.success is False
+    assert task.status == TaskStatus.FAILED
+
+
+def test_retry_task_is_available_to_native_managers() -> None:
+    assert RetryTaskAction in get_default_action_classes()

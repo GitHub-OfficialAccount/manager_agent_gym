@@ -502,7 +502,6 @@ def create_legal_mna_team_configs():
             "You are the Acquirer General Counsel. You prioritize early momentum, then high‑quality drafts and "
             "governance, finishing with strict compliance at signing/closing. Approve key trade‑offs."
         ),
-        model_name="o3",
         name="Acquirer GC (Stakeholder)",
         role="Executive Stakeholder",
         persona_description="Pragmatic, governance‑minded, risk‑aware; values crisp redline logs and evidence‑linked schedules.",

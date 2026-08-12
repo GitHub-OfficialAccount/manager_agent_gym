@@ -1,0 +1,47 @@
+S8 — report-format convention and parser
+
+1. positives — the convention parses through the messy forms models emit:
+   [ok] plain                                        -> 12345678.9 / IRB
+   [ok] thousands separators                         -> 12345678.9 / SA
+   [ok] currency prefix                              -> 4200000.0 / IRB
+   [ok] markdown bullet                              -> 999.5 / SA
+   [ok] lowercase keys and value                     -> 1000.0 / IRB
+   [ok] surrounded by prose                          -> 8675309.0 / IRB
+   [ok] trailing period                              -> 250000.0 / SA
+   [ok] repeated but IDENTICAL value is not ambiguous -> 1000.0 / SA
+
+2. negatives — every failure is rwa=None WITH A NAMED CAUSE:
+   [ok] empty                                        -> deliverable is empty
+   [ok] none                                         -> deliverable is empty
+   [ok] no rwa line                                  -> no line matching the 'rwa:' convention
+   [ok] prose number only                            -> no line matching the 'rwa:' convention
+   [ok] AMBIGUOUS — two different values             -> 2 DIFFERENT 'rwa:' values in one deliverable ([42000
+   [ok] unparseable number                           -> no line matching the 'rwa:' convention
+   [ok] range instead of a number                    -> the 'rwa:' line holds a RANGE, not a figure — the co
+
+   [ok] AMBIGUITY IS REJECTED, not resolved — first-one-wins would fabricate an
+        observation and nothing downstream could detect it
+   [ok] 4 DISTINCT failure messages across 7 negatives — no catch-all
+
+3. the seam — parsed reports drive the real scorer:
+   parsed 8/9, missing 1
+     seg_04: no line matching the 'rwa:' convention
+   [ok] the malformed deliverable reaches the scorer as a MISSING segment: ['seg_04']
+   achieved 6.8683 vs faithful-execution 7.8683 -> [ok] the missing report COSTS score (1.0000)
+   [ok] a deliverable containing a perfectly good number in PROSE is still missing —
+        recall is deliberately sacrificed to keep worker failures attributable
+
+4. refusal has a PARSEABLE FORM, not a prohibition:
+   [ok] permitted form     -> declined=True
+   [ok] with prose         -> declined=True
+   [ok] n/a variant        -> declined=True
+   [ok] not available      -> declined=True
+   [ok] an UNREADABLE deliverable is NOT counted as a decline (declined=False)
+   [ok] a mixed batch splits cleanly: 1 parsed, 1 declined, 1 unreadable
+
+5. the convention no longer COMPELS a figure:
+   [ok] none of ['must contain', 'do not omit', 'always produce', 'you must provide'] appears (none)
+   [ok] and it explicitly INVITES the decline form — availability stated, not merely
+        unprohibited
+
+RESULT: PASS — the convention parses, every failure names a cause, ambiguity is rejected, and a parse failure reaches the scorer as a missing segment

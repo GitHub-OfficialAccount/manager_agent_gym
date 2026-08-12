@@ -1,0 +1,152 @@
+{
+  "profile": {
+    "name": "Reference Portfolio Profile",
+    "stage": "profile",
+    "truth": 2000.0,
+    "method": "profile",
+    "dependencies": []
+  },
+  "calibrate_portfolio": {
+    "name": "Calibrate Portfolio Tail Standard",
+    "stage": "calibration",
+    "truth": 151164.4881051439,
+    "method": "percentile",
+    "dependencies": [
+      "profile"
+    ]
+  },
+  "calibrate_risk": {
+    "name": "Calibrate Risk Tail Standard",
+    "stage": "calibration",
+    "truth": 0.6543543070352771,
+    "method": "percentile",
+    "dependencies": [
+      "profile"
+    ]
+  },
+  "calibrate_screen": {
+    "name": "Calibrate Rapid Screening Standard",
+    "stage": "calibration",
+    "truth": 0.14081103722996322,
+    "method": "zscore",
+    "dependencies": [
+      "profile"
+    ]
+  },
+  "calibration_review": {
+    "name": "Review Calibration Artifacts",
+    "stage": "calibration_review",
+    "truth": 3.0,
+    "method": "artifact_review",
+    "dependencies": [
+      "calibrate_portfolio",
+      "calibrate_risk",
+      "calibrate_screen"
+    ]
+  },
+  "audit_a_robust": {
+    "name": "Batch A Robust Audit",
+    "stage": "audit",
+    "truth": 64.0,
+    "method": "percentile",
+    "dependencies": [
+      "calibration_review"
+    ]
+  },
+  "audit_a_screen": {
+    "name": "Batch A Rapid Screen",
+    "stage": "audit",
+    "truth": 59.0,
+    "method": "zscore",
+    "dependencies": [
+      "calibration_review"
+    ]
+  },
+  "reconcile_a": {
+    "name": "Batch A Method Reconciliation",
+    "stage": "reconciliation",
+    "truth": 5.0,
+    "method": "artifact_reconciliation",
+    "dependencies": [
+      "audit_a_robust",
+      "audit_a_screen"
+    ]
+  },
+  "audit_b_robust": {
+    "name": "Batch B Robust Audit",
+    "stage": "audit",
+    "truth": 89.0,
+    "method": "percentile",
+    "dependencies": [
+      "calibration_review"
+    ]
+  },
+  "audit_b_screen": {
+    "name": "Batch B Rapid Screen",
+    "stage": "audit",
+    "truth": 71.0,
+    "method": "zscore",
+    "dependencies": [
+      "calibration_review"
+    ]
+  },
+  "reconcile_b": {
+    "name": "Batch B Method Reconciliation",
+    "stage": "reconciliation",
+    "truth": 18.0,
+    "method": "artifact_reconciliation",
+    "dependencies": [
+      "audit_b_robust",
+      "audit_b_screen"
+    ]
+  },
+  "audit_c_robust": {
+    "name": "Batch C Robust Audit",
+    "stage": "audit",
+    "truth": 97.0,
+    "method": "percentile",
+    "dependencies": [
+      "calibration_review"
+    ]
+  },
+  "audit_c_screen": {
+    "name": "Batch C Rapid Screen",
+    "stage": "audit",
+    "truth": 80.0,
+    "method": "zscore",
+    "dependencies": [
+      "calibration_review"
+    ]
+  },
+  "reconcile_c": {
+    "name": "Batch C Method Reconciliation",
+    "stage": "reconciliation",
+    "truth": 17.0,
+    "method": "artifact_reconciliation",
+    "dependencies": [
+      "audit_c_robust",
+      "audit_c_screen"
+    ]
+  },
+  "prioritize": {
+    "name": "Prioritize Portfolio Review",
+    "stage": "prioritization",
+    "truth": 2.0,
+    "method": "artifact_prioritization",
+    "dependencies": [
+      "reconcile_a",
+      "reconcile_b",
+      "reconcile_c"
+    ]
+  },
+  "capacity": {
+    "name": "Plan Manual Review Capacity",
+    "stage": "capacity",
+    "truth": 22.25,
+    "method": "artifact_capacity",
+    "dependencies": [
+      "prioritize",
+      "audit_b_robust"
+    ]
+  }
+}

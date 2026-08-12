@@ -1,0 +1,54 @@
+S8 — run-bundle assertions on dry_run_seed101.json
+   NOTE: this is a DRY-RUN bundle (all model calls stubbed). The
+   worker_run_completed assertions are emitted by AIAgent.execute_task,
+   which the dry run replaces, so they are reported as NOT APPLICABLE
+   rather than passed — a stub cannot evidence that a worker ran.
+
+1. provenance: seed 101, sha256 b8ded9fce8e0508b...
+   [ok] the recorded hash still matches what the generator produces for that seed
+        (a seed alone would not catch a generator change between run and reading)
+   [ok] all 6 roles ran on openrouter/deepseek/deepseek-v4-flash
+
+2. roster arrival (2 events, 1 at t_swap=3):
+   applied: ['removed w_26f14e', 'added w_6f6097']
+   rendered_into_observation: True, observation_source: manager
+   [ok] observation_source is present
+   [ok] the change names both the predecessor and the successor
+   arrival evidence is STRONG form (manager) — strong means the manager saw the
+        announcement BEFORE choosing its action, weak means the engine carried it
+        into a post-hoc observation
+   [ok] exactly one arrival event at t_swap
+
+3. worker execution across the swap:
+   worker_run_completed events: {}
+   [n/a] predecessor/successor run evidence — stubbed in a dry run
+   predecessor completions at/before t_swap: 2
+   successor completions after t_swap: 5
+   [ok] the predecessor worked BEFORE the swap and the successor AFTER it
+
+3b. inherited workflow state on the board (spec E5):
+   board rows still assigned to the departed predecessor w_26f14e: 0
+   the condition did not arise in this episode — the predecessor finished
+        everything it held before t_swap. The check is PRESENT and would fire; it
+        simply had nothing to assert on, which is reported rather than passed silently.
+
+4. the DAG: 16 tasks
+   [ok] task count in 15-20 (SHAPE — machinery)
+   [ok] at least one segment executed by a POST-SWAP worker (9) — the
+        segment path works live; a floor, not a count, so completion cannot creep back in
+
+   OUTCOME (reported, NOT adjudicated — this is the study's dependent variable):
+     tasks completed:    16/16
+     segments completed: 9/9
+
+5. capacity: realised per-worker segment counts {'w_68358d': 3, 'w_6f6097': 3, 'w_e172a9': 3} vs C = 3
+   [ok] no worker exceeded C — the runtime MIRRORS the cap the
+        scorer's oracle is computed under
+
+6. the parser seam: 9 parsed, 0 missing, 0 unstaffed
+   [ok] every segment is EITHER parsed OR logged missing — none silently absent
+   [ok] re-parsing the stored deliverables reproduces the bundle's reports exactly
+
+RESULT: PASS (MACHINERY) — swap announced with observation_source, both workers evidenced across it, the segment path works live, capacity respected, every segment parsed or logged missing.
+  Completion is reported above as an OUTCOME and is deliberately not adjudicated here:
+  it is manager behaviour, which is what the study measures.

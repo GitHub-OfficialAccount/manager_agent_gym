@@ -1,0 +1,21 @@
+{
+  "version": "arm3-competent-control-v1",
+  "seed": 101,
+  "scope_expectations": [
+    {"task_pattern": "Reference Portfolio Profile", "scope_family": "portfolio_profile", "required_scope_patterns": ["portfolio", "profil"]},
+    {"task_pattern": "Calibrate Portfolio Tail Standard", "scope_family": "portfolio_tail_calibration", "required_scope_patterns": ["(percentile|tail)", "calibr"], "constraint_expectations": [{"exact_excerpt_pattern": "95th.percentile"}, {"exact_excerpt_pattern": "income"}]},
+    {"task_pattern": "Calibrate Risk Tail Standard", "scope_family": "risk_tail_calibration", "required_scope_patterns": ["(percentile|tail)", "calibr"], "constraint_expectations": [{"exact_excerpt_pattern": "95th.percentile"}, {"exact_excerpt_pattern": "DTI"}]},
+    {"task_pattern": "Calibrate Rapid Screening Standard", "scope_family": "rapid_screen_calibration", "required_scope_patterns": ["(rapid|screen|mean|standard deviation|SD)", "calibr"], "constraint_expectations": [{"exact_excerpt_pattern": "mean.plus.two.SD"}]},
+    {"task_pattern": "Review Calibration Artifacts", "scope_family": "calibration_review", "required_scope_patterns": ["calibration", "(review|artifact|valid)"]},
+    {"task_pattern": "Batch [ABC] Robust Audit", "scope_family": "robust_audit", "required_scope_patterns": ["(robust|percentile|tail)", "(audit|outlier)"], "constraint_expectations": [{"exact_excerpt_pattern": "95th.percentile"}]},
+    {"task_pattern": "Batch [ABC] Rapid Screen", "scope_family": "rapid_screen", "required_scope_patterns": ["(rapid|mean|standard deviation|SD)", "(screen|audit|outlier)"], "constraint_expectations": [{"exact_excerpt_pattern": "mean.plus.two.SD"}]},
+    {"task_pattern": "Batch [ABC] Method Reconciliation", "scope_family": "method_reconciliation", "required_scope_patterns": ["(reconcil|compar|difference)"]},
+    {"task_pattern": "Prioritize Portfolio Review", "scope_family": "review_prioritization", "required_scope_patterns": ["(prioriti|rank|largest)", "(disagreement|reconcil|review)"]},
+    {"task_pattern": "Plan Manual Review Capacity", "scope_family": "review_capacity", "required_scope_patterns": ["(capacity|reviewer|hours)"]}
+  ],
+  "evidence_opportunities": [
+    {"label_id": "a_robust_method", "task_pattern": "Batch A Robust Audit", "assigned_worker": "portfolio_analyst"},
+    {"label_id": "b_robust_method", "task_pattern": "Batch B Robust Audit", "assigned_worker": "portfolio_analyst"},
+    {"label_id": "c_robust_method", "task_pattern": "Batch C Robust Audit", "assigned_worker": "portfolio_analyst"}
+  ]
+}

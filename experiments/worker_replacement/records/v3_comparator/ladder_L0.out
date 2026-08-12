@@ -1,0 +1,8 @@
+rung   batch    n  contradicts  distribution                           cache-hit calls  providers
+L0     A       20            1  {'contradicts_fit': 1, 'supports_fit': 19}              18  {'Baidu': 1, 'AkashML': 1, 'DeepInfra': 18}
+       by cache-hit: {hit: {'supports_fit': 18}, miss: {'contradicts_fit': 1, 'supports_fit': 1}}
+L0     B       20            1  {'contradicts_fit': 1, 'supports_fit': 19}              18  {'Ambient': 1, 'Morph': 1, 'DeepInfra': 18}
+       by cache-hit: {hit: {'supports_fit': 18}, miss: {'contradicts_fit': 1, 'supports_fit': 1}}
+L0     C       20            3  {'neutral': 4, 'supports_fit': 13, 'contradicts_fit': 3}              10  {'Ionstream': 2, 'AtlasCloud': 1, 'Morph': 1, 'Parasail': 2, 'Venice': 1, 'Cloudflare': 1, 'AkashML': 2, 'DeepInfra': 10}
+       by cache-hit: {hit: {'supports_fit': 9, 'neutral': 1}, miss: {'neutral': 3, 'supports_fit': 4, 'contradicts_fit': 3}}
+L0+nonce B       20            8  {'contradicts_fit': 8, 'supports_fit': 9, 'neutral': 3}

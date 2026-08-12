@@ -1,0 +1,8 @@
+text,
+.nodeLabel,
+.edgeLabel,
+.cluster-label {
+  color: #000000 !important;
+  fill: #000000 !important;
+  font-weight: 700 !important;
+}

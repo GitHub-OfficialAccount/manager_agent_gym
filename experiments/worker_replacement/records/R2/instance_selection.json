@@ -1,0 +1,191 @@
+{
+  "ceiling_band": {
+    "max": 0.17628042861770402,
+    "median": 0.09881735530179869,
+    "min": 0.05164329468784564,
+    "sd": 0.031348472080090554
+  },
+  "ceilings_by_seed": {
+    "1": 0.07534983708020437,
+    "2": 0.10370805862510775,
+    "3": 0.0965010203679323,
+    "4": 0.07557937450430245,
+    "5": 0.11946102912882105,
+    "7": 0.06073730028364342,
+    "8": 0.13470034608244608,
+    "9": 0.08148751354538995,
+    "10": 0.09244781493928497,
+    "12": 0.08237186611320249,
+    "13": 0.1011336902356651,
+    "14": 0.06853419078543509,
+    "15": 0.10242095168593997,
+    "16": 0.13830829241720932,
+    "18": 0.15806292993996737,
+    "19": 0.11471662943652321,
+    "20": 0.06230250737240013,
+    "21": 0.11807438641024398,
+    "22": 0.128374648498357,
+    "23": 0.05164329468784564,
+    "24": 0.12362183860418684,
+    "25": 0.09136342028455091,
+    "26": 0.10401810467636809,
+    "27": 0.09596998826612904,
+    "28": 0.0898138542586715,
+    "29": 0.11378547603528501,
+    "30": 0.17628042861770402,
+    "31": 0.14152227565670872,
+    "33": 0.08527955762646212,
+    "34": 0.06590132751967362,
+    "36": 0.13338772636845928,
+    "37": 0.06853609912668977,
+    "38": 0.09122967669416468,
+    "39": 0.16892951813157017
+  },
+  "chosen": {
+    "high": {
+      "ceiling_share": 0.13338772636845928,
+      "seed": 36
+    },
+    "low": {
+      "ceiling_share": 0.05164329468784564,
+      "seed": 23
+    },
+    "mid": {
+      "ceiling_share": 0.0965010203679323,
+      "seed": 3
+    }
+  },
+  "chosen_seeds": [
+    3,
+    23,
+    36
+  ],
+  "draw_seed": 20260807,
+  "n_admitted": 34,
+  "recorded_before_any_episode": true,
+  "rule": "three instances used across ALL six cells; one drawn at random from each rank-tercile of channel_effect_ceiling over the admitted suite; draw seed fixed and recorded before the draw",
+  "sampling_caveats": {
+    "admitted_mean": 0.10339867570607486,
+    "admitted_median": 0.09881735530179869,
+    "caveat_1": "THE LOW PICK IS THE SUITE MINIMUM. Seed 23 at 0.0516 is the minimum of the whole admitted suite \u2014 a legitimate 1-in-11 draw, not a take-first artefact (draw indices 0/5/5 within strata). Consequence: the chosen mean sits BELOW the admitted mean, so the pilot's EFFECT MAGNITUDES are below the suite's by construction.",
+    "caveat_2": "IT COMPOUNDS WITH THE STRATIFICATION INFLATION. The rule widens sigma_between BY DESIGN and this particular draw shifts the centre DOWN. Harmless for sigma \u2014 that is noise, not effect \u2014 and NOT harmless for anything reading effect magnitudes. Both must be named wherever the pilot's numbers appear.",
+    "chosen_mean": 0.09384401380807907,
+    "effect_magnitudes_sit_below_the_suite": true,
+    "low_pick_is_suite_minimum": true
+  },
+  "strata_seeds": {
+    "high": [
+      19,
+      21,
+      5,
+      24,
+      22,
+      36,
+      8,
+      16,
+      31,
+      18,
+      39,
+      30
+    ],
+    "low": [
+      23,
+      7,
+      20,
+      34,
+      14,
+      37,
+      1,
+      4,
+      9,
+      12,
+      33
+    ],
+    "mid": [
+      28,
+      38,
+      25,
+      10,
+      27,
+      3,
+      13,
+      15,
+      2,
+      26,
+      29
+    ]
+  },
+  "suite_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "tercile_bounds_by_rank": {
+    "high": [
+      22,
+      34
+    ],
+    "low": [
+      0,
+      11
+    ],
+    "mid": [
+      11,
+      22
+    ]
+  },
+  "tercile_ceiling_ranges": {
+    "high": {
+      "max": 0.17628042861770402,
+      "min": 0.11471662943652321,
+      "n": 12
+    },
+    "low": {
+      "max": 0.08527955762646212,
+      "min": 0.05164329468784564,
+      "n": 11
+    },
+    "mid": {
+      "max": 0.11378547603528501,
+      "min": 0.0898138542586715,
+      "n": 11
+    }
+  }
+}

@@ -1,0 +1,422 @@
+[
+ {
+  "cond": "L0prime-A",
+  "index": 0,
+  "stance": "contradicts_fit",
+  "provider": "Venice",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 1,
+  "stance": "contradicts_fit",
+  "provider": "Baidu",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 2,
+  "stance": "contradicts_fit",
+  "provider": "Alibaba",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 3,
+  "stance": "contradicts_fit",
+  "provider": "Cloudflare",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 4,
+  "stance": "contradicts_fit",
+  "provider": "Ambient",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 5,
+  "stance": "contradicts_fit",
+  "provider": "AkashML",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 6,
+  "stance": "contradicts_fit",
+  "provider": "DigitalOcean",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 7,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 8,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 9,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 10,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 11,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 12,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 13,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 14,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 15,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 16,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 17,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 18,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-A",
+  "index": 19,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 0,
+  "stance": "contradicts_fit",
+  "provider": "CoreWeave",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 1,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 2,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 3,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 4,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 5,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 6,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 7,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 8,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 9,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 10,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 11,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 12,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 13,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 14,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 15,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 16,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 17,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 18,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-B",
+  "index": 19,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 0,
+  "stance": "contradicts_fit",
+  "provider": "Baidu",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 1,
+  "stance": "contradicts_fit",
+  "provider": "Cloudflare",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 2,
+  "stance": "contradicts_fit",
+  "provider": "Alibaba",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 3,
+  "stance": "contradicts_fit",
+  "provider": "Baidu",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 4,
+  "stance": "contradicts_fit",
+  "provider": "DigitalOcean",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 5,
+  "stance": "contradicts_fit",
+  "provider": "DigitalOcean",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 6,
+  "stance": "contradicts_fit",
+  "provider": "AtlasCloud",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 7,
+  "stance": "contradicts_fit",
+  "provider": "DigitalOcean",
+  "cached": 0
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 8,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 9,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 10,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 11,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 12,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 13,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 14,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 15,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 16,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 17,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 18,
+  "stance": "contradicts_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ },
+ {
+  "cond": "L0prime-C",
+  "index": 19,
+  "stance": "supports_fit",
+  "provider": "DeepInfra",
+  "cached": 64
+ }
+]

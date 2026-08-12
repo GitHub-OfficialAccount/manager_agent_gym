@@ -1,0 +1,64 @@
+{
+  "ignorant_draws": 10000,
+  "mde": 0.2,
+  "rows": [
+    {
+      "max": 0.151347,
+      "median_ceiling_share": 0.0924085,
+      "min": 0.061709,
+      "n_reaching_mde": 0,
+      "n_seeds": 24,
+      "shared_class_segments": 2
+    },
+    {
+      "max": 0.152659,
+      "median_ceiling_share": 0.0961615,
+      "min": 0.041785,
+      "n_reaching_mde": 0,
+      "n_seeds": 24,
+      "shared_class_segments": 3
+    },
+    {
+      "max": 0.158063,
+      "median_ceiling_share": 0.10177749999999999,
+      "min": 0.050645,
+      "n_reaching_mde": 0,
+      "n_seeds": 24,
+      "shared_class_segments": 4
+    },
+    {
+      "max": 0.14353,
+      "median_ceiling_share": 0.0969615,
+      "min": 0.047188,
+      "n_reaching_mde": 0,
+      "n_seeds": 24,
+      "shared_class_segments": 5
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ]
+}

@@ -1,0 +1,59 @@
+S9 — logging records, denominator, realised-authoritative scoring
+
+1. record 1 — channel pulls (and the guard against the bug that hid them):
+   live comms tools: ['broadcast_message', 'get_conversation_with', 'get_recent_messages', 'get_task_messages', 'send_message']
+   counted as PULLS: ['get_conversation_with', 'get_recent_messages', 'get_task_messages']
+   counted as pushes (excluded): ['broadcast_message', 'send_message']
+   [ok] the pull/push classification spans every LIVE comms tool (unclassified: [])
+   bundle contains 66 tool calls; extractor found 13 pulls, by agent {'w_e172a9': 3, 'w_26f14e': 7, 'w_68358d': 1, 'w_6f6097': 2}
+   [ok] NON-VACUOUS — a bundle with real tool calls yields pulls
+        (the earlier guessed-names bug produced 0 here and looked like a finding)
+   first-pull index by agent: {'w_e172a9': 0, 'w_26f14e': 1, 'w_68358d': 10, 'w_6f6097': 11} — this is what makes the
+        P2 before/after split possible
+
+2. record 2 — refine events carry BEFORE/AFTER text, not a count:
+   [ok] a logged refine yields both texts — attributable=True
+   live bundle: 0 refine action(s) seen, 0 with before/after text, 0 without
+   [ok] no refines occurred in this bundle — nothing to attribute, and the record
+        says so rather than implying a measurement
+   [ok] and a refine visible only as an ACTION is surfaced as unattributable
+        (constructed, so the path is covered regardless of what the live run did)
+
+3. record 3 — RENDERED window, which is not the same as addressed:
+   two messages, both addressed to the manager; window size 1
+   [ok] one entered the rendered window and one did NOT — identical addressing,
+        different visibility, which is the whole point of the record
+
+4. record 4 — reply addressing, as written:
+   replies: {'m-seen': True, 'm-unseen': True, 'm-misaddressed': False}
+   [ok] a reply addressed to a NON-EXISTENT id is recorded as not naming
+        the manager (the corpus measured 48 of 56 worker sends addressed to ids that
+        do not exist, so this cannot be assumed)
+
+5. the deferral log and the OBSERVED denominator:
+   deferrals logged in the dry run: 10 across 7 task(s)
+   [ok] refusals are LOGGED, so realised-vs-intended is reconstructible
+        rather than inferred from what happens to be missing
+   denominator: 16 observed vs 16 planned; by origin {'pre_swap_planned': 16}
+   [ok] computed from the OBSERVED task set, with every task stamped
+        pre/post-swap origin
+   unstaffed segments (first-class field): 1 ['seg_01']
+
+6. realised-authoritative scoring (spec §4.1):
+   intended load per worker: {'w_6f6097': 4, 'w_68358d': 3, 'w_e172a9': 2} (1 worker over cap)
+   deferred: ['seg_07']
+   oracle 8.3913  achieved 6.3778  regret 2.0134
+   allocation loss 2.0134   execution loss (signed) 0.0000
+   [ok] the deferral's loss is in ALLOCATION loss
+   [ok] and execution loss stays ~0 — the engine's ordering is NOT absorbed
+        as fake worker underperformance (the retired set-level reading's failure)
+   [ok] the INTENDED allocation survives as a diagnostic — an infeasible
+        intent is a management fact and only the intent shows it
+
+7. comparability — a bundle without the records cannot enter analysis:
+   [ok] both bundles carry every required record
+   a bundle stripped of its index/board: analysable=False, segment_denominator=0
+   [ok] REJECTED with a named cause — records being present is not the
+        same as there being anything to analyse
+
+RESULT: PASS — all four records extract non-vacuously; visibility is distinguished from addressing; deferrals are logged and their loss lands in allocation, not execution; the denominator is computed from the observed task set

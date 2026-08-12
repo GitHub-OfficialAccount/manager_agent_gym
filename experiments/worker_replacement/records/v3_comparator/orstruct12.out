@@ -1,0 +1,13 @@
+[repeat 0] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=2.99s
+[repeat 1] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=4.1s
+[repeat 2] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=3.3s
+[repeat 3] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=3.12s
+[repeat 4] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=3.59s
+[repeat 5] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=3.35s
+[repeat 6] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=10.93s
+[repeat 7] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=13.84s
+[repeat 8] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=12.22s
+[repeat 9] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=14.06s
+[repeat 10] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=12.93s
+[repeat 11] or_structured    parse_ok=8/8 echo_ok=8/8 median_latency=9.97s
+wrote /home/therealgod/Projects/AdHocTeamwork/manager_agent_gym/experiments/ds_reroute/outputs/extraction_probe/determinism_orstruct12.json

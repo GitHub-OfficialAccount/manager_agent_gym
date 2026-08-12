@@ -1,0 +1,19 @@
+12 fallback judgments x n=20 = 240 calls, interleaved
+
+judgment   modal             share  FALSE CONTRA  distribution
+0c33e461   neutral            0.60          8/20  {'contradicts_fit': 8, 'neutral': 12}
+0e4b82c9   contradicts_fit    0.55         11/20  {'neutral': 9, 'contradicts_fit': 11}
+29a81f42   neutral            0.85          3/20  {'neutral': 17, 'contradicts_fit': 3}
+47ce1100   neutral            1.00             -  {'neutral': 20}
+572b9347   neutral            0.95          1/19  {'neutral': 18, 'contradicts_fit': 1}
+742f780f   neutral            1.00             -  {'neutral': 20}
+a2032d7c   neutral            0.90          2/20  {'neutral': 18, 'contradicts_fit': 2}
+a59e9958   neutral            0.80          4/20  {'neutral': 16, 'contradicts_fit': 4}
+bcb6e773   neutral            0.90          2/20  {'neutral': 18, 'contradicts_fit': 2}
+d16a88d4   contradicts_fit    0.70         14/20  {'contradicts_fit': 14, 'neutral': 6}
+e4f27a80   neutral            0.85          3/20  {'neutral': 17, 'contradicts_fit': 3}
+feb8a0f3   neutral            0.95          1/20  {'neutral': 19, 'contradicts_fit': 1}
+
+fallback false-contradiction rate: 49/239 = 20.50%
+  (before the wording fix: 177/238 = 74.37%)
+  (explicit population, Stage B: 12/1117 = 1.07%)

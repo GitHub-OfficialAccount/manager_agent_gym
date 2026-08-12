@@ -324,7 +324,6 @@ def create_team_configs():
         system_prompt=(
             "You are the Chief Product Officer balancing AI safety, regulatory compliance, launch speed, and market competitiveness."
         ),
-        model_name="o3",
         name="Chief Product Officer",
         role="Executive Stakeholder",
         persona_description="Innovation-focused, safety-conscious, values responsible AI deployment with competitive advantage.",

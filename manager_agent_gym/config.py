@@ -15,6 +15,24 @@ class Settings(BaseSettings):
     EXA_API_KEY: str = "na"
     COHERE_API_KEY: str = "na"
 
+    # Key for OpenRouter routes; exported to os.environ below so LiteLLM picks it
+    # up. Routing policy lives in core/common/model_provider.py.
+    OPENROUTER_API_KEY: str = "na"
+
+    # Default model routes by role, resolved via model_provider.get_model_for_role().
+    # The name alone decides the endpoint: "openrouter/<provider>/<model>" goes via
+    # OpenRouter, "openai/<model>" goes to OpenAI natively, bare names ("gpt-4o")
+    # go to OpenAI natively (legacy). Workers/stakeholder accept any LiteLLM route.
+    MANAGER_MODEL_NAME: str = "openai/gpt-4o-mini"
+    WORKER_MODEL_NAME: str = "openai/gpt-4o-mini"
+    STAKEHOLDER_MODEL_NAME: str = "openai/gpt-4o-mini"
+    JUDGE_MODEL_NAME: str = "openai/gpt-4o-mini"
+    # Belief-layer (Arm-3 semantic comparator) model. Deliberately separate
+    # from MANAGER_MODEL_NAME -- the belief layer is not the manager and its
+    # model is an experiment-chosen, swappable config value, not the
+    # orchestration policy under test. See COMPARATOR_GENERALIZATION.md.
+    BELIEF_MODEL_NAME: str = "openai/gpt-4o-mini"
+
     # Default simulation configuration
     default_output_dir: str = "./simulation_outputs"
 
@@ -90,6 +108,11 @@ if settings.EXA_API_KEY != "na":
     os.environ["EXA_API_KEY"] = settings.EXA_API_KEY
 if settings.COHERE_API_KEY != "na":
     os.environ["COHERE_API_KEY"] = settings.COHERE_API_KEY
+if settings.OPENROUTER_API_KEY != "na":
+    os.environ["OPENROUTER_API_KEY"] = settings.OPENROUTER_API_KEY
+    # Routing via OpenRouter: the OpenAI Agents SDK would try to upload traces to
+    # platform.openai.com with a non-OpenAI key, causing 401s.
+    os.environ.setdefault("OPENAI_AGENTS_DISABLE_TRACING", "1")
 
 # Soft validation: warn on missing env vars instead of erroring hard
 if settings.ENV == "local":

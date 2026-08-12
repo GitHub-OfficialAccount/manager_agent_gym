@@ -1,0 +1,47 @@
+detector: 12 fallback (truth=no method) + 8 explicit controls (truth=method present) x n=20 = 400 calls, interleaved
+  round 1/20
+  round 2/20
+  round 3/20
+  round 4/20
+  round 5/20
+  round 6/20
+  round 7/20
+  round 8/20
+  round 9/20
+  round 10/20
+  round 11/20
+  round 12/20
+  round 13/20
+  round 14/20
+  round 15/20
+  round 16/20
+  round 17/20
+  round 18/20
+  round 19/20
+  round 20/20
+
+FALLBACK (no method)
+  0c33e461  20/20  '- Failed: Stakeholder failed to complete task\n- Retry requ'
+  0e4b82c9  20/20  '- Failed: Stakeholder failed to complete task\n- Retry requ'
+  29a81f42  20/20  '- Failed: Stakeholder failed to complete task\n- Retry requ'
+  47ce1100  20/20  '- Failed: Stakeholder failed to complete task'
+  572b9347  20/20  '- Failed: Stakeholder failed to complete task'
+  742f780f  20/20  '- Failed: None'
+  a2032d7c  20/20  '- Failed: Stakeholder failed to complete task'
+  a59e9958  20/20  '- Failed: Stakeholder failed to complete task\n- Retry requ'
+  bcb6e773  20/20  '- Failed: Stakeholder failed to complete task'
+  d16a88d4  20/20  '- Failed: Stakeholder failed to complete task'
+  e4f27a80  20/20  '- Failed: None'
+  feb8a0f3  20/20  '- Failed: Stakeholder failed to complete task\n- Retry requ'
+  detection accuracy: 240/240 = 100.00%
+
+EXPLICIT (method present)
+  2add6c10   0/20  'percentile'
+  33b9c3e2   0/20  'percentile'
+  396c7c7e   0/20  '95th-percentile reference cutoff'
+  66bde56a   0/20  'robust 95th-percentile reference standard'
+  bb7c4521   0/20  'mean-plus-two-standard-deviations'
+  bd79814b   0/20  'mean-plus-two-standard-deviations'
+  c483620f  17/20  'Percentile (robust 95th-percentile reference standard)'
+  e7240efb   0/20  'mean-plus-two-standard-deviations'
+  detection accuracy: 17/160 = 10.62%

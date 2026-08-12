@@ -1,0 +1,57 @@
+FILE-SET: outputs/**/manager_actions.json -> 78 files (35 at outputs/<run>/, 43 at outputs/<group>/<run>/); 74 enter this check.
+  SKIPPED, by reason (never silent -- a new setup that matches none of the
+  setup constants shows up here as a large count, not as a clean run):
+       3  no swap_timestep / target_worker / completions.json
+       1  no post-swap task with key ending '_robust'
+
+condition tagging at this denominator: {'silent': 30, 'full': 19, 'control': 14, 'silent_declared': 3, 'silent_false_declared': 1, 'partial': 7}
+manifested (post-swap robust audit actually produced by zscore): {True: 45, False: 29}
+
+==============================================================================
+UNSTRATIFIED — announcement tier vs response behaviour
+==============================================================================
+  condition                n      rerouted_share         any_reroute     time_to_reroute       inspect_after     time_to_inspect        mean_r_check
+  silent                  30        0.044 (n=30)        0.133 (n=30)         9.500 (n=4)        1.933 (n=30)        9.480 (n=25)        0.741 (n=30)
+  full                    19        0.737 (n=19)        0.895 (n=19)        6.706 (n=17)        2.053 (n=19)        9.357 (n=14)        0.937 (n=19)
+  control                 14        0.071 (n=14)        0.143 (n=14)         8.500 (n=2)        2.286 (n=14)       14.538 (n=13)        0.995 (n=14)
+  partial                  7         0.667 (n=7)         1.000 (n=7)         5.429 (n=7)         1.429 (n=7)        11.000 (n=4)         0.903 (n=7)
+  silent_declared          3         0.667 (n=3)         1.000 (n=3)         5.333 (n=3)         2.667 (n=3)         8.667 (n=3)         0.883 (n=3)
+  silent_false_declared    1         0.000 (n=1)         0.000 (n=1)                 n/a         1.000 (n=1)        19.000 (n=1)         0.732 (n=1)
+
+==============================================================================
+STRATIFIED BY PRODUCER TRACE (§77d) — did the degradation manifest?
+==============================================================================
+
+  manifested=True  n=45
+    condition              n      rerouted_share         any_reroute     time_to_reroute       inspect_after     time_to_inspect        mean_r_check
+    silent                30        0.044 (n=30)        0.133 (n=30)         9.500 (n=4)        1.933 (n=30)        9.480 (n=25)        0.741 (n=30)
+    full                   7         0.381 (n=7)         0.714 (n=7)         7.600 (n=5)         1.143 (n=7)         9.000 (n=5)         0.829 (n=7)
+    partial                4         0.417 (n=4)         1.000 (n=4)         5.500 (n=4)         1.500 (n=4)        11.500 (n=2)         0.831 (n=4)
+    silent_declared        3         0.667 (n=3)         1.000 (n=3)         5.333 (n=3)         2.667 (n=3)         8.667 (n=3)         0.883 (n=3)
+    silent_false_declared   1         0.000 (n=1)         0.000 (n=1)                 n/a         1.000 (n=1)        19.000 (n=1)         0.732 (n=1)
+
+  manifested=False  n=29
+    condition              n      rerouted_share         any_reroute     time_to_reroute       inspect_after     time_to_inspect        mean_r_check
+    control               14        0.071 (n=14)        0.143 (n=14)         8.500 (n=2)        2.286 (n=14)       14.538 (n=13)        0.995 (n=14)
+    full                  12        0.944 (n=12)        1.000 (n=12)        6.333 (n=12)        2.583 (n=12)         9.556 (n=9)        1.000 (n=12)
+    partial                3         1.000 (n=3)         1.000 (n=3)         5.333 (n=3)         1.333 (n=3)        10.500 (n=2)         1.000 (n=3)
+
+==============================================================================
+KEY CONTRASTS — full vs silent, with bootstrap intervals
+==============================================================================
+
+  UNSTRATIFIED: full n=19, silent n=30
+    rerouted_share     full=0.737 silent=0.044  diff=+0.692 [+0.523, +0.855]
+    any_reroute        full=0.895 silent=0.133  diff=+0.761 [+0.556, +0.933]
+    time_to_reroute    full=6.706 silent=9.500  diff=-2.794 [-5.382, +0.000]
+    inspect_after      full=2.053 silent=1.933  diff=+0.119 [-0.856, +1.237]
+    time_to_inspect    full=9.357 silent=9.480  diff=-0.123 [-5.343, +5.286]
+    mean_r_check       full=0.937 silent=0.741  diff=+0.196 [+0.150, +0.237]
+
+  manifested=True only: full n=7, silent n=30
+    rerouted_share     full=0.381 silent=0.044  diff=+0.337 [+0.124, +0.538]
+    any_reroute        full=0.714 silent=0.133  diff=+0.581 [+0.186, +0.900]
+    time_to_reroute    full=7.600 silent=9.500  diff=-1.900 [-4.900, +1.800]
+    inspect_after      full=1.143 silent=1.933  diff=-0.790 [-1.562, -0.052]
+    time_to_inspect    full=9.000 silent=9.480  diff=-0.480 [-8.440, +7.840]
+    mean_r_check       full=0.829 silent=0.741  diff=+0.088 [+0.036, +0.142]

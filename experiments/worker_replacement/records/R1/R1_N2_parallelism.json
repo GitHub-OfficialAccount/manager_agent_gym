@@ -1,0 +1,30 @@
+{
+  "check": "N=2 bounded parallelism",
+  "concurrency": 2,
+  "single_episode_baseline_min": 34.3,
+  "episodes": {
+    "A": {
+      "seed": 101,
+      "wall_clock_min": null,
+      "model": "openrouter/deepseek/deepseek-v4-flash-0731",
+      "completions": 13,
+      "n_tasks": 16,
+      "unstaffed": 1,
+      "parsed": 8,
+      "started": "2026-08-07T10:08:19.182099+00:00",
+      "finished": "2026-08-07T10:45:13.673270+00:00"
+    },
+    "B": {
+      "seed": 7,
+      "wall_clock_min": null,
+      "model": "openrouter/deepseek/deepseek-v4-flash-0731",
+      "completions": 16,
+      "n_tasks": 16,
+      "unstaffed": 0,
+      "parsed": 9,
+      "started": "2026-08-07T10:08:21.178431+00:00",
+      "finished": "2026-08-07T10:47:12.550858+00:00"
+    }
+  },
+  "note": "separate processes; bundles predate the item-4 format fix so they are NOT R1 machinery evidence"
+}

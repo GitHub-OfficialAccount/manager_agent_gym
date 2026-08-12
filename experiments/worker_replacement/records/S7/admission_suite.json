@@ -1,0 +1,1276 @@
+{
+  "baseline_shortfall_median": 0.2867631296703639,
+  "baseline_shortfall_min": -1.7763568394002505e-15,
+  "capacity_cap_k6": 3,
+  "failures_by_condition": {
+    "1_bit_identical_regeneration": 0,
+    "2_interior_spread_and_disclosures": 0,
+    "3_scripted_baseline_below_oracle": 6
+  },
+  "generation_rejections": [],
+  "label_trivial_seeds": [
+    0,
+    6,
+    11,
+    17,
+    32,
+    35
+  ],
+  "n": 40,
+  "n_admitted": 34,
+  "n_generated": 40,
+  "rows": [
+    {
+      "admitted": false,
+      "baseline_shortfall": 0.0,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 1.1068975562943386,
+      "ceiling_vs_ignorant_se": 0.0040377099113127896,
+      "ceiling_vs_ignorant_share": 0.13161927788509353,
+      "ceiling_vs_ignorant_share_se": 0.00048011711636226375,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": false
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.5901562895620494,
+      "diagnostic_m_incumbent": 2.4098437104379506,
+      "diagnostic_m_successor": 3.0,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.132 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.40377099113127896,
+      "max_effect_share": 0.13161927788509353,
+      "oracle": 8.40984371043795,
+      "regeneration_detail": "7034 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [
+        "scripted baseline attains oracle \u2014 the instance is solvable from public information alone, so it measures lookup, not management"
+      ],
+      "scripted_baseline_score": 8.40984371043795,
+      "seed": 0
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.15280186821748387,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.6518186305577363,
+      "ceiling_vs_ignorant_se": 0.002467581887984337,
+      "ceiling_vs_ignorant_share": 0.07534983708020437,
+      "ceiling_vs_ignorant_share_se": 0.000285250964800727,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.34943543588656656,
+      "diagnostic_m_incumbent": 2.6505645641134326,
+      "diagnostic_m_successor": 2.999999999999999,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.075 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.24675818879843373,
+      "max_effect_share": 0.07534983708020437,
+      "oracle": 8.650564564113433,
+      "regeneration_detail": "7055 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.497762695895949,
+      "seed": 1
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 1.1017096383031157,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.8745063580216037,
+      "ceiling_vs_ignorant_se": 0.00324886465514902,
+      "ceiling_vs_ignorant_share": 0.10370805862510775,
+      "ceiling_vs_ignorant_share_se": 0.0003852841583490368,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.16542943082664863,
+      "diagnostic_m_incumbent": 2.4323857722844835,
+      "diagnostic_m_successor": 2.597815203111132,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.104 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.32488646551490197,
+      "max_effect_share": 0.10370805862510775,
+      "oracle": 8.432385772284483,
+      "regeneration_detail": "7037 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 7.330676133981368,
+      "seed": 2
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.7398644846533573,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.8247173810229658,
+      "ceiling_vs_ignorant_se": 0.0031594900201513637,
+      "ceiling_vs_ignorant_share": 0.0965010203679323,
+      "ceiling_vs_ignorant_share_se": 0.0003696951438185044,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.26625460543085744,
+      "diagnostic_m_incumbent": 2.546203738349515,
+      "diagnostic_m_successor": 2.8124583437803725,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.097 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.31594900201513637,
+      "max_effect_share": 0.0965010203679323,
+      "oracle": 8.546203738349515,
+      "regeneration_detail": "7030 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 7.806339253696158,
+      "seed": 3
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.13503861279188278,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.6445377904351046,
+      "ceiling_vs_ignorant_se": 0.0025954530260600102,
+      "ceiling_vs_ignorant_share": 0.07557937450430245,
+      "ceiling_vs_ignorant_share_se": 0.0003043463380673026,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.22841194871264836,
+      "diagnostic_m_incumbent": 2.5279587805852177,
+      "diagnostic_m_successor": 2.756370729297866,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.076 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.259545302606001,
+      "max_effect_share": 0.07557937450430245,
+      "oracle": 8.527958780585218,
+      "regeneration_detail": "7049 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.392920167793335,
+      "seed": 4
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.04751438509724082,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 1.0431510246956028,
+      "ceiling_vs_ignorant_se": 0.00429686490858336,
+      "ceiling_vs_ignorant_share": 0.11946102912882105,
+      "ceiling_vs_ignorant_share_se": 0.0004920743898580474,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.25572331280893223,
+      "diagnostic_m_incumbent": 2.7321449706474468,
+      "diagnostic_m_successor": 2.987868283456379,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.119 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.429686490858336,
+      "max_effect_share": 0.11946102912882105,
+      "oracle": 8.732144970647447,
+      "regeneration_detail": "7044 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.684630585550206,
+      "seed": 5
+    },
+    {
+      "admitted": false,
+      "baseline_shortfall": 0.0,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.8881540892072266,
+      "ceiling_vs_ignorant_se": 0.0037446278353041595,
+      "ceiling_vs_ignorant_share": 0.10733429470089906,
+      "ceiling_vs_ignorant_share_se": 0.00045254195471699013,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": false
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.7253465755545951,
+      "diagnostic_m_incumbent": 2.274653424445404,
+      "diagnostic_m_successor": 2.999999999999999,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.107 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.37446278353041595,
+      "max_effect_share": 0.10733429470089906,
+      "oracle": 8.274653424445404,
+      "regeneration_detail": "7057 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [
+        "scripted baseline attains oracle \u2014 the instance is solvable from public information alone, so it measures lookup, not management"
+      ],
+      "scripted_baseline_score": 8.274653424445404,
+      "seed": 6
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.01587617999575386,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.529127152129476,
+      "ceiling_vs_ignorant_se": 0.002502384951662367,
+      "ceiling_vs_ignorant_share": 0.06073730028364342,
+      "ceiling_vs_ignorant_share_se": 0.00028724306742285003,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.2823315785628484,
+      "diagnostic_m_incumbent": 2.7117331468216435,
+      "diagnostic_m_successor": 2.994064725384492,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.061 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.2502384951662367,
+      "max_effect_share": 0.06073730028364342,
+      "oracle": 8.711733146821643,
+      "regeneration_detail": "7052 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.69585696682589,
+      "seed": 7
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.20140249493727502,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 1.1761199689361286,
+      "ceiling_vs_ignorant_se": 0.003964287971228033,
+      "ceiling_vs_ignorant_share": 0.13470034608244608,
+      "ceiling_vs_ignorant_share_se": 0.00045402762966257704,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.26861954596419224,
+      "diagnostic_m_incumbent": 2.7313804540358078,
+      "diagnostic_m_successor": 3.0,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.135 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.3964287971228033,
+      "max_effect_share": 0.13470034608244608,
+      "oracle": 8.731380454035808,
+      "regeneration_detail": "7045 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.529977959098533,
+      "seed": 8
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.24298775187213018,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.7080377848227606,
+      "ceiling_vs_ignorant_se": 0.002818319313787981,
+      "ceiling_vs_ignorant_share": 0.08148751354538995,
+      "ceiling_vs_ignorant_share_se": 0.0003243581602287246,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.2213809170643657,
+      "diagnostic_m_incumbent": 2.688911392889308,
+      "diagnostic_m_successor": 2.9102923099536735,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.081 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.2818319313787981,
+      "max_effect_share": 0.08148751354538995,
+      "oracle": 8.688911392889308,
+      "regeneration_detail": "7063 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.445923641017178,
+      "seed": 9
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.11209288695503616,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.7870912550640048,
+      "ceiling_vs_ignorant_se": 0.0033005846962398115,
+      "ceiling_vs_ignorant_share": 0.09244781493928497,
+      "ceiling_vs_ignorant_share_se": 0.00038767022403850927,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.48610212603806424,
+      "diagnostic_m_incumbent": 2.5138978739619358,
+      "diagnostic_m_successor": 3.0,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.092 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.33005846962398117,
+      "max_effect_share": 0.09244781493928497,
+      "oracle": 8.513897873961936,
+      "regeneration_detail": "7041 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.4018049870069,
+      "seed": 10
+    },
+    {
+      "admitted": false,
+      "baseline_shortfall": 0.0,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.9719567602184966,
+      "ceiling_vs_ignorant_se": 0.003664509168834602,
+      "ceiling_vs_ignorant_share": 0.1163704963163368,
+      "ceiling_vs_ignorant_share_se": 0.00043874456990986434,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": false
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.647738980365185,
+      "diagnostic_m_incumbent": 2.352261019634815,
+      "diagnostic_m_successor": 3.0,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.116 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.3664509168834602,
+      "max_effect_share": 0.1163704963163368,
+      "oracle": 8.352261019634815,
+      "regeneration_detail": "7049 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [
+        "scripted baseline attains oracle \u2014 the instance is solvable from public information alone, so it measures lookup, not management"
+      ],
+      "scripted_baseline_score": 8.352261019634815,
+      "seed": 11
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.4032430688814017,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.7163116433493961,
+      "ceiling_vs_ignorant_se": 0.0031860476926516713,
+      "ceiling_vs_ignorant_share": 0.08237186611320249,
+      "ceiling_vs_ignorant_share_se": 0.00036637781391104683,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.09397512283019527,
+      "diagnostic_m_incumbent": 2.696071573332807,
+      "diagnostic_m_successor": 2.790046696163002,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.082 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.3186047692651671,
+      "max_effect_share": 0.08237186611320249,
+      "oracle": 8.696071573332807,
+      "regeneration_detail": "7070 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.292828504451405,
+      "seed": 12
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.4695294252240263,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.8715648353435119,
+      "ceiling_vs_ignorant_se": 0.003549218372617451,
+      "ceiling_vs_ignorant_share": 0.1011336902356651,
+      "ceiling_vs_ignorant_share_se": 0.0004118403323759071,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.24296750230987918,
+      "diagnostic_m_incumbent": 2.617947523842574,
+      "diagnostic_m_successor": 2.860915026152453,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.101 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.3549218372617451,
+      "max_effect_share": 0.1011336902356651,
+      "oracle": 8.617947523842574,
+      "regeneration_detail": "7209 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.148418098618547,
+      "seed": 13
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.002038468572642671,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.5820287123401187,
+      "ceiling_vs_ignorant_se": 0.0025840529455513476,
+      "ceiling_vs_ignorant_share": 0.06853419078543509,
+      "ceiling_vs_ignorant_share_se": 0.00030427361024518054,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.18022833979556196,
+      "diagnostic_m_incumbent": 2.4925305992496174,
+      "diagnostic_m_successor": 2.6727589390451794,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.069 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.2584052945551348,
+      "max_effect_share": 0.06853419078543509,
+      "oracle": 8.492530599249617,
+      "regeneration_detail": "7223 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.490492130676975,
+      "seed": 14
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.45539469957425815,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.8782851271011234,
+      "ceiling_vs_ignorant_se": 0.0037642648365684987,
+      "ceiling_vs_ignorant_share": 0.10242095168593997,
+      "ceiling_vs_ignorant_share_se": 0.0004389685935270027,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.20910846084131673,
+      "diagnostic_m_incumbent": 2.575248644381535,
+      "diagnostic_m_successor": 2.7843571052228517,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.102 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.3764264836568499,
+      "max_effect_share": 0.10242095168593997,
+      "oracle": 8.575248644381535,
+      "regeneration_detail": "7200 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.119853944807277,
+      "seed": 15
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.0278785431942552,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 1.1848724851018186,
+      "ceiling_vs_ignorant_se": 0.0055971931979098225,
+      "ceiling_vs_ignorant_share": 0.13830829241720932,
+      "ceiling_vs_ignorant_share_se": 0.0006533515152608202,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.43310596643308497,
+      "diagnostic_m_incumbent": 2.566894033566914,
+      "diagnostic_m_successor": 2.999999999999999,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.138 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.5597193197909822,
+      "max_effect_share": 0.13830829241720932,
+      "oracle": 8.566894033566914,
+      "regeneration_detail": "7017 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.539015490372659,
+      "seed": 16
+    },
+    {
+      "admitted": false,
+      "baseline_shortfall": 0.0,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.4242643700922457,
+      "ceiling_vs_ignorant_se": 0.002052146089156911,
+      "ceiling_vs_ignorant_share": 0.05064520832944436,
+      "ceiling_vs_ignorant_share_se": 0.0002449684053959303,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": false
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.21509815600425597,
+      "diagnostic_m_incumbent": 2.3771867879865116,
+      "diagnostic_m_successor": 2.5922849439907676,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.051 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.2052146089156911,
+      "max_effect_share": 0.05064520832944436,
+      "oracle": 8.377186787986512,
+      "regeneration_detail": "7075 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [
+        "scripted baseline attains oracle \u2014 the instance is solvable from public information alone, so it measures lookup, not management"
+      ],
+      "scripted_baseline_score": 8.377186787986512,
+      "seed": 17
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.09955478529592554,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 1.3257047506040855,
+      "ceiling_vs_ignorant_se": 0.004921358892070724,
+      "ceiling_vs_ignorant_share": 0.15806292993996737,
+      "ceiling_vs_ignorant_share_se": 0.0005867704746568577,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.5003412817201198,
+      "diagnostic_m_incumbent": 2.3871958536235596,
+      "diagnostic_m_successor": 2.8875371353436794,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.158 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.4921358892070724,
+      "max_effect_share": 0.15806292993996737,
+      "oracle": 8.38719585362356,
+      "regeneration_detail": "7062 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.287641068327634,
+      "seed": 18
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.110986179576269,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.9959478695394983,
+      "ceiling_vs_ignorant_se": 0.0038356260643458593,
+      "ceiling_vs_ignorant_share": 0.11471662943652321,
+      "ceiling_vs_ignorant_share_se": 0.00044180032644086447,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.31819096820141723,
+      "diagnostic_m_incumbent": 2.6818090317985828,
+      "diagnostic_m_successor": 3.0,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.115 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.38356260643458595,
+      "max_effect_share": 0.11471662943652321,
+      "oracle": 8.681809031798583,
+      "regeneration_detail": "7036 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.570822852222314,
+      "seed": 19
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.5345598202943371,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.5384534989301599,
+      "ceiling_vs_ignorant_se": 0.002493945428497625,
+      "ceiling_vs_ignorant_share": 0.06230250737240013,
+      "ceiling_vs_ignorant_share_se": 0.0002885654076982613,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.047659052463732365,
+      "diagnostic_m_incumbent": 2.6425654703055113,
+      "diagnostic_m_successor": 2.6902245227692436,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.062 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.24939454284976248,
+      "max_effect_share": 0.06230250737240013,
+      "oracle": 8.642565470305511,
+      "regeneration_detail": "7075 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.108005650011174,
+      "seed": 20
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.6646665394905273,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.9586917825543493,
+      "ceiling_vs_ignorant_se": 0.004211440557073691,
+      "ceiling_vs_ignorant_share": 0.11807438641024398,
+      "ceiling_vs_ignorant_share_se": 0.0005186893939518062,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.8806117761779495,
+      "diagnostic_m_incumbent": 2.1193882238220496,
+      "diagnostic_m_successor": 2.999999999999999,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.118 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.4211440557073691,
+      "max_effect_share": 0.11807438641024398,
+      "oracle": 8.11938822382205,
+      "regeneration_detail": "7067 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 7.454721684331522,
+      "seed": 21
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.7237585565935882,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 1.1014367524485476,
+      "ceiling_vs_ignorant_se": 0.0043351962666394375,
+      "ceiling_vs_ignorant_share": 0.128374648498357,
+      "ceiling_vs_ignorant_share_se": 0.0005052757642815492,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.20992262232428072,
+      "diagnostic_m_incumbent": 2.5798618756307192,
+      "diagnostic_m_successor": 2.789784497955,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.128 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.4335196266639437,
+      "max_effect_share": 0.128374648498357,
+      "oracle": 8.57986187563072,
+      "regeneration_detail": "7064 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 7.856103319037131,
+      "seed": 22
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.18382091954305757,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.452238471401877,
+      "ceiling_vs_ignorant_se": 0.0018428163431956596,
+      "ceiling_vs_ignorant_share": 0.05164329468784564,
+      "ceiling_vs_ignorant_share_se": 0.0002104400962886249,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.2430360197698178,
+      "diagnostic_m_incumbent": 2.756963980230182,
+      "diagnostic_m_successor": 3.0,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.052 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.18428163431956596,
+      "max_effect_share": 0.05164329468784564,
+      "oracle": 8.756963980230182,
+      "regeneration_detail": "7049 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.573143060687125,
+      "seed": 23
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.32628797525911146,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 1.0327197796009386,
+      "ceiling_vs_ignorant_se": 0.0037191756591895054,
+      "ceiling_vs_ignorant_share": 0.12362183860418684,
+      "ceiling_vs_ignorant_share_se": 0.00044520434503405085,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.64613800230308,
+      "diagnostic_m_incumbent": 2.353861997696921,
+      "diagnostic_m_successor": 3.000000000000001,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.124 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.37191756591895053,
+      "max_effect_share": 0.12362183860418684,
+      "oracle": 8.35386199769692,
+      "regeneration_detail": "7210 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.02757402243781,
+      "seed": 24
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.7986783736842789,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.8139222088865843,
+      "ceiling_vs_ignorant_se": 0.004238599542201637,
+      "ceiling_vs_ignorant_share": 0.09136342028455091,
+      "ceiling_vs_ignorant_share_se": 0.00047578619573708535,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.09137763941380861,
+      "diagnostic_m_incumbent": 2.9086223605861914,
+      "diagnostic_m_successor": 3.0,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.091 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.4238599542201637,
+      "max_effect_share": 0.09136342028455091,
+      "oracle": 8.908622360586191,
+      "regeneration_detail": "7043 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.109943986901913,
+      "seed": 25
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.2867631296703639,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.9143975450052402,
+      "ceiling_vs_ignorant_se": 0.004065555598563203,
+      "ceiling_vs_ignorant_share": 0.10401810467636809,
+      "ceiling_vs_ignorant_share_se": 0.0004624808871468679,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.20924623794858999,
+      "diagnostic_m_incumbent": 2.790753762051411,
+      "diagnostic_m_successor": 3.000000000000001,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.104 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.4065555598563203,
+      "max_effect_share": 0.10401810467636809,
+      "oracle": 8.790753762051411,
+      "regeneration_detail": "7219 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.503990632381047,
+      "seed": 26
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 1.0323048592151727,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.831939505148382,
+      "ceiling_vs_ignorant_se": 0.0034601360776729375,
+      "ceiling_vs_ignorant_share": 0.09596998826612904,
+      "ceiling_vs_ignorant_share_se": 0.0003991506794887145,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.33125344517729083,
+      "diagnostic_m_incumbent": 2.668746554822709,
+      "diagnostic_m_successor": 3.0,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.096 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.34601360776729373,
+      "max_effect_share": 0.09596998826612904,
+      "oracle": 8.66874655482271,
+      "regeneration_detail": "7192 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 7.6364416956075365,
+      "seed": 27
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.09825470642622847,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.785941167014605,
+      "ceiling_vs_ignorant_se": 0.0034987799629263624,
+      "ceiling_vs_ignorant_share": 0.0898138542586715,
+      "ceiling_vs_ignorant_share_se": 0.0003998249829145149,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.24922125320412025,
+      "diagnostic_m_incumbent": 2.750778746795879,
+      "diagnostic_m_successor": 2.999999999999999,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.090 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.3498779962926362,
+      "max_effect_share": 0.0898138542586715,
+      "oracle": 8.750778746795879,
+      "regeneration_detail": "7189 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.65252404036965,
+      "seed": 28
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.5055747245037274,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.974641317235851,
+      "ceiling_vs_ignorant_se": 0.0042172865860931495,
+      "ceiling_vs_ignorant_share": 0.11378547603528501,
+      "ceiling_vs_ignorant_share_se": 0.0004923513432990543,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.1107847991325075,
+      "diagnostic_m_incumbent": 2.565603899513622,
+      "diagnostic_m_successor": 2.6763886986461296,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.114 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.4217286586093149,
+      "max_effect_share": 0.11378547603528501,
+      "oracle": 8.565603899513622,
+      "regeneration_detail": "7244 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.060029175009895,
+      "seed": 29
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 1.1905384557228542,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 1.4368809027435594,
+      "ceiling_vs_ignorant_se": 0.004873688707493973,
+      "ceiling_vs_ignorant_share": 0.17628042861770402,
+      "ceiling_vs_ignorant_share_se": 0.0005979172892240964,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.7366564966697551,
+      "diagnostic_m_incumbent": 2.1511085150564018,
+      "diagnostic_m_successor": 2.887765011726157,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.176 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.48736887074939733,
+      "max_effect_share": 0.17628042861770402,
+      "oracle": 8.151108515056402,
+      "regeneration_detail": "7018 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 6.9605700593335476,
+      "seed": 30
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.7683339737829407,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 1.1787381338183813,
+      "ceiling_vs_ignorant_se": 0.005193107104582969,
+      "ceiling_vs_ignorant_share": 0.14152227565670872,
+      "ceiling_vs_ignorant_share_se": 0.0006234975471514203,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.3940794443683755,
+      "diagnostic_m_incumbent": 2.3289936396843434,
+      "diagnostic_m_successor": 2.723073084052719,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.142 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.5193107104582969,
+      "max_effect_share": 0.14152227565670872,
+      "oracle": 8.328993639684343,
+      "regeneration_detail": "7050 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 7.560659665901403,
+      "seed": 31
+    },
+    {
+      "admitted": false,
+      "baseline_shortfall": 0.0,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.9333466198271125,
+      "ceiling_vs_ignorant_se": 0.0032680039967968684,
+      "ceiling_vs_ignorant_share": 0.11487439860436902,
+      "ceiling_vs_ignorant_share_se": 0.0004022192675195558,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": false
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.6890843304227436,
+      "diagnostic_m_incumbent": 2.124931500547717,
+      "diagnostic_m_successor": 2.814015830970461,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.115 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.3268003996796868,
+      "max_effect_share": 0.11487439860436902,
+      "oracle": 8.124931500547717,
+      "regeneration_detail": "7024 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [
+        "scripted baseline attains oracle \u2014 the instance is solvable from public information alone, so it measures lookup, not management"
+      ],
+      "scripted_baseline_score": 8.124931500547717,
+      "seed": 32
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.6820633793895059,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.7202657582837135,
+      "ceiling_vs_ignorant_se": 0.0030946526353241356,
+      "ceiling_vs_ignorant_share": 0.08527955762646212,
+      "ceiling_vs_ignorant_share_se": 0.0003664072666412288,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.3397908996940995,
+      "diagnostic_m_incumbent": 2.4459368497030773,
+      "diagnostic_m_successor": 2.785727749397177,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.085 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.30946526353241355,
+      "max_effect_share": 0.08527955762646212,
+      "oracle": 8.445936849703077,
+      "regeneration_detail": "7236 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 7.7638734703135714,
+      "seed": 33
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.29147524930128554,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.5634247185492862,
+      "ceiling_vs_ignorant_se": 0.0026211548048036474,
+      "ceiling_vs_ignorant_share": 0.06590132751967362,
+      "ceiling_vs_ignorant_share_se": 0.000306585024732139,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.13940139007542918,
+      "diagnostic_m_incumbent": 2.549520013554904,
+      "diagnostic_m_successor": 2.6889214036303333,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.066 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.26211548048036476,
+      "max_effect_share": 0.06590132751967362,
+      "oracle": 8.549520013554904,
+      "regeneration_detail": "7034 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.258044764253619,
+      "seed": 34
+    },
+    {
+      "admitted": false,
+      "baseline_shortfall": -1.7763568394002505e-15,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.9602241625750771,
+      "ceiling_vs_ignorant_se": 0.0034936462377676207,
+      "ceiling_vs_ignorant_share": 0.11711107840432802,
+      "ceiling_vs_ignorant_share_se": 0.00042609287957404385,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": false
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.14046889590422662,
+      "diagnostic_m_incumbent": 2.1992598450838834,
+      "diagnostic_m_successor": 2.33972874098811,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.117 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.3493646237767621,
+      "max_effect_share": 0.11711107840432802,
+      "oracle": 8.199259845083883,
+      "regeneration_detail": "7058 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [
+        "scripted baseline attains oracle \u2014 the instance is solvable from public information alone, so it measures lookup, not management"
+      ],
+      "scripted_baseline_score": 8.199259845083885,
+      "seed": 35
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 1.0258256318849401,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 1.1969815807785844,
+      "ceiling_vs_ignorant_se": 0.003906025877527923,
+      "ceiling_vs_ignorant_share": 0.13338772636845928,
+      "ceiling_vs_ignorant_share_se": 0.0004352747939537361,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.026298945435646814,
+      "diagnostic_m_incumbent": 2.973701054564353,
+      "diagnostic_m_successor": 3.0,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.133 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.39060258775279233,
+      "max_effect_share": 0.13338772636845928,
+      "oracle": 8.973701054564353,
+      "regeneration_detail": "7039 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 7.947875422679413,
+      "seed": 36
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.7193863814264203,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.5884078816179352,
+      "ceiling_vs_ignorant_se": 0.0024024033479614036,
+      "ceiling_vs_ignorant_share": 0.06853609912668977,
+      "ceiling_vs_ignorant_share_se": 0.00027982520143244016,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.30516241002896205,
+      "diagnostic_m_incumbent": 2.585371637948878,
+      "diagnostic_m_successor": 2.89053404797784,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.069 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.24024033479614035,
+      "max_effect_share": 0.06853609912668977,
+      "oracle": 8.585371637948878,
+      "regeneration_detail": "7228 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 7.865985256522458,
+      "seed": 37
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.24936265594301865,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 0.7998171659750204,
+      "ceiling_vs_ignorant_se": 0.004065910791129648,
+      "ceiling_vs_ignorant_share": 0.09122967669416468,
+      "ceiling_vs_ignorant_share_se": 0.00046377064999584904,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.18921624753947963,
+      "diagnostic_m_incumbent": 2.767072239621113,
+      "diagnostic_m_successor": 2.9562884871605926,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.091 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.40659107911296477,
+      "max_effect_share": 0.09122967669416468,
+      "oracle": 8.767072239621113,
+      "regeneration_detail": "7082 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 8.517709583678094,
+      "seed": 38
+    },
+    {
+      "admitted": true,
+      "baseline_shortfall": 0.6019771501506197,
+      "below_provisional_mde": true,
+      "ceiling_vs_ignorant": 1.4416500369172338,
+      "ceiling_vs_ignorant_se": 0.005328357982370723,
+      "ceiling_vs_ignorant_share": 0.16892951813157017,
+      "ceiling_vs_ignorant_share_se": 0.0006243657776468174,
+      "conditions": {
+        "1_bit_identical_regeneration": true,
+        "2_interior_spread_and_disclosures": true,
+        "3_scripted_baseline_below_oracle": true
+      },
+      "declared_mde": 0.2,
+      "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
+      "diagnostic_coverage_attributable": 0.45325708331377346,
+      "diagnostic_m_incumbent": 2.5340327307061266,
+      "diagnostic_m_successor": 2.9872898140199,
+      "flags": [
+        "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.169 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+      ],
+      "generated": true,
+      "ignorant_draws": 10000,
+      "ignorant_per_draw_sd": 0.5328357982370723,
+      "max_effect_share": 0.16892951813157017,
+      "oracle": 8.534032730706127,
+      "regeneration_detail": "7025 bytes across PYTHONHASHSEED ('1', '99')",
+      "rejection_reasons": [],
+      "scripted_baseline_score": 7.932055580555507,
+      "seed": 39
+    }
+  ]
+}
