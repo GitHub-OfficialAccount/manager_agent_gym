@@ -88,18 +88,6 @@ async def test_expose_system_prompts_opt_in() -> None:
     assert obs.available_agent_metadata[0].system_prompt == "SECRET WORKER POLICY"
 
 
-@pytest.mark.asyncio
-async def test_id_only_metadata_level() -> None:
-    w = Workflow(name="w", workflow_goal="g", owner_id=uuid4())
-    w.add_agent(_Worker("w1"))
-    mgr = _Mgr()
-    mgr.set_observation_policy(ObservationPolicy(worker_metadata="id_only"))
-    obs = await _observe(mgr, w)
-    cfg = obs.available_agent_metadata[0]
-    assert cfg.agent_id == "w1"
-    assert cfg.agent_description == ""
-    assert cfg.agent_capabilities == []
-    assert cfg.system_prompt == "[REDACTED]"
 
 
 @pytest.mark.asyncio

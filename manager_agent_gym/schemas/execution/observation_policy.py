@@ -20,7 +20,6 @@ from pydantic import BaseModel, Field, PrivateAttr
 if TYPE_CHECKING:
     from ...core.communication.service import CommunicationService
 
-WorkerMetadataLevel = Literal["id_only", "capabilities", "full"]
 class WorkerObservationDisclosure(BaseModel):
     """A scheduled change to one worker's manager-visible projection."""
 
@@ -63,27 +62,10 @@ class ObservationPolicy(BaseModel):
             "directly."
         ),
     )
-    worker_metadata: WorkerMetadataLevel = Field(
-        default="capabilities",
-        description=(
-            "How much per-worker metadata the manager sees: 'id_only' (just agent "
-            "ids/types), 'capabilities' (ids + description + declared capabilities; "
-            "matches baseline behavior), or 'full' (entire config, minus system "
-            "prompt unless separately exposed)."
-        ),
-    )
     message_window: int = Field(
         default=10,
         ge=0,
         description="How many recent messages the manager sees each timestep",
-    )
-    quality_digest: str = Field(
-        default="none",
-        description=(
-            "Per-worker quality signal in the observation: 'none' (blind) or "
-            "'per_worker' (a recent-correctness summary per worker). The detection "
-            "channel for teammate-change experiments; populated by the engine."
-        ),
     )
     scheduled_worker_disclosures: list[WorkerObservationDisclosure] = Field(
         default_factory=list,
@@ -158,7 +140,4 @@ class ObservationPolicy(BaseModel):
             updates["agent_description"] = description_override
         if not self.expose_worker_system_prompts:
             updates["system_prompt"] = "[REDACTED]"
-        if self.worker_metadata == "id_only":
-            updates["agent_description"] = ""
-            updates["agent_capabilities"] = []
         return config.model_copy(update=updates) if updates else config
