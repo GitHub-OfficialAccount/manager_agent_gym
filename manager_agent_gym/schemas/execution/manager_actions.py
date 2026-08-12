@@ -70,42 +70,6 @@ class ActionResult(BaseModel):
     )
 
 
-def record_assignment(
-    *,
-    task: Any,
-    to_agent: str | None,
-    from_agent: str | None,
-    action_type: str,
-    applied: bool,
-    reason: str = "",
-) -> None:
-    """LOGGING RECORD 6 — the assignment that was MADE (L7).
-
-    WHY THIS DID NOT EXIST AND WHY THAT MATTERED. The only assignment-shaped event
-    in the fork was `assignment_deferred`, a REFUSAL: **we logged the assignments
-    that were rejected and not the ones that were made.** The brief
-    (`STUDY1_FOUNDATION.md` §5) names `rerouted_share` — did the manager move work
-    off the newcomer — as the PRIMARY DV, and it was neither implemented nor
-    loggable. What survived in a bundle was `task_board_final`, a terminal
-    snapshot, in which a task assigned once and a task reassigned three times are
-    indistinguishable. The regret decomposition was then used as a stand-in, and
-    every failure in that chain was an un-mixing failure: an outcome aggregate
-    cannot be made to yield allocation behaviour.
-
-    REQUESTED **AND** APPLIED, ALWAYS BOTH. `AssignTasksToAgentsAction` silently
-    skips missing, terminal and unknown-agent pairs; a record of only what landed
-    would make a skipped assignment indistinguishable from one never attempted,
-    which is the same shape of error one level down. `applied=False` rows carry the
-    reason.
-
-    `from_agent` IS THE PREVIOUS ASSIGNEE, READ BEFORE THE MUTATION. Without it a
-    reassignment cannot be told from a first assignment, and the FORCED-versus-
-    DISCRETIONARY split the DV depends on is exactly that distinction.
-
-    Called from EVERY site that mutates `assigned_agent_id`, deliberately: a record
-    that existed for one action type and not another would make the DV a function
-    of which action the manager happened to choose.
-    """
 class BaseManagerAction(BaseModel, ABC):
     """
     Base class for all manager actions.
@@ -194,10 +158,6 @@ class AssignTaskAction(BaseManagerAction):
             # task through `getattr` throughout, so a missing task records as a
             # requested-but-unapplied row with empty task fields rather than
             # raising -- an attempt that names no known task is still an attempt.
-            record_assignment(
-                task=None, to_agent=self.agent_id, from_agent=None,
-                action_type=self.action_type, applied=False,
-                reason="task_not_in_workflow")
             return ActionResult(
                 summary=f"Failed: Task {self.task_id} not found in workflow from set of all tasks: {workflow.tasks.keys()}",
                 kind="failed_action",
@@ -230,11 +190,6 @@ class AssignTaskAction(BaseManagerAction):
             # assignable so the refusal bucket fills -- fails the production test:
             # a real orchestrator deregisters a leaver and rejects assignment to
             # an unknown id. Recording the rejected attempt is what it does anyway.
-            record_assignment(
-                task=workflow.tasks[task_uuid], to_agent=self.agent_id,
-                from_agent=workflow.tasks[task_uuid].assigned_agent_id,
-                action_type=self.action_type, applied=False,
-                reason="agent_not_in_workflow")
             return ActionResult(
                 summary=f"Failed: Agent {self.agent_id} not found in workflow from set of all agents: {workflow.agents.keys()}",
                 kind="failed_action",
@@ -246,9 +201,6 @@ class AssignTaskAction(BaseManagerAction):
         # Execute assignment. The previous assignee is read BEFORE the mutation —
         # after it, a reassignment is indistinguishable from a first assignment.
         target = workflow.tasks[task_uuid]
-        record_assignment(task=target, to_agent=self.agent_id,
-                          from_agent=target.assigned_agent_id,
-                          action_type=self.action_type, applied=True)
         workflow.tasks[task_uuid].assigned_agent_id = self.agent_id
         logger.info(f"Task {self.task_id} assigned to agent {self.agent_id}")
         summary = f"Assigned task {self.task_id} to {self.agent_id}"
@@ -327,10 +279,6 @@ class RetryTaskAction(BaseManagerAction):
             # A RETRY THAT NAMES A NEW AGENT IS A REASSIGNMENT. Logged here too,
             # or the DV would depend on which action the manager reached for to
             # move the same piece of work.
-            record_assignment(task=task, to_agent=self.agent_id,
-                              from_agent=previous_agent_id,
-                              action_type=self.action_type, applied=True,
-                              reason="retry with replacement agent")
             task.assigned_agent_id = self.agent_id
         task.status = TaskStatus.PENDING
         task.effective_status = TaskStatus.PENDING.value
@@ -401,10 +349,6 @@ class AssignAllPendingTasksAction(BaseManagerAction):
                 TaskStatus.FAILED,
             ):
                 continue
-            record_assignment(task=task, to_agent=target_agent_id,
-                              from_agent=task.assigned_agent_id,
-                              action_type=self.action_type, applied=True,
-                              reason="bulk assignment of unassigned tasks")
             task.assigned_agent_id = target_agent_id
             assigned_count += 1
 
@@ -456,30 +400,13 @@ class AssignTasksToAgentsAction(BaseManagerAction):
             # not having tried.
             if task is None:
                 skipped.append(f"missing:{pair.task_id}")
-                record_assignment(
-                    task=None, to_agent=pair.agent_id, from_agent=None,
-                    action_type=self.action_type, applied=False,
-                    reason=f"missing task {pair.task_id}")
                 continue
             if task.status in (TaskStatus.COMPLETED, TaskStatus.FAILED):
                 skipped.append(f"terminal:{pair.task_id}")
-                record_assignment(
-                    task=task, to_agent=pair.agent_id,
-                    from_agent=task.assigned_agent_id,
-                    action_type=self.action_type, applied=False,
-                    reason=f"task already {task.status.value}")
                 continue
             if pair.agent_id not in workflow.agents:
                 skipped.append(f"no_agent:{pair.agent_id}")
-                record_assignment(
-                    task=task, to_agent=pair.agent_id,
-                    from_agent=task.assigned_agent_id,
-                    action_type=self.action_type, applied=False,
-                    reason=f"no such agent {pair.agent_id}")
                 continue
-            record_assignment(task=task, to_agent=pair.agent_id,
-                              from_agent=task.assigned_agent_id,
-                              action_type=self.action_type, applied=True)
             task.assigned_agent_id = pair.agent_id
             assigned += 1
 

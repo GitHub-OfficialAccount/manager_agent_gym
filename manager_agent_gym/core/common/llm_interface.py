@@ -73,36 +73,7 @@ _client_cache: dict[Any, Any] = {}
 # quantizations, so which backend answered is provenance: it can change the
 # output of a byte-identical temperature-0 request. Read-only -- nothing here
 # alters the request we send.
-_last_serving_backend: ContextVar[dict[str, Any] | None] = ContextVar(
-    "last_serving_backend", default=None
-)
 
-
-async def _capture_serving_backend(response: Any) -> None:
-    """httpx response hook: record which backend answered. Never raises."""
-    try:
-        if response.status_code >= 400:
-            return
-        await response.aread()  # cached by httpx; the caller still reads it
-        payload = response.json()
-        if not isinstance(payload, dict):
-            return
-        usage = payload.get("usage") or {}
-        details = usage.get("prompt_tokens_details") or {}
-        _last_serving_backend.set(
-            {
-                "provider": payload.get("provider"),
-                "served_model": payload.get("model"),
-                "generation_id": payload.get("id"),
-                # Prefix-cache state. Recorded because it is provenance: a warm
-                # prefix can change a temperature-0 verdict, and hit rates rise
-                # across an episode as similar prompts accumulate.
-                "cached_tokens": details.get("cached_tokens"),
-                "prompt_tokens": usage.get("prompt_tokens"),
-            }
-        )
-    except Exception:  # observability must never break a call
-        pass
 
 
 def _get_openai_client(
@@ -129,7 +100,7 @@ def _get_openai_client(
         import httpx  # type: ignore
 
         http_client: Any = httpx.AsyncClient(
-            timeout=300.0, event_hooks={"response": [_capture_serving_backend]}
+            timeout=300.0
         )
     except Exception:  # pragma: no cover - httpx ships with the OpenAI SDK
         http_client = None
@@ -212,7 +183,6 @@ async def generate_structured_response(
         "max_retries": max_retries,
     }
 
-    _last_serving_backend.set(None)
     try:
         kwargs: dict[str, Any] = {
             "model": route.wire_model,

@@ -245,22 +245,3 @@ async def test_live_anthropic_returns_pydantic() -> None:
     assert len(user.foo) > 0
 
 
-@pytest.mark.asyncio
-async def test_serving_backend_capture_never_raises() -> None:
-    """Attribution is best-effort: a malformed response must not fail a call."""
-    import importlib
-
-    llm_iface = importlib.import_module("manager_agent_gym.core.common.llm_interface")
-
-    class _Broken:
-        status_code = 200
-
-        async def aread(self) -> None:
-            return None
-
-        def json(self) -> Any:
-            raise ValueError("not json")
-
-    llm_iface._last_serving_backend.set(None)
-    await llm_iface._capture_serving_backend(_Broken())
-    assert llm_iface._last_serving_backend.get() is None
