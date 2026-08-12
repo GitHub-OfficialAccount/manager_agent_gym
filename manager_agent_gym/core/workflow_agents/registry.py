@@ -48,7 +48,6 @@ class AgentRegistry:
         self._scheduled_changes: dict[int, list[ScheduledAgentChange]] = {}
         self._executed_change_timesteps: set[int] = set()
         # Named tools, so serializable schedules can reference tool objects by id
-        # (used by tool-swap perturbations).
         self._tool_registry: dict[str, object] = {}
 
     def register_tool(self, tool_id: str, tool: object) -> None:
