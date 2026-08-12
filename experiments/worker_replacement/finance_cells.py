@@ -53,7 +53,9 @@ never "channel X had no effect".
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, replace
+from pathlib import Path
 from typing import Any
 
 from manager_agent_gym.core.workflow_agents.registry import AgentRegistry
@@ -191,21 +193,102 @@ def active_roster(instance: dict[str, Any], cell: Cell) -> list[str]:
                 else event["roster_post_swap"])
 
 
+# ---------------------------------------------------------------------------
+# THE SELECTION RECORD IS THE AUTHORITY ON WHAT WE RUN (L17, LS ruling)
+#
+# The approved draw fixes BOTH which seeds run and the generator setting they were
+# drawn under. Threading that setting through the build path makes a mismatch
+# unlikely; this makes it UNSHIPPABLE. The distinction earned its place: threading
+# is the fix that was applied to this same function once before, for the lattice,
+# and it did not hold when four more parameters arrived.
+#
+# THE EVIDENCE ALREADY EXISTED AND NOTHING COMPARED IT (LS). Every bundle manifest
+# records `instance_sha256`, so today's mismatch would have been recoverable from
+# the artefact afterwards -- and flagged by nothing. A recorded fact nobody
+# compares is the shape we keep finding.
+SELECTION_RECORD = (Path(__file__).resolve().parent / "records" / "L10"
+                    / "environment_selection_v2.json")
+
+
+def shipped_setting(record_path: Path = SELECTION_RECORD) -> dict[str, Any]:
+    """The generator setting the approved draw was made under. One object."""
+    return json.loads(record_path.read_text())["setting"]
+
+
+def shipped_seeds(record_path: Path = SELECTION_RECORD) -> list[int]:
+    return [row["seed"] for row in
+            json.loads(record_path.read_text())["chosen"]]
+
+
+def assert_matches_selection(seed: int, instance: dict[str, Any],
+                             record_path: Path = SELECTION_RECORD) -> dict[str, Any]:
+    """REFUSE unless this instance is the one the selection record specifies.
+
+    Compares against an instance REBUILT FROM THE RECORD'S OWN SETTING rather than
+    against a stored hash, because the approved record does not carry one -- and
+    re-deriving an approved artefact to add a field is a worse trade than deriving
+    the expectation from what it already states.
+
+    Raises rather than warning. A run that has already spent money and then reports
+    a mismatch is the failure this exists to prevent, so it fires BEFORE the first
+    timestep and stops the episode.
+    """
+    setting = shipped_setting(record_path)
+    expected = env.instance_hash(gen.generate(seed, **setting))
+    actual = env.instance_hash(instance)
+    if expected != actual:
+        raise ValueError(
+            f"INSTANCE MISMATCH for seed {seed}: this run built {actual[:16]} but "
+            f"{record_path.name} selected {expected[:16]}. The selection record's "
+            f"setting is {setting}. Refusing to run -- selecting on one population "
+            f"and running on another is not a degraded run, it is a run of "
+            f"something nobody chose."
+        )
+    return {"instance_sha256": actual, "selection_record": record_path.name,
+            "setting": setting, "matches_selection": True}
+
+
 def build_cell_environment(seed: int, cell_name: str,
-                           lattice: str = gen.DEFAULT_LATTICE,
-                           shared_class_segments: int = 4) -> dict[str, Any]:
+                           lattice: str | None = None,
+                           shared_class_segments: int | None = None,
+                           **instance_kwargs: Any) -> dict[str, Any]:
     """A runnable environment for (instance seed, cell). The single entry point.
 
-    THE ARRANGEMENT IS A PARAMETER, and it was not. This called `gen.generate(seed)`
-    bare, so a study run built the DEFAULT lattice no matter which arrangement had
-    been selected -- and it is the path the study actually uses, since study cells
-    go through here rather than through `build_environment`. See that function for
-    the measurement: under the default, one of the three seeds authorised for the
-    partial-overlap run is a ZERO-CEILING instance.
+    ★ THE WHOLE SETTING IS ONE OBJECT NOW, AND THAT IS THE POINT (L17). This took
+    `lattice` and `shared_class_segments` as named parameters and passed ONLY those
+    two to `generate()`. The shipped setting has SIX. The other four fell back to
+    generator defaults, so the runner built a different instance from the one the
+    draw selected:
+
+        seed 42   drawn on  ef25aa9d  ceiling 0.04970
+                  built     ce61d5b5  ceiling 0.02632   <- BELOW the 0.03238 floor
+                                                           that selected it
+
+    Not a degraded run -- a run of something we never chose.
+
+    THIS IS THE SECOND TIME THE SAME FIX WAS APPLIED HERE. The paragraph this
+    replaces read: "THE ARRANGEMENT IS A PARAMETER, and it was not. This called
+    `gen.generate(seed)` bare, so a study run built the DEFAULT lattice no matter
+    which arrangement had been selected." The lattice was threaded; the four
+    amplifiers arrived later and were not. **Threading parameters ONE AT A TIME is
+    the bug, not the missing parameter** -- every new generator knob re-opens it at
+    every hop.
+
+    So the signature now takes `**instance_kwargs` and forwards the lot. The two
+    named parameters are kept for existing callers and default to None, meaning
+    "not specified", rather than to a value that silently disagrees with the
+    selection record.
+
+    THREADING ALONE IS NOT THE FIX AND WAS NOT LAST TIME EITHER. The run-start hash
+    assertion in `run_finance_episode` is what makes this unshippable rather than
+    merely unlikely -- see `assert_matches_selection`.
     """
     cell = CELLS[cell_name]
-    instance = gen.generate(seed, lattice=lattice,
-                            shared_class_segments=shared_class_segments)
+    if lattice is not None:
+        instance_kwargs["lattice"] = lattice
+    if shared_class_segments is not None:
+        instance_kwargs["shared_class_segments"] = shared_class_segments
+    instance = gen.generate(seed, **instance_kwargs)
     workflow, index = env.build_workflow(instance)
 
     if not cell.declaration_present:

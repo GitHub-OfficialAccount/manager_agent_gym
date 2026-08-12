@@ -196,6 +196,61 @@ class CapacityBoundedAIAgent(AIAgent):
     # worker's approvals score the rough method, a worse number, WHICH IS THE DV.
     # We do not manufacture a constraint so a bad decision emits an error code.
 
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Drop the DUPLICATE tools upstream hands every worker (L18).
+
+        MEASURED ON REAL BUNDLES, not inferred: `worker_execution_started` records
+        the tool list, and on every worker run of both committed bundles it is
+
+            send_message, broadcast_message, get_recent_messages,
+            get_conversation_with, get_task_messages,
+            send_message, broadcast_message, get_recent_messages
+
+        -- 8 entries, 3 of them repeats. `registry` builds the five via
+        `add_communication_tools`, then `AIAgent.__init__` appends
+        `COMMUNICATION_TOOLS` unconditionally, which re-adds three of the same five.
+
+        A duplicated tool is a second identical option in the model's choice set:
+        no capability is added and the decision is made harder for free.
+
+        DEDUPLICATION IS NOT REMOVAL, and that distinction is the core-tools rule.
+        All five survive. Cell 3 is the ASK channel and needs the worker to receive
+        and answer, so removing messaging would break the study rather than simplify
+        it. This drops repeats only, keeping FIRST occurrence so ordering is stable.
+
+        FIXED HERE RATHER THAN UPSTREAM so the fork stays close to origin; if this
+        ever needs to move into `ai_agent.py` it goes in CHANGED.md.
+
+        ★ AND THE BIGGER THING THE SAME EVIDENCE SHOWS, which is NOT fixed here
+        because it is a design question rather than a bug: all eight tools are
+        MESSAGING. The registry passes `tools=[]` as the base, so
+        `ToolFactory.create_ai_tools()` -- search, analyse, calculate, generate --
+        never reaches a worker on this path. A worker asked to compute Basel RWA
+        holds nothing but ways to talk about it. That is consistent with the
+        calculator no-go (the model does exact algebra in context) and it may be
+        deliberate, but it means the entire tool surface is irrelevant to the task,
+        which is a plausible driver of turn-burning and is worth a decision.
+        """
+        super().__init__(*args, **kwargs)
+        seen: set[str] = set()
+        deduped = []
+        for tool in self.tools:
+            name = getattr(tool, "name", None) or getattr(tool, "__name__", repr(tool))
+            if name in seen:
+                continue
+            seen.add(name)
+            deduped.append(tool)
+        self._duplicate_tools_dropped = len(self.tools) - len(deduped)
+        self.tools = deduped
+        # The SDK agent was already constructed from the un-deduped list, so it
+        # must be rebuilt or this changes only the record and not the model's
+        # choice set -- which would be a fix that reports success and does nothing.
+        if getattr(self, "openai_agent", None) is not None:
+            try:
+                self.openai_agent.tools = self.tools
+            except Exception:
+                pass
+
     @staticmethod
     def is_metered(task: Any) -> bool:
         """Is this task one of the nine SCORED segments? EXPLICIT CLASS, NOT NAME.

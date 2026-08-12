@@ -64,6 +64,9 @@
     "validated_by": "S1 \u2014 BCBS Basel II Annex 5, 19/19 published cases"
   },
   "parameters": {
+    "amplify_count": true,
+    "amplify_divergence": true,
+    "amplify_irb_priority": true,
     "asset_classes": [
       "sovereign",
       "bank",
@@ -74,12 +77,24 @@
     "capacity_cap": 3,
     "coverage_size": 2,
     "irb_applicable_fraction": 0.67,
+    "lattice": "current",
+    "lattice_template": [
+      "ae",
+      "ab",
+      "bc",
+      "cd"
+    ],
     "max_timesteps": 20,
     "min_successor_routed": 1,
+    "mix_amplified_class": "corporate",
+    "mix_class_source": "derived from w0 & w1",
     "n_segments": 8,
     "n_workers": 4,
+    "positional_roles": true,
+    "rng_checkpoint_post_lattice": 3898137425,
     "shared_class_divergence_selection": true,
     "shared_class_segments": 4,
+    "synthetic_clone_classes": {},
     "t_swap": 3
   },
   "sa_provenance": {
@@ -108,7 +123,7 @@
       "irb_approved": true,
       "lgd": 0.3828,
       "maturity": 3.76,
-      "rating": "Below BB-",
+      "rating": "AAA to AA-",
       "segment_id": "seg_01"
     },
     {
@@ -117,7 +132,7 @@
       "irb_approved": true,
       "lgd": 0.5811,
       "maturity": 1.67,
-      "rating": "BBB+ to BBB-",
+      "rating": "Below BB-",
       "segment_id": "seg_02"
     },
     {
@@ -135,7 +150,7 @@
       "irb_approved": true,
       "lgd": 0.3761,
       "maturity": 2.25,
-      "rating": "Below BB-",
+      "rating": "Unrated",
       "segment_id": "seg_00"
     },
     {

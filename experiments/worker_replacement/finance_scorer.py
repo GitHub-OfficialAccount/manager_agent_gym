@@ -374,7 +374,39 @@ def all_allocations(instance: dict[str, Any]) -> Iterable[dict[str, str]]:
 # Sigma-max is retained as an asserted UPPER BOUND, not as the oracle.
 # ---------------------------------------------------------------------------
 
-DEFAULT_CAP = 3
+# THE YARDSTICK FOLLOWS THE WORLD (L14-b, researcher ruling 2026-08-10).
+#
+# This was 3, and the runtime enforced 3 to match. The researcher removed the
+# per-worker segment allowance (L14), so THE RUNTIME NOW ENFORCES NOTHING -- a
+# manager may send all nine segments to one worker and the environment will let it.
+# Scoring against cap 3 while the world enforces no cap prices re-routing around a
+# constraint nobody ever meets, and lets a realised allocation beat its own oracle.
+#
+# `None` means UNCAPPED, resolved per instance to its segment count -- which is the
+# largest load any single worker could physically take, so the constraint is
+# present in form and never binds. Derived rather than hardcoded to 9 because not
+# every instance has nine segments (records/S4 holds an eight-segment one).
+#
+# THE PARAMETER IS DELIBERATELY KEPT. Passing `cap=3` still constrains, and the K6
+# sweeps depend on exactly that. What is retired is the ASSUMPTION that the shipped
+# cell is scored under a cap.
+#
+# WHAT THIS COST, recorded because it is not free: the cap was the only thing
+# making the greedy label-matching script sub-optimal. Uncapped it attains the
+# oracle EXACTLY on both shipped seeds, so the task's difficulty is now entirely
+# INFORMATIONAL -- obtain the successor's labels -- with no constrained-allocation
+# step behind it. See ALLOCATION_DIFFICULTY_RETIRED in finance_generator.
+UNCAPPED = None
+DEFAULT_CAP = UNCAPPED
+
+
+def resolve_cap(instance: dict[str, Any], cap: int | None) -> int:
+    """`None` -> the instance's own segment count, i.e. a cap that cannot bind.
+
+    Every public scorer entry point resolves here, so there is ONE definition of
+    what uncapped means rather than a `or 9` at each call site.
+    """
+    return len(instance["segments"]) if cap is None else cap
 
 
 def _assignment_extreme(
@@ -425,6 +457,7 @@ def _assignment_extreme(
         # leave everything unstaffed and score 0 trivially, which measures nothing.
         return min(options)
 
+    cap = resolve_cap(instance, cap)  # None -> cannot bind (L14-b)
     return best(0, tuple([cap] * n_workers))
 
 
@@ -462,6 +495,7 @@ def oracle_allocation_capacitated(
         return max(options)
 
     allocation: dict[str, str | None] = {}
+    cap = resolve_cap(instance, cap)  # None -> cannot bind (L14-b)
     remaining = tuple([cap] * n_workers)
     for index, segment in enumerate(segments):
         target = best(index, remaining)
@@ -565,10 +599,28 @@ def scripted_label_baseline_capped(
 
     When the preferred worker is full the script must overflow somewhere, and the
     OPTIMAL overflow needs each segment's fallback penalty — which lives in the
-    private calibrations. So no script over public information attains the oracle:
-    the non-triviality is INFORMATION-THEORETIC, not a matter of obfuscating labels.
-    Overflow here goes to the first worker with capacity, in card order.
+    private calibrations. Overflow here goes to the first worker with capacity, in
+    card order.
+
+    ★ THE CLAIM THAT USED TO END THIS DOCSTRING IS RETIRED (L14-b). It read: "So no
+    script over public information attains the oracle: the non-triviality is
+    INFORMATION-THEORETIC, not a matter of obfuscating labels." THAT IS NOW FALSE AT
+    THE DEFAULT CAP. Measured, uncapped, on both shipped seeds:
+
+        seed 56   script 8.5430   oracle 8.5430   gap 0.0000
+        seed 37   8.9168          8.9168          gap 0.0000
+
+    The overflow argument held only while the cap FORCED an overflow. With no cap
+    the preferred worker is never full, nothing overflows, and greedy card-matching
+    IS optimal.
+
+    WHAT SURVIVES, and it is the part the study rests on: the labels this script
+    reads are the SUCCESSOR'S TRUE ONES. Under the stale-card manipulation the
+    manager does not have them, so this is an UPPER-INFORMATION baseline that no
+    manager in cell 0 can execute. The task's difficulty is now entirely
+    informational — obtain the labels — with no allocation step behind it.
     """
+    cap = resolve_cap(instance, cap)  # None -> cannot bind (L14-b)
     workers = sorted(
         roster_workers(instance),
         key=lambda w: "|".join(w.get("card_capabilities", ())),
@@ -648,6 +700,11 @@ def ignorant_stats(
     # Production default 0; the acceptance drives stream 0..k-1 to check that the
     # ACHIEVED SE actually predicts the cross-stream spread, rather than trusting
     # sd/sqrt(n) on an estimator whose draws are not obviously independent.
+    # RESOLVED BEFORE THE SEED IS BUILT, and the order matters. The stream identity
+    # embeds `cap`; resolving after this line would put the literal "None" in the
+    # seed, so every uncapped instance would share a stream keyed on a non-value and
+    # the cap would stop being part of the stream's identity at all.
+    cap = resolve_cap(instance, cap)  # None -> cannot bind (L14-b)
     rng = _random.Random(f"ignorant::{instance['seed']}::{cap}::{draws}::{stream}")
     scores = [[s(segment, worker, cal) for worker in workers]
               for segment in segments]
@@ -818,9 +875,14 @@ def ceiling_vs_stale_card(
     true_m = [[true_score(sg, w) for w in workers] for sg in segments]
     believed_m = [[believed_score(sg, w) for w in workers] for sg in segments]
 
+    # Resolved OUTSIDE the closure: assigning to `cap` inside `feasible` made it a
+    # local and shadowed the enclosing binding (UnboundLocalError). Also correct to
+    # hoist it -- it is loop-invariant and was being recomputed per combination.
+    resolved_cap = resolve_cap(instance, cap)  # None -> cannot bind (L14-b)
+
     def feasible():
         for combo in product(range(len(workers)), repeat=len(segments)):
-            if all(combo.count(i) <= cap for i in range(len(workers))):
+            if all(combo.count(i) <= resolved_cap for i in range(len(workers))):
                 yield combo
 
     def best(matrix):
@@ -1017,6 +1079,12 @@ def realised_report(
     diagnostics rather than being discarded — an infeasible intent is a
     management fact worth seeing, and only the intended allocation shows it.
     """
+    # `n_over_cap_workers` below counts against the RESOLVED cap. At the default it
+    # is now structurally 0 -- no allocation can exceed the segment count -- which
+    # is the honest reading: the runtime enforces nothing, so nothing is "over".
+    # It stays because passing an explicit `cap` still makes it meaningful, and
+    # because a non-zero here on a shipped run would mean the cap came back.
+    cap = resolve_cap(instance, cap)  # None -> cannot bind (L14-b)
     deferred = sorted(set(deferred_segments))
     realised = realised_allocation(intended, deferred)
     faithful = realised_faithful_score(instance, realised)

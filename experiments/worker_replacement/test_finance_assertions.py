@@ -118,14 +118,13 @@ def main() -> int:
             # caught only because the distinctness check counts markers.
             dict(capacity_cap=2),
         ),
-        (
-            "2b capacity does NOT bind (cap >= greedy card-match load)",
-            "ASSERTION 2b",
-            # The other half: a cap at or above the instance's own greedy load
-            # leaves the greedy match feasible, and a public-information script
-            # attains the oracle again — the lookup collapse S7 exists to prevent.
-            dict(capacity_cap=9),
-        ),
+        # ★ THE 2b CONTROL IS REMOVED, NOT DISABLED (L14-b). It drove
+        # `capacity_cap=9` and required ASSERTION 2b to fire. Assertion 2b is
+        # RETIRED -- the runtime enforces no cap, so a check that the cap binds
+        # asserts a property of a constraint nothing has. Keeping the control with
+        # its expectation flipped would be worse than deleting it: it would read as
+        # evidence that non-triviality is still certified somewhere, and it is not.
+        # See ALLOCATION_DIFFICULTY_RETIRED in finance_generator.
         (
             "5 semantic worker ids",
             "ASSERTION 5",

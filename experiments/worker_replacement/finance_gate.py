@@ -39,7 +39,15 @@ OUTPUT_FLOOR = 0.725
 # C = 3 also consumes capacity EXACTLY (3 workers x 3 = 9 segments), so the
 # manager's problem is purely WHICH segments go where, and it makes the successor
 # maximally load-bearing: without it, 2 x 3 = 6 < 9 and three segments go unstaffed.
-CAP = 3
+# FOLLOWS THE RUNTIME (L14-b, researcher ruling 2026-08-10). This was 3 and the
+# paragraph above is the record of how 3 was chosen; it is kept because it explains
+# the instances we generated, not because it still governs scoring.
+#
+# The runtime enforces no per-worker segment cap (L14), so the gate must not score
+# against one. `finance_scorer.UNCAPPED` resolves per instance to its segment count
+# -- present in form, never binding. Passing an explicit integer still constrains,
+# which is what the K6 sweep below relies on.
+CAP = sc.UNCAPPED
 # DECLARED MINIMUM DETECTABLE EFFECT — 0.20, and PROVISIONAL.
 #
 # It is provisional because no variance estimate exists for the outcome score in
@@ -533,7 +541,7 @@ def sweep(seeds: range) -> dict[str, Any]:
     }
 
 
-def suite_headline(seeds: range = range(40)) -> dict[str, Any]:
+def suite_headline(seeds: range = range(40), **instance_kwargs) -> dict[str, Any]:
     """THE headline effect size, over BOTH populations, each labelled.
 
     This function exists twice over, for two versions of the same mistake.
@@ -564,13 +572,19 @@ def suite_headline(seeds: range = range(40)) -> dict[str, Any]:
     # failure this function exists to prevent, one level in.
     from . import finance_admission as adm  # local: admission imports this module
 
-    suite = adm.admit_suite(seeds)
+    # `instance_kwargs` (lattice, shared_class_segments, ...) THREADS TO BOTH the
+    # admission sweep and the regeneration below. It defaulted to the generator's
+    # own default -- `current` -- which is NOT the shipped cell, so this function
+    # described a population the study does not run on while labelling its output
+    # "WHAT THE STUDY WILL ACTUALLY RUN ON". That is the third version of the same
+    # mistake the docstring above records twice (L14-b).
+    suite = adm.admit_suite(seeds, **instance_kwargs)
     admitted_seeds = {row["seed"] for row in suite["rows"] if row["admitted"]}
 
     generated, admitted = [], []
     for seed in seeds:
         try:
-            instance = gen.generate(seed)
+            instance = gen.generate(seed, **instance_kwargs)
         except gen.InstanceAssertionError:
             continue
         share = sc.ceiling_vs_ignorant_stats(
@@ -580,6 +594,26 @@ def suite_headline(seeds: range = range(40)) -> dict[str, Any]:
             admitted.append(share)
 
     def _stats(values: list[float], population: str, question: str) -> dict:
+        # AN EMPTY POPULATION IS A RESULT, NOT A CRASH (L14-b). Criterion 3 now
+        # admits only instances whose stale-card ceiling is above zero, and at this
+        # module's DEFAULT lattice (`current`) that is 0 of 60 -- so `admitted` came
+        # back empty and `min()` raised, hiding a meaningful verdict behind a
+        # traceback. The emptiness is correct and is exactly why `current` is not
+        # the shipped lattice; it has to be REPORTED, because a headline that dies
+        # cannot say "this lattice admits nothing" and a reader would otherwise meet
+        # a stack trace where a finding belongs.
+        if not values:
+            return {
+                "population": population,
+                "answers": question,
+                "n": 0,
+                "empty": True,
+                "why": ("no instance was admitted, so no distribution exists. Under "
+                        "criterion 3 this means every instance's stale-card ceiling "
+                        "is zero -- the successor's identity is worth nothing on any "
+                        "of them. Expected at the `current` lattice; a finding "
+                        "anywhere else."),
+            }
         return {
             "population": population,
             "answers": question,
@@ -605,6 +639,12 @@ def suite_headline(seeds: range = range(40)) -> dict[str, Any]:
             admitted, "ADMITTED (the set instances are selected from)",
             "WHAT THE STUDY RUNS ON — quote this for any effect-size, cost or "
             "power statement about the study"),
+        "instance_kwargs": dict(instance_kwargs) or {"lattice": "current (DEFAULT — not the shipped cell)"},
         "study_population": "admitted",
-        "median_difference": (_st.median(generated) - _st.median(admitted)),
+        # None rather than a number when either population is empty — this figure
+        # exists to show how far admission MOVES the distribution, and with nothing
+        # admitted there is no distribution to have moved (L14-b).
+        "median_difference": (
+            _st.median(generated) - _st.median(admitted)
+            if generated and admitted else None),
     }

@@ -15,15 +15,17 @@ because a baseline nobody can reconstruct is not a gate (P10):
     contains a capability line ending in that asset class. UNDER THE PER-WORKER
     CAP: when the preferred worker is full, overflow to the first worker with
     remaining capacity; if all are full the segment goes unstaffed and scores 0.
-  * WHY THIS IS NOW NON-TRIVIAL, and the property is INFORMATION-THEORETIC rather
-    than a matter of obscuring labels: once the cap binds, the script must choose
-    WHICH segments to overflow, and the optimal overflow depends on each segment's
-    fallback penalty |SA - truth| — which requires the truth, and so lives in the
-    PRIVATE CALIBRATIONS. No script over
-    public information can attain the oracle, because the information required to
-    do so is not public. Obfuscating card wording would only have tested string
-    matching; this tests whether the manager acquires and uses value information
-    the cards do not carry.
+  * ★ THE NON-TRIVIALITY CLAIM HERE IS RETIRED (L14-b). It read: "once the cap
+    binds, the script must choose WHICH segments to overflow... No script over
+    public information can attain the oracle." THE CAP NO LONGER BINDS -- the
+    runtime enforces none -- so nothing overflows and this script ties the oracle
+    on every instance (56: 8.5430 = 8.5430; 37: 8.9168 = 8.9168).
+    The script is still computed and still REPORTED as `scripted_baseline_score`,
+    because it remains a meaningful upper-information reference: it is what a
+    manager who already knew the successor's true labels would achieve by pure
+    label-matching. It is no longer a CRITERION. Criterion 3 now asks whether
+    optimal play believing the PREDECESSOR'S card attains the oracle, which is the
+    question the old form was standing in for.
   * TIE-BREAK: sorted by the worker's joined card text, so the baseline is
     deterministic and reproducible without reference to ids.
 
@@ -80,8 +82,8 @@ def admit(seed: int, **kwargs) -> dict[str, Any]:
     A seed whose instance fails a GENERATION assertion is reported as a rejection,
     not raised: a suite builder that dies on the first invalid seed cannot build a
     suite, and the assertion firing is a correct outcome to record rather than a
-    crash. Assertion 2b in particular rejects seeds whose greedy card-match load
-    happens to equal the cap.
+    crash. (Assertion 2b used to be the common cause here; it is RETIRED -- see
+    ALLOCATION_DIFFICULTY_RETIRED in finance_generator.)
     """
     try:
         instance = gen.generate(seed, **kwargs)
@@ -93,25 +95,55 @@ def admit(seed: int, **kwargs) -> dict[str, Any]:
             "conditions": {
                 "1_bit_identical_regeneration": False,
                 "2_interior_spread_and_disclosures": False,
-                "3_scripted_baseline_below_oracle": False,
+                "3_stale_card_ceiling_above_zero": False,
             },
         }
     verdict = gate.evaluate(instance)
 
     identical, detail = regenerates_bit_identically(seed, **kwargs)
 
-    # Greedy card-matching UNDER the cap (S7 ruling item 5).
+    # ★ CRITERION 3 IS RESTATED AGAINST A DIFFERENT BASELINE (L14-b). It asked
+    # whether the greedy card-match script stays BELOW the oracle. Uncapped that
+    # script ties the oracle on every instance, so the criterion rejected the entire
+    # suite -- 0 admitted, and the study could not run at all.
+    #
+    # WHY THE OLD FORM STOPPED MEASURING ITS OWN INTENT. The intent was "a manager
+    # cannot solve this without the information the study supplies". The script
+    # reads the SUCCESSOR'S TRUE LABELS, which under the stale-card manipulation the
+    # manager does not have -- so it was never a test of what a manager could do. It
+    # only LOOKED like one while the cap forced an overflow the labels could not
+    # resolve. Remove the cap and the disguise falls off.
+    #
+    # THE RESTATEMENT TESTS THE INTENT DIRECTLY: can optimal play believing the
+    # PREDECESSOR'S CARD attain the oracle? If it can, the successor's identity is
+    # worth nothing on this instance and no channel can show an effect. That is
+    # `ceiling_vs_stale_card > 0`, which is also exactly what
+    # `select_study_instances` already excludes on -- so admission and selection now
+    # agree instead of applying two different non-triviality tests.
+    #
+    # WHAT IS GIVEN UP, PLAINLY: admission no longer certifies "not solvable by a
+    # script holding true labels". Under the current design nothing does, because
+    # uncapped that is false everywhere. Saying so beats keeping a criterion that
+    # certifies it by rejecting everything.
     baseline_allocation = scripted_label_baseline_capped(instance, cap=gate.CAP)
     baseline_score = sc.score(instance, baseline_allocation)
     oracle_score = verdict["oracle"]
-    # STRICTLY below: a baseline that merely ties the oracle has still solved the
-    # instance by surface matching.
-    baseline_ok = baseline_score < oracle_score - 1e-9
+    card_ceiling = sc.ceiling_vs_stale_card(instance, cap=gate.CAP)
+    # STRICTLY above zero: an instance the stale card already solves cannot exhibit
+    # a card effect however many episodes it is given.
+    baseline_ok = card_ceiling["ceiling"] > 1e-9
 
     conditions = {
         "1_bit_identical_regeneration": identical,
         "2_interior_spread_and_disclosures": verdict["admitted"],
-        "3_scripted_baseline_below_oracle": baseline_ok,
+        # RENAMED WITH THE CONDITION (L14-b). It was `3_scripted_baseline_below_
+        # oracle`, which described the PREVIOUS test. Keeping the old key for
+        # historical comparability was the wrong trade: a condition whose name
+        # describes a test it no longer runs is how a future reader concludes the
+        # gate checks something it does not -- and that is the sixth instance of
+        # name-over-condition this week, the first caused by a CORRECT edit.
+        # Old rows are readable via this comment; new rows say what they mean.
+        "3_stale_card_ceiling_above_zero": baseline_ok,
     }
 
     # NAMED CAUSES on every non-admitted row (S6 round-2 item 4, which regressed
@@ -126,8 +158,9 @@ def admit(seed: int, **kwargs) -> dict[str, Any]:
         rejection_reasons.extend(verdict["rejection_reasons"])
     if not baseline_ok:
         rejection_reasons.append(
-            "scripted baseline attains oracle — the instance is solvable from "
-            "public information alone, so it measures lookup, not management"
+            "optimal play believing the PREDECESSOR'S CARD already attains the "
+            "oracle — the successor's identity is worth nothing here, so no "
+            "information channel can show an effect on this instance"
         )
     return {
         "seed": seed,

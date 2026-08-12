@@ -48,24 +48,67 @@ from ...config import settings
 # THE FIRST VALUES -- 180s and 2 retries -- CAME FROM NOWHERE AND WOULD HAVE
 # SABOTAGED THE RUN. I asserted twice that "a bound that never fires costs
 # nothing"; it was false, because the bound did not sit above the workload, it sat
-# INSIDE it. Measured over the committed corpus (464 paired request/response
-# events, re-derived independently of LS's script):
+# INSIDE it.
 #
-#   SUCCEEDED calls:  median 39s   p90 149s   p99 554s   max 876s
+# ---------------------------------------------------------------------------
+# 1200 -> 600 (L16, 2026-08-10). THE JUSTIFICATION BELOW USED TO CITE 876s AND
+# THAT FIGURE WAS THE WRONG POPULATION -- the same error as the 180s bound, still
+# live in this comment until now.
 #
-#   bound  180s kills 32/464 (6.9%) of calls that SUCCEEDED  <- the original
-#   bound  630s kills  4/464 (0.9%)                          <- the original backstop
-#   bound  900s kills  0/464
-#   bound 1200s kills  0/464 (+324s of headroom over the observed max)
+# It came from 464 paired `structured_llm_*` request/response events. EVERY ONE OF
+# THOSE IS THE MANAGER'S: the worker path emits no per-request events at all, which
+# is why nothing in the corpus could price a worker request. So a MANAGER
+# request/response pair was justifying a WORKER request timeout.
 #
-# The longest healthy silence in the corpus is a single request/response pair of
-# ~876s -- an episode that RETURNED and is in our committed results. A 180s bound
-# with two retries behind it would have burned 3x180s and then failed, and the
-# failure would have looked exactly like the stall we spent three runs misreading.
+# MEASURED ON THE WORKER PATH, finally, with a litellm CustomLogger
+# (`experiments/worker_replacement/probe_worker_requests.py`):
 #
-# 1200 with ONE retry: no observed successful call is killed, and a genuine stall
-# still terminates in ~41 minutes rather than never.
-WORKER_REQUEST_TIMEOUT_S = float(os.getenv("MAG_WORKER_REQUEST_TIMEOUT_S", "1200"))
+#   longest observed LIVE worker request   305.14s
+#   population                             ~20 requests across 6 tasks, run in
+#                                          ISOLATION, at 2ae0694 + probe
+#
+# AND THE THING THAT DECIDES THE VALUE IS NOT THE DISTRIBUTION, IT IS THE SHAPE.
+# Worker requests do not get slow; they HANG. Episode durations, paired
+# started->completed (`records/R3/run_cell0_seed26.json`, 12 runs):
+#
+#   18.6  38.0  60.5  93.1  94.2  125.1  167.8  176.9 | 1467.4 1608.7 1787.1 2160.4
+#
+# ZERO runs between 200s and 1200s -- a 1290s gap. A continuum would put several
+# there. Each slow run is one request that hangs, burns the whole bound producing
+# NOTHING, is killed, and is followed by a retry at ordinary speed (remainders
+# after subtracting 1200: 267, 409, 587, 960 -- two inside the observed live range,
+# two above it, consistent with a multi-request retry).
+#
+# So every second of the bound is pure waste on a hang, and the only thing a larger
+# value buys is not killing a slow-but-LIVE request.
+#
+# ★ THE MARGIN IS SET AGAINST THE MAXIMUM TIMES THE HOUR-TO-HOUR SWING, NOT
+# AGAINST THE MAXIMUM. I first set 600 (1.97x the observed max) and RR refuted it
+# with a figure from the same measurement:
+#
+#   hour-to-hour swing, SAME task, same prompt   320.5s -> 149.0s   = 2.15x
+#   a 305s request in a bad hour                 305 x 2.15         = 655s
+#   600s would KILL that request.
+#
+# The variation was reported in the same message as the margin and the margin was
+# set below it. A bound justified by a single-hour maximum is the old sin again --
+# a number without the distribution it came from.
+#
+#   900s clears the 655s bad-hour edge; kills 0 observed under either hour
+#   still saves ~300s per hang; ~20 minutes across the four in one episode
+#
+# AND THE "SELF-HEALING" ARGUMENT FOR A LOW BOUND IS WRONG, because the retry is
+# NOT INDEPENDENT: it runs seconds later in the same bad hour. With
+# WORKER_MAX_RETRIES = 1 a too-low bound spends 2 x bound and then FAILS the task,
+# where one longer attempt would have completed. So being too low does not cost an
+# extra attempt -- it converts a slow SUCCESS into a FAILURE at identical cost,
+# moving work into the destructive population.
+#
+# WHAT THIS DOES NOT FIX: three runs in that episode started and NEVER completed
+# (15 started, 12 completed). They are absent from the paired data, they did not
+# hang against the bound, and a shorter timeout does nothing for them. They remain
+# the open question and the more damaging population.
+WORKER_REQUEST_TIMEOUT_S = float(os.getenv("MAG_WORKER_REQUEST_TIMEOUT_S", "900"))
 WORKER_MAX_RETRIES = int(os.getenv("MAG_WORKER_MAX_RETRIES", "1"))
 def _apply_worker_request_limits() -> dict[str, float | int]:
     """Bound the worker path's request time. Returns what was applied, for the record."""
@@ -110,15 +153,33 @@ _apply_worker_request_limits()
 # 3600s: +67% over the longest legitimate run ever observed, kills 0 of 281 runs
 # across both arrangements, and still bounds a hung task to one hour.
 #
-# STATED LIMITATION: with legitimate runs reaching 36 minutes, NO per-run bound
-# separates "slow" from "hung" cleanly. The heartbeat does that and this does not
-# pretend to. This is a last-resort ceiling.
+# ---------------------------------------------------------------------------
+# TWO CLAIMS ABOVE ARE NOW FALSE AND ARE CORRECTED HERE RATHER THAN LEFT (L16).
 #
-# AND `WORKER_REQUEST_TIMEOUT_S` BOUNDS A QUANTITY WE CANNOT OBSERVE: the worker
-# path emits ZERO per-request events (0 worker-attributed `structured_llm_*` in
-# the new bundle; all 22 are the manager's), so no bundle can price it. It is
-# retained because litellm's 6000s default is indefensible, but it is unverified
-# and should be labelled as such wherever it is quoted.
+# (1) "with legitimate runs reaching 36 minutes". THE 36-MINUTE RUN WAS NOT
+# LEGITIMATE WORK. It is 1200s of a hung request producing nothing, plus a ~960s
+# retry. The longest run of actual work observed anywhere is 176.9s in an episode
+# and 438.9s in isolation. Every figure in the table above that exceeds ~440s is
+# a hang plus our own bound, not a workload.
+#
+# So the "STATED LIMITATION" it introduced -- that no per-run bound separates slow
+# from hung -- is much weaker than it was written. The populations are SEPARATED BY
+# A 1290s GAP with nothing in it (18.6..176.9 | 1467.4..2160.4). What made them
+# look inseparable was measuring the hang and the retry as one number.
+#
+# (2) "`WORKER_REQUEST_TIMEOUT_S` BOUNDS A QUANTITY WE CANNOT OBSERVE ... it is
+# unverified and should be labelled as such wherever it is quoted." WE CAN OBSERVE
+# IT AND NOW HAVE. The worker path still emits no per-request EVENTS, which is why
+# no bundle prices it -- but a litellm `CustomLogger` reads it directly at the
+# provider layer without touching this file. See
+# `experiments/worker_replacement/probe_worker_requests.py`. The bound is no longer
+# unverified: longest observed live worker request 305.14s over ~20 requests.
+#
+# 3600 IS KEPT AND IS NOW MORE GENEROUS THAN IT READS. With the request bound at
+# 600 and one retry, a task that hangs twice terminates near 1200s, so the backstop
+# sits ~3x clear of the worst mechanical case rather than +67% over a contaminated
+# maximum. The asymmetry above still decides it: firing wrongly costs a task,
+# firing late only delays a detection the heartbeat already makes.
 WORKER_RUN_BACKSTOP_S = float(os.getenv("MAG_WORKER_RUN_BACKSTOP_S", "3600"))
 
 

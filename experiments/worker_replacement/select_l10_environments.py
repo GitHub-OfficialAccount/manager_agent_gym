@@ -40,14 +40,14 @@ from typing import Any
 from . import finance_admission as adm
 from . import finance_generator as gen
 from . import finance_scorer as sc
-from .check_l10_properties import CAP, SHIPPED, successor_unique_class
+from .check_l10_properties import SHIPPED, successor_unique_class
 
 #: Fixed and recorded BEFORE the draw, so the draw cannot be re-rolled toward a
 #: preferred outcome. The predecessor record used 20260807 for the same reason.
-DRAW_SEED = 20260809
+DRAW_SEED = 20260810  # re-drawn at cfc661f; the 20260809 draw priced its pool at cap 3
 
 SUITE = range(60)
-OUT = Path(__file__).resolve().parent / "records/L10/environment_selection_v1.json"
+OUT = Path(__file__).resolve().parent / "records/L10/environment_selection_v2.json"
 
 
 def pool() -> list[dict[str, Any]]:
@@ -61,7 +61,12 @@ def pool() -> list[dict[str, Any]]:
             continue
         rows.append({
             "seed": seed,
-            "ceiling_share": sc.ceiling_vs_stale_card(inst, cap=CAP)["ceiling_share"] or 0.0,
+            # ★ NO CAP PASSED (L14-b). The runtime enforces no capacity, so the
+            # ceiling must not price re-routing around one. The approved rule is
+            # unchanged; its INPUT is corrected. Measuring at cap=3 here would
+            # score the pool under a constraint the world does not have -- which
+            # is the mismatch L14-b existed to remove, reintroduced in the draw.
+            "ceiling_share": sc.ceiling_vs_stale_card(inst)["ceiling_share"] or 0.0,
             "sole_need_class": successor_unique_class(inst),
         })
     return rows
@@ -116,7 +121,7 @@ def main() -> int:
         "supersedes": "records/R2/instance_selection_partial_segs1.json — drawn at a cell "
                       "the study does not ship; its low/mid/high became low/LOW/high when "
                       "re-measured at the settled cell",
-        "setting": SHIPPED, "cap": CAP,
+        "setting": SHIPPED, "cap": "UNCAPPED — the runtime enforces none (L14-b)",
         "suite_seeds": [SUITE.start, SUITE.stop - 1],
         "n_admitted": len(rows),
         "floor_rule": "pool median of ceiling_share",

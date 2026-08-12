@@ -1,9 +1,35 @@
 {
+  "annotations_carried": [
+    {
+      "keys": [
+        "superseded_2026_08_09"
+      ],
+      "record": "experiments/worker_replacement/records/L4/card_ceiling.json"
+    },
+    {
+      "keys": [
+        "superseded_2026_08_09"
+      ],
+      "record": "experiments/worker_replacement/records/L9/inversion_diagnosis.json"
+    },
+    {
+      "keys": [
+        "superseded_2026_08_09"
+      ],
+      "record": "experiments/worker_replacement/records/L4/reliability_ceiling.json"
+    },
+    {
+      "keys": [
+        "superseded_2026_08_09"
+      ],
+      "record": "experiments/worker_replacement/records/L9/template_pricing.json"
+    }
+  ],
   "caveats": [
     "PRODUCERS is a DECLARED table, not a scan. A record produced by a module not listed here is NOT checked, and its absence is silent.",
     "each normalisation is a hole: a value that differs only inside a UUID or timestamp cannot be detected",
     "this checks that a record MATCHES its producer, not that either is correct",
-    "`superseded_*` blocks are excluded from the comparison: they are provenance ABOUT the record that the producer does not emit. A value inside one is therefore NOT checked."
+    "`superseded_*` blocks are excluded from the comparison: they are provenance ABOUT the record that the producer does not emit. A value inside one is therefore NOT checked -- but as of 2026-08-10 it is at least PRESERVED: --regenerate carries existing blocks across, because before that a regeneration deleted them value-neutrally and every check went green afterwards (L4/card_ceiling.json, +0/-478)."
   ],
   "checked": 13,
   "normalised": [
@@ -11,12 +37,6 @@
     "ISO timestamp",
     "superseded_* annotation blocks"
   ],
-  "stale": [
-    {
-      "module": "test_finance_scorer",
-      "producer_exit": 0,
-      "record": "experiments/worker_replacement/records/S4/instance_seed101_8seg.json"
-    }
-  ],
+  "stale": [],
   "untracked": 0
 }

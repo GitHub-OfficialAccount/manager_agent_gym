@@ -280,41 +280,62 @@ async def _run_episode_inner(
     shared_class_segments: int = 4,
     selection_record: Path | None = None,
 ) -> dict:
+    # ★ THE SELECTION RECORD IS THE AUTHORITY, NOT A CROSS-CHECK (L17).
+    #
+    # This used to compare TWO named flags -- `lattice` and `shared_class_segments`
+    # -- against top-level keys of the record, and let the caller pass them. That is
+    # the same one-parameter-at-a-time shape that caused the fault it was guarding
+    # against: the shipped setting has SIX parameters, the runner passed two, and
+    # the other four fell back to generator defaults. Seed 42 would have run at
+    # ceiling 0.02632 having been drawn at 0.04970 -- below the 0.03238 floor that
+    # selected it.
+    #
+    # AND THIS GUARD HAD ALREADY GONE STALE AGAINST THE CURRENT RECORD: v2 keeps the
+    # setting under `setting` and the seeds under `chosen`, so `chosen.get("lattice")`
+    # was None and every run against it would have raised a confusing mismatch.
+    #
+    # So the record now SUPPLIES the setting rather than being consulted about two
+    # fields of it. A new generator knob is picked up automatically, because nothing
+    # here enumerates the knobs.
+    instance_kwargs: dict = {"lattice": lattice,
+                             "shared_class_segments": shared_class_segments}
     if selection_record is not None:
-        # AND IT IS CHECKED AGAINST THE RECORD IT CLAIMS TO BE RUNNING, rather than
-        # trusting that the right flags were passed. Two artefacts asserting
-        # different arrangements is what this whole phase has been spent removing;
-        # passing flags correctly is a habit, and this is a guard.
-        chosen = json.loads(Path(selection_record).read_text())
-        mismatch = {k: (chosen.get(k), v) for k, v in
-                    (("lattice", lattice),
-                     ("shared_class_segments", shared_class_segments))
-                    if chosen.get(k) != v}
-        if mismatch:
+        from . import finance_cells as fc
+
+        record = json.loads(Path(selection_record).read_text())
+        selected = [row["seed"] for row in record.get("chosen", [])]
+        if seed not in selected:
             raise ValueError(
-                f"arrangement mismatch against {selection_record}: {mismatch}. The "
-                f"selection record and the run disagree about which arrangement "
-                f"this is, and the bundle would record the seed and look correct"
+                f"seed {seed} is not among {Path(selection_record).name}'s chosen "
+                f"seeds {selected}; running an unselected seed under a selection "
+                f"record misattributes it to a rule that did not pick it"
             )
-        if seed not in (chosen.get("chosen_seeds") or []):
-            raise ValueError(
-                f"seed {seed} is not in {selection_record}'s chosen_seeds "
-                f"{chosen.get('chosen_seeds')}; running an unselected seed under a "
-                f"selection record misattributes it to a rule that did not pick it"
-            )
+        instance_kwargs = dict(fc.shipped_setting(Path(selection_record)))
 
     # CELL is the study configuration (R2). Absent means the S8 accurate-card
     # default, which is what the machinery episodes ran on.
     if cell is None:
-        built = env.build_environment(
-            seed, lattice=lattice, shared_class_segments=shared_class_segments)
+        built = env.build_environment(seed, **instance_kwargs)
     else:
         from . import finance_cells as fc
 
-        built = fc.build_cell_environment(
-            seed, cell, lattice=lattice,
-            shared_class_segments=shared_class_segments)
+        built = fc.build_cell_environment(seed, cell, **instance_kwargs)
     instance = built["instance"]
+
+    # ★ THE RUN REFUSES UNLESS THE BUILT INSTANCE IS THE SELECTED ONE (L17).
+    # Threading makes the mismatch unlikely; this makes it unshippable. The
+    # distinction is not academic -- threading is the fix that was applied to
+    # `build_cell_environment` once already, for the lattice, and it did not hold
+    # when four more parameters arrived.
+    #
+    # It fires BEFORE the first timestep, because a run that spends money and THEN
+    # reports a mismatch is the failure being prevented.
+    selection_provenance: dict = {}
+    if selection_record is not None:
+        from . import finance_cells as fc
+
+        selection_provenance = fc.assert_matches_selection(
+            seed, instance, Path(selection_record))
     workflow = built["workflow"]
     index = built["index"]
     event = instance["event"]
@@ -516,6 +537,22 @@ async def _run_episode_inner(
             **_worker_request_limits(),
             "worker_run_backstop_s": _WORKER_BACKSTOP,
             "instance_sha256": built["instance_sha256"],
+            # ★ DID ANYTHING CHECK THIS HASH? (L17). The manifest has recorded
+            # `instance_sha256` all along -- which means today's mismatch would have
+            # been recoverable from the bundle afterwards and was flagged by
+            # nothing. A recorded fact nobody compares is the shape we keep finding,
+            # so the bundle now states whether the comparison HAPPENED.
+            #
+            # Empty means UNGUARDED: no selection record was passed, the generator
+            # setting came from CLI defaults, and the instance is whatever those
+            # produce. Legitimate for machinery and dry runs; NOT legitimate for a
+            # study episode, and now visible per bundle instead of remembered.
+            "selection_provenance": selection_provenance or {
+                "matches_selection": None,
+                "why": "no --selection-record passed; the instance was NOT checked "
+                       "against an approved draw. Fine for machinery runs, not for "
+                       "a study episode.",
+            },
             "manager_model": MANAGER_MODEL,
             "worker_model": env.WORKER_MODEL,
             "role_models": role_models,
@@ -598,9 +635,18 @@ async def main() -> None:
     parser.add_argument("--dry-run", action="store_true",
                         help="stub every model call; proves the runner path cold")
     parser.add_argument("--out", type=Path, default=HERE / "records" / "S8")
+    # THE SELECTION RECORD WAS REACHABLE ONLY FROM PYTHON (L17). `selection_record`
+    # was a function parameter with no flag, so the command a person actually types
+    # could not opt into the guard that makes a run trustworthy. A safety check the
+    # CLI cannot reach is a safety check that does not run.
+    parser.add_argument("--selection-record", type=Path, default=None,
+                        help="the approved draw; SUPPLIES the generator setting and "
+                             "makes the run REFUSE unless the built instance is the "
+                             "selected one. Use it for any study episode.")
     args = parser.parse_args()
     await run_episode(args.seed, args.out, dry_run=args.dry_run, cell=args.cell,
-                      concurrency=args.concurrency)
+                      concurrency=args.concurrency,
+                      selection_record=args.selection_record)
 
 
 if __name__ == "__main__":

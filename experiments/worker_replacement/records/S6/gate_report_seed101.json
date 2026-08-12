@@ -1,13 +1,13 @@
 {
   "admitted": true,
-  "aggregate_output_floor_ratio": 1.2619965335219538,
+  "aggregate_output_floor_ratio": 1.4732598956338092,
   "aggregate_output_floor_status": "published; non-binding at present \u2014 no generated instance has failed it",
   "below_provisional_mde": true,
-  "capacity_cap_k6": 3,
-  "ceiling_vs_ignorant": 0.6046100506661238,
-  "ceiling_vs_ignorant_se": 0.0031812479477831535,
-  "ceiling_vs_ignorant_share": 0.0720520875916477,
-  "ceiling_vs_ignorant_share_se": 0.00037911304241781133,
+  "capacity_cap_k6": null,
+  "ceiling_vs_ignorant": 0.8775319495610558,
+  "ceiling_vs_ignorant_se": 0.0035762093036311136,
+  "ceiling_vs_ignorant_share": 0.10364797602047587,
+  "ceiling_vs_ignorant_share_se": 0.0004223969923059429,
   "clip_flagged_segments": [],
   "coverage_lattice": {
     "w_26f14e": [
@@ -30,14 +30,14 @@
   "declared_mde": 0.2,
   "declared_mde_status": "provisional \u2014 no in-environment variance estimate yet",
   "design_fact": "The channel-effect ceiling lands in a band around 0.09-0.18 of the oracle, against a PROVISIONAL MDE of 0.20 imported from the old corpus. Whether that band is detectable is unknown until the pilot measures this environment's variance. Sequence: pilot measures sigma -> MDE re-derived -> the gate re-runs free -> rejection resumes at the measured threshold. If the measured sigma leaves this band undetectable at any affordable n, the design fails honestly and is redesigned.",
-  "diagnostic_capacity_attributable": 2.3912912293773765,
-  "diagnostic_coverage_attributable": 0.2509400459367388,
-  "diagnostic_m_incumbent": 2.3912912293773765,
-  "diagnostic_m_successor": 2.6422312753141153,
+  "diagnostic_capacity_attributable": 0.0,
+  "diagnostic_coverage_attributable": 1.0752024415261463,
+  "diagnostic_m_incumbent": 0.0,
+  "diagnostic_m_successor": 1.0752024415261463,
   "discriminating": {
     "discriminating_fraction": 0.4444444444444444,
-    "gap_max": 0.2754440584036395,
-    "gap_median": 0.24756433760272567,
+    "gap_max": 0.4504438523026083,
+    "gap_median": 0.2754440584036395,
     "n_discriminating": 4,
     "n_segments": 9,
     "note": "on a NON-discriminating unit every active worker scores the same, so no allocation error is possible and no channel can inform the choice \u2014 those units cannot populate the channel-sensitive term at all",
@@ -46,8 +46,8 @@
       {
         "best": 1.0,
         "discriminates": true,
-        "gap": 0.17576638855455595,
-        "second_best": 0.824233611445444,
+        "gap": 0.21278188011902577,
+        "second_best": 0.7872181198809742,
         "segment_id": "seg_00"
       },
       {
@@ -81,8 +81,8 @@
       {
         "best": 1.0,
         "discriminates": true,
-        "gap": 0.07517365738218307,
-        "second_best": 0.9248263426178169,
+        "gap": 0.4504438523026083,
+        "second_best": 0.5495561476973917,
         "segment_id": "seg_02"
       },
       {
@@ -102,31 +102,31 @@
       {
         "best": 1.0,
         "discriminates": true,
-        "gap": 0.24756433760272567,
-        "second_best": 0.7524356623972743,
+        "gap": 0.1365326507008724,
+        "second_best": 0.8634673492991276,
         "segment_id": "seg_01"
       }
     ]
   },
   "fabrication_blind_effect_carriers": [],
   "flags": [
-    "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.072 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
+    "CHANNEL-EFFECT CEILING BELOW PROVISIONAL MDE: 0.104 < 0.2. FLAGGED, not rejected \u2014 the MDE is imported and provisional. GATE ON THE FLAG (C1): no flagged instance contributes to a reported finding or benchmark release until the MDE is re-derived and the gate re-run."
   ],
   "greedy_card_match_load": 6,
   "ignorant_draws": 10000,
-  "ignorant_per_draw_sd": 0.31812479477831535,
+  "ignorant_per_draw_sd": 0.3576209303631114,
   "k_threshold": 1,
-  "max_effect_share_of_oracle": 0.0720520875916477,
+  "max_effect_share_of_oracle": 0.10364797602047587,
   "n_segments": 9,
-  "oracle": 8.391291229377376,
-  "oracle_without_successor": 5.749059954063261,
+  "oracle": 8.46646488675956,
+  "oracle_without_successor": 7.391262445233414,
   "rejection_reasons": [],
   "sigma_max_upper_bound": 8.46646488675956,
   "signed_divergences": [
     {
       "anchored": false,
       "asset_class": "corporate",
-      "ratio_sa_over_truth": 0.824234,
+      "ratio_sa_over_truth": 0.787218,
       "segment_id": "seg_00",
       "trivially_anchored": false,
       "within_output_floor": null
@@ -166,7 +166,7 @@
     {
       "anchored": false,
       "asset_class": "corporate",
-      "ratio_sa_over_truth": 0.924826,
+      "ratio_sa_over_truth": 0.549556,
       "segment_id": "seg_02",
       "trivially_anchored": false,
       "within_output_floor": null
@@ -190,14 +190,14 @@
     {
       "anchored": false,
       "asset_class": "corporate",
-      "ratio_sa_over_truth": 0.752436,
+      "ratio_sa_over_truth": 0.863467,
       "segment_id": "seg_01",
       "trivially_anchored": false,
       "within_output_floor": null
     }
   ],
-  "spread": 1.1892123697315355,
-  "spread_fraction_of_max": 0.1321347077479484,
+  "spread": 1.5656400266967605,
+  "spread_fraction_of_max": 0.17396000296630673,
   "successor_only_fraction": 0.4444444444444444,
   "successor_strict_count": 4,
   "successor_strict_segments": [
@@ -209,5 +209,5 @@
   "successor_tie_inclusive_count": 4,
   "swap_shared_class": "corporate",
   "unstaffed_segment_count_field": "spec'd for S9 run records",
-  "worst": 7.202078859645841
+  "worst": 6.9008248600628
 }

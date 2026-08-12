@@ -22,17 +22,17 @@
         "sovereign"
       ]
     ],
-    "max_effect_share": 0.131619,
+    "max_effect_share": 0.160675,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 0,
-    "spread": 1.8043,
+    "spread": 2.096302,
     "strict_count": 4,
     "swap_shared_class": "retail"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.254604,
+    "aggregate_output_floor_ratio": 1.352569,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -53,17 +53,17 @@
         "bank"
       ]
     ],
-    "max_effect_share": 0.07535,
+    "max_effect_share": 0.087015,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 1,
-    "spread": 1.072818,
+    "spread": 1.157038,
     "strict_count": 4,
     "swap_shared_class": "corporate"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.344352,
+    "aggregate_output_floor_ratio": 1.294823,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -84,17 +84,17 @@
         "sovereign"
       ]
     ],
-    "max_effect_share": 0.103708,
+    "max_effect_share": 0.07709,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 2,
-    "spread": 1.42876,
+    "spread": 1.071663,
     "strict_count": 4,
     "swap_shared_class": "bank"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.397388,
+    "aggregate_output_floor_ratio": 1.266714,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -115,11 +115,11 @@
         "corporate"
       ]
     ],
-    "max_effect_share": 0.096501,
+    "max_effect_share": 0.122756,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 3,
-    "spread": 1.346012,
+    "spread": 1.659937,
     "strict_count": 4,
     "swap_shared_class": "bank"
   },
@@ -146,17 +146,17 @@
         "sovereign"
       ]
     ],
-    "max_effect_share": 0.075579,
+    "max_effect_share": 0.083888,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 4,
-    "spread": 1.150786,
+    "spread": 1.234509,
     "strict_count": 4,
     "swap_shared_class": "retail"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.243364,
+    "aggregate_output_floor_ratio": 1.405043,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -177,17 +177,17 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.119461,
+    "max_effect_share": 0.121845,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 5,
-    "spread": 1.80388,
+    "spread": 1.650496,
     "strict_count": 4,
     "swap_shared_class": "retail"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.228922,
+    "aggregate_output_floor_ratio": 1.201559,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -208,17 +208,17 @@
         "retail"
       ]
     ],
-    "max_effect_share": 0.107334,
+    "max_effect_share": 0.108167,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 6,
-    "spread": 1.597019,
+    "spread": 1.486635,
     "strict_count": 4,
     "swap_shared_class": "sovereign"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.250642,
+    "aggregate_output_floor_ratio": 1.069372,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -239,11 +239,11 @@
         "bank"
       ]
     ],
-    "max_effect_share": 0.060737,
+    "max_effect_share": 0.040768,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 7,
-    "spread": 0.952633,
+    "spread": 0.632155,
     "strict_count": 4,
     "swap_shared_class": "corporate"
   },
@@ -270,17 +270,17 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.1347,
+    "max_effect_share": 0.159976,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 8,
-    "spread": 2.077972,
+    "spread": 2.344899,
     "strict_count": 4,
     "swap_shared_class": "retail"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.189629,
+    "aggregate_output_floor_ratio": 1.25195,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -301,11 +301,11 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.081488,
+    "max_effect_share": 0.091849,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 9,
-    "spread": 1.085916,
+    "spread": 1.194407,
     "strict_count": 4,
     "swap_shared_class": "sovereign"
   },
@@ -332,17 +332,17 @@
         "sovereign"
       ]
     ],
-    "max_effect_share": 0.092448,
+    "max_effect_share": 0.123444,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 10,
-    "spread": 1.40442,
+    "spread": 1.703625,
     "strict_count": 4,
     "swap_shared_class": "retail"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.406041,
+    "aggregate_output_floor_ratio": 1.50431,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -363,17 +363,17 @@
         "corporate"
       ]
     ],
-    "max_effect_share": 0.11637,
+    "max_effect_share": 0.175794,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 11,
-    "spread": 1.769256,
+    "spread": 2.414532,
     "strict_count": 4,
     "swap_shared_class": "sovereign"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.184109,
+    "aggregate_output_floor_ratio": 1.283415,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -394,17 +394,17 @@
         "retail"
       ]
     ],
-    "max_effect_share": 0.082372,
+    "max_effect_share": 0.098118,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 12,
-    "spread": 1.349369,
+    "spread": 1.553724,
     "strict_count": 4,
     "swap_shared_class": "corporate"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.301129,
+    "aggregate_output_floor_ratio": 1.223664,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -425,17 +425,17 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.101134,
+    "max_effect_share": 0.058863,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 13,
-    "spread": 1.355838,
+    "spread": 0.773161,
     "strict_count": 4,
     "swap_shared_class": "sovereign"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.388828,
+    "aggregate_output_floor_ratio": 1.414215,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -456,17 +456,17 @@
         "bank"
       ]
     ],
-    "max_effect_share": 0.068534,
+    "max_effect_share": 0.083718,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 14,
-    "spread": 1.15515,
+    "spread": 1.412761,
     "strict_count": 4,
     "swap_shared_class": "corporate"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.360601,
+    "aggregate_output_floor_ratio": 1.393271,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -487,17 +487,17 @@
         "retail"
       ]
     ],
-    "max_effect_share": 0.102421,
+    "max_effect_share": 0.11233,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 15,
-    "spread": 1.484508,
+    "spread": 1.454648,
     "strict_count": 4,
     "swap_shared_class": "sovereign"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.230866,
+    "aggregate_output_floor_ratio": 1.243887,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -518,17 +518,17 @@
         "bank"
       ]
     ],
-    "max_effect_share": 0.138308,
+    "max_effect_share": 0.169617,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 16,
-    "spread": 2.270359,
+    "spread": 2.586528,
     "strict_count": 4,
     "swap_shared_class": "mdb"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.089771,
+    "aggregate_output_floor_ratio": 1.103334,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -549,17 +549,17 @@
         "retail"
       ]
     ],
-    "max_effect_share": 0.050645,
+    "max_effect_share": 0.07446,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 17,
-    "spread": 0.806286,
+    "spread": 1.106846,
     "strict_count": 4,
     "swap_shared_class": "sovereign"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.273411,
+    "aggregate_output_floor_ratio": 1.341239,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -580,11 +580,11 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.158063,
+    "max_effect_share": 0.136675,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 18,
-    "spread": 2.398875,
+    "spread": 1.836612,
     "strict_count": 4,
     "swap_shared_class": "sovereign"
   },
@@ -611,17 +611,17 @@
         "corporate"
       ]
     ],
-    "max_effect_share": 0.114717,
+    "max_effect_share": 0.125432,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 19,
-    "spread": 1.878593,
+    "spread": 1.988499,
     "strict_count": 4,
     "swap_shared_class": "retail"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.203771,
+    "aggregate_output_floor_ratio": 1.724268,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -642,11 +642,11 @@
         "retail"
       ]
     ],
-    "max_effect_share": 0.062303,
+    "max_effect_share": 0.163503,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 20,
-    "spread": 0.922299,
+    "spread": 2.438026,
     "strict_count": 4,
     "swap_shared_class": "corporate"
   },
@@ -673,17 +673,17 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.118074,
+    "max_effect_share": 0.165345,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 21,
-    "spread": 1.752211,
+    "spread": 2.206824,
     "strict_count": 4,
     "swap_shared_class": "retail"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.274028,
+    "aggregate_output_floor_ratio": 1.205484,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -704,11 +704,11 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.128375,
+    "max_effect_share": 0.119029,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 22,
-    "spread": 1.653039,
+    "spread": 1.541272,
     "strict_count": 4,
     "swap_shared_class": "corporate"
   },
@@ -735,17 +735,17 @@
         "sovereign"
       ]
     ],
-    "max_effect_share": 0.051643,
+    "max_effect_share": 0.058195,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 23,
-    "spread": 0.799823,
+    "spread": 0.86353,
     "strict_count": 4,
     "swap_shared_class": "retail"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.298073,
+    "aggregate_output_floor_ratio": 1.272821,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -766,17 +766,17 @@
         "corporate"
       ]
     ],
-    "max_effect_share": 0.123622,
+    "max_effect_share": 0.124012,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 24,
-    "spread": 1.667239,
+    "spread": 1.836469,
     "strict_count": 4,
     "swap_shared_class": "sovereign"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.250524,
+    "aggregate_output_floor_ratio": 1.416757,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -797,17 +797,17 @@
         "retail"
       ]
     ],
-    "max_effect_share": 0.091363,
+    "max_effect_share": 0.120805,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 25,
-    "spread": 1.633862,
+    "spread": 2.010007,
     "strict_count": 4,
     "swap_shared_class": "bank"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.472401,
+    "aggregate_output_floor_ratio": 1.539047,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -828,17 +828,17 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.104018,
+    "max_effect_share": 0.123126,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 26,
-    "spread": 1.830424,
+    "spread": 1.643739,
     "strict_count": 4,
     "swap_shared_class": "sovereign"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.215101,
+    "aggregate_output_floor_ratio": 1.111222,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -859,17 +859,17 @@
         "retail"
       ]
     ],
-    "max_effect_share": 0.09597,
+    "max_effect_share": 0.066105,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 27,
-    "spread": 1.436147,
+    "spread": 1.069448,
     "strict_count": 4,
     "swap_shared_class": "mdb"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.3114,
+    "aggregate_output_floor_ratio": 1.324173,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -890,17 +890,17 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.089814,
+    "max_effect_share": 0.147324,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 28,
-    "spread": 1.459108,
+    "spread": 2.167807,
     "strict_count": 4,
     "swap_shared_class": "sovereign"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.441076,
+    "aggregate_output_floor_ratio": 1.393069,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -921,17 +921,17 @@
         "bank"
       ]
     ],
-    "max_effect_share": 0.113785,
+    "max_effect_share": 0.096945,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 29,
-    "spread": 1.83492,
+    "spread": 1.598009,
     "strict_count": 4,
     "swap_shared_class": "corporate"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.564929,
+    "aggregate_output_floor_ratio": 1.434215,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -952,17 +952,17 @@
         "bank"
       ]
     ],
-    "max_effect_share": 0.17628,
+    "max_effect_share": 0.152506,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 30,
-    "spread": 2.241109,
+    "spread": 1.897082,
     "strict_count": 4,
     "swap_shared_class": "mdb"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.467324,
+    "aggregate_output_floor_ratio": 1.369749,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -983,11 +983,11 @@
         "bank"
       ]
     ],
-    "max_effect_share": 0.141522,
+    "max_effect_share": 0.133767,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 31,
-    "spread": 2.196833,
+    "spread": 1.902915,
     "strict_count": 4,
     "swap_shared_class": "retail"
   },
@@ -1014,17 +1014,17 @@
         "sovereign"
       ]
     ],
-    "max_effect_share": 0.114874,
+    "max_effect_share": 0.140696,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 32,
-    "spread": 1.584987,
+    "spread": 1.827255,
     "strict_count": 4,
     "swap_shared_class": "retail"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.195138,
+    "aggregate_output_floor_ratio": 1.125072,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -1045,17 +1045,17 @@
         "retail"
       ]
     ],
-    "max_effect_share": 0.08528,
+    "max_effect_share": 0.065381,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 33,
-    "spread": 1.468851,
+    "spread": 0.918185,
     "strict_count": 4,
     "swap_shared_class": "corporate"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.345946,
+    "aggregate_output_floor_ratio": 1.293834,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -1076,17 +1076,17 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.065901,
+    "max_effect_share": 0.133541,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 34,
-    "spread": 0.874307,
+    "spread": 1.787243,
     "strict_count": 4,
     "swap_shared_class": "bank"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.878226,
+    "aggregate_output_floor_ratio": 1.459423,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -1107,17 +1107,17 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.117111,
+    "max_effect_share": 0.128126,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 35,
-    "spread": 1.561964,
+    "spread": 1.744837,
     "strict_count": 4,
     "swap_shared_class": "sovereign"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.233855,
+    "aggregate_output_floor_ratio": 1.303254,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -1138,17 +1138,17 @@
         "sovereign"
       ]
     ],
-    "max_effect_share": 0.133388,
+    "max_effect_share": 0.151973,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 36,
-    "spread": 1.878635,
+    "spread": 2.111182,
     "strict_count": 4,
     "swap_shared_class": "bank"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.262825,
+    "aggregate_output_floor_ratio": 1.240087,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -1169,17 +1169,17 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.068536,
+    "max_effect_share": 0.080728,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 37,
-    "spread": 1.102196,
+    "spread": 1.190452,
     "strict_count": 4,
     "swap_shared_class": "corporate"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.056465,
+    "aggregate_output_floor_ratio": 1.131389,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -1200,17 +1200,17 @@
         "mdb"
       ]
     ],
-    "max_effect_share": 0.09123,
+    "max_effect_share": 0.066503,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 38,
-    "spread": 1.414987,
+    "spread": 1.119567,
     "strict_count": 4,
     "swap_shared_class": "corporate"
   },
   {
     "admitted": true,
-    "aggregate_output_floor_ratio": 1.336845,
+    "aggregate_output_floor_ratio": 1.334798,
     "fabrication_blind_carriers": [],
     "generated": true,
     "lattice": [
@@ -1231,11 +1231,11 @@
         "corporate"
       ]
     ],
-    "max_effect_share": 0.16893,
+    "max_effect_share": 0.141977,
     "oracle_perfect": false,
     "rejection_causes": [],
     "seed": 39,
-    "spread": 2.210023,
+    "spread": 1.824027,
     "strict_count": 4,
     "swap_shared_class": "mdb"
   }

@@ -110,6 +110,12 @@ STATE_PREDICATES: dict[str, str] = {
     "refused_concurrency":
         "assigned, never executed, and every refusal on it names only "
         "concurrency — transient, and it would have run given more timesteps",
+    "started_and_failed":
+        "a worker RAN this segment and the run threw. Keyed on a "
+        "`worker_execution_failed` event, never on absence from completions. "
+        "Carries `error_type`, so a turn-cap death and a provider error are not "
+        "summed. A DEFECT — the harness or the provider broke, and the manager's "
+        "allocation is not what is being observed.",
     "unexecuted_no_refusal":
         "assigned, never executed, and NO refusal fired on it — the horizon "
         "ended first, or it never became ready",
@@ -246,6 +252,32 @@ def split(bundle: dict[str, Any]) -> dict[str, Any]:
     executed = {str(c["task_id"]) for c in bundle.get("completions", [])}
     detail = bundle.get("parse_detail") or {}
 
+    # ★ A TASK THAT RAN AND THREW (L19). `executed` is membership of COMPLETIONS,
+    # so a run that burned 564 seconds over sixteen model calls and raised
+    # `MaxTurnsExceeded` was "never executed" -- and then, because the allotment it
+    # had already consumed kept refusing later assignments, it was classified
+    # `refused_allotment`, a DV state. It WAS the DV=1 on the only bundle we can
+    # classify. Every step was a fair reading of the step before it and the manager
+    # did nothing wrong.
+    #
+    # Keyed on the EVENT, not on an absence: `worker_execution_failed` carries
+    # `error_type` and a traceback and has been in every bundle since the harness
+    # was built. Nothing read it.
+    # EVERY failure, not the first. seg_04 in the R3 bundle threw TWICE for
+    # DIFFERENT reasons -- APIConnectionError at t2, MaxTurnsExceeded at t15 -- and
+    # a `setdefault` kept only the provider error, hiding the turn-cap death behind
+    # it. That is the exact summing this state's own predicate forbids, committed
+    # in the code that introduced the predicate.
+    failures: dict[str, list[str]] = {}
+    for event in bundle.get("events", []):
+        if event.get("event_type") != "worker_execution_failed":
+            continue
+        payload = event.get("payload") or {}
+        task_id = str(event.get("task_id") or payload.get("task_id") or "")
+        if task_id:
+            failures.setdefault(task_id, []).append(
+                payload.get("error_type") or "unknown")
+
     states: dict[str, str] = {}
     for segment_id, task_id in by_segment.items():
         if task_id in executed:
@@ -291,6 +323,14 @@ def split(bundle: dict[str, Any]) -> dict[str, Any]:
                 states[segment_id] = "executed_but_unparseable"
             else:
                 states[segment_id] = "executed_and_parsed"
+        elif task_id in failures:
+            # PRECEDENCE, STATED: `executed` wins over this, because a task that
+            # failed once and COMPLETED on a later attempt succeeded -- seg_00 in
+            # the R3 bundle failed at t3 and completed at t15, and it is
+            # `executed_and_parsed`, correctly. This wins over the REFUSAL states,
+            # because when a run threw and the refusals came afterwards the throw
+            # is the root and the refusals are its consequence.
+            states[segment_id] = "started_and_failed"
         elif task_id not in assigned:
             states[segment_id] = "never_assigned"
         else:
@@ -319,6 +359,10 @@ def split(bundle: dict[str, Any]) -> dict[str, Any]:
 
     counts = {state: sum(1 for s in states.values() if s == state)
               for state in STATE_PREDICATES}
+    # The CAUSE travels with the state. A turn-cap death is ours to fix; a provider
+    # JSON error is not, and summing them would hide which.
+    failure_causes = {seg: sorted(set(failures[by_segment[seg]]))
+                      for seg, st in states.items() if st == "started_and_failed"}
 
     # THE RESIDUAL CHECK COULD NOT FIRE ON ANY DATA, AND THAT IS WORSE THAN NOT
     # HAVING IT (RR). `states` is only ever assigned one of the eight literals that
@@ -376,6 +420,7 @@ def split(bundle: dict[str, Any]) -> dict[str, Any]:
     return {
         "states": states,
         "counts": counts,
+        "failure_causes": failure_causes,
         "predicates": dict(STATE_PREDICATES),
         "n_segments": len(by_segment),
         "residual": residual,

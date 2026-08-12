@@ -404,7 +404,12 @@ def main() -> int:
     # two). Checked BEFORE rewriting, so a stale record fails rather than being
     # quietly overwritten by the same run that was supposed to detect it.
     # --- THE HEADLINE, with its provenance, so it cannot be mis-sourced again --
-    headline = gate.suite_headline()
+    # THE SHIPPED CELL, NOT THE GENERATOR DEFAULT (L14-b). This called
+    # `suite_headline()` bare, which reports the `current` lattice -- a cell whose
+    # stale-card ceiling is 0.000% on 60 of 60 instances, so under the restated
+    # criterion 3 it admits NOTHING. The acceptance was printing "QUOTE THIS FOR
+    # THE STUDY" over a population the study does not run on.
+    headline = gate.suite_headline(lattice="partial", shared_class_segments=1)
     print(f"\n   HEADLINE EFFECT SIZE — reported for BOTH populations, because "
           f"they answer\n   different questions and a reader cannot tell which "
           f"they hold unless it is labelled:")
@@ -412,14 +417,19 @@ def main() -> int:
         block = headline[key]
         marker = "  <- QUOTE THIS FOR THE STUDY" if key == "admitted" else ""
         print(f"     {block['population']}, n={block['n']}{marker}")
+        if block.get("empty"):
+            print(f"       EMPTY — {block['why']}")
+            continue
         print(f"       min {block['min']:.4f}  median {block['median']:.4f}  "
               f"mean {block['mean']:.4f}  max {block['max']:.4f}")
         print(f"       sd {block['sd_sample']:.4f} sample / "
               f"{block['sd_population']:.4f} population; reaching MDE "
               f"{headline['mde']}: {block['n_reaching_mde']} of {block['n']}")
-    print(f"     medians differ by {headline['median_difference']:.4f} — small, "
-          f"and not the point: the point is\n     that the population must be "
-          f"named, since the study runs on the ADMITTED set.")
+    diff = headline['median_difference']
+    print(f"     medians differ by "
+          f"{'n/a (a population is empty)' if diff is None else format(diff, '.4f')}"
+          f" — small, and not the point: the point is\n     that the population "
+          f"must be named, since the study runs on the ADMITTED set.")
 
     # BELOW-MDE IS UNIVERSAL IN BOTH populations. Asserted on both rather than
     # inferred from the subset relation, because "a fortiori" is a reason to

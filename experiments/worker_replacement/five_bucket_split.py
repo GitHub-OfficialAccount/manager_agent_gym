@@ -23,15 +23,16 @@ with no arguments it reports the committed corpus baseline.
 
 from __future__ import annotations
 
+import collections
 import glob
 import json
 import sys
 from typing import Any
 
 try:  # package import -- the form every other module here uses
-    from .finance_split import STATE_PREDICATES, split
+    from .finance_split import ALLOTMENT_UNREACHABLE, STATE_PREDICATES, split
 except ImportError:  # direct-script invocation, which the docstring documents
-    from finance_split import STATE_PREDICATES, split
+    from finance_split import ALLOTMENT_UNREACHABLE, STATE_PREDICATES, split
 
 # Ruling of 2026-08-09, corrected from a two-way split. The correction that
 # matters and the reason the mapping is worth a file: `refused_unavailable` was
@@ -42,7 +43,19 @@ BUCKETS: dict[str, tuple[str, ...]] = {
     "DV": ("never_assigned", "refused_allotment", "executed_and_declined"),
     "MANIPULATION": ("refused_unavailable",),
     "BUDGET_HORIZON": ("refused_concurrency", "unexecuted_no_refusal"),
-    "DEFECT": ("executed_but_unparseable",),
+    # `started_and_failed` (L19) joins DEFECT because that is what it is: the worker
+    # RAN and the run threw. Its predicate is keyed on the `worker_execution_failed`
+    # EVENT, never on absence from the completions list -- which is what made the old
+    # partition assert something false about every failed run, calling a task with a
+    # start event, 564 s of wall clock and a traceback "never executed".
+    #
+    # DEFECT and not DV, and the distinction is the whole finding: on the R3 bundle
+    # this ONE reclassification takes DV from 1 to 0, because the manager was being
+    # charged for a chain it did not start --
+    #     turn-cap death -> allotment consumed before the work ran -> allotment
+    #     refusals -> refused_allotment -> "the manager allocated badly".
+    # Every step read fairly from the one before it, and the manager did nothing wrong.
+    "DEFECT": ("executed_but_unparseable", "started_and_failed"),
     "MEASUREMENT": ("executed_and_parsed",),
 }
 
@@ -115,8 +128,10 @@ BUCKET_MEANS: dict[str, str] = {
                     "must be total; it is not kept because it can fill.",
     "BUDGET_HORIZON": "the episode ran out of timesteps or slots. A property of "
                       "the run's budget, not of the manager's judgement.",
-    "DEFECT": "the harness or the worker produced something unreadable. A bug "
-              "to fix, never a finding.",
+    "DEFECT": "the harness or the worker produced something unreadable, or the run "
+              "THREW. A bug to fix, never a finding. `started_and_failed` carries "
+              "`error_type`, so a turn-cap death and a provider error are never "
+              "summed into one number.",
     "MEASUREMENT": "executed and yielded a value. The scorer's business from here.",
 }
 
@@ -169,6 +184,26 @@ def five_bucket(bundle: dict[str, Any]) -> dict[str, Any]:
             "uninterpretable_states": flagged,
             "reason": result.get("uninterpretable_reason") if flagged else None,
         }
+    # ★ THE SAME TREATMENT FOR DV, ON RR's FINDING, AND FOR THE SAME REASON.
+    # With the allotment removed, `refused_allotment` has no emission site left --
+    # one of DV's three states cannot fire. `never_assigned` is reachable but LS
+    # established it is indistinguishable from "the manager never tried", since an
+    # assignment to a departed worker returns early and emits nothing. That leaves
+    # `executed_and_declined`, which is rare and pools two causes.
+    #
+    # So a DV of zero is PARTLY STRUCTURAL, and reporting it as "the manager made no
+    # allocation error" would be the MANIPULATION=0 shape again -- a bucket read as
+    # evidence when the live question is whether it can fill at all. Three predictions
+    # were voided on exactly that a week ago.
+    if ALLOTMENT_UNREACHABLE:
+        out["DV"]["partly_unreachable"] = ["refused_allotment"]
+        out["DV"]["reason"] = (
+            "`refused_allotment` cannot fire (the allotment is removed) and "
+            "`never_assigned` cannot be distinguished from the manager never trying. "
+            "A zero here is not evidence that the manager allocated well -- see "
+            "`over_assignment`, which is where the allocation signal actually lives."
+        )
+
     # A ZERO THAT CANNOT BE OTHERWISE IS NOT A MEASUREMENT. Carried on the data
     # structure, not in a printed banner, because every consumer reads `buckets`
     # and a banner is dropped by the first summariser that reformats the output.
@@ -180,8 +215,31 @@ def five_bucket(bundle: dict[str, Any]) -> dict[str, Any]:
             "structural, not behavioural, and must not be reported as evidence "
             "that the manager never mis-assigned to the departed worker."
         )
+    # ★ THE ALLOCATION SIGNAL THE BUCKETS DO NOT CARRY (RR). Over-assignment is
+    # COUNTABLE and never needed a refusal code: `intended_allocation` is what the
+    # manager assigned, `allocation` is what executed, and the difference is the
+    # manager giving a worker more than it got through. That is an allocation
+    # outcome, it is directly observable, and it sits OUTSIDE the five buckets --
+    # so reporting DV alone reports an emptied bucket while the quantity it names
+    # lives in a comparison this split does not compute. It computes it here.
+    intended = collections.Counter(
+        w for w in (bundle.get("intended_allocation") or {}).values()
+        if w and not str(w).startswith("__"))
+    realised = collections.Counter(
+        w for w in (bundle.get("allocation") or {}).values()
+        if w and not str(w).startswith("__"))
+    over = {w: intended[w] - realised[w] for w in intended if intended[w] > realised[w]}
+
     return {
         "buckets": out,
+        "over_assignment": {
+            "intended_per_worker": dict(intended),
+            "realised_per_worker": dict(realised),
+            "over_assigned": over,
+            "means": "the manager assigned a worker more segments than executed. An "
+                     "ALLOCATION outcome, countable without any refusal code, and the "
+                     "reason a DV of zero is not evidence that allocation was good.",
+        },
         "n_segments": result["n_segments"],
         "residual": result["residual"],
         "comparator": "the segment denominator for this episode",

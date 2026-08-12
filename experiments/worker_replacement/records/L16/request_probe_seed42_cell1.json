@@ -1,0 +1,85 @@
+{
+  "seed": 42,
+  "cell": "1",
+  "max_turns": 16,
+  "tools": [
+    "send_message",
+    "broadcast_message",
+    "get_recent_messages",
+    "get_conversation_with",
+    "get_task_messages"
+  ],
+  "runs": [
+    {
+      "task": "Risk-weighted assets \u2014 seg_05",
+      "wall_s": 35.53,
+      "requests": 3,
+      "in_requests_s": 35.5,
+      "outside_requests_s": 0.04,
+      "longest_request_s": 15.22,
+      "median_request_s": 14.82,
+      "failed_requests": 0,
+      "error": null
+    },
+    {
+      "task": "Risk-weighted assets \u2014 seg_00",
+      "wall_s": 149.02,
+      "requests": 3,
+      "in_requests_s": 149.01,
+      "outside_requests_s": 0.01,
+      "longest_request_s": 92.69,
+      "median_request_s": 31.03,
+      "failed_requests": 0,
+      "error": null
+    },
+    {
+      "task": "Risk-weighted assets \u2014 seg_03",
+      "wall_s": 20.38,
+      "requests": 3,
+      "in_requests_s": 20.37,
+      "outside_requests_s": 0.01,
+      "longest_request_s": 9.51,
+      "median_request_s": 7.72,
+      "failed_requests": 0,
+      "error": null
+    },
+    {
+      "task": "Risk-weighted assets \u2014 seg_07",
+      "wall_s": 438.92,
+      "requests": 8,
+      "in_requests_s": 438.89,
+      "outside_requests_s": 0.03,
+      "longest_request_s": 305.14,
+      "median_request_s": 16.36,
+      "failed_requests": 0,
+      "error": null
+    },
+    {
+      "task": "Risk-weighted assets \u2014 seg_01",
+      "wall_s": 128.37,
+      "requests": 3,
+      "in_requests_s": 128.36,
+      "outside_requests_s": 0.01,
+      "longest_request_s": 93.09,
+      "median_request_s": 18.7,
+      "failed_requests": 0,
+      "error": null
+    },
+    {
+      "task": "Risk-weighted assets \u2014 seg_04",
+      "wall_s": 63.69,
+      "requests": 3,
+      "in_requests_s": 63.68,
+      "outside_requests_s": 0.01,
+      "longest_request_s": 28.46,
+      "median_request_s": 27.14,
+      "failed_requests": 0,
+      "error": null
+    }
+  ],
+  "does_not_establish": [
+    "tasks run in ISOLATION, so episode contention is not reproduced",
+    "request duration is the CLIENT's view: provider-side queuing is included in it and is not separable from generation",
+    "measured with the probe registered \u2014 cite as '<commit> + probe'"
+  ]
+}

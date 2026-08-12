@@ -71,7 +71,7 @@ def main() -> int:
     print("  solves completely measures lookup, not management.")
     rejected_by_3 = [
         r["seed"] for r in generated
-        if not r["conditions"]["3_scripted_baseline_below_oracle"]
+        if not r["conditions"]["3_stale_card_ceiling_above_zero"]
     ]
     exact = sorted(rejected_by_3) == sorted(all_trivial)
     print(f"  condition 3 rejects: {sorted(rejected_by_3)}")
@@ -106,23 +106,35 @@ def main() -> int:
     print("\ncapacity consequences (asserted, not narrated):")
     instance = gen.generate(101)
     load = sc.greedy_card_match_load(instance)
-    binds = gate.CAP < load
-    print(f"  greedy card-match load {load} vs cap {gate.CAP} -> "
-          f"[{'ok' if binds else 'FAIL'}] the cap BINDS")
-    if not binds:
-        failures.append("cap does not bind on the committed instance")
 
+    # ★ "THE CAP BINDS" IS RETIRED (L14-b). It asserted `gate.CAP < load`, and
+    # gate.CAP is now UNCAPPED. Reported as context, asserted on nothing.
+    print(f"  greedy card-match load {load} vs cap {gate.CAP} (UNCAPPED) -> "
+          f"the cap-binds assertion is RETIRED, see ALLOCATION_DIFFICULTY_RETIRED")
+
+    # ★ "STRUCTURALLY LOAD-BEARING" IS RESTATED, AND THE CHANGE IS SCIENTIFIC, NOT
+    # COSMETIC. It read: without the successor, (roster-1) x cap < segments, so
+    # segments MUST go unstaffed -- the successor mattered by ARITHMETIC, whoever it
+    # was. With no cap two workers can absorb all nine segments, so that guarantee
+    # is gone.
+    #
+    # What must now carry it is COVERAGE: the successor matters because of WHICH
+    # classes it is approved for, not because there is nowhere else to put the work.
+    # That is the better property for this study -- the whole question is whether
+    # the manager learns WHO the newcomer is -- but it is strictly weaker, it is not
+    # guaranteed by construction, and it is now MEASURED per instance instead of
+    # being implied by three integers.
     without = sc.oracle_without_successor(instance, cap=gate.CAP)
     full = sc.oracle_capacitated(instance, cap=gate.CAP)
-    remaining_capacity = (len(instance["event"]["roster_post_swap"]) - 1) * gate.CAP
-    structural = remaining_capacity < len(instance["segments"])
-    print(f"  without the successor: {remaining_capacity} capacity for "
-          f"{len(instance['segments'])} segments -> "
-          f"[{'ok' if structural else 'FAIL'}] segments MUST go unstaffed "
-          f"(oracle {full:.4f} -> {without:.4f}, M/oracle "
-          f"{(full - without) / full:.4f})")
-    if not structural:
-        failures.append("successor is not structurally load-bearing under the cap")
+    load_bearing = full - without > 1e-9
+    print(f"  without the successor: oracle {full:.4f} -> {without:.4f}, "
+          f"M/oracle {(full - without) / full:.4f} -> "
+          f"[{'ok' if load_bearing else 'FAIL'}] the successor is load-bearing "
+          f"through COVERAGE (capacity no longer forces it)")
+    if not load_bearing:
+        failures.append(
+            "successor is not load-bearing: removing it does not lower the oracle, "
+            "so no information about it can matter on this instance")
 
     # Sigma-max must remain a valid upper bound on the capacitated oracle.
     bound_ok = full <= sc.oracle(instance) + 1e-9
@@ -150,9 +162,9 @@ def main() -> int:
         for f in failures:
             print(f"  {f}")
         return 1
-    print("RESULT: PASS — all seeds generate; condition 3 rejects exactly the "
-          "label-trivial instances; the cap binds and the successor is "
-          "structurally load-bearing")
+    print("RESULT: PASS — all seeds generate; condition 3 rejects instances whose "
+          "stale card already attains the oracle; the successor is load-bearing "
+          "through COVERAGE (the capacity guarantee is retired, L14-b)")
     return 0
 
 

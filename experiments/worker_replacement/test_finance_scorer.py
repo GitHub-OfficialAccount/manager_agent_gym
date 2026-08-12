@@ -220,6 +220,47 @@ def main() -> int:
     if not raised:
         failures.append("foreign report key did not raise")
 
+    # --- EVERY PUBLIC ENTRY POINT ACTUALLY EXECUTES AT THE DEFAULT CAP ---------
+    # ADDED AFTER A NEAR MISS (L14-b). The `UNCAPPED` change put a
+    # `cap = resolve_cap(instance, cap)` inside a closure in `ceiling_vs_stale_card`,
+    # which made `cap` local and left the read unbound. `oracle_capacitated` and
+    # `ceiling_vs_ignorant` were fine, so every acceptance in the suite passed and
+    # ONE function raised on every call.
+    #
+    # RR found it by trying to produce a third number and failing -- their words:
+    # "I did not review the oracle change, I ran it." That is luck, not method, and
+    # this is the deliberate version. It asserts almost nothing about the VALUES;
+    # it asserts that each entry point runs and returns a finite number at the
+    # DEFAULT cap, which is the case that had no coverage because every existing
+    # test passed an explicit one.
+    #
+    # The failing case it would have caught is named so this cannot pass vacuously:
+    # `ceiling_vs_stale_card(instance)` raised UnboundLocalError.
+    print("\nevery public scorer entry point, at the DEFAULT cap (regression "
+          "control):")
+    probes = {
+        "oracle_capacitated": lambda i: sc.oracle_capacitated(i),
+        "worst_capacitated": lambda i: sc.worst_capacitated(i),
+        "oracle_without_successor": lambda i: sc.oracle_without_successor(i),
+        "oracle_without_incumbent": lambda i: sc.oracle_without_incumbent(i),
+        "ceiling_vs_stale_card": lambda i: sc.ceiling_vs_stale_card(i)["ceiling"],
+        "ceiling_vs_ignorant": lambda i: sc.ceiling_vs_ignorant(i),
+        "expected_ignorant_score": lambda i: sc.expected_ignorant_score(i),
+        "scripted_label_baseline_capped":
+            lambda i: sc.score(i, sc.scripted_label_baseline_capped(i)),
+    }
+    import math
+    for name, probe in sorted(probes.items()):
+        try:
+            value = probe(instance)
+            ok = isinstance(value, float) and math.isfinite(value)
+            detail = f"{value:.4f}" if ok else f"returned {value!r}"
+        except Exception as exc:
+            ok, detail = False, f"{type(exc).__name__}: {exc}"
+        print(f"   [{'ok' if ok else 'FAIL'}] {name:<32} {detail}")
+        if not ok:
+            failures.append(f"{name} does not execute at the default cap: {detail}")
+
     # record the fixed instance used, so the numbers above are reproducible
     out = HERE / "records" / "S4"
     out.mkdir(parents=True, exist_ok=True)

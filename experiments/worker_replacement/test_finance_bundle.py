@@ -28,6 +28,7 @@ from pathlib import Path
 
 from . import finance_env as env
 from . import finance_gate as gate
+from . import finance_scorer as sc
 from . import finance_generator as gen
 from . import finance_report_parser as rp
 
@@ -270,7 +271,12 @@ def main(path: Path) -> int:
     # bundle where it is four are not comparable against a cap-3 ceiling.
     seg_counts = collections.Counter(
         c["agent_id"] for c in completions if c["task_id"] in seg_task_ids)
-    cap = gate.CAP
+    # RESOLVED, because `gate.CAP` is now `UNCAPPED`/None (L14-b) and comparing an
+    # int against None raised here. Resolving makes the cap the segment count, so
+    # `over` is structurally empty -- which is the honest reading: the runtime
+    # enforces nothing, so no assignment is "over". The counting stays as the
+    # tripwire for its own premise (a non-zero here means a cap came back).
+    cap = sc.resolve_cap(gen.generate(seed), gate.CAP)
     over = {a: n for a, n in seg_counts.items() if n > cap}
     excess = sum(n - cap for n in over.values())
     print(f"\n5. capacity: realised per-worker segment counts {dict(seg_counts)} "

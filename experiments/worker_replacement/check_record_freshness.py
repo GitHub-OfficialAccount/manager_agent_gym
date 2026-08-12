@@ -121,6 +121,43 @@ def normalise(text: str) -> str:
     return _ISO.sub("<TIMESTAMP>", text)
 
 
+def carry_annotations(before: str, after: str) -> tuple[str, list[str]]:
+    """Copy `superseded_*` blocks from the COMMITTED text into a regenerated one.
+
+    ★ THE HOLE I NAMED WAS WORSE THAN I NAMED IT (LS, 2026-08-10). I wrote that a
+    value inside a `superseded_*` block "is not checked". It is not merely
+    unchecked -- it is DELETED by the routine regeneration this check exists to
+    prompt, and every check we have goes green afterwards. `L4/card_ceiling.json`
+    regenerated as +0/-478: zero value change, and all 478 deleted lines were the
+    preserved prior values and the notes explaining what superseded them.
+
+    A value-neutral, history-destroying edit is the worst shape a regeneration can
+    have, because nothing downstream can distinguish it from a no-op.
+
+    THE FIX IS ON THE WRITE PATH, NOT THE COMPARISON. Excluding `superseded_*` from
+    the comparison is still right -- the producer does not emit it, so an annotated
+    record would otherwise report STALE forever. What was missing is that
+    `--regenerate` must CARRY the annotation across rather than let the producer's
+    output silently drop it. The producer stays ignorant of its own archive.
+
+    Returns the merged text and the keys carried, so the run can report them
+    instead of doing it invisibly.
+    """
+    try:
+        old, new = json.loads(before), json.loads(after)
+    except Exception:
+        return after, []
+    if not isinstance(old, dict) or not isinstance(new, dict):
+        return after, []
+    carried = sorted(k for k in old
+                     if any(k.startswith(p) for p in _ANNOTATION_KEYS)
+                     and k not in new)
+    if not carried:
+        return after, []
+    merged = {**new, **{k: old[k] for k in carried}}
+    return json.dumps(merged, indent=2, sort_keys=True) + "\n", carried
+
+
 def committed(path: str) -> str | None:
     out = subprocess.run(["git", "show", f"HEAD:{path}"], cwd=REPO,
                          capture_output=True, text=True)
@@ -143,9 +180,25 @@ def dirty_records() -> list[str]:
     I caught that one only because 0 was impossible given what I thought HEAD held.
     NEXT TIME THE ARITHMETIC MAY NOT BE IMPOSSIBLE, AND THEN IT IS JUST A GREEN.
     Documenting the trap leaves it reachable; refusing to run does not.
+
+    AGAINST `HEAD`, NOT THE INDEX (L14-i, 2026-08-10). This ran
+    `git diff --name-only`, which reports UNSTAGED changes only, so a record edit
+    that was `git add`-ed but not committed passed the guard.
+
+    It was never destructive -- `git checkout -- path` restores from the INDEX, so
+    staged content survives. The failure was a FALSE STALE: the comparison below
+    reads `git show HEAD:<path>`, so a staged-but-uncommitted record was compared
+    against the previous commit and reported as asserting a number the code no
+    longer produces, when in fact the record had already been updated.
+
+    Adding `HEAD` is strictly more inclusive and cannot lose data. I flagged this
+    rather than fixing it, on the general principle of not widening a guard the day
+    before a run; LS's counter is the correct one -- that principle does not apply
+    to a change that only ever catches MORE and destroys nothing, and a
+    false-positive path is exactly the confusing signal to not carry into a run.
     """
     paths = [p for ps in PRODUCERS.values() for p in ps]
-    out = subprocess.run(["git", "diff", "--name-only", "--"] + paths,
+    out = subprocess.run(["git", "diff", "--name-only", "HEAD", "--"] + paths,
                          cwd=REPO, capture_output=True, text=True)
     return [line for line in out.stdout.splitlines() if line.strip()]
 
@@ -165,6 +218,7 @@ def main() -> int:
     print("normalised: UUIDs, timestamps. Anything else differing is a VALUE change.\n")
 
     stale: list[dict] = []
+    annotations_carried: list[dict] = []
     checked = missing = 0
     print(f"{'module':<30}{'record':<44}{'verdict':>10}")
     for module, paths in sorted(PRODUCERS.items()):
@@ -179,6 +233,15 @@ def main() -> int:
                 continue
             actual = (REPO / path)
             after = actual.read_text() if actual.exists() else ""
+            # CARRY THE ANNOTATION BEFORE ANYTHING ELSE LOOKS AT THE FILE. Only in
+            # --regenerate, because that is the only mode that leaves the new file
+            # in the tree; without it the restore below puts the committed version
+            # back anyway.
+            if regenerate and after:
+                after, carried = carry_annotations(before, after)
+                if carried:
+                    actual.write_text(after)
+                    annotations_carried.append({"record": path, "keys": carried})
             checked += 1
             if normalise(before) == normalise(after):
                 print(f"{module:<30}{path.split('/')[-1]:<44}{'fresh':>10}")
@@ -196,6 +259,14 @@ def main() -> int:
             print(f"    {s['record']}")
     if regenerate:
         print("\n  --regenerate: the regenerated files are LEFT IN THE TREE for commit.")
+        if annotations_carried:
+            print("  RETRACTION HISTORY CARRIED ACROSS (the producer does not emit it):")
+            for row in annotations_carried:
+                print(f"    {row['record']}: {', '.join(row['keys'])}")
+        else:
+            print("  no `superseded_*` blocks needed carrying — if you expected "
+                  "some, that is a finding,\n  not a pass: check the record still "
+                  "has them.")
     else:
         print("\n  tree restored; run with --regenerate to keep the new outputs")
 
@@ -204,6 +275,7 @@ def main() -> int:
     (out / "record_freshness.json").write_text(json.dumps({
         "checked": checked, "stale": stale, "untracked": missing,
         "normalised": ["UUID", "ISO timestamp", "superseded_* annotation blocks"],
+        "annotations_carried": annotations_carried,
         "caveats": [
             "PRODUCERS is a DECLARED table, not a scan. A record produced by a "
             "module not listed here is NOT checked, and its absence is silent.",
@@ -213,7 +285,10 @@ def main() -> int:
             "correct",
             "`superseded_*` blocks are excluded from the comparison: they are "
             "provenance ABOUT the record that the producer does not emit. A value "
-            "inside one is therefore NOT checked.",
+            "inside one is therefore NOT checked -- but as of 2026-08-10 it is at "
+            "least PRESERVED: --regenerate carries existing blocks across, because "
+            "before that a regeneration deleted them value-neutrally and every "
+            "check went green afterwards (L4/card_ceiling.json, +0/-478).",
         ],
     }, indent=2, sort_keys=True) + "\n")
     print(f"  written: {out / 'record_freshness.json'}")

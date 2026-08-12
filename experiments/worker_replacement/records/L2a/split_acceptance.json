@@ -59,6 +59,7 @@
       "refused_allotment": 0,
       "refused_concurrency": 3,
       "refused_unavailable": 0,
+      "started_and_failed": 0,
       "unexecuted_no_refusal": 0
     },
     "n_segments": 9,
@@ -72,6 +73,7 @@
     "refused_allotment": "assigned, never executed, and at least one refusal on it names the segment allotment. STRUCTURALLY UNREACHABLE AS THE HARNESS STANDS \u2014 a count of 0 here is UNINFORMATIVE, not a finding. See ALLOTMENT_UNREACHABLE.",
     "refused_concurrency": "assigned, never executed, and every refusal on it names only concurrency \u2014 transient, and it would have run given more timesteps",
     "refused_unavailable": "assigned, never executed, and a refusal named the assignee as UNAVAILABLE. RETRACTED: 'which a roster change can cause, so this is the state a swap run must be able to see separately' \u2014 UNREACHABLE as implemented; a count of 0 here is structural, not behavioural",
+    "started_and_failed": "a worker RAN this segment and the run threw. Keyed on a `worker_execution_failed` event, never on absence from completions. Carries `error_type`, so a turn-cap death and a provider error are not summed. A DEFECT \u2014 the harness or the provider broke, and the manager's allocation is not what is being observed.",
     "unexecuted_no_refusal": "assigned, never executed, and NO refusal fired on it \u2014 the horizon ended first, or it never became ready"
   }
 }

@@ -3,34 +3,34 @@
   "mde": 0.2,
   "rows": [
     {
-      "max": 0.151347,
-      "median_ceiling_share": 0.0924085,
-      "min": 0.061709,
+      "max": 0.156522,
+      "median_ceiling_share": 0.0933885,
+      "min": 0.044313,
       "n_reaching_mde": 0,
       "n_seeds": 24,
       "shared_class_segments": 2
     },
     {
-      "max": 0.152659,
-      "median_ceiling_share": 0.0961615,
-      "min": 0.041785,
+      "max": 0.159485,
+      "median_ceiling_share": 0.10145799999999999,
+      "min": 0.034861,
       "n_reaching_mde": 0,
       "n_seeds": 24,
       "shared_class_segments": 3
     },
     {
-      "max": 0.158063,
-      "median_ceiling_share": 0.10177749999999999,
-      "min": 0.050645,
+      "max": 0.175794,
+      "median_ceiling_share": 0.11567949999999999,
+      "min": 0.040768,
       "n_reaching_mde": 0,
       "n_seeds": 24,
       "shared_class_segments": 4
     },
     {
-      "max": 0.14353,
-      "median_ceiling_share": 0.0969615,
-      "min": 0.047188,
-      "n_reaching_mde": 0,
+      "max": 0.201596,
+      "median_ceiling_share": 0.11628,
+      "min": 0.039088,
+      "n_reaching_mde": 1,
       "n_seeds": 24,
       "shared_class_segments": 5
     }

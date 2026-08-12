@@ -40,7 +40,17 @@ SHIPPED: dict[str, Any] = {
     "amplify_divergence": False,
     "amplify_irb_priority": False,
 }
-CAP = 3
+# ★ NOT A CAPACITY ANY MORE (L14-b). The runtime enforces none, so property 1 must
+# not price re-routing around one -- measuring the ceiling at 3 here scored the
+# instance under a constraint the world does not have, and reported 5.52% where the
+# draw reported 4.97% for the same seed. Two numbers for one quantity, from two
+# modules that disagree about the world: the mismatch L14-b removed, surviving in
+# the acceptance that is supposed to police it.
+#
+# The name is KEPT only where it still means a segment count -- fixture 2 forces
+# `shared_class_segments = SEGMENTS_PER_WORKER`, which is about how many segments
+# land in a class and has nothing to do with capacity.
+SEGMENTS_PER_WORKER = 3
 
 # Digest of the Basel tables as committed. Property 5 detects PERTURBATION; it does not
 # establish correctness against BCBS -- that is S1's job via `test_basel_reference`, and
@@ -111,7 +121,7 @@ def n_a(instance: dict[str, Any]) -> int:
 # --------------------------------------------------------------------------- #
 
 def p1_ceiling_positive(inst: dict[str, Any]) -> tuple[bool, str]:
-    share = sc.ceiling_vs_stale_card(inst, cap=CAP)["ceiling_share"]
+    share = sc.ceiling_vs_stale_card(inst)["ceiling_share"]  # no cap: the runtime has none
     return (share or 0.0) > 1e-9, f"ceiling_share={0.0 if share is None else share:.5f}"
 
 
@@ -263,7 +273,7 @@ def _fixture_p2(seed: int, pinned: str) -> tuple[bool, str]:
     tried, skipped = [], []
     for candidate in (seed, *range(12)):
         try:
-            inst = gen.generate(candidate, **{**SHIPPED, "shared_class_segments": CAP})
+            inst = gen.generate(candidate, **{**SHIPPED, "shared_class_segments": SEGMENTS_PER_WORKER})
         except (gen.InstanceAssertionError, ValueError) as exc:
             # Generation refuses in TWO ways and an earlier version knew only one:
             # at segs=3 and irb_applicable_fraction=0.89 it raises a bare ValueError
@@ -347,7 +357,7 @@ def _fixture_p5b(seed: int, pinned: str) -> tuple[bool, str]:
 
 
 #: A seed measured as rejected at the shipped cell (18 of 40 are; seed 0 is the
-#: lowest, failing `3_scripted_baseline_below_oracle`). Used only as a SEARCH HINT
+#: lowest, failing `3_stale_card_ceiling_above_zero`). Used only as a SEARCH HINT
 #: now -- see `_fixture_p6`, which no longer trusts it.
 REJECTED_SEED = 0
 
@@ -365,17 +375,31 @@ def _fixture_p6(seed: int, pinned: str) -> tuple[bool, str]:
     rejected AT THE SETTLED CELL, and the selection defect shows a cell can move
     underneath a recorded fact. Searching re-establishes it every run.
     """
+    # ★ THE SEARCH SPACE CHANGED WITH L14-b, AND THE CONTROL SAID SO ITSELF.
+    # It used to find a rejected seed inside `partial` -- 18 of 40 were rejected
+    # when assertion 2b was live. With 2b retired, admission admits every `partial`
+    # seed, and this fixture reported "DID NOT FIRE -- the check is vacuous" rather
+    # than quietly passing. That is the control working.
+    #
+    # Admission still discriminates, just on a different axis: it rejects `current`
+    # 12 of 12 on condition 3 (the stale-card ceiling is identically zero there).
+    # So the negative case for "admitted" is now an ARRANGEMENT admission refuses,
+    # not a seed -- and the fixture searches arrangements first, seeds second, and
+    # NAMES which axis it fired on so a future reader is not misled about why.
     tried = []
-    for candidate in (seed, REJECTED_SEED, *range(12)):
-        try:
-            result = adm.admit(candidate, **SHIPPED)
-        except (gen.InstanceAssertionError, ValueError):
-            continue
-        tried.append(candidate)
-        if not result["admitted"]:
-            failed = [k for k, v in result["conditions"].items() if v is not True]
-            return True, f"seed {candidate}: admitted=False failing={failed}"
-    return False, f"no seed in {tried[:8]} was rejected -- admission never refuses here"
+    for lattice in (SHIPPED["lattice"], "current"):
+        for candidate in (seed, *range(12)):
+            try:
+                result = adm.admit(candidate, **{**SHIPPED, "lattice": lattice})
+            except (gen.InstanceAssertionError, ValueError):
+                continue
+            tried.append(f"{lattice}/{candidate}")
+            if not result["admitted"]:
+                failed = [k for k, v in result["conditions"].items() if v is not True]
+                return True, (f"lattice={lattice!r} seed {candidate}: admitted=False "
+                              f"failing={failed}")
+    return False, (f"nothing rejected across {len(tried)} (arrangement, seed) pairs -- "
+                   f"admission refuses nothing anywhere")
 
 
 FIXTURES = (
@@ -397,7 +421,7 @@ def main(argv: list[str]) -> int:
     pinned = basel_digest()
 
     print("L10 ACCEPTANCE — six properties, asserted not hoped for")
-    print(f"setting: {json.dumps(SHIPPED, sort_keys=True)}  cap={CAP}")
+    print(f"setting: {json.dumps(SHIPPED, sort_keys=True)}  cap=UNCAPPED (runtime enforces none)")
     print(f"Basel table digest pinned at run start: {pinned[:16]}...\n")
 
     ok_all = True

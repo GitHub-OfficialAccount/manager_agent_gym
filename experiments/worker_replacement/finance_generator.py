@@ -1139,6 +1139,50 @@ def _assert_non_nested(instance: dict[str, Any]) -> None:
                 )
 
 
+# ---------------------------------------------------------------------------
+# ALLOCATION_DIFFICULTY_RETIRED (researcher ruling L14-b, 2026-08-10)
+#
+# ASSERTION 2b IS GONE. It required `capacity_cap < greedy_card_match_load`, on the
+# stated ground that otherwise "a public-information script attains the oracle and
+# the task is a lookup". The researcher removed the per-worker allowance from the
+# RUNTIME (L14); scoring then had to follow, and once it does, 2b is asserting a
+# property of a constraint nothing enforces.
+#
+# ★ THE GENERAL SHAPE, WORTH MORE THAN THE INSTANCE (LS). The label said "this
+# isn't just a lookup" -- a design principle. The condition compared two integers,
+# `3 < 4`. It was quoted for two days as though it certified the principle, and
+# nobody unpacked what it actually tested. THIS IS THE THIRD TIME IN ONE WEEK a
+# name carried a claim its test never checked:
+#
+#   `agent_available`      declared True, never written, True on 653/653 deferrals
+#   two-cause refusal      asserted a distinction between one thing and nothing
+#   `capacity binds`       asserted non-triviality, compared two integers
+#
+# When a check's NAME states a property and its BODY states a comparison, the name
+# is a hypothesis about the comparison and should be read as one.
+#
+# WHAT WAS LOST, MEASURED, NOT ESTIMATED. Uncapped, greedy card-matching attains
+# the oracle exactly on both shipped seeds (56: 8.5430 = 8.5430; 37: 8.9168 =
+# 8.9168). So the task's difficulty is now ENTIRELY INFORMATIONAL -- obtain the
+# successor's labels -- with no constrained-allocation step behind it.
+#
+# WHAT WAS NOT LOST, and it is why this is a change rather than a collapse: that
+# script reads the SUCCESSOR'S TRUE labels, and the stale-card arm withholds them.
+# Verified: `card_capabilities == irb_coverage` on every worker of both seeds, so
+# staleness lives in the PROMPT, not the instance. The ceiling stands (56: 4.76%,
+# 37: 3.44%) and it now prices exactly one thing -- knowing who the newcomer is.
+#
+# OPEN, AND FLAGGED BEFORE THE FIRST RUN RATHER THAN AFTER: with no allocation step
+# the DV may become close to a step function (labels acquired -> near-oracle; not
+# acquired -> near-card-believing). Whether that is a cleaner separation or a loss
+# of graded sensitivity is not answered by anything in the corpus.
+#
+# `capacity_cap` REMAINS an instance parameter and 2a still uses it. The K6 sweep
+# varies it deliberately, and a future design may re-impose a cap in the world --
+# at which point this is re-decided, not silently inherited.
+ALLOCATION_DIFFICULTY_RETIRED = True
+
+
 def _assert_capacity_binds(instance: dict[str, Any]) -> None:
     """2 — INVERTED by the S7 ruling. Capacity must BIND, and must be FEASIBLE.
 
@@ -1150,12 +1194,9 @@ def _assert_capacity_binds(instance: dict[str, Any]) -> None:
 
     (a) FEASIBLE: total active capacity >= segments, or segments go unstaffed for
         reasons unrelated to management.
-    (b) BINDING: the per-worker cap is strictly BELOW the instance's own measured
-        greedy card-match load — measured, not assumed, because a cap above that
-        load leaves the greedy match feasible and the lookup collapse returns.
+    (b) BINDING — ★ RETIRED (L14-b, researcher ruling 2026-08-10). See
+        ALLOCATION_DIFFICULTY_RETIRED below.
     """
-    from .finance_scorer import greedy_card_match_load
-
     cap = instance["parameters"]["capacity_cap"]
     roster = len(instance["event"]["roster_post_swap"])
     demand = len(instance["segments"])
@@ -1164,13 +1205,6 @@ def _assert_capacity_binds(instance: dict[str, Any]) -> None:
             f"ASSERTION 2a (capacity feasible): {roster} workers x cap {cap} = "
             f"{roster * cap} < {demand} segments — segments would go unstaffed for "
             "reasons unrelated to allocation quality"
-        )
-    load = greedy_card_match_load(instance)
-    if cap >= load:
-        raise InstanceAssertionError(
-            f"ASSERTION 2b (capacity binds): cap {cap} is not below the greedy "
-            f"card-match load {load} — the greedy match stays feasible, so a "
-            "public-information script attains the oracle and the task is a lookup"
         )
 
 

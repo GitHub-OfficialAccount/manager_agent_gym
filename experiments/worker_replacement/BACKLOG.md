@@ -50,7 +50,7 @@ output plus both reviews under `records/`.
 
 ---
 
-## L10 — TWO DESIGNED ENVIRONMENTS, replacing the random pool `[~] BOTH RESEARCHER DECISIONS MADE 2026-08-09. ENVIRONMENTS DRAWN: seed 56 (bank, 5.29%) and seed 37 (corporate, 6.61%) — approved rule, draw seed 20260809 recorded before drawing, both PASS all six properties, all eight controls fire (`records/L10/environment_selection_v1.json`, `select_l10_environments.py`, `check_l10_properties.py`). REMAINING, with RE: remove the segment allowance (ruled — it is ours, not upstream; the gap survives its removal, measured 4.76%/7.11% at cap 9 against 5.29%/6.61% at cap 3), and RESTATE PROPERTIES 2 AND 4, which the removal makes vacuous. Standing checks answered below.`
+## L10 — TWO DESIGNED ENVIRONMENTS, replacing the random pool `[x] CLOSED 2026-08-10. SHIPPED: seed 42 (bank, 4.97%) and seed 30 (mdb, 7.12%), drawn under the researcher-approved rule at the settled revision with the draw seed recorded before drawing (`records/L10/environment_selection_v2.json`). Acceptance output committed (`L10_acceptance_output.md`): FIVE properties — property 2 RETIRED as unfalsifiable without a cap, property 4 REPLACED because it would have kept passing while no longer meaning its name — both seeds PASS, all seven controls FIRE on named fixtures. Reviews: `L10_draw_review_LS.md`, `L10_draw_review_RR.md`, `L10_acceptance_review_RR.md`; RE verified the draw independently by recomputing the pool (0 mismatches in 60, floor identical to 17dp). CARRIED FORWARD, NOT RESOLVED: the run these feed is a SHAKEDOWN, not a test of the channel question — the ceilings are 0.25x and 0.36x the declared MDE and the gate's own 0.09-0.18 band contains 0 of 60 shipped seeds; and the median floor selects RANK not MAGNITUDE, so it does not establish 'a real gap'. Both declared before any bundle exists, which is what makes them limitations rather than excuses.`
 **Depends:** L9 `[x]` · **Owner:** RE builds, RR attacks the design, LS specs · **Cost: no model
 spend to design; the step-2 run is separately authorised.**
 
@@ -627,7 +627,7 @@ tasks** (8 of 9 `refine_task` requests set `new_name`), and one observed rename 
 
 ---
 
-## L3 — Re-measure at scope: does an effect appear once the instrument is honest? `[!] BLOCKER MOVED, NOT CLEARED (LS, 2026-08-09) — now blocked on L10, which is blocked on the researcher. The ORIGINAL blocker is satisfied.`
+## L3 — Re-measure at scope: does an effect appear once the instrument is honest? `[~] BLOCKER CLEARED 2026-08-10 when L10 closed. NOW THE TOPMOST OPEN STEP, and it is a RUN. Its FULL scope (6 cells x 2-3 seeds) is NOT authorised. Its AUTHORISED SUBSET is the shakedown: cells 0 and 1 on seeds 42 and 30, a few episodes, parallel, flash. Predictions from all three agents are committed (`records/L15/`). PRE-DECLARED AND BINDING: this subset is NOT POWERED for the channel question -- ceilings are 0.25x and 0.36x the declared MDE -- so it measures harness behaviour, `report_form` compliance, the timestep profile and this environment's VARIANCE, and a null from it may not be read either way. The variance is what makes L3's full scope sizable at all. Awaiting the researcher's word on whether to spend on a shakedown; declining is a defensible call and was offered.`
 > **ORIGINAL BLOCK (RR, accepted by LS), NOW SATISFIED — retained as the record, not as the
 > current state.** As scoped this re-measures the same regret aggregate that produced four
 > retractions, without the behavioural DV. *"Unblocks when the manager action stream and the
@@ -5660,3 +5660,452 @@ scorer that cannot compute the study's central quantity.**
 produce a third number and failing. I did not review the oracle change — I ran it. If I had reviewed
 it as asked I might have read the comment, agreed with the intent, and missed that the line cannot
 execute. Running it was luck, not method."*
+
+### 2026-08-10 — the four "disagreeing" ceilings were three CAPS and one real disagreement; and the APPROVED DRAW records cap-3 ceilings for a world about to be uncapped
+
+**Resolved by reading a default rather than by trading measurements.**
+`ceiling_vs_stale_card(instance, cap: int = DEFAULT_CAP)`. At HEAD `DEFAULT_CAP` was **3**; in RE's
+working tree it is **UNCAPPED**.
+
+    cap 3       seed 56  5.29%   seed 37  6.61%    <- RR's figures, and LS's earlier ones, and the
+                                                      committed selection record -- three occasions
+    uncapped    seed 56  4.76%   seed 37  7.11%    <- LS's quoted figures, cap passed explicitly
+    RE                   4.76%            3.44%
+
+**RR loaded HEAD's scorer and omitted `cap`, so they measured at cap 3.** Their "fourth construction
+from a hybrid tree" is the cap default. **And because three separate occasions agree at cap 3, the
+generator has NOT drifted for these seeds** — RR's dirty-tree caution is right in general and did not
+produce this.
+
+**★ THE ONLY GENUINE DISAGREEMENT LEFT IS RE's SEED-37 3.44%**, matching neither cap 3 nor uncapped.
+One figure, one construction question, still open with RE.
+
+**★ AND THE CONSEQUENCE NOBODY WAS LOOKING FOR, WHICH IS LS's OWN:
+`records/L10/environment_selection_v1.json` — THE DRAW THE RESEARCHER APPROVED — RECORDS CEILINGS OF
+5.29% AND 6.61%. THOSE ARE CAP-3 VALUES, AND THE WORLD IS ABOUT TO BE UNCAPPED.**
+
+Not cosmetic. **The draw's rule is `floor = pool median`, computed over ceilings that were ALL taken
+at cap 3.** Uncapped, every instance's ceiling moves — **measured, it moved DOWN for seed 56 and UP
+for seed 37** — so the median moves, which classes clear the floor moves, and which classes retain
+more than one candidate moves. **The draw could come out differently.**
+
+**Cannot be re-measured now** — `ceiling_vs_stale_card` raises in the current tree. **Verify after the
+fix lands, before the run.** If the pool shifts, the draw is re-run under the same approved rule with
+a new draw seed recorded before drawing; if it does not, the record is annotated and stands.
+
+**FIFTH STALE-RECORD INSTANCE, AND THE FIRST THAT IS A DECISION RATHER THAN A DIAGNOSTIC.** The other
+four were figures nobody had acted on. **This one is the environments the study will run.**
+
+**§G RULE FILED UNDER RR's NAME, with LS's amendment to the trigger:**
+
+> **A review of a computation is not complete until the computation has been run.** Reading
+> establishes intent and cannot establish reachability. **Corollary: running it is only a review if
+> you know which revision you ran.**
+> **Trigger: the reviewer names the invocation, ITS REVISION, and its output — or the review states
+> that it covered design only.**
+
+The corollary is the load-bearing half: **RR executed the path and still produced a number nobody
+could use, because "HEAD" was asserted from one of three modified files.** A trigger of "run it"
+would catch the reading failure and not the revision failure.
+
+**RR's third self-report today, and the most literal: they read `git status`, saw the scorer row, and
+did not read the other two rows of the same output.** Recorded because the evidence was on screen.
+
+### 2026-08-10 — ★ THE APPROVED DRAW WILL NOT SURVIVE THE RULING: admission stopped rejecting, so the pool, the floor and the environments all move
+
+**Measured against RE's IN-FLIGHT, UNCOMMITTED tree — a WARNING, not a result. RR's clause applies:
+a revision that moves during the measurement is not a revision.** Re-derive at a settled commit.
+
+    admission at the settled cell, seeds 0-59
+      BEFORE the ruling   34 of 60 admitted   (26 rejected)
+      NOW                 60 of 60 admitted   (no condition ever fails)
+
+**The pool nearly doubled, and the draw's floor IS the pool median.** Applying the approved rule
+unchanged to the new pool:
+
+                    approved (cap 3, pool 34)     now (uncapped, pool 60)
+      floor              3.30%                        3.24%
+      usable classes     bank corporate retail sovereign   + mdb  (5, not 4)
+      drawn classes      bank, corporate              bank, retail
+      ENVIRONMENTS       seed 56, seed 37             seed 42, seed 10
+
+**THE RESEARCHER APPROVED A RULE AND WAS SHOWN SEEDS 56 AND 37. THE SAME RULE ON THE CORRECTED POOL
+GIVES 42 AND 10.** Re-running an approved rule on a corrected input is execution rather than a new
+decision — **but the environments change, and that is theirs to know before the run.**
+
+**★ THE GATE IS NOT VACUOUS — CHECKED, because "rejects nothing" and "cannot reject" are different
+claims.** Negative case: `current` is rejected **12 of 12** on condition 3, `partial` admitted 12 of
+12. **It discriminates; it simply does not bind on the shipped arrangement.** Reporting it as vacuous
+would have been the same error class it exists to catch.
+
+**★ SIXTH LABEL-OVER-CONDITION INSTANCE, INTRODUCED WHILE FIXING ONE.** Condition 3 is still named
+**`3_scripted_baseline_below_oracle`** and no longer tests that — RE's own diff: *"now the stale-card
+ceiling, not the scripted baseline (L14-b)"*. **The test was correctly changed (uncapped, the script
+ATTAINS the oracle, so the old condition would reject everything); the NAME was not.** After
+`amplify_count`, `refused_unavailable`, the digest name-list, `3 < 4`, and the accurate-comment case
+— **this one is a name that became wrong by a correct edit.**
+
+**WHAT MUST HAPPEN, IN ORDER:** RE settles and commits → the draw is re-derived at that commit under
+the **unchanged approved rule**, with a new draw seed recorded before drawing → both peers review →
+then the run. **RR's caution to carry into it: check not only the two chosen seeds but whether CLASS
+AVAILABILITY above the floor survives** — at cap 3, sovereign was 8→2 and mdb 4→1, margins thin
+enough to vanish.
+
+**RR's §G clause accepted and it is the one that catches all three of today's failures:**
+
+> **Trigger: name the invocation, its revision, and its output — and the revision must not change for
+> the duration of the measurement. In practice: measure against a commit, never a working tree.**
+
+**Without the final clause the rule would have passed the measurement RR abandoned — and the one
+above, which is why it is filed as a warning.**
+
+### 2026-08-10 — draw RE-DERIVED at the settled commit (seeds 42, 30); and REGENERATING A RECORD DELETES ITS RETRACTION HISTORY
+
+**RE settled and committed the L14-b work. The approved RULE is unchanged; its INPUT was corrected
+twice.** Record: `records/L10/environment_selection_v2.json`.
+
+    pool     60 admitted (was 34 -- 2b retired, so no `partial` seed is rejected), seeds 0-59
+    floor    3.24% (was 3.30%), 30 above
+    usable   ALL FIVE classes (was four -- mdb went 1 candidate -> 3)
+    draw     seed 20260810, fixed and recorded before drawing -> bank, mdb
+    CHOSEN   seed 42 bank 4.97%   |   seed 30 mdb 7.12%
+
+**Both pass all five surviving properties; all controls fire.** Supersedes
+`environment_selection_v1.json` (seeds 56, 37), whose pool was priced at cap 3.
+
+**★ REGENERATION DELETES RETRACTION HISTORY, AND THE FRESHNESS CHECK CANNOT SEE IT.**
+`records/L4/card_ceiling.json` regenerates as **+0 / −478**: **zero value change**, and every deleted
+line is its own `superseded_2026_08_09` block — the preserved prior values and the note explaining
+what superseded them.
+
+**A regeneration is value-neutral and history-destroying, in exactly one direction.** The producer
+does not emit `superseded_*` and never will.
+
+**AND THIS IS THE HOLE RE NAMED WHEN THEY EXCLUDED THOSE BLOCKS FROM THE COMPARISON** — correctly,
+since otherwise every annotated record reports STALE forever. The hole was stated as *"a value hidden
+inside a `superseded_*` block is not checked."* **It is worse than unchecked: it is DELETED by the
+routine maintenance the check exists to prompt, and the check goes GREEN afterwards.**
+
+**RESTORED, not committed.** The other eight records regenerate with genuine value changes under the
+uncapped runtime and are committed (e.g. `S6/sweep_report.json` aggregate_floor_median
+1.298073 → 1.324173). **Committing L4 would have destroyed the record and passed every check we
+have.** Fix is RE's; a `--regenerate` that preserves an existing block would close it without
+touching the comparison.
+
+**SMALLER, SAME FAMILY: `check_record_freshness` REFUSES TO RUN AND EXITS 0.** The dirty-tree guard
+fired correctly, printed *"REFUSING TO RUN"*, and returned success. **A caller sees exit 0 and
+concludes the records are fresh.** The guard is right; its exit code makes it invisible.
+
+**THE ACCEPTANCE CARRIED THE SAME CAP MISMATCH AS THE DRAW, and it showed as two numbers for one
+quantity:** property 1 reported **5.52%** where the draw reported **4.97%** for seed 42, because the
+checker still passed `cap=CAP`. **Inside the check that is supposed to police exactly that.** Fixed;
+`CAP` renamed `SEGMENTS_PER_WORKER` where it still means a segment count.
+
+**FIXTURE 6 DECLARED ITSELF VACUOUS RATHER THAN PASSING.** It searched for a rejected seed inside
+`partial`; with 2b retired there are none, so it printed *"DID NOT FIRE — the check is vacuous"*.
+**Admission still discriminates on ARRANGEMENT** (`current` rejected 12/12 on condition 3), so the
+fixture searches arrangements first and **names the axis it fired on.**
+
+**★ LS ERROR, CORRECTED BY RE AND VERIFIED: seed 56's ceiling agreeing to the digit was a
+COINCIDENCE — 0.04762 under both configurations.** LS reasoned *"seed 56 agreeing exactly rules out a
+wholesale configuration difference"*; **that inference was wrong, and one agreeing cell is not a
+control.** RE's numbers came from passing 2 of the 6 shipped parameters and inheriting generator
+defaults for the other four. **The differ-test failure in a new form: a single agreement treated as
+evidence about the setup, without asking what would have made the two differ.**
+
+### 2026-08-10 — the retraction hole was FOUR records, not one; and LS's "exit 0" was LS's shell, not RE's code
+
+**RE closed the write path at `ee02298`: `--regenerate` now carries existing `superseded_*` blocks
+across.** Comparison untouched — excluding them is still right, or every annotated record reports
+STALE forever. **Controlled both ways:** producer drops the block → carried back, values
+byte-identical; producer keeps it → nothing duplicated.
+
+**★ THE EXPOSURE WAS FOUR RECORDS, AND THREE WERE IN THE BATCH LS CLEARED.** `L4/card_ceiling.json`,
+`L4/reliability_ceiling.json`, `L9/inversion_diagnosis.json`, `L9/template_pricing.json`. **All four
+still hold their history at HEAD — RE verified `eca34eb~1` against HEAD, nothing was lost.**
+
+**But the margin was file-handling order, not a property of the process.** LS classified the batch by
+counting dropped `superseded` lines and read zero for those three — **true at that moment, and not a
+property that could be relied on.** LS caught the one that showed the symptom; **the same
+regeneration could have taken three more, and no check we have would have seen it.** The run now
+prints what it carried and says so explicitly when it carried nothing, because **a silent success
+here is indistinguishable from the bug.**
+
+**★ L14-h WITHDRAWN — `check_record_freshness` DOES return 2. The exit-0 report was LS's shell.**
+
+    ... | tail -12; echo "exit=$?"     -> 0    (tail's exit status)
+    captured correctly                 -> 2    (what the check returns)
+
+**Third instance today of this exact error by LS, and the SECOND after explicitly correcting it** —
+LS wrote *"my exit codes are meaningless; `$?` after a pipeline captures `tail`"*, fixed that sweep,
+and repeated it two hours later. **A habit failure, not a knowledge one.** Second time today LS
+reported a defect in a peer's code that was LS's own shell. **RE asked "what did you run" instead of
+editing, which is why it cost one message rather than a commit.**
+
+**L14-i, NAMED BY RE AND NOT FIXED BY THEM PENDING REVIEW:** `dirty_records()` uses
+`git diff --name-only`, which reports **unstaged** changes only, **so a record that is `git add`-ed
+but not committed passes the guard.** Not destructive — the restore reads from the index — but the
+comparison is against `HEAD`, so it can report **STALE for a change already staged.**
+
+**LS REVIEW DECISION: fix now.** `git diff --name-only HEAD` is one word, **strictly more inclusive,
+cannot lose data**, and the failure it prevents is a **false STALE mid-run** — the confusing signal
+that costs an hour while bundles are being read. RE's caution about widening a guard before a run is
+sound in general and **does not apply to a change that only catches more and cannot destroy
+anything.**
+
+**RE's own framing, kept: LS's property-1 cap mismatch (5.52% vs 4.97% inside the checker that
+polices exactly that) is the same fault as RE's seed-37 error, one layer up — a quantity computed
+under a configuration that no longer matches the thing it describes.** RE's was four missing
+generator kwargs; LS's was `cap=CAP`. **A name that says which quantity it is cannot be passed to the
+wrong parameter silently, which is why the rename to `SEGMENTS_PER_WORKER` is the fix and not the
+comment.**
+
+**AND RE ON FIXTURE 6, worth more than the fix it prompted: *"a search that finds nothing and says
+'the check is vacuous' is doing the job; the failure mode we keep hitting is the one that finds
+nothing and reports green."***
+
+### 2026-08-10 — L10 CLOSED. Two designed environments, both peer-reviewed, with two limitations declared in advance
+
+**SHIPPED: seed 42 (bank, ceiling 4.97%) and seed 30 (mdb, 7.12%)**, drawn under the
+researcher-approved rule at the settled revision, draw seed **20260810** recorded before drawing.
+Record: `records/L10/environment_selection_v2.json`. Supersedes v1 (seeds 56, 37), whose pool was
+priced at a cap the runtime no longer enforces.
+
+**ACCEPTANCE OUTPUT COMMITTED** (`records/L10/L10_acceptance_output.md`): **FIVE properties, both
+seeds PASS, all seven controls FIRE on named fixtures.** Property 2 **retired** — without a capacity
+allowance its condition is unconditionally true and the check could not fail. Property 4 **replaced**
+— *"capacity binds exactly"* would have kept **passing while no longer meaning what its name said**.
+
+**REVIEWS:** `L10_draw_review_LS.md`, `L10_draw_review_RR.md`, `L10_acceptance_review_RR.md`. **RE
+verified the draw independently by recomputing the pool from the generator rather than reading the
+record** — 0 ceiling mismatches in 60, floor identical to 17 decimal places, per-class counts exact.
+
+**★ TWO LIMITATIONS CARRIED FORWARD, DECLARED BEFORE ANY BUNDLE EXISTS — which is the only thing
+separating them from retrospective excuses:**
+
+**1. The run these feed is a SHAKEDOWN, not a test of the channel question.** The chosen ceilings are
+**0.25x and 0.36x** the declared MDE of 0.20, and the gate's own `DESIGN_FACT` band of 0.09–0.18
+contains **0 of 60** shipped seeds — its floor is 1.3x our best instance. **Nothing about whether the
+card channel works may be concluded from this run in either direction.** What it is for: harness
+behaviour on the designed instances, `report_form` compliance on the tightened contract, the
+timestep profile, and the variance the MDE needs to be re-derived.
+
+**RR's companion condition, which makes the reading sound rather than an escape hatch: *"it was
+underpowered" is available after ANY null.*** If invoked retrospectively the pre-commitment dies —
+every null becomes a power failure and nothing is ever a finding. **The band, the MDE and the ratios
+are in the record before the bundles exist.**
+
+**2. The median floor selects RANK, not MAGNITUDE.** It would admit half of a pool of all-zeros; it
+cannot fail and cannot report that a pool is weak. **Not vacuous against a random draw — it roughly
+doubles the expected ceiling — but it does not establish "a real gap", which is a magnitude claim.**
+Proof: the floor was satisfied and the ceilings are a quarter and a third of the MDE. **It delivered
+"the better half of a pool that has none" (RR).** The principled fix is an absolute floor from the
+MDE, **not computable until this run supplies the variance.** The claim is withdrawn from the record
+rather than the floor replaced.
+
+**AND A PROPERTY OF THE DRAW, recorded rather than discovered later: it landed on the two THINNEST
+usable classes** — bank 4 candidates above the floor, mdb 3, against corporate 12 and retail 8.
+**With 3–4 candidates the class choice nearly determines the instance**, so the second stage
+contributed little and the randomisation does less work than the description implies. Class-first
+with a pre-recorded seed is what was specified, so this is a property and not a fault.
+
+**STANDING CHECKS ON THE CLOSED STEP.** **(1) PRODUCTION TEST — PASSES**: constructing benchmark
+instances to stated properties is ordinary practice, and the one thing that failed it (a capacity cap
+charged before the work ran) was removed on the researcher's ruling. **(2) NO DRIFT** — these
+instances ARE the instrument the question needs. **(3) AMBIGUITY** — three were found and none was
+routed around: the selection axis, the gap floor, and what the retired admission criterion certified.
+
+### 2026-08-10 — ★ STOP: THE RUNNER DOES NOT BUILD THE INSTANCES THE DRAW SELECTED. Third instance of one shape in two days
+
+**RE found it setting up the stall probe. Verified at source by LS. NOTHING RUNS UNTIL IT IS FIXED.**
+
+`run_finance_episode` calls `build_cell_environment(seed, cell, lattice=..., shared_class_segments=...)`
+— **two of the six parameters in the shipped setting.** The other four fall back to generator
+defaults: `irb_applicable_fraction` 0.89 → 0.67, `amplify_divergence` False → True,
+`amplify_irb_priority` False → True.
+
+    seed 42   drawn ef25aa9d ceiling 0.04970 | runner-built ce61d5b5 ceiling 0.02632 | same=False
+    seed 30   drawn fc1eac6c ceiling 0.07120 | runner-built 2d88dfb5 ceiling 0.06775 | same=False
+    pool floor that selected them: 0.03238
+
+**★ SEED 42's REAL CEILING IS BELOW THE FLOOR THAT SELECTED IT.** The instance the runner would
+execute **would not have been eligible for the draw.** Not a degraded run — **a run of something we
+never chose, with the record asserting the thing we did.**
+
+**THIRD INSTANCE OF THIS EXACT SHAPE IN TWO DAYS, and `build_cell_environment`'s own docstring records
+the first:** *"This called `gen.generate(seed)` bare, so a study run built the DEFAULT lattice no
+matter which arrangement had been selected."* **The lattice was threaded through; the four amplifiers
+were not.** RE's seed-37 error was the same fault in a script, `suite_headline()` the same in a
+report, **and this is it on the path that actually spends money.**
+
+**RULED (LS): thread the SETTING as one object — RE's fix — AND ASSERT THE HASH AT RUN START.** The
+built instance's `instance_sha256` must equal the selection record's for that seed **or the run
+REFUSES.** Control shown failing: build with the wrong parameters, watch it refuse.
+
+**★ WHY THREADING ALONE IS NOT THE ANSWER: threading is exactly the fix applied last time, and it did
+not hold.** The lattice was threaded and four parameters were added afterwards. **Doing it again more
+carefully is not a different answer; an assertion is.**
+
+**AND THE EVIDENCE ALREADY EXISTS: the manifest records `instance_sha256`.** So today's mismatch
+would have been **recoverable from the bundle afterwards and flagged by nothing.** A recorded fact
+nobody compares is the shape this project keeps finding.
+
+---
+
+**THE BOUND'S SCOPE, resolved from the code before either agent quoted a timing (RE):**
+
+    litellm.request_timeout = 1200   PER HTTP REQUEST
+    litellm.num_retries     = 1      per request, inside litellm
+    asyncio.wait_for(Runner.run, WORKER_RUN_BACKSTOP_S)   per RUN
+
+**So "2160 s = 1200 + retry" requires that run to have made ONE request, which nothing establishes —
+a three-request run reaches 2160 s with nothing timing out.** RE's arithmetic and LS's prediction are
+**both unsafe until the probe shows request counts.** The completed/failed alignment stands
+regardless, because it is an observation rather than a mechanism.
+
+**★ AND THE 876 s FIGURE JUSTIFYING THE 1200 s BOUND WAS NEVER A WORKER MEASUREMENT.** It came from
+`structured_llm_*` request/response pairs, and **every one of those is the MANAGER's.** A manager
+request/response pair is being used to justify a WORKER request timeout — **the same wrong-population
+error as the 180 s bound, still live in the code.** Do not design against 876 until the worker side
+is measured.
+
+**INSTRUMENT: litellm's `CustomLogger` hooks** — provider-layer, no change to `ai_agent.py`, giving
+per-request start/end and the GAPS between them, which is what separates one long call from many
+short ones from time spent outside calls entirely. **Named as `4b13339` + probe, with what it
+registers stated.**
+
+**ORDER: thread + assert → both peers review → probe the stall on the CORRECT instances → shakedown.**
+RE held the probe rather than taking timings on the wrong instance, **which would have been a third
+measurement of the wrong thing.**
+
+### 2026-08-10 — ★ THE SPLIT HAS NO STATE FOR A TASK THAT RAN AND FAILED, and the contamination chain is now complete root-to-label
+
+**Checked in the code, not inferred.** `executed` is defined by membership of the COMPLETIONS list
+(`finance_split` ~line 219). **A failed run is not in completions, so the split classifies it as
+NEVER EXECUTED** — of a task with a `worker_execution_started`, **564 seconds of wall clock, sixteen
+model calls and a traceback.**
+
+    never_assigned          "no APPLIED assignment event names this segment"
+    refused_* x3            "assigned, NEVER EXECUTED, and a refusal ..."
+    unexecuted_no_refusal   "assigned, NEVER EXECUTED, and NO refusal fired"
+    executed_* x3           "EXECUTED, and ..."
+
+**No state in the partition describes what happened. The predicate is false about the thing it
+names.**
+
+**★ THE CHAIN, COMPLETE, AND IT IS ALL ONE TASK (seg_04 on the R3 bundle):**
+
+    worker burns 16 turns, throws MaxTurnsExceeded, produces nothing        564 s
+    -> the allotment was consumed BEFORE the work ran, and is not released on failure
+    -> later assignments to seg_04 are refused on segment_allotment        t13, t14, t18, t21
+    -> the split sees "assigned, not in completions, allotment refusal"    -> refused_allotment
+    -> refused_allotment is a DV state                                     -> SCORED AS THE MANAGER
+                                                                              ALLOCATING BADLY
+
+**Every step is a fair reading of the step before it, and the manager did nothing wrong.** The middle
+of this chain was found 2026-08-09; **this is its head.** It is also **the entire DV=1 on the only
+bundle we can classify.**
+
+**★ AND REMOVING THE ALLOTMENT DOES NOT FIX IT — IT MOVES IT.** With no allotment refusal possible,
+the same failure falls to `unexecuted_no_refusal`, whose predicate reads *"the horizon ended first,
+or it never became ready"*. **False too, and it files a turn-cap death under BUDGET_HORIZON — "a
+property of the run's budget, not of the manager's judgement".** Closer to true, still wrong,
+**and it will look like a benign horizon effect rather than a lost task.**
+
+**PROPOSED TO RE (their artefact, so proposed not ruled): a ninth state for STARTED-AND-FAILED**,
+keyed on `worker_execution_failed` rather than on absence from completions, **carrying `error_type`
+so `MaxTurnsExceeded` and `APIConnectionError` are distinguishable.** It belongs in **DEFECT** —
+*"the harness or the worker produced something unreadable; a bug to fix, never a finding"* — which is
+exactly what all three failures are.
+
+**It changes the partition, so it is RE's and RR's to settle.** But **the current partition asserts
+something false about every failed run, and there are three in the only bundle we can classify.**
+`five_bucket_split` is LS's file and will need the new state mapped with its control shown failing.
+
+**AFTER THIS: `max_turns` is with the researcher (LS recommends raising uniformly to ~24 rather than
+cell-aware, since a per-cell budget would introduce a harness difference exactly where the
+manipulation is conversation), and the shakedown is unblocked.**
+
+### 2026-08-10 — L16 DIAGNOSIS CLOSED: four modes, one fixed. And the turn cap sits INSIDE normal variation
+
+**Record: `records/L16/stall_prediction_LS.md`. Probes: `probe_worker_requests.py`.**
+
+    normal work          <= 177 s episode, <= 439 s isolated
+    turn-burn            MaxTurnsExceeded, 564 s, CELL 0 -- NO messaging needed
+    provider malformed   APIConnectionError, JSON decode on a truncated body, 607 s and 1040 s
+    hang                 one request burns the bound, then a normal retry, 1467-2160 s   FIXED
+
+**Only the hang is fixed; two of the remaining three are provider behaviour we can bound but not
+fix.** The researcher's over-engineering hypothesis was tested and **not supported**: a worker makes
+~3 calls, spends **100% of wall clock inside them**, and occasionally one call takes five minutes.
+
+**NO SILENT TRUNCATION — the validity question is closed.** `MaxTurnsExceeded` is an exception with a
+traceback, not a quiet cut-off, so **a worker at the budget loses the task outright and never returns
+a half-finished report that scores as a good one.** Truncation probe: 4/4 scoreable.
+
+**★ THE CAP IS INSIDE THE NORMAL DISTRIBUTION, NOT ABOVE IT.** Same task, same seeded message, two
+runs: **16 requests then 12.** Observed range 3–16. **A cap of 16 is therefore a random task-killer
+firing about once per episode, not a safety limit.** LS proposed cutting it three times and was wrong
+each time — first from a COMMENT rather than a measurement, then it would have killed tasks that
+legitimately used 5 and 8, and finally it would multiply the one mode that destroys work. **Direction
+is RAISE (~24, uniform) or cell-aware; LS recommends uniform because a per-cell budget introduces a
+harness difference exactly where the manipulation is conversation. WITH THE RESEARCHER.**
+
+**BOUND: `WORKER_REQUEST_TIMEOUT_S` 1200 → 900**, after RR refuted LS's 600 using LS's own figure —
+the hour-to-hour swing on one task is **2.15x** and the margin was **1.97x**, so a 305 s request in a
+bad hour is ~655 s and 600 s kills it. **And the self-healing argument fails on independence:** the
+retry runs in the same bad hour, so with `MAX_RETRIES=1` that is 1200 s consumed and a FAILED task.
+**Basis now stated as observed max x observed swing, not a single-hour maximum.**
+
+### 2026-08-10 — ★ A NINTH STATE, AND THE DV ON THE ONLY CLASSIFIABLE BUNDLE GOES 1 → 0
+
+**`started_and_failed` (RE, L19), mapped to DEFECT (LS).** `executed` was defined as membership of
+the completions list, **so a task with a start event, 564 s of wall clock, sixteen model calls and a
+traceback was classified "never executed".** No state described what happened.
+
+    before   seg_04 -> refused_allotment   and that was the whole DV=1
+    after    seg_04 -> started_and_failed  causes ['APIConnectionError', 'MaxTurnsExceeded']
+
+**THE CHAIN, ROOT TO LABEL, ALL ONE TASK:** turn-cap death → the allotment was charged before the
+work ran and never refunded → allotment refusals → `refused_allotment` → *"the manager allocated
+badly"*. **Every step a fair reading of the one before it, and the manager did nothing wrong.**
+
+**RR SUPPLIED THE STRONGER REASON FOR DEFECT, replacing LS's "the cause is ours": a DV that MOVES
+WHEN YOU FIX A BUG is not measuring the manipulation.** Fix the turn cap and the provider retry and
+the segment completes — **so classifying it as DV would make the headline a function of
+infrastructure reliability and make cell comparisons partly measure which cell got unlucky.**
+
+**RE's control B is the one to point at: strip the failure events and the OLD misclassification
+reappears** — the fix is shown doing the thing rather than passing beside it. **And RE committed the
+fault the state exists to prevent, inside the code introducing it:** `setdefault` kept only the FIRST
+cause, so seg_04's provider error **hid its turn-cap death** — the summing their own predicate
+forbids. Caught by printing the causes rather than trusting the field.
+
+### 2026-08-10 — ★ RETRACTED: "the manager made no allocation error" — DV=0 is PARTLY STRUCTURAL
+
+**RR found what neither agent had raised.** With the allotment removed, **`refused_allotment` has no
+emission site left**, and `never_assigned` was already established to be **indistinguishable from
+"the manager never tried"** (the early return emits nothing). That leaves `executed_and_declined`,
+rare and pooling two causes.
+
+**So a DV of zero is the MANIPULATION=0 shape again — a bucket read as evidence when the live
+question is whether it can fill at all. Three predictions were voided on exactly that a week ago.**
+**And the LS headline overstated n=1 regardless:** it is *"no segment landed in DV on one bundle"*,
+not a property of the manager.
+
+**★ AND THE QUANTITY DV NAMES WAS SITTING OUTSIDE THE SPLIT:**
+
+    intended  w_cd45fc 4  w_316827 3  w_29592b 2
+    realised  w_cd45fc 3  w_316827 3  w_29592b 2
+    OVER-ASSIGNED  w_cd45fc: 1
+
+**`intended_allocation` minus `allocation` is the manager giving a worker more than it got through —
+an allocation outcome, countable without any refusal code.** Reporting DV alone reported an emptied
+bucket while the quantity it names lived in a comparison the split did not compute. **`five_bucket_
+split` now computes it, and DV carries `partly_unreachable` with its reason — the same treatment
+MANIPULATION got, for the same reason.**
+
+**RR's framing kept as two questions rather than a judgement call:** *"a manager whose worker dies
+has still lost the work"* is true and matters for a **deployment** claim; it does not matter for
+*"does information about the newcomer change allocation decisions"*. **A named second quantity does
+not get re-litigated; a losing judgement call does.**
