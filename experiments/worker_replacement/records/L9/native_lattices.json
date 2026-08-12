@@ -1,0 +1,345 @@
+{
+  "cap": 3,
+  "caveats": [
+    "a CEILING under exact optimal play; not what any manager realises",
+    "no sigma anywhere; nothing here is an episodes/arm budget",
+    "the interval is the range believed-indifference leaves open, NOT error bars on a point estimate",
+    "an empty sample is reported as null, never as zero"
+  ],
+  "declares": {
+    "baseline": "stale card",
+    "belief_model": "whole card (D1)",
+    "path": "single native generator path; lattice is a first-class parameter and the shipped template is one value of it (D85)",
+    "tie_break": "expectation over the believed-optimal set (D19)"
+  },
+  "lattices": {
+    "current": [
+      "ae",
+      "ab",
+      "bc",
+      "cd"
+    ],
+    "disjoint": [
+      "de",
+      "ab",
+      "ce",
+      "cb"
+    ],
+    "partial": [
+      "ae",
+      "ab",
+      "ce",
+      "cb"
+    ]
+  },
+  "live_at_realistic_mix": [
+    "disjoint",
+    "partial"
+  ],
+  "mechanism": "both lattices turn at nA = cap in OPPOSITE directions. The lie must be ACTED ON to cost. `current` lies about an UNCOVERED class, so its only cost is displacement, which needs the successor FULL (channel at nA >= cap). `partial` lies about a COVERED class, so misrouting costs immediately but needs a FREE SLOT to be misrouted into (channel at nA < cap).",
+  "results": {
+    "current|1": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.0
+      ],
+      "mean_share": 5.578338431343068e-18,
+      "median_share": 0.0,
+      "n_a_achieved": {
+        "1": 60
+      },
+      "nonzero": 0
+    },
+    "current|2": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.0
+      ],
+      "mean_share": 0.0,
+      "median_share": 0.0,
+      "n_a_achieved": {
+        "2": 60
+      },
+      "nonzero": 0
+    },
+    "current|3": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.00980172417413364,
+        0.00980172417413364
+      ],
+      "mean_share": 0.00980172417413364,
+      "median_share": 0.005402030060625608,
+      "n_a_achieved": {
+        "3": 60
+      },
+      "nonzero": 42
+    },
+    "current|4": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.012362353145829112,
+        0.012362353145829112
+      ],
+      "mean_share": 0.012362353145829112,
+      "median_share": 0.010707679523724414,
+      "n_a_achieved": {
+        "4": 60
+      },
+      "nonzero": 34
+    },
+    "current|5": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.014131541565016286,
+        0.014131541565016286
+      ],
+      "mean_share": 0.014131541565016286,
+      "median_share": 0.0,
+      "n_a_achieved": {
+        "5": 60
+      },
+      "nonzero": 28
+    },
+    "disjoint|1": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.09261410420963939
+      ],
+      "mean_share": 0.05271964908944575,
+      "median_share": 0.05338953577062902,
+      "n_a_achieved": {
+        "1": 48,
+        "2": 12
+      },
+      "nonzero": 60
+    },
+    "disjoint|2": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.09261410420963939
+      ],
+      "mean_share": 0.05271964908944575,
+      "median_share": 0.05338953577062902,
+      "n_a_achieved": {
+        "1": 48,
+        "2": 12
+      },
+      "nonzero": 60
+    },
+    "disjoint|3": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.09261410420963939
+      ],
+      "mean_share": 0.05271964908944575,
+      "median_share": 0.05338953577062902,
+      "n_a_achieved": {
+        "1": 48,
+        "2": 12
+      },
+      "nonzero": 60
+    },
+    "disjoint|4": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.09261410420963939
+      ],
+      "mean_share": 0.05271964908944575,
+      "median_share": 0.05338953577062902,
+      "n_a_achieved": {
+        "1": 48,
+        "2": 12
+      },
+      "nonzero": 60
+    },
+    "disjoint|5": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.09261410420963939
+      ],
+      "mean_share": 0.05271964908944575,
+      "median_share": 0.05338953577062902,
+      "n_a_achieved": {
+        "1": 48,
+        "2": 12
+      },
+      "nonzero": 60
+    },
+    "partial|1": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.04848499327539173
+      ],
+      "mean_share": 0.02257563871562015,
+      "median_share": 0.01992660124298134,
+      "n_a_achieved": {
+        "1": 60
+      },
+      "nonzero": 60
+    },
+    "partial|2": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.042456464289656756
+      ],
+      "mean_share": 0.01252155617670061,
+      "median_share": 0.012202637619655513,
+      "n_a_achieved": {
+        "2": 60
+      },
+      "nonzero": 60
+    },
+    "partial|3": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.0
+      ],
+      "mean_share": 0.0,
+      "median_share": 0.0,
+      "n_a_achieved": {
+        "3": 60
+      },
+      "nonzero": 0
+    },
+    "partial|4": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.0
+      ],
+      "mean_share": 0.0,
+      "median_share": 0.0,
+      "n_a_achieved": {
+        "4": 60
+      },
+      "nonzero": 0
+    },
+    "partial|5": {
+      "cells": 60,
+      "failures": 0,
+      "interval": [
+        0.0,
+        0.0
+      ],
+      "mean_share": 0.0,
+      "median_share": 0.0,
+      "n_a_achieved": {
+        "5": 60
+      },
+      "nonzero": 0
+    }
+  },
+  "saturation_turns": {
+    "current|3": {
+      "first_nonzero": 3,
+      "first_zero": 2
+    },
+    "current|4": {
+      "first_nonzero": 4,
+      "first_zero": 2
+    },
+    "current|5": {
+      "first_nonzero": 5,
+      "first_zero": 2
+    },
+    "partial|3": {
+      "first_nonzero": 1,
+      "first_zero": 3
+    },
+    "partial|4": {
+      "first_nonzero": 1,
+      "first_zero": 4
+    },
+    "partial|5": {
+      "first_nonzero": 1,
+      "first_zero": 5
+    }
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59
+  ]
+}

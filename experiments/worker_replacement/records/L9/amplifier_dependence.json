@@ -1,0 +1,103 @@
+{
+  "arms": {
+    "UNAMPLIFIED (all three off)": {
+      "cells": 60,
+      "mean_share": 0.0,
+      "median_share": 0.0,
+      "n_a_achieved": {
+        "1": 48,
+        "2": 12
+      },
+      "nonzero": 0
+    },
+    "amplified, segs=1": {
+      "cells": 60,
+      "mean_share": 5.578338431343068e-18,
+      "median_share": 0.0,
+      "n_a_achieved": {
+        "1": 60
+      },
+      "nonzero": 0
+    },
+    "amplified, segs=4 (as shipped)": {
+      "cells": 60,
+      "mean_share": 0.012362353145829112,
+      "median_share": 0.010707679523724414,
+      "n_a_achieved": {
+        "4": 60
+      },
+      "nonzero": 34
+    }
+  },
+  "capacity_threshold": {
+    "first_nonzero_n_a_by_cap": {
+      "3": 3,
+      "4": 4,
+      "5": 5
+    },
+    "predicted_n_a_equals_cap": true
+  },
+  "caveats": [
+    "measures the SHIPPED template only; prices no candidate",
+    "a CEILING under exact optimal play",
+    "amplify_mix=False disables all THREE amplifiers, measured not read"
+  ],
+  "declares": {
+    "baseline": "stale card",
+    "belief_model": "whole card (D1)",
+    "path": "five-class NATURAL generation \u2014 never touched by the override faults, held bit-identical through this phase",
+    "tie_break": "expectation over the believed-optimal set (D19)"
+  },
+  "mechanism_at_n_a_1": {
+    "lied_classes_covered_by_nobody_post_swap": "60/60",
+    "omitted_classes_covered_by_incumbent": "60/60"
+  },
+  "positive_control_dose_response": {
+    "1": {
+      "cells": 60,
+      "max": 1.1198743758301466e-16,
+      "mean": 5.578338431343068e-18,
+      "n_a": [
+        1
+      ],
+      "nonzero": 0
+    },
+    "2": {
+      "cells": 60,
+      "max": 0.0,
+      "mean": 0.0,
+      "n_a": [
+        2
+      ],
+      "nonzero": 0
+    },
+    "3": {
+      "cells": 60,
+      "max": 0.04814024225049971,
+      "mean": 0.00980172417413364,
+      "n_a": [
+        3
+      ],
+      "nonzero": 42
+    },
+    "4": {
+      "cells": 60,
+      "max": 0.06820680643607539,
+      "mean": 0.012362353145829112,
+      "n_a": [
+        4
+      ],
+      "nonzero": 34
+    },
+    "5": {
+      "cells": 60,
+      "max": 0.05845554148384635,
+      "mean": 0.014131541565016286,
+      "n_a": [
+        5
+      ],
+      "nonzero": 28
+    }
+  },
+  "verdict": "the current template's card channel is ZERO at nA=1 under both amplifier settings; its shipped figure lives entirely at nA=4"
+}

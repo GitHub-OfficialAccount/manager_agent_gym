@@ -307,6 +307,50 @@ the defect it is meant to fix. [§92]_
 
 ---
 
+### Before treating agreement as evidence, ask what would have to be true for the two to DIFFER.
+
+_Origin: four instances, and the fourth was mine. LS's 60/60 card claim (a fixed-template
+restatement of its own construction); the 6,480 enumeration quoted as "my number reproduced" when
+it counted two different predicates to the same total; the builder mismatch, where RE and I agreed
+on a cell to every digit because we were running the same builder and disagreed on aggregates
+because we were not; and my own two-path check on `partial`, which matched in every digit because
+with `amplify_mix=False` segment generation does not depend on the lattice, so the two paths
+NECESSARILY produce the same instances._
+
+Agreement between two measurements is evidence only if they could have disagreed. When they are
+the same computation reached by two routes, matching digits are a **tautology wearing the clothes
+of a replication** — and the closer the match, the more convincing the illusion. **Identical to the
+last digit is the tell, not the confirmation.**
+
+So before reporting agreement: **name the thing that would have made them differ.** A different
+population, a different code path, a different estimator, an independent implementation. If you
+cannot name it, you have measured once and reported twice.
+
+**This is the positive-control rule from the other side.** A positive control asks *can this fire
+at all* — it guards against a measurement that cannot produce a signal. The differ-test asks
+*could these two have disagreed* — it guards against a measurement that cannot produce a conflict.
+Same defect, opposite faces, and this project has now been caught by each of them twice.
+
+### A comparator names its CONSTRUCTION PATH, or the comparison is not reportable.
+
+_Origin: five instances, and every withdrawn version of the L9 ratio was one of them. Substitution
+onto natural instances vs generation through an override; amplified vs unamplified; roles derived
+vs declared; five-class-natural vs six-class-override; and two different builder functions
+(`build_size3` vs `build_six`) handed over as "the same templates and seeds". **Not one of the
+withdrawals was an arithmetic error.**_
+
+The shape is always the same: **a population is named by the property being MATCHED ON — `nA=1`,
+"the same template", "the same seeds" — while the construction that produced it goes unnamed.**
+"nA=1" was 576 substituted cells at 3.84% and 960 generated cells at 4.76%. One name, two
+populations, and the mismatch is invisible in the name.
+
+So a reported comparison names, for **each** side: the generator call, the amplification state, and
+which parameter is held fixed. **"Same templates, same seeds" is not a specification** — it omits
+the instrument, which is the thing that differed every time.
+
+This is the §E provenance rule applied to comparisons rather than to record fields, and it was
+written about fields while the identical failure was live in the comparators for the whole phase.
+
 ## C. Claim rules — what you may write
 
 ### P4. Write access claims as rendering or as existence, never in the ambiguous form.
@@ -445,6 +489,21 @@ committed file. The reading rule caught the elision; the transcription step near
 P10's "recomputable by someone who wasn't in the room", applied to prose. [§117–118]_
 
 ---
+
+### In a signed quantity, every "best" and "worst" names WHOSE.
+
+_Origin: the tie-break interval on `ceiling = oracle − realised`. A draft read "a manager that
+tie-breaks worst-case gets nothing", which is inverted twice: the manager tie-breaking **well**
+maximises `realised` and therefore produces the **zero** ceiling, and such a manager does not get
+nothing — it gets everything, and the EXPERIMENT measures nothing._
+
+Where a reported quantity is a gap between what happened and what could have happened, **the
+subject's best is the measurement's worst**, and unqualified "best case" will be read the wrong way
+round by default. Name the party: *"the floor is the manager tie-breaking favourably — it attains
+the oracle and the channel has nothing left to be worth."*
+
+The general form: any quantity of the shape `ideal − actual` inverts the sense of every superlative
+applied to the actor. Write the actor into the phrase, not into the reader's inference.
 
 ## F. The substitution instruments
 
@@ -600,6 +659,10 @@ Recognise these by shape, before you know what is wrong.
 | a record field that repeats a module constant | constant recorded instead of the value used | E-provenance-asserted |
 | a verdict printed without the quantity it reduces over | empty collector rendered as a result | G-print-the-intermediate, B-positive-control |
 | an `all(...)`/`any(...)` over a collection nobody sized | `all([])` is True | G-print-the-intermediate |
+| two measurements agreeing to the last digit | one computation reached twice | B-differ-test |
+| "same templates, same seeds" as a specification | the instrument went unnamed | E-comparator-path |
+| a comparison whose two sides came from different builders | comparator construction unnamed | E-comparator-path |
+| an unqualified "best case" on an `ideal − actual` quantity | superlative inverted | E-names-whose |
 
 ---
 

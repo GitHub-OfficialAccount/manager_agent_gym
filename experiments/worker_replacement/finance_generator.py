@@ -122,6 +122,41 @@ ASSET_CLASSES = ("sovereign", "bank", "corporate", "retail", "mdb")
 COVERAGE_SIZE = 2
 
 # ---------------------------------------------------------------------------
+# LATTICE TEMPLATES — the lattice is a FIRST-CLASS PARAMETER, and the shipped
+# five-class one is simply the DEFAULT VALUE of it (D85).
+#
+# WHY THE PARAMETER EXISTS AT ALL. Candidate lattices used to arrive through
+# `coverage_override`, a path documented as existing SOLELY for S5's negative
+# cases and "never used by study instances". Five mechanisms turned out to be
+# silently inactive on it — mix forcing (three amplifiers), role designation, the
+# rng stream, and the sole-class totality repair — and each was found only while
+# fixing the previous one. EVERY ONE was an `if coverage_override is None:` guard
+# on logic that has nothing to do with where the lattice came from.
+#
+# So this does not audit those guards; it DELETES THE CONDITION. A template is a
+# template. There is no privileged path for a guard to key on, and no provenance
+# to be wrong about.
+#
+# Labels are abstract (a..e) and PERMUTED PER SEED, so the classes a template's
+# roles land on vary across instances. Position is the role: w0 PREDECESSOR,
+# w1 SUCCESSOR, w2 and w3 incumbents.
+LATTICE_TEMPLATES: dict[str, tuple[str, ...]] = {
+    # SHIPPED. w0={a,e} w1={a,b} w2={b,c} w3={c,d}. The lie is about `e`, which
+    # NOBODY covers post-swap — so every worker falls back to SA on it equally and
+    # misrouting there costs nothing. That is why this lattice's card channel is
+    # identically zero below nA = cap (check_amplifier_dependence.py).
+    "current": ("ae", "ab", "bc", "cd"),
+    # Predecessor and successor share NOTHING.
+    "disjoint": ("de", "ab", "ce", "cb"),
+    # PARTIAL OVERLAP AT COVERAGE SIZE 2. Previously believed impossible: the old
+    # admissibility predicate demanded a predecessor-SOLE-HELD lied class, and that
+    # is precisely the worthless configuration above. The predicate encoded the
+    # broken lattice's shape as a requirement.
+    "partial": ("ae", "ab", "ce", "cb"),
+}
+DEFAULT_LATTICE = "current"
+
+# ---------------------------------------------------------------------------
 # PD INPUT FLOORS — BCBS d424 (the same fetched PDF as the SA tables), cited per
 # class, with the UNVERIFIED classes labelled rather than assumed:
 #
@@ -307,6 +342,8 @@ def generate(
     force_mix_class: str | None = None,
     amplify_mix: bool = True,
     positional_roles: bool = True,
+    lattice: str = DEFAULT_LATTICE,
+    lattice_template: tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
     """Emit one complete instance. Deterministic in `seed` alone.
 
@@ -389,12 +426,34 @@ def generate(
     # five classes in both cases, so a six-class instance sits at the same stream
     # position as the five-class instance of the same seed. This is common random
     # numbers, not tuning: it removes a difference, it does not choose one.
+    # A NAMED lattice or an explicit template, never both silently. The name is
+    # what a study config carries; the template is for enumerating candidates.
+    if lattice_template is None:
+        if lattice not in LATTICE_TEMPLATES:
+            raise ValueError(
+                f"unknown lattice {lattice!r}; known: {sorted(LATTICE_TEMPLATES)}. "
+                f"Pass lattice_template=... to price a candidate that has no name yet"
+            )
+        lattice_template = LATTICE_TEMPLATES[lattice]
+    elif lattice != DEFAULT_LATTICE:
+        raise ValueError(
+            f"both lattice={lattice!r} and an explicit lattice_template were given; "
+            f"one of them would silently lose, which is the provenance fault this "
+            f"parameter exists to remove"
+        )
+    if len({len(cover) for cover in lattice_template}) != 1:
+        raise ValueError(
+            f"lattice_template {lattice_template} has unequal-size coverage sets; "
+            f"equal size is what makes the lattice NON-NESTED by construction"
+        )
+
+    # ONE PATH. The label draw ALWAYS happens, so no caller can leave the stream at
+    # a different position; `coverage_override` is retained only for S5's negative
+    # cases, which must supply a lattice that is deliberately NOT a valid template
+    # (nested, unequal-size), and it takes the same downstream logic as any other.
+    chosen = _lattice_from_template(rng, lattice_template)
     if coverage_override is not None:
         chosen = [tuple(c) for c in coverage_override]
-        _discarded_label_draw = list(ASSET_CLASSES)
-        rng.shuffle(_discarded_label_draw)
-    else:
-        chosen = _lattice_from_template(rng)
 
     # THE STREAM CHECKPOINT, so the NEXT divergence raises instead of being found
     # by a round-trip test months later. Forcing, roles and the rng stream have now
@@ -738,43 +797,28 @@ def generate(
     # The replacement event. Two incumbents stay throughout, so the team is larger
     # than the swap and the manager always has a real choice (HARNESS_SPEC_v2 §5).
     worker_ids = [w.worker_id for w in workers]
-    if coverage_override is None:
-        # The TEMPLATE fixes the roles: worker 0 is the predecessor, worker 1 the
-        # successor, and they share exactly class A. Designation is by construction
-        # rather than by searching for a two-holder class -- the template creates
-        # SEVERAL two-holder classes (A, B and C), so a lexicographic search would
-        # pick the wrong pair and the sole-held class would not be the vacated one.
-        predecessor_id, successor_id = worker_ids[0], worker_ids[1]
-        swap_shared_class = sorted(
-            set(workers[0].irb_coverage) & set(workers[1].irb_coverage)
-        )[0]
-    elif positional_roles:
-        # THE OVERRIDE PATH SILENTLY RE-DERIVED THE ROLES, AND THAT INVALIDATED
-        # EVERY SIX-CLASS FIGURE BUILT ON IT (D41).
+    if positional_roles:
+        # POSITION IS THE ROLE. w0 is the predecessor, w1 the successor -- declared
+        # by the template, never searched for.
         #
-        # A supplied lattice used to go to `_designate_swap_pair`, which SEARCHES
-        # for a two-holder class instead of reading the declared positions. Handing
-        # a seed's OWN natural lattice back through the override path returned a
-        # DIFFERENT instance: seed 0 went from (pred=w0, succ=w1, shared=retail) to
-        # (pred=w1, succ=w2, shared=corporate), and its ceiling from 0.00% to 7.08%.
+        # THE TWO BRANCHES THIS REPLACES DIFFERED, AND THE DIFFERENCE INVALIDATED
+        # EVERY SIX-CLASS FIGURE OF THIS PHASE (D41). A supplied lattice went to
+        # `_designate_swap_pair`, which SEARCHES for a two-holder class. Handing
+        # seed 0's OWN lattice back through that path returned pred=w1, succ=w2
+        # instead of pred=w0, succ=w1, and its ceiling 7.08% instead of 0.00%.
+        # The templates being priced were not the templates being described.
         #
-        # Every size-3 template in L9 declares its roles POSITIONALLY — w0 is the
-        # predecessor, w1 the successor — and the carrier stratification is defined
-        # on those positions. With the roles re-derived, the templates being priced
-        # were not the templates being described: `successor_unique(template)` named
-        # one class while the instance's actual successor held another, so nA was
-        # measured against the wrong class.
-        #
-        # This is the SAME function I recorded in records/L9 as "dead code, not on
-        # the template path". That was true of the template path and false of the
-        # override path, which is the one everything six-class was then built on.
+        # A DISJOINT PAIR IS LEGAL AND MUST NOT RAISE. `sorted(...)[0]` on an empty
+        # intersection is the IndexError recorded in records/L9 as the blocker for
+        # the disjoint candidate -- it was unreachable only because that candidate
+        # had never been generated. A disjoint pair genuinely has no shared class,
+        # and None is the honest value rather than a crash.
         predecessor_id, successor_id = worker_ids[0], worker_ids[1]
         shared = sorted(set(workers[0].irb_coverage) & set(workers[1].irb_coverage))
-        # DISJOINT PAIRS ARE LEGAL HERE and must not raise: `sorted(...)[0]` is the
-        # IndexError recorded in the L9 proposal. A disjoint pair genuinely has no
-        # shared class, and None is the honest value.
         swap_shared_class = shared[0] if shared else None
     else:
+        # S5 negative cases only: roles DERIVED from coverage. Retained so the
+        # assertion that guards against it can be made to fire.
         predecessor_id, successor_id, swap_shared_class = _designate_swap_pair(workers)
     instance = {
         "schema": "worker_replacement.finance_instance.v2",
@@ -812,6 +856,11 @@ def generate(
             # the two paths iff their draws are aligned (D42).
             "rng_checkpoint_post_lattice": rng_checkpoint,
             "positional_roles": positional_roles,
+            # The lattice this instance HAS, named. Not a default trusted forever:
+            # it is the value that produced `chosen`, and check_path_alignment
+            # asserts a named lattice reproduces itself.
+            "lattice": lattice if coverage_override is None else "coverage_override",
+            "lattice_template": list(lattice_template),
             "capacity_cap": capacity_cap,
         },
         "event": {
@@ -1216,7 +1265,8 @@ def _designate_swap_pair(workers: list[Worker]) -> tuple[str, str, str]:
     )
 
 
-def _lattice_from_template(rng: random.Random) -> list[tuple[str, ...]]:
+def _lattice_from_template(rng: random.Random,
+                           template: tuple[str, ...] | None = None) -> list[tuple[str, ...]]:
     """The CONSTRUCTED five-class lattice (HARNESS_SPEC_v2 §5), not a free draw.
 
     Roles over permuted class labels A..E:
@@ -1256,10 +1306,11 @@ def _lattice_from_template(rng: random.Random) -> list[tuple[str, ...]]:
     removes the suite-level swap-class uniformity risk at its root rather than
     reporting it as a scope limit.
     """
+    spec = template if template is not None else LATTICE_TEMPLATES[DEFAULT_LATTICE]
     labels = list(ASSET_CLASSES)
     rng.shuffle(labels)
-    a, b, c, d, e = labels
-    return [(a, e), (a, b), (b, c), (c, d)]
+    mapping = dict(zip("abcde", labels))
+    return [tuple(mapping[ch] for ch in cover) for cover in spec]
 
 
 def _assert_sole_class_has_irb_segment(instance: dict[str, Any]) -> None:

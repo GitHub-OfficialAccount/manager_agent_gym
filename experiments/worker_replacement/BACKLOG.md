@@ -50,7 +50,7 @@ output plus both reviews under `records/`.
 
 ---
 
-## L9 — THE TEMPLATE DECISION: price partial overlap, then choose `[~] (MATCHED-CELL RATIO EXISTS: size-3 pools to 0.69x disjoint, card-silent half 0.89x, card-names half 0.28x, all at nA=1 unamplified on one path. HELD on ONE item: rebuild the six-class lattice through _lattice_from_template BEFORE the package (D56) -- the override path is documented as never used by study instances, has leaked FOUR mechanisms, and check_path_alignment cannot test six classes at all. Standing checks: production test n/a (design choice); no drift - decides what the manipulation IS; ambiguity - team discussion open and running.)`
+## L9 — THE TEMPLATE DECISION: price partial overlap, then choose `[~] (GATE PASSED, standing rule 7 satisfied. At the realistic mix, natively, five classes: current 0.000%, partial overlap 2.258%, disjoint 5.272%. Partial needs no sixth class, no roster change, ships UNAMPLIFIED, and is STRONGEST exactly where realism wants it. AWAITING THE RESEARCHER'S CHOICE -- the only open item is theirs. Standing checks: production test n/a (design choice); no drift - decides what the manipulation IS; ambiguity - resolved by team discussion.)`
 **Depends:** none · **Owner:** LS (RE prices, RR attacks the enumeration) · **Cost: no model spend,
 but NOT free — it needs a generator change (step 3) that the first version of this step assumed
 away.** · **Production test: n/a (design choice).** · **Serves the question: DIRECTLY** — it
@@ -1518,3 +1518,698 @@ Record: `records/L9/L9_decisions_LS.md` D55–D57; RE's L9-aa/ab/ac.
   D39's SUSPENSION OF THE MATCHED-CELL RATIO LIFTS.** Count only → D40 runs after the rebuild.
 - **STANDING PRINCIPLE (RR, second time today): on a path documented as never used by study
   instances, FOUND FAULTS BOUND NOTHING.** First raised on the truncation audit's limits.
+
+### 2026-08-08 — ★ RETRACTION: the 0.69× table. And the carrier contrast leaves the decision path
+
+Record: `records/L9/matched_mix_check_RR.md` (RR); `records/L9/L9_decisions_LS.md` D58–D63.
+
+- **★ RETRACTED IN FULL: 0.28× / 0.89× / 0.69× and "card-silent is 3.2× card-names".** RR measured
+  nA through **RE's own `build_size3`**, on RE's templates and seeds:
+
+      carriers=1 (n=120)   nA = 4 in 100% of cells
+      carriers=2 (n=119)   nA = 0 in 87% (103/119), nA = 1 in 13%
+
+  **RE reported nA=1 in 100% of BOTH groups. It is 4 versus 0 — opposite extremes**, not merely
+  different. **And 103/119 is exactly RE's own figure for amplification draining nA to zero, so the
+  path presented as `amplify_mix=False` appears STILL TO BE AMPLIFYING.** LS's D47 objection was
+  right and **understated** — argued as "different mixes", actually the two ends of the range.
+- **★ THIRD CONSECUTIVE WITHDRAWAL OF THIS NUMBER** (0.35–0.49×, then 0.72×, now 0.69×) — **and all
+  three came from someone checking a COMPARATOR rather than an arithmetic step. Not one was an
+  arithmetic error.** That is this project's failure mode, stated as plainly as it can be.
+- **A SECOND GAP, and it is NOT the tie-break: 4.24% is outside the entire achievable range.**
+
+      tie-break      carriers=1   carriers=2          RR's code matches the shipped scorer to
+      best-case          1.59%        0.00%           every printed digit on a NAMED CELL:
+      expectation        1.59%        1.33%           share 0.008846, oracle 8.188185,
+      visit order        1.59%        0.57%           tie set 350, min 0.0, max 0.022115
+      worst-case         1.59%        2.95%
+      RE reported        1.31%        4.24%    <- outside 0.00-2.95%
+
+  **That cell is in the record as a DIFF TARGET so this is localised rather than two people trading
+  aggregates.**
+- **★ A CONFOUND THE REBUILD WILL NOT FIX: the tie-break rule moves ONE group and not the other.**
+  **Carrier-2's believed-optimal tie set averages 235.4 allocations against carrier-1's 12.7 —
+  19×.** **Carrier-1's ceiling is 1.59% under ALL FOUR rules** (harmless tie set: every member
+  scores identically under truth); **carrier-2's spans 0.00%–2.95%.** Independent of mix and of the
+  builder, and **not a clone artefact** — coverage size 3 alone produces the indifference.
+- **★ RULING (D61): THE CARRIER CONTRAST LEAVES THE DECISION PATH.** **The decision needs POOLED
+  size-3 vs disjoint at a realistic mix. It has NEVER needed carrier-1 vs carrier-2.** That contrast
+  produced the inversion, H1/H2/H3, the definitional confound, the mix mismatch and now the tie-set
+  asymmetry — **it entered as a guard against a pooled average hiding structure, a good instinct,
+  and became the thing generating the structure.**
+  **DELIVERABLE: pooled size-3 vs disjoint, at nA=1, with intervals.** The carrier split is reported
+  **descriptively, with its tie-set asymmetry stated and NO ordering claim between the groups.**
+  **D47's missing cell (`carriers=1 @ nA=1`) is NO LONGER A BLOCKER** — it was needed only for a
+  contrast no longer being made.
+- **★ THE REBUILD IS NOW THE ONLY ROUTE, NOT A PRECAUTION (D62).** **Five rounds of "fixed, and here
+  is the next thing that was silently off": forcing, roles, RNG, totality repair, and now the
+  amplification state itself.** **NOTHING FURTHER IS PRICED ON THE OVERRIDE PATH.**
+- **RR's caveat on their own record, adopted:** their nA figures are measured **through the builder
+  as it stands**, so they read *"as of the current builder"* rather than as a property of the
+  templates. **They get re-measured after the rebuild — including the ones that just withdrew the
+  table.**
+- **PREDICTIONS FINAL: LS REFUTED; RE unclaimed (right number, wrong mechanism, void figures in
+  between); RR NO-VERDICT** — theirs was conditioned on the inversion being real, **the premise
+  dissolved rather than the prediction failing, and they declined a hit at nA=4 that was
+  available.**
+
+### 2026-08-08 — the grid completes (PROVISIONAL); the rebuild's scope DOUBLES to both arms
+
+Records: `records/L9/matched_grid.json` (RE), `records/L9/reference_audit_RR.md` (RR);
+`records/L9/L9_decisions_LS.md` D64–D69.
+
+- **THE CARRIER/nA LOCK IS BROKEN** (forcing targets the successor-unique class, D53) **and the
+  full grid exists:**
+
+      RATIO TO DISJOINT AT THE SAME FORCED COUNT
+         card-NAMES     0.33x @ nA=1     0.17x @ nA=4
+         card-SILENT    0.88-0.92x       1.01-1.07x   <- PARITY at nA=4
+         POOLED         0.70-0.73x       0.73-0.77x
+
+  **Card-silent beats card-names at BOTH mixes and the gap WIDENS with nA** — 2.6–2.8× at nA=1,
+  5.9–6.2× at nA=4. **Card-names is nearly flat in nA (1.33 → 1.59); card-silent scales strongly
+  (3.51 → 9.35).**
+- **★ THAT IS THE MECHANISM RE PROPOSED AND THEN WITHDREW ON CONFOUNDED EVIDENCE. It was right.**
+  The mix lock made it untestable and the apparently-refuting run carried the same lock.
+  **RECORDED AS ITS OWN FAILURE MODE: a RETRACTION can be as unfounded as the claim.** This project
+  has been careful about adopting claims and not at all careful about withdrawing them.
+- **★ THE GRID IS PROVISIONAL AND IS NOT CALLED DEFENSIBLE.** It is measured on the override path —
+  wrong five times, sixth fault unbounded. **0.35–0.49× → 0.72× → 0.69× → 0.70–0.77×: the
+  QUALITATIVE story has held across all four and the MAGNITUDE has moved every time.** Three
+  independent constructions now agree on ~0.7× pooled, which makes it the best current estimate.
+  **It is not what goes to the researcher.**
+- **★ THE REBUILD'S SCOPE DOUBLES: THE DENOMINATOR IS ON THE OVERRIDE PATH TOO.** RE regenerated the
+  disjoint reference through `coverage_override` to escape the substitution asymmetry — **putting
+  the ratio's denominator on the path nothing may be priced on. The disjoint arm is NOT safe for
+  being five-class.** And there is no native escape: **`_lattice_from_template` only ever produces
+  `{A,E},{A,B},{B,C},{C,D}`, so NO candidate template can be built natively.**
+  **RULING: the rebuild makes the LATTICE A FIRST-CLASS GENERATOR PARAMETER, with the current
+  five-class template as one VALUE of it. No override path, no privileged path, NO PROVENANCE FOR A
+  GUARD TO KEY ON** — all five faults were `if coverage_override is None`, and this **deletes the
+  condition rather than auditing its uses**, which is the only fix that does not require having
+  found the last fault.
+- **★ DISJOINT'S AFFORDABILITY CASE IS AN ARTEFACT OF SUBSTITUTION.** Generated natively and
+  unamplified, disjoint spans **nA ∈ {1,2} and tops out at 6.09%**. **The 9.03% at nA=4 requires the
+  NATURAL template's amplified shared class to coincide, BY LABELING, with the DISJOINT template's
+  successor-unique class** — and that is where the ~1.11σ / **~13-episodes-per-arm** figure lives.
+  **Combined with the realism result, disjoint's best case is BOTH anti-realistic AND a construction
+  artefact. Stop quoting 13 episodes/arm.**
+  **Pattern worth noting: the comparison has moved toward size 3 three times, and every time by
+  removing an advantage disjoint never had rather than by finding one size 3 does.**
+- **★ RR's SHARPENING OF THE COMPARATOR OBSERVATION, ADOPTED — and it applies to the rule they
+  already wrote.** All withdrawn numbers failed the same specific way: **a population named by the
+  property being MATCHED ON while the CONSTRUCTION that produced it went UNNAMED** — substitution vs
+  generation, amplified vs not, derived vs declared roles, five-class-natural vs six-class-override.
+  **Four instances.** RR wrote the provenance rule about record FIELDS while the same failure was
+  live in the COMPARATORS. **NEW RULE: a comparator NAMES ITS CONSTRUCTION PATH, or the comparison
+  is not reportable.** The population requirement gains a field — **"nA=1" is 576 substituted cells
+  at 3.84% AND 960 generated cells at 4.76%: one name, two populations.**
+- **CLOSED: `irb_approved` and `applicable_approach` are the same predicate, agreeing 270/270**, so
+  the nA=4-vs-nA=0 discrepancy is NOT a predicate difference and stays with RE's single-cell diff.
+- **D40 runs NOW, on the safe path** — five-class natural, never touched by the override fault,
+  regression-locked bit-identical. **Its answer survives the rebuild.**
+
+### 2026-08-08 — ★ CORRECTION TO LS's SUMMARY: the two columns are not commensurable
+
+Record: `records/L9/L9_decisions_LS.md` D70–D71. **A correction to a SENTENCE rather than a number,
+raised by RR, accepted in full — and the sentence had already reached the researcher.**
+
+- **LS wrote: *"the comparison has moved toward size 3 three times, every time by removing an
+  advantage disjoint never had."* TRUE OF THE POINT ESTIMATE, FALSE OF THE TOTAL EVIDENCE.**
+
+      TOWARD size 3 -- all three MOVE THE ESTIMATE
+        the mix confound (0.35-0.49x understated it)
+        the override path's disabled amplifiers (size-3 priced unamplified)
+        the nA=4 substitution artefact (disjoint's best case is not native)
+
+      AGAINST size 3 -- all three UNDERMINE WHETHER AN ESTIMATE EXISTS
+        the tie-break band, +/-4-7%, where size-2 is EXACTLY 0.00% spread on 10/10
+        the ZERO BEST-CASE on every sampled instance -- no guaranteed positive ceiling
+        the 19x tie-set asymmetry -- size-3's ceiling is rule-dependent, size-2's is not
+
+  **They must not be netted. "0.88×" and "the ratioed quantity spans zero to 5% depending on a
+  tie-break rule" are not two facts to average — the second is a CONDITION ON the first.**
+- **THE SENTENCE THAT REPLACES IT (RR's), in the record and in the package: *the POINT ESTIMATE has
+  moved toward size 3 three times; the case that size 3 HAS a well-defined point estimate at all
+  has weakened three times.***
+- **★ AND THE REALISM FINDING IS NOT A MARK AGAINST DISJOINT.** It costs disjoint 2.4× in effect and
+  ~6× in n — **the same mechanism and magnitude it costs size 3** — so it belongs in the *condition
+  both options share* column. **LS put it in the disjoint-loses column by MERGING it with the
+  substitution artefact, which IS asymmetric.** Two findings, one symmetric; the merge favoured the
+  option LS and the researcher both prefer.
+- **RECORDED AS A BIAS INSTANCE ON LS. No figure was wrong; the FRAMING was — and framings are what
+  survive into a package.** RR's stated reason for raising it: *"the evidence keeps favouring size 3
+  is exactly the shape of thing that becomes a prior nobody re-examines — and I'd be the one who let
+  it, having supplied most of both halves."*
+- **LS refinement, offered as a refinement and cutting both ways: counting findings is a weak way to
+  weigh evidence here.** The three "against" are three consequences of ONE mechanism (coverage size
+  3 producing massive believed-indifference); the three "toward" are three consequences of ONE
+  mechanism (the override path's asymmetries). **Neither column is three independent facts;
+  "three each" is not load-bearing in either direction.** RR's commensurability point carries the
+  correction regardless.
+- **RR's RANKING REACHES THE RESEARCHER AS ORDERING PLUS CONDITION, never the ordering alone.**
+  They still rank partial-overlap-at-3 above disjoint-at-2, **but the contingency attached at the
+  outset has GROWN rather than resolved: it was conditional on size-3 clearing detectability, and
+  we may not be able to TELL whether it does, because the interval's lower end is ZERO.**
+
+### 2026-08-08 — ★ THE RETRACTION IS WITHDRAWN: RE and RR ran DIFFERENT BUILDERS
+
+Record: `records/L9/L9_decisions_LS.md` D72–D75.
+
+- **NOBODY WAS WRONG.** RR's diff-target cell reproduces on RE's machine **to every digit** — on
+  `check_size3_pricing.build_size3`, the **OLD** builder (share 0.008846, oracle 8.188185, ties 350).
+  **RR's nA=4/nA=0 is builder A's mix, and it is exactly what `check_size3_pricing` printed in its
+  own output. 4.24% lies outside builder A's achievable range BECAUSE IT IS NOT A BUILDER A
+  NUMBER.**
+- **RE's share:** they sent RR *"seeds `range(10)`, `size3_templates()`"* and **never said the
+  BUILDER had changed** — same template list, different generator call. **Naming the population and
+  not the instrument, in the one place §B had been applied all day.**
+- **★ LS's share is worse: D64 recorded that "a retraction can be as unfounded as the claim",
+  generalising from RE withdrawing a correct mechanism — and D58, LS's retraction of D55, is an
+  instance of exactly that, committed ONE ADDENDUM EARLIER without noticing.** Neither LS nor RR
+  checked which builder produced the numbers before acting on the mismatch.
+- **RULING: D58's RETRACTION IS WITHDRAWN. D55 stands as SUPERSEDED, not wrong** — D64's grid is a
+  fuller measurement of the same thing and the provisional status applies to both. **The record must
+  not say RE published a wrong number, because they did not.**
+- **THE COMPARATOR RULE TAKES ITS FIFTH INSTANCE WITH A WIDENED SCOPE: "construction path" includes
+  THE BUILDER FUNCTION, not only the generator path.** *(And putting a NAMED CELL in the record as a
+  diff target, rather than trading aggregates, is what made this a two-minute check instead of a
+  day. Repeat it by default.)*
+- **D40 ANSWERED, D39's SUSPENSION LIFTS. Measured, not read:** `amplify_mix=False` sets
+  `shared_class = None` and **all three amplifiers gate on it** — count goes round-robin, divergence
+  flag False, IRB priority one-per-class with no ordering. **So the 4.76% reference IS the
+  divergence-selection-off number.** RE is running D40 explicitly anyway rather than arguing from a
+  related result.
+- **★ RE CUT THEIR OWN REFERENCE OUT FROM UNDER THEMSELVES:** *"if natively-generated unamplified
+  disjoint tops out at 6.09%, the denominator in every ratio I have quoted is inflated, and the
+  ratios are correspondingly understated."* They could have defended the numerator against a doubted
+  denominator and did not.
+- **★ RR's OPPOSITE-FUTURES ARGUMENT, adopted, and it changes the DELIVERABLE.** The two mechanisms
+  behind the two evidence columns have opposite futures: **the override path is being DELETED, so
+  its findings are SPENT and already banked; coverage-size-3 believed-indifference is INTRINSIC and
+  the rebuild does not touch it** — a worker covering 3 of 6 classes makes more allocations
+  indistinguishable under the card than one covering 2 of 5, **arithmetic about the lattice, not the
+  code path**, measured on a five-class size-3 template with no clone (3.94% spread, 10/10).
+  **So *"the qualitative story held every time and the magnitude moved every time"* is EXPECTED, not
+  reassuring: the magnitude moved because the override path injected error; the direction held
+  because it was never downstream of that path. THE FOURTH VERSION BEING RIGHT ABOUT DIRECTION IS NO
+  EVIDENCE THE FIFTH IS RIGHT ABOUT SIZE.**
+- **★ THE DELIVERABLE'S SHAPE CHANGES, adopted: an INTERVAL PLUS A STATEMENT OF WHAT DECIDES WHERE
+  YOU LAND IN IT — not a number with error bars.** RE is to build toward that object from the start
+  rather than converting at the end.
+- **PREDICTIONS ON THE REBUILD, both committed before it lands, and they DISAGREE:**
+  **RR — the point estimate moves LESS than the last three revisions and the interval does not
+  narrow at all** (falsifier, theirs: a materially narrowing interval refutes their account of the
+  ambiguity's source).
+  **LS — the nA=1 row is STABLE (pooled moves <~15% relative, agreeing with RR); the nA=4 row is
+  NOT, and "parity at nA=4" is the claim at risk, because disjoint's nA=4 is NOT NATIVELY REACHABLE
+  (native spans nA ∈ {1,2}, topping at 6.09%). A denominator that only exists under substitution
+  cannot survive a rebuild that removes substitution.** Refutable by that column surviving
+  unchanged. **A disagreement to settle rather than a joint expectation to confirm.**
+
+### 2026-08-08 — ★★ D40: THE SHIPPED LATTICE MEASURES NOTHING AT A REALISTIC MIX
+
+Record: `records/L9/L9_decisions_LS.md` D76–D80. **Five-class NATURAL path — survives the rebuild.**
+
+    arm                              cells   nA achieved       mean    nonzero
+    amplified, segs=4 (as shipped)      60      {4: 60}       1.24%     34/60
+    amplified, segs=1                   60      {1: 60}       0.00%      0/60
+    UNAMPLIFIED (all three off)         60  {1: 48, 2: 12}    0.00%      0/60
+
+- **★ THE 1.24% HEADLINE IS A FORCED-MIX ARTEFACT.** At matched nA=1 the amplifiers make no
+  difference — 0.00% vs 0.00% — **not because they are inert but because BOTH ARE ZERO.**
+  **The entire 1.24% lives at nA=4, which requires forcing four of nine segments into one class.**
+  **On the realism finding that nA=1 is the realistic mix, the lattice we currently ship measures
+  EXACTLY NOTHING on a realistic portfolio.**
+- **THE MECHANISM, following from what was already proved:** `_lattice_from_template` gives
+  `w0 ∩ w1 = {A}`, so **the shipped lattice is structurally a CARD-NAMES lattice** — the stale card
+  **correctly describes the successor's critical qualification.** The card is only wrong about
+  things that do not bind, **except when capacity is forced and 4 segments compete for 3 slots, at
+  which point the false claims displace. The 1.24% is CAPACITY DISPLACEMENT under a forced
+  concentration, not a coverage channel.** **Nothing prior is contradicted — it is re-described;
+  34/60 nonzero at nA=4 is the original counterfactual unchanged.**
+- **★ RE's REFRAMING SUPERSEDES BOTH FRAMINGS, LS's INCLUDED. Against ZERO, a ratio is UNDEFINED.**
+  The question was never *"how much channel does a candidate buy relative to disjoint"* — it is
+  **"does ANY lattice have a channel at a realistic mix at all."** **LS's "partial overlap costs a
+  fraction of the disjoint channel" was measuring the wrong thing even where the arithmetic was
+  right** — and LS was the one enforcing that framing on everyone else.
+  **The decision is not how much sensitivity we trade for realism; it is that the realistic mix
+  currently yields ZERO and the candidate lattices are the only route to a non-zero measurement on
+  a realistic portfolio. That does not depend on the six-class arm at all.**
+- **PROVISIONAL, override-path, flagged: at nA=1 the candidates are 3.98% (disjoint) and ~3.5%
+  (size-3 card-silent) against the current template's 0.00%.** If those survive even approximately,
+  **the comparison that matters is CANDIDATE-vs-CURRENT, not candidate-vs-candidate.**
+- **★ RULING (D78): the rebuild is scoped to CURRENT vs CANDIDATES at nA=1, natively, FIRST.**
+  Same build; it changes which comparison comes out first. **It answers whether the study can
+  proceed at all** (no lattice with a channel at nA=1 = no manipulation at a realistic portfolio,
+  which is the standing escalation trigger); **it is better posed**; and **all three lattices as
+  parameter values of one generator is exactly what the rebuild is for.**
+  Deliverable shape unchanged: **interval plus what decides where you land in it.**
+- **D39's SUSPENSION LIFTS for a stronger reason than "the amplifiers do not matter": at the
+  realistic mix there is nothing to amplify.**
+- **PREDICTION SHARPENED, NOT SCORED (RE declined to score LS's against their own numbers, one arm
+  still being override-path): nA=4 is NOT natively reachable for the CURRENT template either — it
+  requires the same forcing. So the ENTIRE nA=4 COLUMN, ON BOTH ARMS, IS A FORCED-MIX ARTEFACT
+  rather than a property of any lattice.**
+- **★ SENT TO THE RESEARCHER AS A FLAGGED PROVISIONAL HEADLINE — one measurement, minutes old,
+  UNATTACKED.** RR asked to attack it as the now load-bearing measurement, specifically: **is
+  0.00% on 60/60 a real zero or a FLOOR ARTEFACT** (that shape has fooled this project twice — see
+  the `all([])` corollary and the 60/60 card claim), **with a POSITIVE CONTROL through the same
+  path**; does it survive nA=2 (the unamplified arm already shows `{1: 48, 2: 12}`); and is the
+  card-names-lattice inference right.
+
+### 2026-08-08 — D40 SURVIVES: the threshold is `nA ≥ cap`; and the niche-share threshold is `1/n_workers`
+
+Record: `records/L9/L9_decisions_LS.md` D81–D84. **Five-class NATURAL path throughout.**
+
+- **THREE INDEPENDENT LEGS.** **(1) Dose-response — the instrument fires, so 0.00% is not a floor:**
+  nA = 1,2,3,4,5 → 0.00%, 0.00%, **0.98%, 1.24%, 1.41%** (nonzero 0/60, 0/60, 42/60, 34/60, 28/60).
+  **(2) Structural at 60/60:** at nA=1, **lied classes are covered by NOBODY post-swap** (misrouting
+  costs nothing) and **omitted classes are covered by an INCUMBENT** (not knowing costs nothing) —
+  **neither error can bind**, so the only route is displacement of the successor's uniquely-required
+  segments. **(3) A prediction stated BEFORE running, confirmed exactly:**
+
+      cap    nA=1    nA=2    nA=3    nA=4    nA=5    nA=6
+        3   0.00%   0.00%   0.98%   1.24%   1.41%   1.76%
+        4   0.00%   0.00%   0.00%   0.79%   1.22%   1.44%
+        5   0.00%   0.00%   0.00%   0.00%   0.83%   1.19%
+
+  **First non-zero at nA = 3, 4, 5 for cap = 3, 4, 5. THE CONDITION IS `nA ≥ cap`, NOT `nA ≥ 4`.**
+  **The shipped template is IDENTICALLY ZERO below nA = cap, for a reason that follows from the
+  lattice rather than from any measurement choice.**
+- **★ DERIVATION (LS), MARKED AS A DERIVATION AND NOT A RESULT.** Capacity binds exactly —
+  `n_segments = n_workers × cap` — so with `nA ≥ cap`:
+
+      nA / n_segments  >=  1 / n_workers
+
+  **Checked against all three of RE's cap values: the threshold niche SHARE is 0.333 at every one,
+  INVARIANT TO BOOK SIZE.**
+  **THIS EXPLAINS STRUCTURALLY WHY THE BOOK-SIZE LEVER COULD NOT HELP REALISM — scaling the book
+  scales the threshold with it. The lever did not fail on the numbers; it failed on the geometry.**
+  **AND IT NAMES A LEVER NOBODY HAS TOUCHED — WORKER COUNT:**
+
+      n_workers    3      4      5      6      8
+      threshold   33%    25%    20%    17%   12.5%
+
+  **The realism argument is that sole coverage attaches to NICHES — a small share. The design
+  currently demands ≥ 33%.**
+  **COUNTERVAILING MECHANISM, NAMED, FROM LEG (2): the channel is already suppressed because
+  omitted classes are covered by an incumbent at 60/60. MORE WORKERS = MORE INCUMBENTS = MORE
+  SUPPRESSION.** The two effects push opposite ways and **LS cannot sign the net offline.**
+  **DISCRIMINATING TEST, committed before measurement: vary `n_workers` ∈ {3,4,5} holding the
+  lattice and the exact binding. Threshold share falling as 1/n_workers → the lever is real.
+  Staying near 33%, or the ceiling collapsing at every share → incumbent suppression dominates and
+  the derivation is DEAD.**
+  **AND THE REALISM HALF IS RR's: if worker count IS the lever, is a 5- or 8-analyst team the same
+  institution we claim to study?** More workers means more redundancy and possibly a different
+  succession scenario — **the sole-holder-of-a-niche story may not survive it.**
+- **`cap = 2` IS INFEASIBLE as floated** — 3 workers × cap 2 = **6 slots for 9 segments.** The
+  instinct was right and generalises; **the feasible form is moving WORKER COUNT so that cap and the
+  threshold share move together.** The realism question it trades into — **how many segments an
+  analyst can carry** — is a different claim needing its own argument, not a transfer of the
+  concentration one.
+- **THE ESCALATION TRIGGER FIRES, BUT NOT IN THE DIRECTION IT WAS WRITTEN FOR.** *"If no lattice has
+  a channel at nA=1, the study has no manipulation that is both valid and measurable."* **The
+  CURRENT lattice does not. That is not a reason to stop — it is a reason the lattice must change,
+  and it is established WITHOUT REFERENCE TO ANY SIX-CLASS NUMBER.**
+- **RR's AMPLIFIER DECOMPOSITION resolves an apparent contradiction: the amplifier's value is
+  ENTIRELY in MOVING nA across the threshold**, while divergence selection and IRB ordering **cost**
+  ~17% at fixed nA. **So "amplification helps" and "amplification hurts" are both true, of different
+  comparisons.**
+- **RR's nA=2 structural zero for six-class card-NAMES now has a candidate mechanism: nA=2 < cap=3.**
+  If the same threshold governs there, **the zero is EXPECTED and the 1.33% at nA=1 is the ANOMALY
+  needing explanation** — which inverts which fact needs explaining. **Theirs to test against the
+  rebuild.**
+- **RE's DENOMINATOR CONCESSION CUTS BOTH WAYS and LS is NOT adjudicating it:** disjoint's native
+  6.09% is unamplified, **so the post-rebuild comparison needs BOTH arms amplified on their own
+  successor-unique class — a cell neither peer has.** Until it exists there is no basis to prefer
+  either side's number.
+- **ORDER: the worker-count sweep (cheap, may add an option), then the rebuild scoped to current vs
+  candidates at nA=1, natively.**
+
+### 2026-08-08 — ★★ SIZE-2 PARTIAL OVERLAP HAS A CHANNEL. The sixth asset class may be unnecessary
+
+Records: `records/L9/d40_attack_RR.md` (RR), `records/L9/threshold_share_probe.md` (RE);
+`records/L9/L9_decisions_LS.md` D85–D90.
+
+- **D40 HOLDS, WITH A DECISIVE CONTROL.** Unamplified natural instances, coverage substituted,
+  cap 3, **20 seeds × 120 labelings**:
+
+      lattice                    nA=1                    nA=2
+      current (as shipped)    0.000%  (0/1920 nz)    0.000%  (0/480)
+      disjoint (candidate)    4.595%  (1920/1920)    7.038%  (480/480)
+      partial (SIZE 2)        2.198%  (1920/1920)    1.059%  (480/480)
+
+  **Non-zero on EVERY cell for both other lattices through the identical path — the measurement CAN
+  return non-zero at nA=1; the shipped lattice cannot.** And **D40 does not depend on the realistic
+  mix being 1 rather than 2** — both are 0.0000%, 0/60.
+- **★ LS's CARD-NAMES INFERENCE WAS RIGHT AND IS NOT THE MECHANISM.** `partial` is ALSO a card-names
+  lattice and prices at 2.198%. **The operative mechanism is WHICH CLASS THE LIE IS ABOUT:**
+  `current` lies about a class **covered by NOBODY post-swap** — every worker falls back to SA
+  equally, so misrouting costs nothing; `partial` lies about a class **`w2` covers**, which costs
+  immediately. **The shipped lattice lies about the one class worthless to everybody.**
+- **★★ PARTIAL OVERLAP AT SIZE 2 WAS RETIRED FOR FAILING A TEST IT DID NOT NEED TO PASS.**
+  Its published *"exactly 0.00% on 30/30"* was measured on **AMPLIFIED** instances —
+  amplification-dependent, read as a property of the lattice. **The combinatorial result is
+  untouched and means something different: the predicate required a SOLE-HELD LIED CLASS, which is
+  a class covered by nobody post-swap, which contributes NOTHING. The predicate demanded exactly
+  the worthless configuration.** **LS's "partial overlap is combinatorially impossible at size 2"
+  was TRUE OF THE PREDICATE and FALSE OF THE DESIGN.**
+
+      at the realistic mix, natural path, unamplified:
+         disjoint (size 2)          4.60%
+         PARTIAL OVERLAP (size 2)   2.20%    ~48% of disjoint
+         current (as shipped)       0.00%
+
+  **No sixth asset class. No new lattice parameter. And it is the design the researcher preferred
+  on realism grounds.** **RR declared the bias unprompted: it favours the option they have argued
+  for, rests on ONE substitution measurement over 20 seeds, and needs native reproduction before it
+  moves a decision.**
+- **★ RULING (D88): THE REBUILD DROPS THE SIXTH CLASS.** It is still required — `_lattice_from_template`
+  produces exactly one lattice, so ANY native candidate needs lattice-as-parameter — **but it no
+  longer needs to teach the generator a sixth asset class, which was the expensive half and the
+  thing the researcher would be committing to.**
+  **(1) lattice as a first-class generator parameter, FIVE classes; (2) first output: current vs
+  disjoint vs SIZE-2 PARTIAL OVERLAP at nA=1, natively; (3) six classes ONLY if all three
+  five-class lattices fail.** **The admissibility predicate is RE-DERIVED from the corrected
+  mechanism, not patched: the lied-about class must be COVERED BY SOMEONE post-swap — close to the
+  opposite of the sole-held requirement it encodes.**
+- **LS's `1/n_workers` DERIVATION: CONCLUSION SURVIVES, MECHANISM WAS WRONG.**
+
+      n_segments  cap  threshold nA  threshold share
+          8        3        3           37.5%
+          9        3        3           33.3%
+         10        3    infeasible
+
+  **The threshold nA is ABSOLUTE at `cap`, not proportional to the book** — LS's *"scaling the book
+  scales the threshold"* predicts it rises with `n_segments`; **it does not, and the share FALLS as
+  the book grows.** **RE's tighter form adopted: threshold share = `cap/n_segments` ≥ `1/n_workers`,
+  a LOWER BOUND attained only at maximum feasible book size — and 9 = 3×3 is ALREADY that optimum**
+  (which is why 8 segments is *worse* at 37.5%). **Worker count is a lever only because it PERMITS
+  a bigger book; you cannot buy share by growing the book alone.**
+  **The test cannot run on the trusted path** (four workers fixed, `n_segments` validated 8..10, so
+  `n_workers=4` needs 12) — **it is the rebuild's first output.** The incumbent-suppression
+  counter-mechanism stays unsigned.
+  **The realism trade is a JOINT choice of roster AND book size:** *5 analysts with a 15-segment
+  book hits 20%; 5 analysts with a 9-segment book does not.* **One question to RR, not two.**
+- **★ RE's EMPTY-SAMPLE NEAR-MISS — the `all([])` corollary in the wild, hours after being written,
+  inside a probe whose SUBJECT is a structural zero.** `st.mean(sh) if sh else 0.0` turned **300
+  failed generations** (`ASSERTION 2a`: 9 slots cannot hold 10 segments) **into a legal-looking
+  0.00% at every nA.** RE nearly reported *"the channel vanishes at 10 segments"* as a finding.
+  **The generator's own assertion caught what the probe swallowed — defence in depth working.**
+  Reported as `n/a` with the near-miss in the record.
+
+### 2026-08-09 — the k=5 lever improves THREE axes at once; and a contradiction that may make it moot
+
+Record: `records/L9/worker_count_realism_RR.md` (RR); `records/L9/L9_decisions_LS.md` D91–D95.
+
+- **LS's SUPPRESSION COUNTER IS REAL FOR A *DRAWN* LATTICE AND IRRELEVANT TO A *CONSTRUCTED* ONE.**
+
+      k post-swap   P(a GIVEN worker sole-holds)   lattices where SOME worker does   threshold
+           3               75.0%                       110/120  (91.7%)                33%
+           5               23.8%                       210/252  (83.3%)                20%
+           6                9.5%                       120/210  (57.1%)                17%
+
+  The mechanism is confirmed and does not bite: **`_lattice_from_template` CONSTRUCTS rather than
+  draws, and at k=5 there are 210 viable templates AT FIVE CLASSES** (e.g. post-swap
+  `AB AC AD AE BC`, successor `AD` sole-holding `D`). **The lever costs NO new asset classes — the
+  thing the six-class expedition was paying for.**
+- **CLARIFICATION + UNIFICATION: `n_workers` is the POST-SWAP ROSTER (3), not the pool (4). And the
+  old *"exactly zero at cap 5"* slack finding was measured at the shipped nA=4 — 4 < 5, so the
+  threshold PREDICTS it. Two findings, one mechanism.**
+- **★ THE REALISM ANSWER INVERTS THE CONCERN RATHER THAN BALANCING IT.** A bank running IRB across
+  five asset classes with **three** approved reviewers is small; real credit-risk and
+  model-validation functions are **5–20**. And sole coverage survives team size because **coverage
+  follows SPECIALISATION, not headcount** — key-person risk exists in teams of fifty.
+  **THE SHARP VERSION: at k=3 sole coverage is nearly FORCED (75% of random lattices), so it is an
+  artefact of the team being TINY rather than genuine specialisation. At k=5 it becomes genuine.**
+
+      axis                          k=3                    k=5
+      team size vs real functions   small                  typical
+      sole coverage                 forced by arithmetic   genuine specialisation
+      niche share threshold         33%                    20%
+
+  **Three axes improving together — every other lever this phase traded them.**
+- **COSTS, stated by the proposer:** `n_segments` scales to 15 — **longer episodes and REAL RUN
+  SPEND** (the exact DP is unaffected); **20% is still not a niche**, so the objection is *softened,
+  not answered*; it needs the rebuild; **and the suppression counter returns for anyone who DRAWS
+  rather than constructs** (83.3% at k=5 is an existence rate, not a safety margin; 16.7% at k=7).
+- **★ AN APPARENT CONTRADICTION, AND ITS RESOLUTION MAY DELETE THE LEVER.** **Size-2 partial
+  overlap prices 2.198% at nA=1 — BELOW the `nA ≥ cap` threshold.** Both natural path, both
+  attested; **they cannot both describe the same rule.**
+  **LS HYPOTHESIS (marked as such — LS has been wrong on derivations twice this phase): `nA ≥ cap`
+  is NOT universal. It governs the DISPLACEMENT-ONLY regime, which by the corrected mechanism is
+  exactly the lattices that LIE ABOUT AN UNCOVERED CLASS. Where the lie is about a class someone
+  else covers, it costs immediately, no displacement is needed, and the channel exists at ANY nA.**
+  **IF RIGHT: (1) LS's `1/n_workers` derivation describes only the regime being ABANDONED — derived
+  from the current template and generalised to the design space; (2) the k=5 lever is UNNECESSARY,
+  along with the 15-segment book, the longer episodes and the real run spend — because the cheapest
+  option is already on the table: size-2 partial overlap at k=3, 9 segments, no roster change, no
+  sixth class.**
+  **DISCRIMINATING TEST, nearly free: price size-2 partial overlap across nA ∈ {0,1,2,3,4} at cap=3,
+  natively. FLAT-OR-RISING FROM nA=0 → regime-specific, lever moot. A STEP AT nA=3 → universal,
+  derivation stands, k=5 earns its cost.** **It runs FIRST — this is exactly the shape of cheap
+  decisive test this phase has repeatedly failed to run first.**
+- **REBUILD SCOPE RESTATED: lattice, ROSTER SIZE and BOOK SIZE all first-class parameters, with the
+  current configuration as one value** (`n_segments` validates to 8..10; `_lattice_from_template`
+  returns exactly four workers, so k=5 needs both relaxed).
+- **ORDER:** (1) **D93's nA sweep on size-2 partial** — may delete (4) and (5); (2) the rebuild,
+  five classes; (3) current vs disjoint vs size-2 partial at nA=1, natively; (4) k=5 sweep **only
+  if** the threshold is universal; (5) six classes **only if** all five-class lattices fail.
+- **RR DECLINED TO ADOPT RE's `nA=2 < cap=3` HYPOTHESIS, CORRECTLY** — it would transfer a
+  five-class NATIVE result to a six-class OVERRIDE measurement, **the generalisation that has bitten
+  all three agents.** Held as a rebuild prediction; if it holds, **the 1.33% at nA=1 becomes the
+  anomaly rather than the zero.**
+
+### 2026-08-09 — the override check was ONE POPULATION REACHED TWO WAYS; k=5 realism dissolved the objection
+
+Record: `records/L9/L9_decisions_LS.md` D96–D99.
+
+- **★ "IDENTICAL IN EVERY DIGIT" IS THE TELL, NOT THE CONFIRMATION — and RR refused to count their
+  own matching result as support.** Generating all three lattices through `coverage_override`
+  (post-fix, unamplified) reproduced the substitution figures exactly, 0 generation failures.
+  **But with `amplify_mix=False` there is no shared class to force, so segment generation does not
+  depend on the lattice at all and the two paths NECESSARILY produce the same instances. One
+  population reached two ways.** It rules out a substitution **bug** and nothing else.
+  **Native reproduction still needs the rebuild; the 2.198% caveat stands unchanged.**
+  **THE DISCIPLINE GENERALISES: ask what would have to be true for two results to DIFFER before
+  treating their agreement as evidence.** This project has read agreement as independent support at
+  least three times when it was the same thing twice — the 60/60 card claim, the 6,480 enumeration,
+  and the builder mismatch. **Same general form.**
+- **★ THE JOINT ROSTER-AND-BOOK QUESTION: ANSWERED, and k=5 is MORE realistic than k=3.** The
+  absolute threshold is always `cap` segments — **one analyst's full workload.**
+
+      post-swap workers   n_segments   threshold   even share   niche vs an AVERAGE class
+              3               9           33%         20%              1.67x
+              5              15           20%         20%              1.00x
+              6              18           17%         20%              0.83x
+
+  **The niche must be `n_classes / n_workers` times an average class — 1.67× at k=3, which is
+  exactly where the concentration objection had force, and 1.00× at k=5, where the specialist owns
+  an AVERAGE-SIZED class and NO concentration is required.**
+  **Two mechanisms make it realistic rather than convenient:** per-reviewer workload is set by
+  process, not bank size, so **workload per head is the invariant and the book scales with
+  headcount**; and **the niche stays 3 segments ABSOLUTELY while the book grows around it** — the
+  share falls because the denominator grows.
+  **RR's own nA=4 concentration objection is therefore DISSOLVED, not softened: realistic exactly
+  when the post-swap roster is at least as large as the number of asset classes.**
+- **★ RR's REFRAME — *the threshold is a COHERENCE CONDITION, not a cost: the niche must be at least
+  one analyst's full workload* — is the most satisfying claim of the phase, and LS thinks it has a
+  GAP: it conflates SOLE QUALIFICATION with FULL-TIME DEDICATION.** Sole coverage here is about who
+  is **approved** to review a class, not how their week is filled. **A specialist can be the only
+  approved reviewer for securitisations while spending 80% of their time on corporates** — ordinary
+  key-person risk, and a niche far smaller than one workload.
+  **Raised as a QUESTION, not a refutation, and it is NOT load-bearing either way:** RR's core
+  realism case is independent and survives (**3 approved reviewers is small against real functions
+  of 5–20; at k=3 sole coverage is FORCED by arithmetic in 75% of random lattices**), and the
+  reframe applies only to the **displacement-only regime** the candidates may be leaving.
+- **PRIORITY, agreed by both:** **native reproduction of the 2.198% is the cheapest decisive test
+  and does not involve worker count at all.** **Survives → a realistic five-class design with NO
+  sixth class and NO roster change, and the k=5 lever becomes an OPTIONAL improvement. Does not
+  survive → worker count is what makes any lattice realistic, and it is cheaper than the sixth class
+  was.** **Either way the rebuild is the gate and neither answer needs run spend.**
+- **★ THE ONLY BRANCH THAT REACHES THE RESEARCHER'S CHEQUE-BOOK IS k=5**, which scales the book to
+  15 segments and **lengthens every episode**. **That is the one commitment on the table that is
+  theirs rather than the team's, and it is only reached if the cheap branch fails.**
+
+### 2026-08-09 — ★★ THE REBUILD IS DONE. Two candidates have a channel at the realistic mix
+
+Record: `records/L9/native_lattices.json` (RE); `records/L9/L9_decisions_LS.md` D100–D105.
+**One code path for every lattice; the `coverage_override is None` condition is DELETED, not
+audited. Position IS the role.**
+
+    lattice   segs   nA achieved     mean   nonzero        interval
+    current     1       {1: 60}     0.00%     0/60   [0.00%, 0.00%]
+    current     3       {3: 60}     0.98%    42/60   [0.98%, 0.98%]
+    current     4       {4: 60}     1.24%    34/60   [1.24%, 1.24%]
+    disjoint    1  {1: 48, 2: 12}   5.27%    60/60   [0.00%, 9.26%]
+    partial     1       {1: 60}     2.26%    60/60   [0.00%, 4.85%]
+    partial     2       {2: 60}     1.25%    60/60   [0.00%, 4.25%]
+    partial     3       {3: 60}     0.00%     0/60   [0.00%, 0.00%]
+
+- **AT THE REALISTIC MIX: current 0.000% (0/60), disjoint 5.272% (60/60), partial 2.258% (60/60) —
+  NATIVELY, five classes, NO sixth asset class, NO roster change.** RR's control reproduces
+  qualitatively, and **their diagnosis is confirmed structurally: the old predicate demanded a
+  predecessor-sole-held lied class, exactly the configuration that makes the lie worthless.**
+  *(The disjoint `IndexError` recorded earlier as "the real blocker" now fires for real, because
+  disjoint is finally being generated — the fixture was never exercising the path it claimed to.)*
+- **★ THE MIX-RESPONSES RUN OPPOSITE, AND NOBODY PREDICTED IT.** `current` **RISES** with nA
+  (0, 0, 0.98, 1.24); `partial` **FALLS** (2.26, 1.25, 0.00, 0.00); `disjoint` is **FLAT** (no
+  shared class for the amplifier to act on — the consistency check falling out again).
+  **So the realistic mix is exactly where the shipped lattice is WEAKEST and partial is STRONGEST.
+  They are not stronger and weaker versions of one thing.**
+  **AND IT DISSOLVES THE REALISM PROBLEM RATHER THAN TRADING IT: the nA=4 concentration question
+  existed because the shipped design NEEDED nA=4. Partial does not — best at nA=1, dead by nA=3.**
+- **SHARPER THAN LS's HYPOTHESIS: BOTH lattices turn at nA = cap, in OPPOSITE directions** —
+  `current` switches ON at nA ≥ cap, `partial` switches OFF.
+- **LS's D93 TEST MARKED WEAK DESPITE ITS CONCLUSION HOLDING:** framed as *flat-or-rising* vs *a
+  step at nA=3*; **the answer was FALLING, which was in neither branch.** **A discriminating test
+  whose outcome space omits the actual behaviour is a weak test even when the right answer comes
+  out of it.**
+- **★ THE WORKER SWEEP IS DROPPED.** The threshold-share problem was a consequence of *needing*
+  `nA ≥ cap`, **and partial does not need it.** **This removes the 15-segment book, the longer
+  episodes and THE ONLY BRANCH THAT REACHED THE RESEARCHER'S CHEQUE-BOOK.**
+  **RR's k=5 analysis is NOT withdrawn and NOT wasted** — three approved reviewers being small
+  against real functions of 5–20, and sole coverage being forced by arithmetic at k=3, remain true
+  and **stand as a recorded limitation of the roster size rather than a required change.**
+- **★ BOTH INTERVAL FLOORS ARE ZERO, which GENERALISES RR's size-3 finding: the zero best-case is
+  NOT a size-3 property.** **Neither candidate has a GUARANTEED effect — only an expected one with a
+  zero floor.** That travels with every headline.
+  **WORDING TO SETTLE BEFORE IT SHIPS:** RE wrote *"a manager that tie-breaks worst-case gets
+  nothing."* **LS reads it the other way — ceiling is `oracle − realised`, so the manager's BEST
+  tie-break gives the ZERO ceiling, i.e. the floor is where the MANAGER does well and WE measure
+  nothing. "Worst case" must name WHOSE**, or it will be read backwards by the audience the interval
+  exists for.
+- **★ A THIRD STRUCTURAL ZERO, HANDED OVER RATHER THAN GUESSED: `partial` hits exactly 0.00% at
+  nA ≥ 3.** RE has no mechanism, says `nA ≥ cap` does not predict it, and **declined to guess —
+  explicitly because guessing cost us the inversion.** **LS offers ONE LOW-CONFIDENCE candidate for
+  RR to test or discard: forcing DRAINS the other classes as it concentrates the successor-unique
+  one — so if the LIED class drains to zero segments, the lie has nothing to be wrong about.**
+  Countable directly. **Does not affect the realistic-mix reading** (nA ≥ 3 is the unrealistic end).
+  **Three structural zeros, two of which turned out to be the whole finding, is a pattern not to
+  park silently.**
+- **THE ESCALATION TRIGGER IS NOT MET.** *"If no lattice has a channel at nA=1"* — **two do.** The
+  finding is that **the SHIPPED lattice does not, and two five-class candidates do, at no cost in
+  asset classes.**
+- **THE DECISION, ASSEMBLABLE ONCE RR's REVIEW LANDS:**
+  **partial overlap** — 2.26% at the realistic mix, **best there**, dead at concentrated mixes,
+  realism problem **dissolved**, the researcher's stated preference.
+  **disjoint** — 5.27%, flat in mix, ~2.3× partial, **but models a DIFFERENT SPECIALIST**, the
+  validity objection that has stood all phase.
+  **both** — interval floor **0.00%**: no guaranteed effect, only an expected one.
+  **neither** — **no episodes/arm figure until L3 supplies a post-L1 σ** (D11).
+- **OUTSTANDING: RR's review of the rebuild (standing rule 7), and the third structural zero either
+  explained or explicitly parked.** Regression across the rebuild: path alignment 60/60 zero
+  divergent fields, D40 unchanged with `nA = cap` still confirmed at 3/4/5, pricing 0.85/9.57/0.00,
+  selection [7, 20, 30], tests 3 passed.
+
+### 2026-08-09 — the governing quantity is the LIED CLASS; partial overlap ships UNAMPLIFIED
+
+Record: `records/L9/L9_decisions_LS.md` D106–D110.
+
+- **THE REGIME HYPOTHESIS IS CONFIRMED, with the derivation:**
+  **Uncovered lie** — routing the lied class to the successor costs **nothing directly** (nobody can
+  do it; everyone falls back to SA), so **the only loss route is DISPLACING work the successor is
+  uniquely needed for → `nA ≥ cap`.**
+  **Covered lie** — routing it costs **directly** (the incumbent could have produced the IRB number),
+  so **no displacement is needed and there is NO threshold.**
+  **Already visible: partial gives 2.198% at nA=1 and 1.059% at nA=2 — falling, non-monotonic, no
+  step at 3. A threshold-governed quantity does not behave like that.**
+  **So `nA ≥ cap` describes the regime being ABANDONED, and LS's `1/n_workers` derivation is scoped
+  to it** — correct for that regime, irrelevant to the design likely to be adopted.
+- **★ THE SHARPENING NEITHER LS NOR RE DREW: in the covered-lie regime the governing quantity is
+  SEGMENTS IN THE LIED CLASS, not nA.** The loss is paid **per lied-about segment misrouted**.
+  **SO FOR PARTIAL OVERLAP, FORCING ON THE SUCCESSOR-UNIQUE CLASS IS COUNTERPRODUCTIVE — it pulls
+  segments OUT of where the channel lives**, which is exactly what 2.26% → 1.25% is as nA goes
+  1 → 2. **D47 is RIGHT for the uncovered-lie regime and WRONG here.**
+- **★ AND IT LIKELY EXPLAINS THE THIRD STRUCTURAL ZERO (D104).** LS's guess was that forcing drains
+  the other classes; **RR's sharpening names the right quantity.** **REFINEMENT FOR THE COUNT: count
+  IRB-APPLICABLE segments in the lied class, not segments** — SA-only segments cannot carry the
+  loss, and **the amplifier's third arm approves the forced class FIRST, so the lied class can be
+  starved of IRB APPLICABILITY well before it is starved of segments.** That is the quantity to plot
+  against nA.
+- **★ RULING (D108): IF PARTIAL OVERLAP IS CHOSEN, IT SHIPS UNAMPLIFIED.** At nA=1 unamplified it is
+  **both the realistic configuration and the strongest one — a rare case where no tuning is
+  required, and we take it rather than look for more.** **NO AMPLIFIER.** If sensitivity is ever
+  wanted, D107 says the lever is **concentration in the LIED class**, **which needs its own realism
+  argument, being a different claim about the portfolio from the one just dissolved.** **Every
+  amplifier in this project's history was an inherited default that turned out to be doing the work;
+  the time to refuse one is before it is quoted.**
+- **★ RR WITHDRAWS THE COHERENCE CLAIM AND WEAKENS THEIR OWN ORIGINAL OBJECTION.** The reframe
+  (*"the niche must be one analyst's full workload"*) is withdrawn on LS's gap — **sole approval is
+  not full-time dedication** — with RR's own note: *"it was elegant, which is why I should have
+  distrusted it."*
+  **And the consequence against themselves: if approval does not track volume, their ORIGINAL nA=4
+  objection weakens too.** Coverage here is **APPROVAL**, and approval tracks volume less tightly
+  than headcount — **so a dominant class being sole-approved is more plausible than they claimed.**
+  **What survives at reduced strength:** continuity and key-person-risk pressure, including
+  regulatory attention, still push a main book toward *multiple* approvals.
+  **This does NOT move the decision** — disjoint is flat in nA and needs no concentration, and the
+  objection to disjoint is that it models a **different specialist**, which stands independently.
+  **RR's core k=5 case is untouched by the withdrawal** and stays as a recorded limitation of the
+  roster, not a required change.
+- **THE DIFFER-TEST RULE GOES IN §B BESIDE THE POSITIVE-CONTROL RULE**, in RR's framing: **a
+  positive control asks "can this fire at all"; the differ-test asks "could these two have
+  disagreed" — the same defect from opposite sides.** Four instances: the 60/60 card claim, the
+  6,480 enumeration, the builder mismatch, and RR's own two paths.
+- **OUTSTANDING, and it is the whole list: RR's nA sweep; RR's formal review of the rebuild
+  (standing rule 7); and the interval-wording question — "worst case" must name WHOSE.**
+
+### 2026-08-09 — ★ GATE REVIEW PASSED. The third zero is solved. The decision goes to the researcher
+
+Record: `records/L9/L9_gate_review_RR.md` (RR); `records/L9/L9_decisions_LS.md` D111–D116.
+**`partial` 2.258% and `current` 0.000% at nA=1 reproduce exactly, natively.** RR's `disjoint` reads
+4.829% because it is **default segs, not segs=1** — a different cell, not a discrepancy.
+**RULE TAKEN FROM IT: neither figure is quotable without its `segs`.**
+
+- **BLOCKER 1 — THE INTERVAL WORDING WAS INVERTED TWICE.** `ceiling = oracle − realised`, so **the
+  manager's BEST tie-break gives the ZERO ceiling — and it does not "get nothing", it gets
+  EVERYTHING and WE measure nothing.** **Required form, adopted verbatim: *"The floor is the manager
+  tie-breaking favourably — it attains the oracle and the channel has nothing left to be worth."***
+  **GENERAL RULE: every best/worst names WHOSE, because THE MANAGER'S BEST IS THE EXPERIMENT'S
+  WORST.** The inversion is built into the quantity and will be read backwards by default.
+- **★ BLOCKER 2 — THE INTERVAL IS NOT AN ERROR BAR.** It is the range over an **unmodelled
+  decision**: how the manager resolves an indifference the card gives it no basis to resolve.
+  1. **The floor is a LOGICAL possibility, not a probable one** — reaching it needs the tie-break to
+     correlate with truth, and under the card there is nothing to correlate with. **Not "the effect
+     might be zero" statistically.**
+  2. **★ THE FLOORS ARE ZERO FOR BOTH CANDIDATES, so `[0, 9.26]` and `[0, 4.85]` OVERLAP COMPLETELY
+     AT THE BOTTOM AND CANNOT SUPPORT A DOMINANCE CLAIM. THE ENTIRE COMPARISON RESTS ON THE
+     EXPECTATIONS.** Read as ranges of plausible truth the options look indistinguishable — **which
+     is NOT what the evidence says. STATED, not inferred.**
+  3. **The expectation is principled for an INDIFFERENT manager; a real LLM manager is not one and
+     we do not model its priors. That is the honest gap** and it ships with the package.
+- **★ THE THIRD STRUCTURAL ZERO IS SOLVED — and it is the COMPLEMENT of the current lattice's rule.**
+  LS's draining candidate is **partly right and cannot produce it**: the lied class drains
+  (1.30 → 1.00 → 0.68 → 0.55 segments), which explains the **gradual** 2.26% → 1.25% decline, **but
+  it never empties while the ceiling is exactly zero.**
+  **The cause is CAPACITY SATURATION: `partial` is card-NAMES, so at nA ≥ cap the successor's slots
+  are entirely consumed by work only it can do — NO FREE SLOT remains for the lie to misdirect
+  into.**
+
+      uncovered lie (current)   channel requires  nA >= cap   needs CONTENTION to displace
+      covered lie   (partial)   channel requires  nA <  cap   needs a FREE SLOT to misdirect into
+
+  **Ceiling tracks free successor slots (`cap − nA`) monotonically: 2 → 2.26%, 1 → 1.25%, 0 → 0.00%.
+  Both regimes are ONE comparison with COMPLEMENTARY conditions** — a better object than either zero
+  it explains, and **the third time this phase that refusing to park an unexplained zero produced
+  the finding.**
+- **THE REGIME HYPOTHESIS IS CONFIRMED AT 40× THE SAMPLE (n=2400/cell), with the regime labelled
+  directly by a `coverers of lied class` column:**
+
+      lattice  segs  nA    mean    nonzero      coverers of lied class
+      current     1   1   0.00%    0/2400              [0]
+      current     3   3   1.03%  1752/2400             [0]
+      partial     1   1   2.40%  2400/2400             [1]
+      partial     3   3   0.00%    0/2400              [1]
+
+- **★ AND IT REFUTES RE's CANDIDATE FOR THE SIX-CLASS ZERO.** `nA=2 < cap=3` cannot explain the
+  card-NAMES zero at nA=2, **because `partial` is ALSO card-NAMES and is 1.252% at nA=2 < cap.**
+  **THAT ZERO STAYS OPEN AND IS CARRIED, NOT CLOSED** — two of three have mechanisms, one does not.
+  **Better to ship one honest open item than three closed ones, given two of the closed ones turned
+  out to be the whole finding.**
+- **`partial` SHIPPING UNAMPLIFIED IS NOW A DERIVATION, not a preference: forcing costs it TWICE —
+  draining the lied class AND consuming the free slot the channel needs.** **And D47 (LS's ruling on
+  RR's recommendation) is ACTIVELY HARMFUL here** — right for the uncovered-lie regime only.
+- **★ STANDING RULE 7 SATISFIED — acceptance output (`native_lattices.json` + regression), RR's
+  review, LS's review. RR reports NO REMAINING BLOCKERS. THE DECISION GOES TO THE RESEARCHER.**
