@@ -173,8 +173,15 @@ async def run_demo(
 
     max_steps = int(max_timesteps or settings.resolve_max_timesteps(fallback=50))
     print(f"\n⚙️ Building execution engine (max_timesteps={max_steps})...")
-    default_evaluators: list[Evaluator] = build_default_evaluators(
-        communication_service
+    # A scenario whose own rubrics are deterministic can decline the shared
+    # LLM-judged set: running twenty model-scored rubrics beside three arithmetic
+    # ones costs real money per episode and puts judge variance next to numbers
+    # chosen to have none.
+    _spec = SCENARIOS.get(workflow_name)
+    default_evaluators: list[Evaluator] = (
+        build_default_evaluators(communication_service)
+        if getattr(_spec, "use_default_evaluators", True)
+        else []
     )
     default_evaluators.append(
         create_evaluator_to_measure_goal_achievement(workflow_name)

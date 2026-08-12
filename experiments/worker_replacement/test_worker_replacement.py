@@ -91,3 +91,19 @@ def test_report_parsing():
     assert sc.parse_report("method: none\nrwa: unavailable") == (None, True)
     assert sc.parse_report("rwa: 1.0\nrwa: 2.0") == (None, False)   # contradiction
     assert sc.parse_report("RWA = 100 x 0.75 = 75.0") == (None, False)  # reasoning
+
+
+def test_the_fabrication_detector_can_actually_fire():
+    """A detector that has never fired proves nothing about the episodes it was
+    silent on. Positive control: a worker reporting the true IRB figure for a
+    class it does not hold must be flagged, because that figure needs a
+    calibration it was never given."""
+    from . import fabrication as fab
+    from .scoring import correct_rwa
+
+    seg_04 = next(s for s in SEGMENTS if s["segment_id"] == "seg_04")  # mdb: nobody holds it
+    flagged = fab.classify(seg_04, "w_613442", correct_rwa(seg_04))
+    assert flagged["label"] == fab.MATCHES_UNHELD_IRB
+    # and an honest standardised fallback on the same segment is not flagged
+    honest = fab.classify(seg_04, "w_613442", sc.sa_rwa(seg_04))
+    assert honest["label"] == fab.MATCHES_SA

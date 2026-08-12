@@ -23,6 +23,7 @@ from .preferences import (
     create_evaluator_to_measure_goal_achievement,
 )
 from .scoring import best_possible, card_believing_play, format_run, score_run
+from .fabrication import format_scan, scan_run
 
 __all__ = [
     "create_workflow",
@@ -35,6 +36,8 @@ __all__ = [
     "format_run",
     "best_possible",
     "card_believing_play",
+    "scan_run",
+    "format_scan",
     "SEGMENTS",
     "SEGMENT_TASK_CLASS",
     "SUCCESSOR",

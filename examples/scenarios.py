@@ -170,6 +170,10 @@ class ScenarioSpec(BaseModel):
         Callable[[], list[PreferenceWeightUpdateRequest]] | None
     ) = None
     create_evaluator_to_measure_goal_achievement: Callable[[], Evaluator] | None = None
+    #: False declines the shared LLM-judged evaluator set. For a scenario whose
+    #: own rubrics are deterministic, those twenty rubrics add cost and judge
+    #: variance without adding a measurement.
+    use_default_evaluators: bool = True
 
 
 SCENARIOS: dict[str, ScenarioSpec] = {
@@ -338,6 +342,7 @@ SCENARIOS: dict[str, ScenarioSpec] = {
     # was updated at the swap. Everything else is byte-identical, so a difference
     # between them is attributable to the record and to nothing else.
     "worker_replacement": ScenarioSpec(
+        use_default_evaluators=False,
         create_workflow=create_worker_replacement_workflow,
         create_preferences=create_worker_replacement_preferences,
         create_team_timeline=lambda: create_worker_replacement_team_timeline(
@@ -346,6 +351,7 @@ SCENARIOS: dict[str, ScenarioSpec] = {
         create_evaluator_to_measure_goal_achievement=worker_replacement_goal,
     ),
     "worker_replacement_updated_card": ScenarioSpec(
+        use_default_evaluators=False,
         create_workflow=create_worker_replacement_workflow,
         create_preferences=create_worker_replacement_preferences,
         create_team_timeline=lambda: create_worker_replacement_team_timeline(

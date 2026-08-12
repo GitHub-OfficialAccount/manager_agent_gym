@@ -20,31 +20,6 @@ from pydantic import BaseModel, Field, PrivateAttr
 if TYPE_CHECKING:
     from ...core.communication.service import CommunicationService
 
-class WorkerObservationDisclosure(BaseModel):
-    """A scheduled change to one worker's manager-visible projection."""
-
-    timestep: int = Field(ge=0)
-    agent_id: str
-    capability_override: list[str] | None = Field(
-        default=None,
-        description=(
-            "Capabilities shown after this disclosure. None removes any prior "
-            "override and exposes the worker's current canonical capabilities."
-        ),
-    )
-    description_override: str | None = Field(
-        default=None,
-        description=(
-            "Description shown after this disclosure. None leaves the worker's "
-            "canonical description untouched. Added 2026-07-28: capability_override "
-            "alone leaves `agent_description` stale, and the description is a SECOND "
-            "capability-bearing field the manager routes on -- observed directly, a "
-            "manager assigning a robust audit to a worker whose capabilities had been "
-            "revised, citing 'who handles income/loan-amount portfolio audits'."
-        ),
-    )
-    announce: bool = False
-    announcement: str | None = None
 
 
 class ObservationPolicy(BaseModel):
@@ -67,77 +42,12 @@ class ObservationPolicy(BaseModel):
         ge=0,
         description="How many recent messages the manager sees each timestep",
     )
-    scheduled_worker_disclosures: list[WorkerObservationDisclosure] = Field(
-        default_factory=list,
-        description=(
-            "Manager-facing capability projections and announcements scheduled "
-            "independently of objective worker mutations."
-        ),
-    )
 
-    _capability_overrides: dict[str, list[str]] = PrivateAttr(default_factory=dict)
-    _description_overrides: dict[str, str] = PrivateAttr(default_factory=dict)
-    _applied_disclosure_timesteps: set[int] = PrivateAttr(default_factory=set)
 
-    async def apply_scheduled_disclosures_for_timestep(
-        self,
-        timestep: int,
-        communication_service: "CommunicationService | None" = None,
-    ) -> list[str]:
-        """Apply this timestep's manager-facing disclosures exactly once."""
-        if timestep in self._applied_disclosure_timesteps:
-            return []
-
-        disclosures = [
-            disclosure
-            for disclosure in self.scheduled_worker_disclosures
-            if disclosure.timestep == timestep
-        ]
-        changes: list[str] = []
-        for disclosure in disclosures:
-            if disclosure.capability_override is None:
-                self._capability_overrides.pop(disclosure.agent_id, None)
-                projection = "current canonical capabilities"
-            else:
-                self._capability_overrides[disclosure.agent_id] = list(
-                    disclosure.capability_override
-                )
-                projection = "an observation-policy capability override"
-
-            if disclosure.description_override is None:
-                self._description_overrides.pop(disclosure.agent_id, None)
-            else:
-                self._description_overrides[disclosure.agent_id] = (
-                    disclosure.description_override
-                )
-
-            if disclosure.announce:
-                if not disclosure.announcement:
-                    raise ValueError(
-                        "An announced worker disclosure requires announcement text."
-                    )
-                if communication_service is not None:
-                    await communication_service.broadcast_message(
-                        from_agent=disclosure.agent_id,
-                        content=disclosure.announcement,
-                    )
-            changes.append(
-                f"Worker observation disclosure for {disclosure.agent_id}: "
-                f"{projection}; announced={disclosure.announce}"
-            )
-
-        self._applied_disclosure_timesteps.add(timestep)
-        return changes
 
     def redact_agent_config(self, config):
         """Return a copy of an agent config filtered to this policy."""
         updates: dict = {}
-        capability_override = self._capability_overrides.get(config.agent_id)
-        if capability_override is not None:
-            updates["agent_capabilities"] = list(capability_override)
-        description_override = self._description_overrides.get(config.agent_id)
-        if description_override is not None:
-            updates["agent_description"] = description_override
         if not self.expose_worker_system_prompts:
             updates["system_prompt"] = "[REDACTED]"
         return config.model_copy(update=updates) if updates else config
