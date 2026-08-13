@@ -66,7 +66,7 @@ IRB_COVERAGE: dict[str, tuple[str, ...]] = {
 
 PREDECESSOR = "w_9f1635"
 SUCCESSOR = "w_721a8b"
-INCUMBENTS = ("w_c0dd2b", "w_613442")
+PERSISTENT_WORKERS = ("w_c0dd2b", "w_613442")
 
 #: The timestep the roster changes. Three upstream tasks run before it, so the
 #: manager has seen the predecessor work before losing it.
@@ -157,8 +157,8 @@ def create_team_timeline(profile_updated: bool = False) -> dict[int, list]:
     return {
         0: [
             ("add", cfg[PREDECESSOR], "initial engagement team"),
-            ("add", cfg[INCUMBENTS[0]], "initial engagement team"),
-            ("add", cfg[INCUMBENTS[1]], "initial engagement team"),
+            ("add", cfg[PERSISTENT_WORKERS[0]], "initial engagement team"),
+            ("add", cfg[PERSISTENT_WORKERS[1]], "initial engagement team"),
         ],
         T_SWAP: [
             ("remove", cfg[PREDECESSOR], "rolled off the engagement"),
