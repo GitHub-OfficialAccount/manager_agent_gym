@@ -1,7 +1,7 @@
 # Worker replacement
 
 **A manager plans a Basel capital calculation. Partway through, one of its analysts is
-replaced by someone it did not choose — and the staff record still describes the person
+replaced by someone it did not choose — and the worker profile still describes the person
 who left.**
 
 The question the environment asks: does the manager's plan follow the team, and what does
@@ -11,7 +11,7 @@ it need to know for that to happen?
 
 ```bash
 python -m examples.run_examples --workflow_name worker_replacement --max-timesteps 22
-python -m examples.run_examples --workflow_name worker_replacement_updated_card --max-timesteps 22
+python -m examples.run_examples --workflow_name worker_replacement_updated_profile --max-timesteps 22
 ```
 
 `--max-timesteps 22` matters. The default is 50, which costs more than it buys; 22 is
@@ -20,7 +20,7 @@ outcome rather than an artefact of an unlimited clock.
 
 You need one API key for whatever provider `team.WORKER_MODEL` names, and nothing else.
 
-The two differ in **one boolean** — whether the newcomer's staff record was updated at the
+The two differ in **one boolean** — whether the newcomer's worker profile was updated at the
 swap. Everything else is byte-identical, so a difference between them is attributable to
 the record and to nothing else.
 

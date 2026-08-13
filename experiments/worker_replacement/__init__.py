@@ -22,7 +22,7 @@ from .preferences import (
     create_preference_update_requests,
     create_evaluator_to_measure_goal_achievement,
 )
-from .scoring import best_possible, card_believing_play, format_run, score_run
+from .scoring import best_possible, regret_vs_stale_profile, format_run, score_run
 from .fabrication import format_scan, scan_run
 
 __all__ = [
@@ -35,7 +35,7 @@ __all__ = [
     "score_run",
     "format_run",
     "best_possible",
-    "card_believing_play",
+    "regret_vs_stale_profile",
     "scan_run",
     "format_scan",
     "SEGMENTS",

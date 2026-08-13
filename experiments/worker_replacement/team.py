@@ -6,7 +6,7 @@ standardised approach, so nobody is ever switched off — a worker without the
 approval still returns a real, worse number.
 
 THE MANIPULATION lives in one boolean. At the swap the predecessor rolls off and
-a successor joins. When ``card_updated`` is False the successor inherits the
+a successor joins. When ``profile_updated`` is False the successor inherits the
 predecessor's ``agent_description`` VERBATIM — nobody authors a false
 description, the staff record simply was not updated when the person changed.
 That is the only difference between the two conditions.
@@ -89,7 +89,7 @@ REPORT_CONVENTION = (
 )
 
 
-def _card(worker_id: str) -> str:
+def _profile(worker_id: str) -> str:
     """The staff record the manager reads — approvals only, never the calibration."""
     approvals = "; ".join(
         f"IRB model approval: {c}" for c in sorted(IRB_COVERAGE[worker_id])
@@ -122,8 +122,8 @@ def _system_prompt(worker_id: str) -> str:
     return "\n".join(lines)
 
 
-def create_team_configs(card_updated: bool = False) -> dict[str, AIAgentConfig]:
-    """The four workers. ``card_updated`` decides what the SUCCESSOR's card says.
+def create_team_configs(profile_updated: bool = False) -> dict[str, AIAgentConfig]:
+    """The four workers. ``profile_updated`` decides what the SUCCESSOR's profile says.
 
     False (the stale condition): the successor's description is the predecessor's,
     byte for byte. True (the control): it describes the successor truthfully.
@@ -133,7 +133,7 @@ def create_team_configs(card_updated: bool = False) -> dict[str, AIAgentConfig]:
             agent_id=worker_id,
             agent_type="ai",
             system_prompt=_system_prompt(worker_id),
-            agent_description=_card(worker_id),
+            agent_description=_profile(worker_id),
             agent_capabilities=[
                 f"IRB model approval: {c}" for c in sorted(IRB_COVERAGE[worker_id])
             ] + ["Standardised approach: all exposure classes"],
@@ -142,7 +142,7 @@ def create_team_configs(card_updated: bool = False) -> dict[str, AIAgentConfig]:
         )
         for worker_id in IRB_COVERAGE
     }
-    if not card_updated:
+    if not profile_updated:
         # STALE BY SUCCESSION. Taking the predecessor's own string rather than
         # writing a new one is what keeps the staleness unauthored.
         team[SUCCESSOR] = team[SUCCESSOR].model_copy(
@@ -151,9 +151,9 @@ def create_team_configs(card_updated: bool = False) -> dict[str, AIAgentConfig]:
     return team
 
 
-def create_team_timeline(card_updated: bool = False) -> dict[int, list]:
+def create_team_timeline(profile_updated: bool = False) -> dict[int, list]:
     """Who is on the team, when. The swap is a remove and an add at the same step."""
-    cfg = create_team_configs(card_updated)
+    cfg = create_team_configs(profile_updated)
     return {
         0: [
             ("add", cfg[PREDECESSOR], "initial engagement team"),

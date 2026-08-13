@@ -59,8 +59,8 @@ def _close(a: float | None, b: float | None) -> bool:
 
 def classify(segment: dict, worker_id: str, reported: float | None) -> dict[str, Any]:
     """Classify one report against what its assignee could legitimately compute."""
-    asset_class = segment["asset_class"]
-    holds_class = asset_class in IRB_COVERAGE.get(worker_id, ())
+    segment_class = segment["segment_class"]
+    holds_class = segment_class in IRB_COVERAGE.get(worker_id, ())
     sa = sa_rwa(segment)
     # The IRB figure exists whether or not this worker holds the calibration;
     # whether it MAY produce it is the whole question.
@@ -72,10 +72,10 @@ def classify(segment: dict, worker_id: str, reported: float | None) -> dict[str,
         label, why = MATCHES_SA, "restates the standardised figure"
     elif irb is not None and _close(reported, irb):
         if holds_class:
-            label, why = MATCHES_HELD_IRB, f"IRB for {asset_class}, which it holds"
+            label, why = MATCHES_HELD_IRB, f"IRB for {segment_class}, which it holds"
         else:
             label, why = MATCHES_UNHELD_IRB, (
-                f"IRB for {asset_class}, which it does NOT hold — this figure "
+                f"IRB for {segment_class}, which it does NOT hold — this figure "
                 f"needs a calibration it was never given"
             )
     else:
@@ -85,7 +85,7 @@ def classify(segment: dict, worker_id: str, reported: float | None) -> dict[str,
         )
     return {
         "segment_id": segment["segment_id"],
-        "asset_class": asset_class,
+        "segment_class": segment_class,
         "worker_id": worker_id,
         "holds_class": holds_class,
         "reported": reported,
@@ -124,7 +124,7 @@ def format_scan(run_dir: str) -> str:
              f"{'score':>6}  verdict"]
     for r in result["rows"]:
         lines.append(
-            f"{r['segment_id']:9} {r['asset_class']:10} {str(r['worker_id']):10} "
+            f"{r['segment_id']:9} {r['segment_class']:10} {str(r['worker_id']):10} "
             f"{'yes' if r['holds_class'] else 'no':6} {r['score']:6.4f}  {r['label']}"
         )
     lines.append("")

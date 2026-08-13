@@ -338,7 +338,7 @@ SCENARIOS: dict[str, ScenarioSpec] = {
         create_evaluator_to_measure_goal_achievement=airline_goal_achievement,
     ),
     # Worker replacement — the team changes mid-episode and the staff record does
-    # not. The two entries differ in ONE boolean: whether the newcomer's record
+    # not. The two entries differ in ONE boolean: whether the newcomer's profile
     # was updated at the swap. Everything else is byte-identical, so a difference
     # between them is attributable to the record and to nothing else.
     "worker_replacement": ScenarioSpec(
@@ -346,16 +346,16 @@ SCENARIOS: dict[str, ScenarioSpec] = {
         create_workflow=create_worker_replacement_workflow,
         create_preferences=create_worker_replacement_preferences,
         create_team_timeline=lambda: create_worker_replacement_team_timeline(
-            card_updated=False),
+            profile_updated=False),
         create_preference_update_requests=worker_replacement_update_requests,
         create_evaluator_to_measure_goal_achievement=worker_replacement_goal,
     ),
-    "worker_replacement_updated_card": ScenarioSpec(
+    "worker_replacement_updated_profile": ScenarioSpec(
         use_default_evaluators=False,
         create_workflow=create_worker_replacement_workflow,
         create_preferences=create_worker_replacement_preferences,
         create_team_timeline=lambda: create_worker_replacement_team_timeline(
-            card_updated=True),
+            profile_updated=True),
         create_preference_update_requests=worker_replacement_update_requests,
         create_evaluator_to_measure_goal_achievement=worker_replacement_goal,
     ),

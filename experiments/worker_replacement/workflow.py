@@ -30,23 +30,23 @@ _HAS_TASK_CLASS = "task_class" in getattr(Task, "model_fields", {})
 #: The portfolio. `irb_approved` is a property of the SEGMENT: where it is False
 #: the standardised approach is the correct answer and every worker can produce it.
 SEGMENTS: tuple[dict, ...] = (
-    {"segment_id": "seg_00", "asset_class": "bank",      "rating": "AAA to AA-",
+    {"segment_id": "seg_00", "segment_class": "bank",      "rating": "AAA to AA-",
      "ead": 171440664.06, "lgd": 0.3659, "maturity": 3.25, "irb_approved": True},
-    {"segment_id": "seg_01", "asset_class": "sovereign", "rating": "BBB+ to BBB-",
+    {"segment_id": "seg_01", "segment_class": "sovereign", "rating": "BBB+ to BBB-",
      "ead": 202420062.49, "lgd": 0.5656, "maturity": 4.51, "irb_approved": True},
-    {"segment_id": "seg_02", "asset_class": "corporate", "rating": "BBB+ to BBB-",
+    {"segment_id": "seg_02", "segment_class": "corporate", "rating": "BBB+ to BBB-",
      "ead": 109300347.46, "lgd": 0.3547, "maturity": 4.96, "irb_approved": True},
-    {"segment_id": "seg_03", "asset_class": "retail",    "rating": "Unrated",
+    {"segment_id": "seg_03", "segment_class": "retail",    "rating": "Unrated",
      "ead": 128017886.90, "lgd": 0.4297, "maturity": 3.05, "irb_approved": True},
-    {"segment_id": "seg_04", "asset_class": "mdb",       "rating": "Unrated",
+    {"segment_id": "seg_04", "segment_class": "mdb",       "rating": "Unrated",
      "ead": 213254911.30, "lgd": 0.5195, "maturity": 2.98, "irb_approved": True},
-    {"segment_id": "seg_05", "asset_class": "sovereign", "rating": "BB+ to B-",
+    {"segment_id": "seg_05", "segment_class": "sovereign", "rating": "BB+ to B-",
      "ead": 120905372.39, "lgd": 0.5385, "maturity": 2.36, "irb_approved": True},
-    {"segment_id": "seg_06", "asset_class": "corporate", "rating": "BBB+ to BBB-",
+    {"segment_id": "seg_06", "segment_class": "corporate", "rating": "BBB+ to BBB-",
      "ead": 106902652.37, "lgd": 0.2919, "maturity": 4.30, "irb_approved": True},
-    {"segment_id": "seg_07", "asset_class": "retail",    "rating": "Unrated",
+    {"segment_id": "seg_07", "segment_class": "retail",    "rating": "Unrated",
      "ead": 166874123.52, "lgd": 0.3445, "maturity": 4.73, "irb_approved": True},
-    {"segment_id": "seg_08", "asset_class": "mdb",       "rating": "BBB+ to BBB-",
+    {"segment_id": "seg_08", "segment_class": "mdb",       "rating": "BBB+ to BBB-",
      "ead": 90255438.53, "lgd": 0.4342, "maturity": 2.04, "irb_approved": False},
 )
 
@@ -106,7 +106,7 @@ def create_workflow() -> Workflow:
             description=(
                 f"Compute the risk-weighted assets for exposure segment "
                 f"{segment['segment_id']}.\n"
-                f"asset class: {segment['asset_class']}\n"
+                f"asset class: {segment['segment_class']}\n"
                 f"rating bucket: {segment['rating']}\n"
                 f"exposure at default: {segment['ead']:,.2f}\n"
                 f"loss given default: {segment['lgd']}\n"

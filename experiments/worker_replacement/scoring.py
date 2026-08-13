@@ -59,14 +59,14 @@ SA_TABLES: dict[str, dict[str, float]] = {
 }
 
 
-def sa_risk_weight(asset_class: str, rating: str) -> float:
-    if asset_class == "retail":
+def sa_risk_weight(segment_class: str, rating: str) -> float:
+    if segment_class == "retail":
         return SA_RETAIL_FLAT
-    table = SA_TABLES[asset_class]
+    table = SA_TABLES[segment_class]
     if rating not in table:
         raise KeyError(
-            f"rating {rating!r} is not a bucket of the {asset_class} table; "
-            f"bucket strings are NOT interchangeable across asset classes "
+            f"rating {rating!r} is not a bucket of the {segment_class} table; "
+            f"bucket strings are NOT interchangeable across segment classes "
             f"(valid here: {sorted(table)})"
         )
     return table[rating]
@@ -137,7 +137,7 @@ def applicable_approach(segment: dict) -> str:
 
 
 def sa_rwa(segment: dict) -> float:
-    return segment["ead"] * sa_risk_weight(segment["asset_class"], segment["rating"])
+    return segment["ead"] * sa_risk_weight(segment["segment_class"], segment["rating"])
 
 
 def correct_rwa(segment: dict) -> float:
@@ -150,7 +150,7 @@ def correct_rwa(segment: dict) -> float:
     """
     if applicable_approach(segment) == "SA":
         return sa_rwa(segment)
-    pd = CLASS_CALIBRATION[segment["asset_class"]][segment["rating"]]
+    pd = CLASS_CALIBRATION[segment["segment_class"]][segment["rating"]]
     return segment["ead"] * 12.5 * capital_requirement(
         pd, segment["lgd"], segment["maturity"])
 
@@ -161,7 +161,7 @@ def attainable_report(segment: dict, worker_id: str,
     coverage = coverage or IRB_COVERAGE
     if applicable_approach(segment) == "SA":
         return sa_rwa(segment)
-    if segment["asset_class"] in coverage[worker_id]:
+    if segment["segment_class"] in coverage[worker_id]:
         return correct_rwa(segment)
     return sa_rwa(segment)
 
@@ -213,30 +213,30 @@ def achieved(allocation: dict[str, str],
     return sum(score_report(BY_ID[sid], reports.get(sid)) for sid in allocation)
 
 
-def _feasible_allocations(roster: Iterable[str], cap: int | None
-                          ) -> Iterable[dict[str, str]]:
+def _all_allocations(roster: Iterable[str]) -> Iterable[dict[str, str]]:
+    """Every way of giving nine segments to this roster.
+
+    Unfiltered, because there is no capacity limit: the engine bounds an agent to
+    one task AT A TIME, never to a total over the episode. A per-worker cap was
+    briefly imposed here and priced the stale profile at 0.4618 instead of
+    0.4156 — a constraint nothing enforces, changing the answer.
+    """
     roster = tuple(roster)
     ids = [s["segment_id"] for s in SEGMENTS]
     for combo in product(roster, repeat=len(ids)):
-        if cap is not None:
-            if any(combo.count(w) > cap for w in roster):
-                continue
         yield dict(zip(ids, combo))
 
 
-def best_possible(after_swap: bool = True, cap: int | None = None,
+def best_possible(after_swap: bool = True,
                   coverage: dict[str, tuple[str, ...]] | None = None) -> float:
-    """The best any allocation can be worth. Uncapped by default.
+    """The best any allocation can be worth: the per-segment maximum, summed.
 
-    Computed as the per-segment maximum, which is exact when capacity does not
-    bind. Pass ``cap`` to respect a per-worker limit; then it enumerates.
+    Exact with no capacity limit, which is the case here — nothing stops one
+    worker taking every segment over the episode.
     """
     roster = active_roster(after_swap)
-    if cap is None:
-        return sum(max(attainable_score(s, w, coverage) for w in roster)
-                   for s in SEGMENTS)
-    return max(allocation_score(a, coverage)
-               for a in _feasible_allocations(roster, cap))
+    return sum(max(attainable_score(s, w, coverage) for w in roster)
+               for s in SEGMENTS)
 
 
 def discriminating_segments(after_swap: bool = True) -> list[dict[str, Any]]:
@@ -254,7 +254,7 @@ def discriminating_segments(after_swap: bool = True) -> list[dict[str, Any]]:
         gap = scores[0] - scores[1] if len(scores) > 1 else 0.0
         rows.append({
             "segment_id": segment["segment_id"],
-            "asset_class": segment["asset_class"],
+            "segment_class": segment["segment_class"],
             "best": scores[0],
             "second_best": scores[1] if len(scores) > 1 else None,
             "gap": gap,
@@ -263,8 +263,8 @@ def discriminating_segments(after_swap: bool = True) -> list[dict[str, Any]]:
     return rows
 
 
-def card_believing_play(cap: int | None = None) -> dict[str, Any]:
-    """What a manager that BELIEVED the stale card would get, scored under truth.
+def regret_vs_stale_profile() -> dict[str, Any]:
+    """What a manager that BELIEVED the stale profile would get, scored under truth.
 
     UNCAPPED BY DEFAULT, and the default matters more than it looks. This
     defaulted to ``cap=3`` — three segments per worker — which the runtime does
@@ -275,12 +275,12 @@ def card_believing_play(cap: int | None = None) -> dict[str, Any]:
     runtime"), and it moved the answer: 18 tied allocations and 0.4618 expected
     cost under the phantom cap, 144 and 0.4156 without it.
 
-    The card is a REPLACEMENT description of the successor, so it has two errors:
+    The profile is a REPLACEMENT description of the successor, so it has two errors:
     it CLAIMS coverage the successor lacks, and it is SILENT about coverage the
     successor has. Both are modelled by substituting the predecessor's coverage.
 
     Returns the spread, never a single number: the believed-best allocation is
-    usually a tie, and quoting the worst case as "the cost of the stale card"
+    usually a tie, and quoting the worst case as "the cost of the stale profile"
     overstates it — which is exactly the mistake this function exists to prevent.
     """
     believed = dict(IRB_COVERAGE)
@@ -288,7 +288,7 @@ def card_believing_play(cap: int | None = None) -> dict[str, Any]:
     roster = active_roster(after_swap=True)
 
     best_belief, tied = -1.0, []
-    for alloc in _feasible_allocations(roster, cap):
+    for alloc in _all_allocations(roster):
         value = allocation_score(alloc, believed)
         if value > best_belief + TIE_EPS:
             best_belief, tied = value, [alloc]
@@ -296,7 +296,7 @@ def card_believing_play(cap: int | None = None) -> dict[str, Any]:
             tied.append(alloc)
 
     truth = [allocation_score(a) for a in tied]
-    optimum = best_possible(cap=cap)
+    optimum = best_possible()
     return {
         "believed_best": best_belief,
         "n_tied": len(tied),
@@ -365,14 +365,14 @@ def _extract(tasks: Iterable[Any], content_of: Any, agents: Iterable[Any]
         if was_declined:
             declined.append(segment_id)
 
-    roster, cards = [], {}
+    roster, profiles = [], {}
     for agent in agents:
         if field(agent, "agent_type") != "ai":
             continue
         agent_id = field(agent, "agent_id")
         roster.append(agent_id)
         config = field(agent, "config") or {}
-        cards[agent_id] = (config.get("agent_description")
+        profiles[agent_id] = (config.get("agent_description")
                            if isinstance(config, dict)
                            else getattr(config, "agent_description", None))
     return {
@@ -382,7 +382,7 @@ def _extract(tasks: Iterable[Any], content_of: Any, agents: Iterable[Any]
         "unallocated": sorted(set(BY_ID) - set(allocation)),
         "states": states,
         "roster": roster,
-        "cards": cards,
+        "profiles": profiles,
     }
 
 
@@ -421,10 +421,10 @@ def read_run(run_dir: str | Path) -> dict[str, Any]:
     }
 
 
-def score_view(run: dict[str, Any], cap: int | None = None) -> dict[str, Any]:
+def score_view(run: dict[str, Any]) -> dict[str, Any]:
     """The whole picture for one episode, split into the two losses."""
     allocation = {k: v for k, v in run["allocation"].items() if v}
-    optimum = best_possible(cap=cap)
+    optimum = best_possible()
     routed = allocation_score(allocation)
     got = achieved(allocation, run["reports"])
     rows = discriminating_segments()
@@ -442,19 +442,19 @@ def score_view(run: dict[str, Any], cap: int | None = None) -> dict[str, Any]:
     }
 
 
-def score_run(run_dir: str | Path, cap: int | None = None) -> dict[str, Any]:
+def score_run(run_dir: str | Path) -> dict[str, Any]:
     """Score a finished episode from ``simulation_outputs/run_*``."""
-    return score_view(read_run(run_dir), cap)
+    return score_view(read_run(run_dir))
 
 
-def score_workflow(workflow: Any, cap: int | None = None) -> dict[str, Any]:
+def score_workflow(workflow: Any) -> dict[str, Any]:
     """Score a LIVE workflow — the entry point the rubric functions use."""
-    return score_view(read_workflow(workflow), cap)
+    return score_view(read_workflow(workflow))
 
 
-def format_run(run_dir: str | Path, cap: int | None = None) -> str:
+def format_run(run_dir: str | Path) -> str:
     """A human-readable episode report. Every number above, none of them invented."""
-    r = score_run(run_dir, cap)
+    r = score_run(run_dir)
     lines = [
         f"run              {r['run_dir']}  (last timestep {r['timestep']})",
         f"roster           {', '.join(r['roster'])}",
@@ -468,7 +468,7 @@ def format_run(run_dir: str | Path, cap: int | None = None) -> str:
         could = attainable_score(segment, worker) if worker else 0.0
         did = score_report(segment, r["reports"].get(sid))
         lines.append(
-            f"{sid:9} {segment['asset_class']:10} {str(worker):10} "
+            f"{sid:9} {segment['segment_class']:10} {str(worker):10} "
             f"{could:7.4f} {did:7.4f}  {'yes' if gaps[sid]['discriminates'] else '-'}"
         )
     lines += [
