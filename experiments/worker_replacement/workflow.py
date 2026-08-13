@@ -27,27 +27,27 @@ SEGMENT_TASK_CLASS = "segment"
 
 _HAS_TASK_CLASS = "task_class" in getattr(Task, "model_fields", {})
 
-#: The portfolio. `irb_approved` is a property of the SEGMENT: where it is False
+#: The portfolio. `irb_applicable` is a property of the SEGMENT: where it is False
 #: the standardised approach is the correct answer and every worker can produce it.
 SEGMENTS: tuple[dict, ...] = (
     {"segment_id": "seg_00", "segment_class": "bank",      "rating": "AAA to AA-",
-     "ead": 171440664.06, "lgd": 0.3659, "maturity": 3.25, "irb_approved": True},
+     "ead": 171440664.06, "lgd": 0.3659, "maturity": 3.25, "irb_applicable": True},
     {"segment_id": "seg_01", "segment_class": "sovereign", "rating": "BBB+ to BBB-",
-     "ead": 202420062.49, "lgd": 0.5656, "maturity": 4.51, "irb_approved": True},
+     "ead": 202420062.49, "lgd": 0.5656, "maturity": 4.51, "irb_applicable": True},
     {"segment_id": "seg_02", "segment_class": "corporate", "rating": "BBB+ to BBB-",
-     "ead": 109300347.46, "lgd": 0.3547, "maturity": 4.96, "irb_approved": True},
+     "ead": 109300347.46, "lgd": 0.3547, "maturity": 4.96, "irb_applicable": True},
     {"segment_id": "seg_03", "segment_class": "retail",    "rating": "Unrated",
-     "ead": 128017886.90, "lgd": 0.4297, "maturity": 3.05, "irb_approved": True},
+     "ead": 128017886.90, "lgd": 0.4297, "maturity": 3.05, "irb_applicable": True},
     {"segment_id": "seg_04", "segment_class": "mdb",       "rating": "Unrated",
-     "ead": 213254911.30, "lgd": 0.5195, "maturity": 2.98, "irb_approved": True},
+     "ead": 213254911.30, "lgd": 0.5195, "maturity": 2.98, "irb_applicable": True},
     {"segment_id": "seg_05", "segment_class": "sovereign", "rating": "BB+ to B-",
-     "ead": 120905372.39, "lgd": 0.5385, "maturity": 2.36, "irb_approved": True},
+     "ead": 120905372.39, "lgd": 0.5385, "maturity": 2.36, "irb_applicable": True},
     {"segment_id": "seg_06", "segment_class": "corporate", "rating": "BBB+ to BBB-",
-     "ead": 106902652.37, "lgd": 0.2919, "maturity": 4.30, "irb_approved": True},
+     "ead": 106902652.37, "lgd": 0.2919, "maturity": 4.30, "irb_applicable": True},
     {"segment_id": "seg_07", "segment_class": "retail",    "rating": "Unrated",
-     "ead": 166874123.52, "lgd": 0.3445, "maturity": 4.73, "irb_approved": True},
+     "ead": 166874123.52, "lgd": 0.3445, "maturity": 4.73, "irb_applicable": True},
     {"segment_id": "seg_08", "segment_class": "mdb",       "rating": "BBB+ to BBB-",
-     "ead": 90255438.53, "lgd": 0.4342, "maturity": 2.04, "irb_approved": False},
+     "ead": 90255438.53, "lgd": 0.4342, "maturity": 2.04, "irb_applicable": False},
 )
 
 BY_ID = {s["segment_id"]: s for s in SEGMENTS}
@@ -85,10 +85,10 @@ def create_workflow() -> Workflow:
             "Produce the portfolio's Basel capital calculation: risk-weighted "
             "assets for every exposure segment, aggregated into a portfolio total "
             "with an output-floor check and a capital adequacy summary.\n\n"
-            "Each segment must be priced under the approach that applies to it. "
-            "An analyst holding the relevant IRB model approval should use it; "
-            "one that does not may still price the segment under the standardised "
-            "approach, which is always available."
+            "Each segment must be priced under the method that applies to it. "
+            "An analyst capable at the segment's class should use the advanced "
+            "method; one that is not may still price the segment under the "
+            "regular method, which every analyst can always do."
         ),
         owner_id=uuid4(),
     )
@@ -111,8 +111,8 @@ def create_workflow() -> Workflow:
                 f"exposure at default: {segment['ead']:,.2f}\n"
                 f"loss given default: {segment['lgd']}\n"
                 f"maturity (years): {segment['maturity']}\n"
-                f"IRB approved for this segment: "
-                f"{'yes' if segment['irb_approved'] else 'no'}"
+                f"advanced method applies to this segment: "
+                f"{'yes' if segment['irb_applicable'] else 'no'}"
             ),
             dependency_task_ids=list(prep_ids),
             status=TaskStatus.PENDING,

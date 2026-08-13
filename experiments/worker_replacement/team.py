@@ -35,7 +35,7 @@ _HAS_MAX_TURNS = "max_turns" in getattr(AIAgentConfig, "model_fields", {})
 #: The private PD calibrations, by asset class and rating. A worker is provisioned
 #: ONLY the classes it holds approval for; the full table is the answer key and
 #: lives in ``scoring``. Held here so team and truth cannot drift apart.
-CLASS_CALIBRATION: dict[str, dict[str, float]] = {
+CALIBRATION: dict[str, dict[str, float]] = {
     "sovereign": {
         "AAA to AA-": 0.000778, "A+ to A-": 0.001514, "BBB+ to BBB-": 0.011827,
         "BB+ to B-": 0.044617, "Below B-": 0.137006, "Unrated": 0.058685,
@@ -116,7 +116,7 @@ def _system_prompt(worker_id: str) -> str:
     ]
     for cls in sorted(IRB_COVERAGE[worker_id]):
         lines.append(f"  {cls}:")
-        for rating, pd in sorted(CLASS_CALIBRATION[cls].items()):
+        for rating, pd in sorted(CALIBRATION[cls].items()):
             lines.append(f"    {rating}: PD = {pd:.6f}")
     lines += ["", REPORT_CONVENTION]
     return "\n".join(lines)

@@ -31,12 +31,12 @@ from itertools import product
 from pathlib import Path
 from typing import Any, Iterable
 
-from .team import CLASS_CALIBRATION, IRB_COVERAGE, PREDECESSOR, SUCCESSOR
+from .team import CALIBRATION, IRB_COVERAGE, PREDECESSOR, SUCCESSOR
 from .workflow import BY_ID, SEGMENTS
 
 #: A report within this relative distance of the truth scores 1.0. Tight on
 #: purpose: it admits floating-point noise and nothing else.
-TOLERANCE = 1e-6
+SCORE_TOLERANCE = 1e-6
 
 #: Two workers count as tied on a segment when their attainable scores differ by
 #: less than this. Ties matter — on a tied segment no allocation can be wrong.
@@ -133,7 +133,7 @@ def capital_requirement(pd: float, lgd: float, m: float) -> float:
 # --------------------------------------------------------------------------
 def applicable_approach(segment: dict) -> str:
     """Which approach APPLIES here. A property of the segment, not of anyone."""
-    return "IRB" if segment["irb_approved"] else "SA"
+    return "IRB" if segment["irb_applicable"] else "SA"
 
 
 def sa_rwa(segment: dict) -> float:
@@ -150,7 +150,7 @@ def correct_rwa(segment: dict) -> float:
     """
     if applicable_approach(segment) == "SA":
         return sa_rwa(segment)
-    pd = CLASS_CALIBRATION[segment["segment_class"]][segment["rating"]]
+    pd = CALIBRATION[segment["segment_class"]][segment["rating"]]
     return segment["ead"] * 12.5 * capital_requirement(
         pd, segment["lgd"], segment["maturity"])
 
@@ -177,9 +177,9 @@ def score_report(segment: dict, reported: float | None) -> float:
         return 0.0
     truth = correct_rwa(segment)
     if truth == 0.0:
-        return 1.0 if abs(reported) <= TOLERANCE else 0.0
+        return 1.0 if abs(reported) <= SCORE_TOLERANCE else 0.0
     relative_error = abs(reported - truth) / abs(truth)
-    if relative_error <= TOLERANCE:
+    if relative_error <= SCORE_TOLERANCE:
         return 1.0
     return 1.0 - min(1.0, relative_error)
 

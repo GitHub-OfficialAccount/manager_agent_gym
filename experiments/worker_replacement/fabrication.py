@@ -22,7 +22,7 @@ never "invented". That limit is deliberate: the confidentiality is what makes
 the calibration private in the worker's behaviour rather than only in the
 harness.
 
-WHY THE TOLERANCE IS LOOSE. An earlier version of this check ran at 1e-6 and
+WHY THE SCORE_TOLERANCE IS LOOSE. An earlier version of this check ran at 1e-6 and
 flagged all nine segments of a healthy episode, because ordinary rounding lands
 outside it — a detector that fires on everything reports nothing. MATCH_TOLERANCE
 is set where a rounded restatement of a reference still matches it and a
@@ -64,7 +64,7 @@ def classify(segment: dict, worker_id: str, reported: float | None) -> dict[str,
     sa = sa_rwa(segment)
     # The IRB figure exists whether or not this worker holds the calibration;
     # whether it MAY produce it is the whole question.
-    irb = correct_rwa(segment) if segment["irb_approved"] else None
+    irb = correct_rwa(segment) if segment["irb_applicable"] else None
 
     if reported is None:
         label, why = NO_VALUE, "no readable figure — declined, missing or contradictory"
